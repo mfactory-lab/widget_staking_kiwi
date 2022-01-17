@@ -1,0 +1,31 @@
+<!--
+  - This file is part of the Web3 Library developed by mFactory GmbH.
+  -
+  - Copyright © 2021, mFactory GmbH
+  -
+  - Solana Reference Stake Pool is free software: you can redistribute it
+  - and/or modify it under the terms of the GNU Affero General Public License
+  - as published by the Free Software Foundation, either version 3
+  - of the License, or (at your option) any later version.
+  -
+  - Solana Reference Stake Pool is distributed in the hope that it
+  - will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  - warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  - See the GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+  -
+  - You can be released from the requirements of the Affero GNU General Public License
+  - by purchasing a commercial license. The purchase of such a license is
+  - mandatory as soon as you develop commercial activities using the
+  - Solana Reference Stake Pool code without disclosing the source code of
+  - your own applications.
+  -
+  - The developer of this program can be contacted at <info@mfactory.ch>.
+  -->
+
+<svg width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M20.667 1.93577C19.927 2.30007 19.1239 2.51908 18.3014 2.58093C19.1755 2.07976 19.8187 1.25641 20.0935 0.287027C19.2976 0.767834 18.4245 1.10737 17.5129 1.29061C16.3609 0.0682344 14.5808 -0.329631 13.0181 0.285997C11.4553 0.901626 10.4248 2.4067 10.4161 4.08631C10.4161 4.44473 10.4878 4.73147 10.4878 5.01821C7.17704 4.88223 4.08935 3.31222 2.029 0.717135C1.65586 1.37264 1.45832 2.11341 1.45552 2.86767C1.44199 4.25925 2.14637 5.55963 3.31932 6.30853C2.66784 6.28614 2.03019 6.11446 1.45552 5.80674V5.87843C1.45307 7.83299 2.83519 9.51557 4.75301 9.89276C4.40015 9.97565 4.04 10.0237 3.67775 10.0361C3.41287 10.0479 3.14762 10.0238 2.88921 9.96445C3.44347 11.6426 4.99338 12.7906 6.76018 12.8318C5.30555 13.9702 3.51754 14.5998 1.67058 14.6239C1.33445 14.6358 0.998021 14.6118 0.666992 14.5523C2.55155 15.7568 4.73868 16.403 6.97524 16.4161C14.5738 16.4161 18.6598 10.1078 18.6598 4.73147V4.22968C19.4226 3.55243 20.097 2.78172 20.667 1.93577Z" fill="#F1F1F2"/>
+</svg>

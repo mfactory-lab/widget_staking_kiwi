@@ -1,0 +1,3 @@
+[submodule "@jpool/common"]
+	path = ./packages/common
+	url = https://github.com/mfactory-lab/jfactory-web3-common

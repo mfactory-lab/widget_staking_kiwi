@@ -1,0 +1,31 @@
+<!--
+  - This file is part of the Web3 Library developed by mFactory GmbH.
+  -
+  - Copyright © 2021, mFactory GmbH
+  -
+  - Solana Reference Stake Pool is free software: you can redistribute it
+  - and/or modify it under the terms of the GNU Affero General Public License
+  - as published by the Free Software Foundation, either version 3
+  - of the License, or (at your option) any later version.
+  -
+  - Solana Reference Stake Pool is distributed in the hope that it
+  - will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  - warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  - See the GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+  -
+  - You can be released from the requirements of the Affero GNU General Public License
+  - by purchasing a commercial license. The purchase of such a license is
+  - mandatory as soon as you develop commercial activities using the
+  - Solana Reference Stake Pool code without disclosing the source code of
+  - your own applications.
+  -
+  - The developer of this program can be contacted at <info@mfactory.ch>.
+  -->
+
+<svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M25.2301 8.0613H31.9998C31.9998 3.45105 28.7429 0.757812 23.2248 0.757812H8.77506C3.25687 0.757812 0 3.45105 0 8.00249V17.9404C0 22.4919 3.25687 25.1851 8.77506 25.1851H23.2248C28.7429 25.1851 31.9998 22.4919 31.9998 17.9404V17.517H25.2301C22.0882 17.517 19.5412 15.4108 19.5412 12.8127C19.5412 10.2145 22.0882 8.10834 25.2301 8.10834V8.0613ZM25.2302 10.0842H30.8052C31.465 10.0842 31.9999 10.5265 31.9999 11.0721V14.5062C31.9922 15.0492 31.4618 15.4878 30.8052 15.4941H25.3582C23.7676 15.5118 22.3768 14.6113 22.016 13.3301C21.8353 12.5349 22.0889 11.7142 22.7089 11.0881C23.3288 10.462 24.2517 10.0946 25.2302 10.0842ZM25.4719 13.6957H25.9981C26.6736 13.6957 27.2212 13.2429 27.2212 12.6843C27.2212 12.1257 26.6736 11.6729 25.9981 11.6729H25.4719C25.1488 11.6697 24.8377 11.7737 24.6079 11.9615C24.3781 12.1493 24.2488 12.4054 24.2488 12.6726C24.2487 13.2331 24.7941 13.6893 25.4719 13.6957ZM7.58028 8.06096H16.6113C17.2868 8.06096 17.8344 7.60813 17.8344 7.04953C17.8344 6.49093 17.2868 6.0381 16.6113 6.0381H7.58028C6.91029 6.03806 6.36497 6.48377 6.35718 7.03777C6.35713 7.5983 6.90248 8.05452 7.58028 8.06096Z" fill="white"/>
+</svg>
