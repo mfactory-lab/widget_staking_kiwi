@@ -28,32 +28,15 @@
 
 @import '~quasar/src/css/variables.sass';
 
-$primary: #1ce4b0;
-$secondary: #FFD140;
-$accent: #609ecc;
-$gray: #455A64;
-$almostWhite: #eff5f6;
+$primary: #455A64;
+$secondary: #1DE3B0;
+$accent: #00A5B9;
+$dark: #404246;
+$warning: #FFCD29;
 
-$graySuperLight: #F3F4F5;
-$dark: #1d1d1d;
-$darkGray: #383838;
-$lightGray: #9EB3BD;
-$lightGrayNatural: #E9E9E9;
-$naturalGray: #e7e7e7;
-
-$positive: #1ce4b0;
-$negative: #f56c6c;
-$info: #609ecc;
-$warning: #ffdf75;
+$textWhite: #FFFFFF;
 
 $generic-border-radius: 12px;
-
-// Light mode
-$body-bg: #f4f4f4;
-
-// Dark mode
-$dark-page: #121212;
-$dark-secondary: #1e2423;
 
 // Assumes the browser default, typically `16px`
 $body-font-size: 1rem;
@@ -62,4 +45,4 @@ $button-padding: 9px 17px;
 
 $fontSecondary: 'Montserrat';
 
-$tooltip-background: $gray;
+$tooltip-background: $blue-grey-8;

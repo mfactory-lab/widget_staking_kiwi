@@ -27,46 +27,33 @@
   -->
 
 <template>
-  <q-page>
-    <app-header />
-    <title-validators-section />
-    <triangle-section :color="getColor('accent')" />
-    <validators-section />
-    <title-how-section />
-    <triangle-section :color="getColor('primary')" />
-    <faq-section />
-    <team-section />
-    <app-footer />
-  </q-page>
+  <div class="left-line" :style="styles"></div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '../components/home/ValidatorsSection.vue';
-  import TriangleSection from '../components/home/TriangleSection.vue';
-  import TitleHowSection from '../components/home/TitleHowSection.vue';
-  import TeamSection from '../components/home/TeamSection.vue';
-  import FaqSection from '../components/home/FaqSection.vue';
-  import AppHeader from '../components/home/AppHeader.vue';
-  import AppFooter from '../components/home/AppFooter.vue';
-  import { getCssVar } from 'quasar';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
-    components: {
-      TitleValidatorsSection,
-      ValidatorsSection,
-      TriangleSection,
-      TitleHowSection,
-      TeamSection,
-      FaqSection,
-      AppHeader,
-      AppFooter,
+    props: {
+      color: {
+        type: String,
+      },
     },
-    setup() {
+    setup(props) {
       return {
-        getColor: (val: string) => getCssVar(val),
+        styles: computed(() => (props.color ? { background: props.color } : {})),
       };
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .left-line {
+    width: 42px;
+    flex-basis: 42px;
+    flex-grow: 0;
+    height: 100%;
+    margin-right: 62px;
+    background: $textWhite;
+  }
+</style>

@@ -27,42 +27,34 @@
   -->
 
 <template>
-  <q-page>
-    <app-header />
-    <title-validators-section />
-    <triangle-section :color="getColor('accent')" />
-    <validators-section />
-    <title-how-section />
-    <triangle-section :color="getColor('primary')" />
-    <faq-section />
-    <team-section />
-    <app-footer />
-  </q-page>
+  <section class="title-how-section">
+    <div class="container">
+      <div class="title-how-section__main">
+        <left-line />
+        <div class="column title-how-section__content">
+          <div class="section-title">How a validator generates profit</div>
+          <ul class="title-how-section__list">
+            <li>A new block is sent to validators for verification</li>
+            <li>Validators verify the block and respond with true or false</li>
+            <li>Network disburses rewards for the work done</li>
+            <li
+              >The rewards is added to the delegated stake, after deduction of a fee that goes to
+              the delegator</li
+            >
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '../components/home/ValidatorsSection.vue';
-  import TriangleSection from '../components/home/TriangleSection.vue';
-  import TitleHowSection from '../components/home/TitleHowSection.vue';
-  import TeamSection from '../components/home/TeamSection.vue';
-  import FaqSection from '../components/home/FaqSection.vue';
-  import AppHeader from '../components/home/AppHeader.vue';
-  import AppFooter from '../components/home/AppFooter.vue';
+  import LeftLine from '@/components/home/LeftLine.vue';
   import { getCssVar } from 'quasar';
 
   export default defineComponent({
-    components: {
-      TitleValidatorsSection,
-      ValidatorsSection,
-      TriangleSection,
-      TitleHowSection,
-      TeamSection,
-      FaqSection,
-      AppHeader,
-      AppFooter,
-    },
+    components: { LeftLine },
     setup() {
       return {
         getColor: (val: string) => getCssVar(val),
@@ -70,3 +62,29 @@
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .title-how-section {
+    margin-top: 64px;
+    background: $primary;
+
+    .section-title {
+      margin-top: -10px;
+    }
+
+    &__main {
+      display: flex;
+      padding: 62px;
+      justify-content: center;
+      color: $textWhite;
+    }
+    &__content {
+      flex-basis: 0;
+      flex-grow: 1;
+    }
+    &__list {
+      margin-bottom: 0;
+      font-size: 28px;
+    }
+  }
+</style>

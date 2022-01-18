@@ -27,15 +27,61 @@
   -->
 
 <template>
-  <section :class="!$q.dark.isActive ? 'bg-white text-dark' : null" class="app-header">
+  <section class="app-header">
     <div class="container">
       <div class="row justify-end q-py-md">
-        <router-link to="/terms">contact</router-link>
-        <span class="q-px-sm">|</span>
-        <a href="https://docs.jpool.one/" target="_blank">docs</a>
+        <router-link to="/terms" class="text-primary">contact</router-link>
+        <span class="q-px-sm text-primary">|</span>
+        <a href="https://docs.jpool.one/" class="text-primary" target="_blank">docs</a>
       </div>
-      <div>
-        <img src="@/assets/img/logo.svg" alt="" />
+      <div class="row">
+        <div class="column col-8">
+          <div class="row">
+            <div class="col-2">
+              <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
+            </div>
+            <div class="col-10 q-mt-md">
+              <div class="column q-ml-md">
+                <h1 class="app-header__title">STAKING</h1>
+                <h3 class="app-header__subtitle"
+                  >Dependable
+                  <span class="text-weight-bolder">validators for PoS</span> Blockchain</h3
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row justify-between q-mt-md">
+            <q-btn
+              type="a"
+              href="https://solstake.io/#/app/validator/DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao"
+              target="_blank"
+              rounded
+              label="STAKE SOLANA NOW"
+              color="secondary"
+              text-color="text-white"
+              size="26px"
+              padding="6px 32px"
+              class="q-mr-md q-mt-md"
+            />
+            <q-btn
+              type="a"
+              href="https://explorer.near.org/accounts/jstaking.poolv1.near"
+              target="_blank"
+              rounded
+              label="STAKE NEAR NOW"
+              color="dark"
+              text-color="text-white"
+              size="26px"
+              padding="6px 32px"
+              class="q-mr-md q-mt-md"
+            />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row justify-end relative-position">
+            <img src="@/assets/img/s2.svg" class="app-header__flower" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -48,3 +94,30 @@
     setup() {},
   });
 </script>
+
+<style lang="scss" scoped>
+  .app-header {
+    font-family: $fontSecondary;
+    color: $primary;
+    &__logo {
+      width: 100%;
+    }
+    &__title {
+      font-size: 82px;
+      line-height: 84px;
+      font-weight: 900;
+      margin: 8px 0 0;
+    }
+    &__subtitle {
+      font-size: 35px;
+      line-height: 38px;
+      font-weight: 700;
+      margin: 0;
+    }
+    &__flower {
+      position: absolute;
+      height: 400px;
+      top: 50px;
+    }
+  }
+</style>

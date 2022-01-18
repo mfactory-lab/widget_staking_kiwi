@@ -27,46 +27,63 @@
   -->
 
 <template>
-  <q-page>
-    <app-header />
-    <title-validators-section />
-    <triangle-section :color="getColor('accent')" />
-    <validators-section />
-    <title-how-section />
-    <triangle-section :color="getColor('primary')" />
-    <faq-section />
-    <team-section />
-    <app-footer />
-  </q-page>
+  <div class="validator">
+    <img :src="icon" alt="" class="validator__icon" />
+    <div class="validator__title">{{ title }}</div>
+    <q-btn
+      type="a"
+      :href="link.href"
+      target="_blank"
+      rounded
+      :label="link.label"
+      :color="link.color"
+      text-color="text-white"
+      size="26px"
+      padding="6px 90px"
+      class="q-mt-md"
+    />
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '../components/home/ValidatorsSection.vue';
-  import TriangleSection from '../components/home/TriangleSection.vue';
-  import TitleHowSection from '../components/home/TitleHowSection.vue';
-  import TeamSection from '../components/home/TeamSection.vue';
-  import FaqSection from '../components/home/FaqSection.vue';
-  import AppHeader from '../components/home/AppHeader.vue';
-  import AppFooter from '../components/home/AppFooter.vue';
-  import { getCssVar } from 'quasar';
 
   export default defineComponent({
-    components: {
-      TitleValidatorsSection,
-      ValidatorsSection,
-      TriangleSection,
-      TitleHowSection,
-      TeamSection,
-      FaqSection,
-      AppHeader,
-      AppFooter,
+    props: {
+      icon: {
+        type: String,
+      },
+      title: {
+        type: String,
+      },
+      link: {
+        type: Object,
+      },
     },
-    setup() {
-      return {
-        getColor: (val: string) => getCssVar(val),
-      };
+    setup(props) {
+      console.log('props === ', props);
+      return {};
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .validator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 24px;
+    &__icon {
+      width: 256px;
+      margin-bottom: 16px;
+    }
+    &__title {
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 32px;
+      text-align: center;
+      text-transform: uppercase;
+      color: $primary;
+    }
+  }
+</style>

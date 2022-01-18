@@ -27,46 +27,24 @@
   -->
 
 <template>
-  <q-page>
-    <app-header />
-    <title-validators-section />
-    <triangle-section :color="getColor('accent')" />
-    <validators-section />
-    <title-how-section />
-    <triangle-section :color="getColor('primary')" />
-    <faq-section />
-    <team-section />
-    <app-footer />
-  </q-page>
+  <section class="title-validators-section">
+    <div class="container">
+      <div class="title-validators-section__main section-title">Validators</div>
+    </div>
+  </section>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '../components/home/ValidatorsSection.vue';
-  import TriangleSection from '../components/home/TriangleSection.vue';
-  import TitleHowSection from '../components/home/TitleHowSection.vue';
-  import TeamSection from '../components/home/TeamSection.vue';
-  import FaqSection from '../components/home/FaqSection.vue';
-  import AppHeader from '../components/home/AppHeader.vue';
-  import AppFooter from '../components/home/AppFooter.vue';
-  import { getCssVar } from 'quasar';
+<style lang="scss" scoped>
+  .title-validators-section {
+    margin-top: 90px;
+    background: $accent;
 
-  export default defineComponent({
-    components: {
-      TitleValidatorsSection,
-      ValidatorsSection,
-      TriangleSection,
-      TitleHowSection,
-      TeamSection,
-      FaqSection,
-      AppHeader,
-      AppFooter,
-    },
-    setup() {
-      return {
-        getColor: (val: string) => getCssVar(val),
-      };
-    },
-  });
-</script>
+    &__main {
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $textWhite;
+    }
+  }
+</style>

@@ -82,9 +82,9 @@
 
 <style lang="scss" module>
   .footer {
-    background-color: $gray !important;
+    background-color: $blue-grey-8 !important;
     color: #fff !important;
-    padding: 2rem 0 2rem;
+    padding: 2rem 0 1.5rem;
     @media (max-width: $breakpoint-sm) {
       text-align: center;
     }
@@ -108,7 +108,7 @@
     text-align: right;
 
     a {
-      color: $gray !important;
+      color: $blue-grey-8 !important;
       font-size: 23px;
     }
 
@@ -130,22 +130,6 @@
 </style>
 
 <style lang="scss" scoped>
-  .contact-title {
-    text-align: right;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    padding-right: 93px;
-    margin-top: -15px;
-    margin-bottom: -10px;
-
-    @media (max-width: $breakpoint-sm) {
-      text-align: center;
-      margin-bottom: 5px;
-      padding-right: 0;
-    }
-  }
-
   .footer-links {
     @media (max-width: $breakpoint-sm) {
       margin-top: 10px;
