@@ -27,32 +27,25 @@
   -->
 
 <template>
-  <div class="left-line" :style="styles"></div>
+  <section class="title-launch-section">
+    <div class="container">
+      <div class="title-launch-section__main">
+        <img src="@/assets/img/rocket.svg" alt="" />
+      </div>
+    </div>
+  </section>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent } from 'vue';
-
-  export default defineComponent({
-    props: {
-      color: {
-        type: String,
-      },
-    },
-    setup(props) {
-      return {
-        styles: computed(() => (props.color ? { background: props.color } : {})),
-      };
-    },
-  });
-</script>
-
 <style lang="scss" scoped>
-  .left-line {
-    width: 42px;
-    flex-basis: 42px;
-    flex-grow: 0;
-    margin-right: 62px;
-    background: $textWhite;
+  .title-launch-section {
+    margin-top: 90px;
+    background: $accent;
+
+    &__main {
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 </style>

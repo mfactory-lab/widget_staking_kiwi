@@ -27,64 +27,74 @@
   -->
 
 <template>
-  <section class="title-how-section">
+  <div class="launch-pair">
+    <div class="launch-pair__t-block"></div>
     <div class="container">
-      <div class="title-how-section__main">
-        <left-line />
-        <div class="column title-how-section__content">
-          <div class="section-title">How a validator generates profit</div>
-          <ul class="title-how-section__list">
-            <li>A new block is sent to validators for verification</li>
-            <li>Validators verify the block and respond with true or false</li>
-            <li>Network disburses rewards for the work done</li>
-            <li
-              >The rewards is added to the delegated stake, after deduction of a fee that goes to
-              the delegator</li
-            >
-          </ul>
-        </div>
+      <div class="launch-pair__row">
+        <launch-validator
+          v-for="item in items"
+          :key="item.title"
+          :title="item.title"
+          :icon="item.icon"
+          :apy="item.apy"
+          :cap="item.cap"
+        />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script lang="ts">
+  import LaunchValidator from '@/components/home/LaunchValidator.vue';
   import { defineComponent } from 'vue';
-  import LeftLine from '@/components/home/LeftLine.vue';
-  import { getCssVar } from 'quasar';
 
   export default defineComponent({
-    components: { LeftLine },
-    setup() {
-      return {
-        getColor: (val: string) => getCssVar(val),
-      };
+    components: { LaunchValidator },
+    props: {
+      items: {
+        type: Array,
+      },
     },
   });
 </script>
 
 <style lang="scss" scoped>
-  .title-how-section {
-    margin-top: 64px;
-    background: $primary;
-
-    .section-title {
-      margin-top: -10px;
+  .launch-pair {
+    &__t-block {
+      height: 90px;
+      background: $accent;
     }
-
-    &__main {
+    &:not(:first-child) &__t-block {
+      @media (max-width: $breakpoint-sm) {
+        display: none;
+      }
+    }
+    &__row {
       display: flex;
-      padding: 62px;
       justify-content: center;
-      color: $textWhite;
-    }
-    &__content {
-      flex-basis: 0;
-      flex-grow: 1;
-    }
-    &__list {
-      margin-bottom: 0;
-      font-size: 28px;
+      padding: 65px 0;
+
+      @media (max-width: $breakpoint-sm) {
+        padding: 50px 0 0;
+      }
+
+      > :first-child {
+        @media (min-width: $breakpoint-sm) {
+          padding-right: 50px;
+        }
+        @media (max-width: $breakpoint-sm) {
+          margin-bottom: 50px;
+        }
+      }
+      > :last-child {
+        @media (min-width: $breakpoint-sm) {
+          padding-left: 49px;
+          border-left: 1px solid #647e82;
+        }
+      }
+      @media (max-width: $breakpoint-sm) {
+        flex-direction: column;
+      }
     }
   }
 </style>

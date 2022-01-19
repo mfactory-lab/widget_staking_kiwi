@@ -31,7 +31,7 @@
     <div class="container">
       <div class="row q-col-gutter-lg">
         <div class="col justify-end d-flex column">
-          <div class="text-caption">© Copyright 2021 jpool.finance. All rights reserved.</div>
+          <div class="">© Copyright 2021 jpool.finance. All rights reserved.</div>
         </div>
         <div class="col col-12 col-md-auto justify-between d-flex column">
           <div :class="$style.buttons" class="q-gutter-md">
@@ -49,7 +49,7 @@
               <twitter-svg class="q-icon" />
             </q-btn>
           </div>
-          <div :class="$style.nav" class="row text-caption footer-links q-pt-md">
+          <div :class="$style.nav" class="row footer-links q-pt-md">
             <a href="https://docs.jpool.one/" target="_blank">Docs</a>
             <span class="q-px-sm">|</span>
             <router-link to="/terms">Terms of Use</router-link>
@@ -85,6 +85,7 @@
     background-color: $blue-grey-8 !important;
     color: #fff !important;
     padding: 2rem 0 1.5rem;
+    font-size: 24px;
     @media (max-width: $breakpoint-sm) {
       text-align: center;
     }
@@ -101,30 +102,28 @@
 
     a {
       margin: 0 0.5em;
+      &:first-child {
+        margin-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 
   .buttons {
     text-align: right;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0 24px;
 
     a {
       color: $blue-grey-8 !important;
-      font-size: 23px;
+      font-size: 46px;
     }
 
     @media (max-width: $breakpoint-sm) {
       text-align: center;
-    }
-  }
-  .telegramChannel {
-    height: 69px;
-    border-radius: 40px;
-
-    b {
-      line-height: 1;
-      font-size: 13px;
-      margin-right: 5px;
-      text-align: left;
     }
   }
 </style>

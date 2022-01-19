@@ -27,5 +27,22 @@
   -->
 
 <template>
-  <section class="faq-section"></section>
+  <section class="flower-section">
+    <div class="container">
+      <div class="flower-section__main">
+        <img src="@/assets/img/flower.svg" alt="" />
+      </div>
+    </div>
+  </section>
 </template>
+
+<style lang="scss" scoped>
+  .flower-section {
+    &__main {
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+</style>

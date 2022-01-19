@@ -27,32 +27,25 @@
   -->
 
 <template>
-  <div class="left-line" :style="styles"></div>
+  <section class="title-ensure-section">
+    <div class="container">
+      <div class="title-ensure-section__main">
+        <img src="@/assets/img/surface.svg" alt="" />
+      </div>
+    </div>
+  </section>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent } from 'vue';
-
-  export default defineComponent({
-    props: {
-      color: {
-        type: String,
-      },
-    },
-    setup(props) {
-      return {
-        styles: computed(() => (props.color ? { background: props.color } : {})),
-      };
-    },
-  });
-</script>
-
 <style lang="scss" scoped>
-  .left-line {
-    width: 42px;
-    flex-basis: 42px;
-    flex-grow: 0;
-    margin-right: 62px;
-    background: $textWhite;
+  .title-ensure-section {
+    margin-top: 90px;
+    background: $warning;
+
+    &__main {
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 </style>

@@ -29,49 +29,27 @@
 <template>
   <section class="team-section">
     <div class="container">
-      <div class="team-section__subtitle">Team</div>
+      <div class="section-title text-primary text-center">Team</div>
 
       <div class="team-section__members">
-        <div class="row justify-center wrap">
+        <div class="row justify-between wrap">
           <div class="team-member q-px-sm" v-for="(member, index) in members" :key="index">
             <div class="team-member__item">
               <div class="team-member__pic">
                 <img :src="member.pic" :alt="member.name" />
-                <a
-                  v-if="member.linkedUrl"
-                  class="team-member__link"
-                  :href="member.linkedUrl"
-                  target="_blank"
-                >
-                  <img alt="linkedin" src="@/assets/img/linkedin.svg" />
-                </a>
               </div>
               <div class="team-member__name">
                 {{ member.name }}
               </div>
               <div class="team-member__pos">
-                {{ member.position }}
-              </div>
-              <div class="team-member__social" v-if="member.social">
-                <div
-                  class="team-member__social__item"
-                  v-for="(social, idx) in member.social"
-                  :key="idx"
-                >
-                  <a class="team-member__social__link" :href="social.link" target="_blank">
-                    <img
-                      alt="social.type"
-                      :class="`team-member__social__img--${social.type}`"
-                      :src="socialIcons[social.type]"
-                    />
-                  </a>
-                </div>
+                <div v-for="(pos, idx) in member.position" :key="idx">{{ pos }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="team-section__b-block"></div>
   </section>
 </template>
 
@@ -81,7 +59,7 @@
   import igorIcon from '@/assets/img/team/igor.svg';
   import vladIcon from '@/assets/img/team/vlad.svg';
   import leonidIcon from '@/assets/img/team/leonid.svg';
-  import romanIcon from '@/assets/img/team/roman.svg';
+  // import romanIcon from '@/assets/img/team/roman.svg';
   import telegramIcon from '@/assets/img/telegram.svg';
   import discordIcon from '@/assets/img/discord.svg';
 
@@ -94,49 +72,30 @@
         },
         members: [
           {
-            pic: rayIcon,
-            name: 'Alexander Ray',
-            position: 'Business Development, Technology/Architecture',
-            linkedUrl: 'https://www.linkedin.com/in/alex-a-ray/',
-            social: [
-              {
-                link: 'https://t.me/joogh',
-                type: 'telegram',
-              },
-              // {
-              //   link: 'https://www.linkedin.com/in/alex-a-ray/',
-              //   type: 'discord',
-              // },
-            ],
-          },
-          {
             pic: igorIcon,
             name: 'Igor Volfson',
-            position: 'Marketing, Content management',
-            linkedUrl: 'https://www.linkedin.com/in/igor-volfson-22297621/',
-            social: [
-              {
-                link: 'https://t.me/sonny_dbb',
-                type: 'telegram',
-              },
-            ],
+            position: ['Marketing,', 'Content management'],
+          },
+          {
+            pic: rayIcon,
+            name: 'Alexander Ray',
+            position: ['CEO,', 'Business Development,', 'Technology/Architecture'],
           },
           {
             pic: leonidIcon,
             name: 'Leonid Krassovitski',
-            position: 'Design/Advertising',
-            linkedUrl: 'https://www.linkedin.com/in/leonid-krassovitski/',
+            position: ['Design/Advertising'],
           },
           {
             pic: vladIcon,
             name: 'Vladyslav Korniienko',
-            position: 'Full-Stack Developer',
+            position: ['Full-Stack Developer'],
           },
-          {
-            pic: romanIcon,
-            name: 'Roman Leukhin',
-            position: 'Frontend Developer',
-          },
+          // {
+          //   pic: romanIcon,
+          //   name: 'Roman Leukhin',
+          //   position: ['Frontend Developer'],
+          // },
         ],
       };
     },

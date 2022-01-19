@@ -9,8 +9,8 @@
   - of the License, or (at your option) any later version.
   -
   - Solana Reference Stake Pool is distributed in the hope that it
-  - will be useful, but WITHOUT ANY WARRANTY; without even the implied
-  - warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  - will be useful, but WITHOUT ANY ensureY; without even the implied
+  - ensurey of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   - See the GNU Affero General Public License for more details.
   -
   - You should have received a copy of the GNU Affero General Public License
@@ -27,32 +27,44 @@
   -->
 
 <template>
-  <div class="left-line" :style="styles"></div>
+  <section class="ensure-section">
+    <div class="container">
+      <div class="column">
+        <div class="section-title text-center text-primary q-mb-xl">We ensure</div>
+        <div class="row no-wrap">
+          <left-line :color="getColor('warning')" />
+          <div class="column ensure-section__content section-text">
+            <div class="q-my-sm">— Top-notch maintenance and service, expert configuration</div>
+            <div class="q-my-sm">— Hosting in world’s leading, high-security data centers</div>
+            <div class="q-my-sm">— 24/7 advisory support</div>
+            <div class="q-my-sm">— High-end servers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { defineComponent } from 'vue';
+  import { getCssVar } from 'quasar';
 
   export default defineComponent({
-    props: {
-      color: {
-        type: String,
-      },
-    },
-    setup(props) {
+    setup() {
       return {
-        styles: computed(() => (props.color ? { background: props.color } : {})),
+        getColor: (val: string) => getCssVar(val),
       };
     },
   });
 </script>
 
 <style lang="scss" scoped>
-  .left-line {
-    width: 42px;
-    flex-basis: 42px;
-    flex-grow: 0;
-    margin-right: 62px;
-    background: $textWhite;
+  .ensure-section {
+    margin-top: 64px;
+
+    &__content {
+      flex-basis: 0;
+      flex-grow: 1;
+    }
   }
 </style>

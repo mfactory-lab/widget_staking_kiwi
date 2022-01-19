@@ -27,32 +27,64 @@
   -->
 
 <template>
-  <div class="left-line" :style="styles"></div>
+  <section class="how-section">
+    <div class="container">
+      <div class="how-section__main">
+        <left-line />
+        <div class="column how-section__content">
+          <div class="section-title">How a validator generates profit</div>
+          <ul class="how-section__list">
+            <li>A new block is sent to validators for verification</li>
+            <li>Validators verify the block and respond with true or false</li>
+            <li>Network disburses rewards for the work done</li>
+            <li
+              >The rewards is added to the delegated stake, after deduction of a fee that goes to
+              the delegator</li
+            >
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { defineComponent } from 'vue';
+  import LeftLine from '@/components/home/LeftLine.vue';
+  import { getCssVar } from 'quasar';
 
   export default defineComponent({
-    props: {
-      color: {
-        type: String,
-      },
-    },
-    setup(props) {
+    components: { LeftLine },
+    setup() {
       return {
-        styles: computed(() => (props.color ? { background: props.color } : {})),
+        getColor: (val: string) => getCssVar(val),
       };
     },
   });
 </script>
 
 <style lang="scss" scoped>
-  .left-line {
-    width: 42px;
-    flex-basis: 42px;
-    flex-grow: 0;
-    margin-right: 62px;
-    background: $textWhite;
+  .how-section {
+    margin-top: 64px;
+    background: $primary;
+
+    .section-title {
+      margin-top: -10px;
+    }
+
+    &__main {
+      display: flex;
+      padding: 62px 0;
+      justify-content: center;
+      color: $textWhite;
+    }
+    &__content {
+      flex-basis: 0;
+      flex-grow: 1;
+    }
+    &__list {
+      margin-bottom: 0;
+      font-size: 28px;
+    }
   }
 </style>

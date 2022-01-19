@@ -37,9 +37,23 @@ a {
 }
 
 .section-title {
-    font-size: 70px;
-    font-weight: 700;
-    line-height: 80px;
-    font-family: $fontSecondary;
-    text-transform: uppercase;
+  font-size: 70px;
+  font-weight: 700;
+  line-height: 80px;
+  font-family: $fontSecondary;
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-size: 30px;
+  line-height: 37px;
+  text-transform: uppercase;
+  color: #252B42;
+  font-weight: 700;
+  font-family: $fontSecondary;
+}
+
+.section-text {
+  font-size: 30px;
+  line-height: 37px;
 }

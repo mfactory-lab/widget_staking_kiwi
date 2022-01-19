@@ -72,10 +72,3 @@
     max-width: 1440px;
   }
 }
-
-// for more space on small notebooks
-@media (min-width: 1143px) {
-  .container, .container-sm, .container-md {
-    max-width: 1140px;
-  }
-}

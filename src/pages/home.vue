@@ -32,10 +32,19 @@
     <title-validators-section />
     <triangle-section :color="getColor('accent')" />
     <validators-section />
-    <title-how-section />
+    <how-section />
     <triangle-section :color="getColor('primary')" />
-    <faq-section />
+    <warrant-section />
+    <title-ensure-section />
+    <triangle-section :color="getColor('warning')" />
+    <ensure-section />
+    <title-launch-section />
+    <triangle-section :color="getColor('accent')" />
+    <launch-section />
+    <triangle-section :color="getColor('accent')" />
+    <comunity-section />
     <team-section />
+    <flower-section />
     <app-footer />
   </q-page>
 </template>
@@ -45,9 +54,15 @@
   import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
   import ValidatorsSection from '../components/home/ValidatorsSection.vue';
   import TriangleSection from '../components/home/TriangleSection.vue';
-  import TitleHowSection from '../components/home/TitleHowSection.vue';
+  import HowSection from '../components/home/HowSection.vue';
+  import WarrantSection from '../components/home/WarrantSection.vue';
+  import TitleEnsureSection from '../components/home/TitleEnsureSection.vue';
+  import EnsureSection from '../components/home/EnsureSection.vue';
+  import TitleLaunchSection from '../components/home/TitleLaunchSection.vue';
+  import LaunchSection from '../components/home/LaunchSection.vue';
+  import ComunitySection from '../components/home/ComunitySection.vue';
   import TeamSection from '../components/home/TeamSection.vue';
-  import FaqSection from '../components/home/FaqSection.vue';
+  import FlowerSection from '../components/home/FlowerSection.vue';
   import AppHeader from '../components/home/AppHeader.vue';
   import AppFooter from '../components/home/AppFooter.vue';
   import { getCssVar } from 'quasar';
@@ -57,9 +72,15 @@
       TitleValidatorsSection,
       ValidatorsSection,
       TriangleSection,
-      TitleHowSection,
+      HowSection,
+      WarrantSection,
+      TitleEnsureSection,
+      EnsureSection,
+      TitleLaunchSection,
+      LaunchSection,
+      ComunitySection,
       TeamSection,
-      FaqSection,
+      FlowerSection,
       AppHeader,
       AppFooter,
     },

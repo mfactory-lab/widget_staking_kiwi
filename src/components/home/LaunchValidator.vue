@@ -27,62 +27,85 @@
   -->
 
 <template>
-  <div class="validator">
-    <img :src="icon" alt="" class="validator__icon" />
-    <div class="validator__title">{{ title }}</div>
-    <q-btn
-      type="a"
-      :href="link.href"
-      target="_blank"
-      rounded
-      :label="link.label"
-      :color="link.color"
-      text-color="text-white"
-      size="26px"
-      padding="6px 90px"
-      class="q-mt-md"
-    />
+  <div class="launch-validator">
+    <img :src="icon" alt="" class="launch-validator__icon" />
+    <div class="column items-start full-height q-py-sm">
+      <div class="launch-validator__title">{{ title }}</div>
+      <div class="launch-validator__apy">APY: {{ apyFormatted }}</div>
+      <div class="launch-validator__cap">Market cap: ${{ capFormatted }}</div>
+      <div class="launch-validator__soon">coming soon</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
+  import { formatAmount, formatPct } from '@jpool/common/utils';
 
   export default defineComponent({
     props: {
       icon: {
         type: String,
+        required: true,
       },
       title: {
         type: String,
+        required: true,
       },
-      link: {
-        type: Object,
+      apy: {
+        type: Number,
+        required: true,
+      },
+      cap: {
+        type: Number,
+        required: true,
       },
     },
-    setup() {
-      return {};
+    setup(props) {
+      return {
+        apyFormatted: computed(() => formatPct.format(props.apy)),
+        capFormatted: computed(() => formatAmount(props.cap, 2).replace('G', 'B')),
+      };
     },
   });
 </script>
 
 <style lang="scss" scoped>
-  .validator {
+  $textColor: #647e82;
+  .launch-validator {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding-bottom: 24px;
+    @media (max-width: $breakpoint-sm) {
+      margin: 0 auto;
+    }
     &__icon {
-      width: 256px;
-      margin-bottom: 16px;
+      width: 160px;
+      margin-right: 30px;
     }
     &__title {
-      font-weight: 500;
-      font-size: 26px;
-      line-height: 32px;
-      text-align: center;
+      font-family: $fontSecondary;
+      font-size: 34px;
+      line-height: 41px;
+      color: $textColor;
+      font-weight: 700;
+    }
+    &__apy {
+      font-size: 23px;
+      line-height: 27px;
+      color: $textColor;
+      font-weight: 700;
+    }
+    &__cap {
+      font-size: 23px;
+      line-height: 27px;
+      color: $textColor;
+    }
+    &__soon {
+      font-family: $fontSecondary;
+      font-size: 23px;
+      line-height: 28px;
+      color: #000000;
       text-transform: uppercase;
-      color: $primary;
     }
   }
 </style>
