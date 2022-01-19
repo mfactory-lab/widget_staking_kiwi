@@ -29,7 +29,7 @@
 <template>
   <div class="launch-validator">
     <img :src="icon" alt="" class="launch-validator__icon" />
-    <div class="column items-start full-height q-py-sm">
+    <div class="column justify-between full-height q-py-sm">
       <div class="launch-validator__title">{{ title }}</div>
       <div class="launch-validator__apy">APY: {{ apyFormatted }}</div>
       <div class="launch-validator__cap">Market cap: ${{ capFormatted }}</div>
@@ -88,6 +88,7 @@
       line-height: 41px;
       color: $textColor;
       font-weight: 700;
+      margin-bottom: auto;
     }
     &__apy {
       font-size: 23px;
@@ -106,6 +107,7 @@
       line-height: 28px;
       color: #000000;
       text-transform: uppercase;
+      margin-top: auto;
     }
   }
 </style>
