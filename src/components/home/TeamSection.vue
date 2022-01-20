@@ -32,7 +32,7 @@
       <div class="section-title text-primary text-center">Team</div>
 
       <div class="team-section__members">
-        <div class="row justify-between wrap">
+        <div class="row justify-sm-between justify-center wrap">
           <div class="team-member q-px-sm" v-for="(member, index) in members" :key="index">
             <div class="team-member__item">
               <div class="team-member__pic">

@@ -57,7 +57,7 @@
               class="validators-section__square-link"
             >
               <div class="column items-center justify-center">
-                <img :src="item.icon" alt="" class="q-mt-xs" />
+                <img :src="item.icon" alt="" class="q-mt-xs full-width" />
                 <div class="text-center q-mt-sm">{{ item.label }}</div>
               </div>
             </q-btn>
@@ -130,6 +130,9 @@
       @media (min-width: $breakpoint-sm) {
         border-right: 1px solid#CFCFCF;
       }
+      @media (max-width: $breakpoint-md) {
+        margin-bottom: 24px;
+      }
     }
     &__square-link {
       border-radius: 15px;
@@ -138,6 +141,11 @@
       margin-right: 4px;
       &:not(:last-child) {
         margin-right: 20px;
+      }
+      @media (max-width: $breakpoint-sm) {
+        margin: 8px auto;
+        width: calc(0.28 * 100%);
+        max-width: 110px;
       }
     }
   }

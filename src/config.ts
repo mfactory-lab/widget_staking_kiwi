@@ -28,6 +28,12 @@
 
 import { Commitment, StakeProgram } from '@solana/web3.js';
 import { Endpoint } from '@jpool/common/store';
+import ethIcon from '@/assets/img/eth.svg';
+import dotIcon from '@/assets/img/dot.svg';
+import atomIcon from '@/assets/img/atom.svg';
+import terraIcon from '@/assets/img/terra.svg';
+import avalancheIcon from '@/assets/img/avalanche.svg';
+import minaIcon from '@/assets/img/mina.svg';
 
 const mode = import.meta.env.MODE;
 const isProd = mode == 'production';
@@ -47,8 +53,7 @@ export const POOL_CONNECTION_DELAY = 30000;
 export const GTAG_ID = isProd ? null : null;
 
 // Social links
-export const TWITTER_URL = 'https://twitter.com/JPoolSolana';
-export const TELEGRAM_URL = 'https://t.me/jpool_solana';
+export const TELEGRAM_URL = 'https://t.me/jstaking';
 export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jpoolsolana';
 
 // Stake
@@ -97,86 +102,37 @@ export const DEFAULT_ENDPOINT = ENDPOINTS[0] as Endpoint;
 export const DEFAULT_COMMITMENT: Commitment = 'confirmed';
 
 // DEFI
-export const DEFI = [
+export const DEFI = [];
+
+export const LAUNCH_VALIDATORS = [
   {
-    id: '0_JSOL-SOL',
-    leftTitle: 'RAYDIUM LIQUIDITY POOL',
-    rightTitle: 'JSOL/SOL',
-    pairName: 'JSOL-SOL',
-    iconHeader: '/img/defi/sol-defi-head.svg',
-    liquidityLink:
-      'https://raydium.io/liquidity/?ammId=D8pasgJWjP9wy39fzeD8BUjQMvYCZxABzPcnuoDSLHBB',
-    swapLink:
-      'https://raydium.io/swap/?from=7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn&to=11111111111111111111111111111111',
-    icon: '/img/defi/sol-defi.svg',
-    textBottom:
-      'Please note: In case of high-volume swaps compared to the liquidity pool volume, the exchange rate may be affected by the transaction.',
-    mainText: [
-      'You can add liquidity to the JSOL-SOL pair on Raydium, our partner AMM, to earn additional yields from the trading going on in that pool.',
-      'The liquidity pool can be used to instantly swap JSOL for SOL and vice versa.',
-    ],
-    iconValidator: '/img/defi/raydium.svg',
-    type: 'raydium',
-    hasValues: true,
+    title: 'Etherium 2.0',
+    id: 'ethereum',
+    icon: ethIcon,
   },
   {
-    id: '1_JSOL-USDC',
-    leftTitle: 'RAYDIUM LIQUIDITY POOL',
-    rightTitle: 'JSOL/USDC',
-    pairName: 'JSOL-USDC',
-    iconHeader: '/img/defi/usd-defi-head.svg',
-    liquidityLink:
-      'https://raydium.io/liquidity/?ammId=7e8GrkwsRm5sS5UaKobLJUNu9esmrzg37dqX6aQyuver',
-    swapLink:
-      'https://raydium.io/swap/?from=7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn&to=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-    icon: '/img/defi/usd-defi.svg',
-    textBottom:
-      'Please note: In case of high-volume swaps compared to the liquidity pool volume, the exchange rate may be affected by the transaction.',
-    mainText: [
-      'You can add liquidity to the JSOL-USDC pair on Raydium, our partner AMM, to earn additional yields from the trading going on in that pool.',
-      'The liquidity pool can be used to instantly swap JSOL for USDC and vice versa.',
-    ],
-    iconValidator: '/img/defi/raydium.svg',
-    type: 'raydium',
-    hasValues: true,
+    title: 'Polkadot',
+    id: 'polkadot',
+    icon: dotIcon,
   },
   {
-    id: '2_JSOL-SOL',
-    leftTitle: 'SABER LIQUIDITY POOL',
-    rightTitle: 'JSOL/SOL',
-    pairName: 'JSOL-SOL',
-    iconHeader: '/img/defi/saber-head.svg',
-    liquidityLink: 'https://app.saber.so/#/pools/jsol/deposit',
-    swapLink:
-      'https://app.saber.so/#/swap?from=7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn&to=So11111111111111111111111111111111111111112',
-    icon: '/img/defi/sol-defi.svg',
-    textBottom:
-      'Please note: In case of high-volume swaps compared to the liquidity pool volume, the exchange rate may be affected by the transaction.',
-    mainText: [
-      'You can add liquidity to the JSOL-SOL pair on Saber, our partner AMM, to earn additional yields from the trading going on in that pool.',
-      'The liquidity pool can be used to instantly swap JSOL for SOL and vice versa.',
-    ],
-    iconValidator: '/img/defi/saber.svg',
-    type: 'saber',
-    hasValues: false,
+    title: 'Cosmos',
+    id: 'cosmos',
+    icon: atomIcon,
   },
   {
-    id: '3_JSOL-USDC',
-    leftTitle: 'ORCA LIQUIDITY POOL',
-    rightTitle: 'JSOL/USDC',
-    pairName: 'JSOL-USDC',
-    iconHeader: '/img/defi/orca-head-usd.svg',
-    liquidityLink: 'https://www.orca.so/pools?pool=jsol/usdc',
-    swapLink: 'https://www.orca.so/?input=USDC&output=JSOL',
-    icon: '/img/defi/usd-defi.svg',
-    textBottom:
-      'Please note: In case of high-volume swaps compared to the liquidity pool volume, the exchange rate may be affected by the transaction.',
-    mainText: [
-      'You can add liquidity to the JSOL-USDC pair on Orca, our partner AMM, to earn additional yields from the trading going on in that pool.',
-      'The liquidity pool can be used to instantly swap JSOL for USDC and vice versa.',
-    ],
-    iconValidator: '/img/defi/orca.svg',
-    type: 'orca',
-    hasValues: true,
+    title: 'Terra',
+    id: 'terracoin',
+    icon: terraIcon,
+  },
+  {
+    title: 'Avalanche',
+    id: 'avalanche-2',
+    icon: avalancheIcon,
+  },
+  {
+    title: 'Mina',
+    id: 'mina-protocol',
+    icon: minaIcon,
   },
 ];

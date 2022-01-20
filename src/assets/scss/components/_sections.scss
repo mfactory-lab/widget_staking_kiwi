@@ -29,10 +29,29 @@
 .team-section {
   position: relative;
 
+  @media (max-width: $breakpoint-sm) {
+    padding-top: 50px;
+    background: $primary;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding-top: 32px;
+    padding-bottom: 8px;
+  }
+
+  .section-title {
+    @media (max-width: $breakpoint-sm) {
+      color: $textWhite !important;
+    }
+  }
+
   &__b-block {
     background: $primary;
     height: 300px;
     margin-top: -245px;
+    @media (max-width: $breakpoint-xs) {
+      display: none;
+    }
   }
 }
 
@@ -41,6 +60,9 @@
   position: relative;
   z-index: 2;
   overflow: hidden;
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 1.5rem;
+  }
 }
 
 .team-member {
@@ -51,8 +73,8 @@
     width: 230px;
     min-width: 230px;
 
-    @media (max-width: $breakpoint-xs) {
-      height: auto;
+    @media (max-width: $breakpoint-sm) {
+      padding-bottom: 24px;
     }
   }
 
@@ -80,6 +102,11 @@
     border-radius: 100%;
     height: 230px;
     margin-bottom: 10px;
+    @media (max-width: $breakpoint-sm) {
+      height: 150px;
+      width: 150px;
+      margin: 0 auto 10px;
+    }
 
     img {
       width: 100%;
@@ -92,6 +119,10 @@
     color: $textWhite;
     font-weight: bold;
     padding: 0 10px;
+    @media (max-width: $breakpoint-sm) {
+      font-size: 16px;
+      line-height: 20px;
+    }
   }
 
   &__pos {
@@ -100,5 +131,9 @@
     font-size: 18px;
     line-height: 26px;
     padding: 0 10px;
+    @media (max-width: $breakpoint-sm) {
+      font-size: 14px;
+      line-height: 18px;
+    }
   }
 }

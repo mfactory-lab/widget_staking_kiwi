@@ -43,6 +43,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      > img {
+        max-height: 65%;
+      }
+      @media (max-width: $breakpoint-xs) {
+        height: 150px;
+      }
     }
   }
 </style>

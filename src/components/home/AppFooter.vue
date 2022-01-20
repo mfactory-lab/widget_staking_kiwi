@@ -34,28 +34,21 @@
           <div class="">© Copyright 2021 jpool.finance. All rights reserved.</div>
         </div>
         <div class="col col-12 col-md-auto justify-between d-flex column">
-          <div :class="$style.buttons" class="q-gutter-md">
-            <q-btn
-              :href="TELEGRAM_ANNOUNCEMENT_URL"
-              color="white"
-              round
-              target="_blank"
-              type="a"
-              unelevated
-            >
+          <div :class="$style.buttons" class="">
+            <q-btn :href="TELEGRAM_URL" color="white" round target="_blank" type="a" unelevated>
               <telegram-svg class="q-icon" />
             </q-btn>
-            <q-btn :href="TWITTER_URL" color="white" round target="_blank" type="a" unelevated>
+            <!-- <q-btn :href="TWITTER_URL" color="white" round target="_blank" type="a" unelevated>
               <twitter-svg class="q-icon" />
-            </q-btn>
+            </q-btn> -->
           </div>
-          <div :class="$style.nav" class="row footer-links q-pt-md">
+          <!-- <div :class="$style.nav" class="row footer-links q-pt-md">
             <a href="https://docs.jpool.one/" target="_blank">Docs</a>
             <span class="q-px-sm">|</span>
             <router-link to="/terms">Terms of Use</router-link>
             <span class="q-px-sm">|</span>
             <router-link to="/impressum">Legal</router-link>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -63,18 +56,19 @@
 </template>
 
 <script lang="ts">
-  import { TELEGRAM_ANNOUNCEMENT_URL, TELEGRAM_URL, TWITTER_URL } from '@/config';
+  import { TELEGRAM_URL } from '@/config';
   import TelegramSvg from '@/components/icons/TelegramSvg.vue';
-  import TwitterSvg from '@/components/icons/TwitterSvg.vue';
+  // import TwitterSvg from '@/components/icons/TwitterSvg.vue';
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    components: { TelegramSvg, TwitterSvg },
+    components: {
+      TelegramSvg,
+      // TwitterSvg
+    },
     setup() {
       return {
-        TWITTER_URL,
         TELEGRAM_URL,
-        TELEGRAM_ANNOUNCEMENT_URL,
       };
     },
   });
@@ -88,6 +82,9 @@
     font-size: 24px;
     @media (max-width: $breakpoint-sm) {
       text-align: center;
+    }
+    @media (max-width: $breakpoint-xs) {
+      font-size: 12px;
     }
 
     a {
@@ -117,21 +114,28 @@
     justify-content: space-between;
     margin: 8px 0 24px;
 
+    @media (max-width: $breakpoint-xs) {
+      margin: 8px 0;
+    }
+
     a {
       color: $blue-grey-8 !important;
       font-size: 46px;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 26px;
+      }
     }
 
     @media (max-width: $breakpoint-sm) {
-      text-align: center;
+      justify-content: center;
     }
   }
 </style>
 
 <style lang="scss" scoped>
-  .footer-links {
-    @media (max-width: $breakpoint-sm) {
-      margin-top: 10px;
-    }
-  }
+  // .footer-links {
+  //   @media (max-width: $breakpoint-sm) {
+  //     margin-top: 10px;
+  //   }
+  // }
 </style>

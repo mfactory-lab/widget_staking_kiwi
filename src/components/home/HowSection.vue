@@ -68,8 +68,14 @@
     margin-top: 64px;
     background: $primary;
 
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 24px;
+    }
+
     .section-title {
-      margin-top: -10px;
+      @media (min-width: $breakpoint-sm) {
+        margin-top: -10px;
+      }
     }
 
     &__main {
@@ -85,6 +91,10 @@
     &__list {
       margin-bottom: 0;
       font-size: 28px;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 14px;
+        padding-left: 24px;
+      }
     }
   }
 </style>

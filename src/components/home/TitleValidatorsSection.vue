@@ -39,12 +39,19 @@
     margin-top: 90px;
     background: $accent;
 
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 50px;
+    }
+
     &__main {
       height: 300px;
       display: flex;
       justify-content: center;
       align-items: center;
       color: $textWhite;
+      @media (max-width: $breakpoint-sm) {
+        height: 100px;
+      }
     }
   }
 </style>

@@ -31,7 +31,7 @@
     <img :src="icon" alt="" class="launch-validator__icon" />
     <div class="column justify-between full-height q-py-sm">
       <div class="launch-validator__title">{{ title }}</div>
-      <div class="launch-validator__apy">APY: {{ apyFormatted }}</div>
+      <!-- <div class="launch-validator__apy">APY: {{ apyFormatted }}</div> -->
       <div class="launch-validator__cap">Market cap: ${{ capFormatted }}</div>
       <div class="launch-validator__soon">coming soon</div>
     </div>
@@ -40,7 +40,7 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { formatAmount, formatPct } from '@jpool/common/utils';
+  import { formatAmount /*, formatPct*/ } from '@jpool/common/utils';
 
   export default defineComponent({
     props: {
@@ -52,10 +52,10 @@
         type: String,
         required: true,
       },
-      apy: {
-        type: Number,
-        required: true,
-      },
+      // apy: {
+      //   type: Number,
+      //   required: true,
+      // },
       cap: {
         type: Number,
         required: true,
@@ -63,7 +63,7 @@
     },
     setup(props) {
       return {
-        apyFormatted: computed(() => formatPct.format(props.apy)),
+        // apyFormatted: computed(() => formatPct.format(props.apy)),
         capFormatted: computed(() => formatAmount(props.cap, 2).replace('G', 'B')),
       };
     },
@@ -75,12 +75,13 @@
   .launch-validator {
     display: flex;
     align-items: center;
-    @media (max-width: $breakpoint-sm) {
-      margin: 0 auto;
-    }
     &__icon {
       width: 160px;
-      margin-right: 30px;
+      margin-right: 32px;
+      @media (max-width: $breakpoint-xs) {
+        width: 80px;
+        margin-right: 16px;
+      }
     }
     &__title {
       font-family: $fontSecondary;
@@ -89,17 +90,26 @@
       color: $textColor;
       font-weight: 700;
       margin-bottom: auto;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 22px;
+        line-height: 26px;
+      }
     }
-    &__apy {
-      font-size: 23px;
-      line-height: 27px;
-      color: $textColor;
-      font-weight: 700;
-    }
+    // &__apy {
+    //   font-size: 23px;
+    //   line-height: 27px;
+    //   color: $textColor;
+    //   font-weight: 700;
+    // }
     &__cap {
       font-size: 23px;
       line-height: 27px;
       color: $textColor;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 16px;
+        line-height: 20px;
+        margin: 4px 0;
+      }
     }
     &__soon {
       font-family: $fontSecondary;
@@ -108,6 +118,10 @@
       color: #000000;
       text-transform: uppercase;
       margin-top: auto;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 16px;
+        line-height: 20px;
+      }
     }
   }
 </style>

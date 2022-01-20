@@ -27,15 +27,15 @@
   -->
 
 <template>
-  <section class="app-header">
+  <section class="app-header q-pt-xl">
     <div class="container">
-      <div class="row justify-end q-py-md app-header__links">
+      <!-- <div class="row justify-end q-py-md app-header__links">
         <router-link to="/terms" class="text-primary">contact</router-link>
         <span class="q-px-sm text-primary">|</span>
         <a href="https://docs.jpool.one/" class="text-primary" target="_blank">docs</a>
-      </div>
+      </div> -->
       <div class="row">
-        <div class="column col-9 col-lg-8">
+        <div class="column col-12 col-md-9 col-lg-8">
           <div class="row">
             <div class="col-2">
               <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
@@ -50,7 +50,7 @@
               </div>
             </div>
           </div>
-          <div class="row justify-between q-mt-md">
+          <div class="row justify-between q-mt-md app-header__btns">
             <q-btn
               type="a"
               href="https://solstake.io/#/app/validator/DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao"
@@ -59,7 +59,7 @@
               label="STAKE SOLANA NOW"
               color="secondary"
               text-color="text-white"
-              size="26px"
+              :size="$q.screen.gt.xs ? '26px' : '14px'"
               padding="6px 32px"
               class="q-mr-md q-mt-md"
             />
@@ -71,13 +71,13 @@
               label="STAKE NEAR NOW"
               color="dark"
               text-color="text-white"
-              size="26px"
+              :size="$q.screen.gt.xs ? '26px' : '14px'"
               padding="6px 32px"
               class="q-mr-md q-mt-md"
             />
           </div>
         </div>
-        <div class="col-3 col-lg-4">
+        <div class="col-3 col-lg-4 gt-sm">
           <div class="row justify-end relative-position">
             <img src="@/assets/img/s2.svg" class="app-header__flower" />
           </div>
@@ -107,20 +107,32 @@
       line-height: 84px;
       font-weight: 900;
       margin: 8px 0 0;
+      @media (max-width: $breakpoint-xs) {
+        margin: -8px 0 0;
+        font-size: 36px;
+        line-height: 44px;
+      }
     }
     &__subtitle {
       font-size: 35px;
       line-height: 38px;
       font-weight: 700;
       margin: 0;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 16px;
+        line-height: 20px;
+      }
     }
     &__flower {
       position: absolute;
       height: 400px;
       top: 50px;
     }
-    &__links {
-      font-size: 21px;
+    // &__links {
+    //   font-size: 21px;
+    // }
+    &__btns {
+      max-width: 760px;
     }
   }
 </style>

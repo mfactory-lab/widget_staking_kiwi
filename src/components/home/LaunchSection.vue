@@ -27,12 +27,12 @@
   -->
 
 <template>
-  <section class="launch-section q-pt-lg">
+  <section class="launch-section">
     <div class="container">
-      <div class="section-title text-center text-primary q-my-xl"
+      <div class="section-title text-center text-primary"
         >Validator launch timeline by blockchain
       </div>
-      <div class="section-subtitle text-center q-mb-xl"
+      <div class="section-subtitle text-center"
         >We plan to launch following launch in 2021–2023:</div
       >
     </div>
@@ -46,19 +46,8 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import LaunchValidatorPair from '@/components/home/LaunchValidatorPair.vue';
-  import ethIcon from '@/assets/img/eth.svg';
-  import dotIcon from '@/assets/img/dot.svg';
-  import atomIcon from '@/assets/img/atom.svg';
-  import terraIcon from '@/assets/img/terra.svg';
-  import nearIcon from '@/assets/img/near-logo.svg';
-  import minaIcon from '@/assets/img/mina.svg';
-
-  interface Validator {
-    title: string;
-    icon: string;
-    apy: number;
-    cap: number;
-  }
+  import { Validator } from '@utils/launch-validators';
+  import { useLaunchValidators } from '@/hooks/launch-validators';
 
   export default defineComponent({
     components: { LaunchValidatorPair },
@@ -68,50 +57,12 @@
       },
     },
     setup() {
-      //TODO: make real values
-      const validators: Validator[] = [
-        {
-          title: 'Etherium 2.0',
-          icon: ethIcon,
-          apy: 0.05,
-          cap: 462764000000,
-        },
-        {
-          title: 'Polkadot',
-          icon: dotIcon,
-          apy: 0.14,
-          cap: 32234000000,
-        },
-        {
-          title: 'Cosmos',
-          icon: atomIcon,
-          apy: 0.1,
-          cap: 5512000000,
-        },
-        {
-          title: 'Terra',
-          icon: terraIcon,
-          apy: 0.11,
-          cap: 12164000000,
-        },
-        {
-          title: 'Near',
-          icon: nearIcon,
-          apy: 0.11,
-          cap: 2312000000,
-        },
-        {
-          title: 'Mina',
-          icon: minaIcon,
-          apy: 0.12,
-          cap: 804000000,
-        },
-      ];
+      const { launchValidators } = useLaunchValidators();
       return {
         launchPairs: computed(() => {
           const arr: Validator[][] = [];
           let tempArr: Validator[] = [];
-          validators.forEach((item, index) => {
+          launchValidators.value.forEach((item, index) => {
             tempArr.push(item);
             if (index % 2) {
               arr.push(tempArr);
@@ -127,6 +78,18 @@
 
 <style lang="scss" scoped>
   .launch-section {
+    .section-title {
+      margin: 48px 0;
+      @media (max-width: $breakpoint-xs) {
+        margin: 16px 0;
+      }
+    }
+    .section-subtitle {
+      margin-bottom: 48px;
+      @media (max-width: $breakpoint-xs) {
+        margin-bottom: 16px;
+      }
+    }
     &__validator-box {
       padding-bottom: 24px;
       @media (min-width: $breakpoint-sm) {
@@ -147,6 +110,10 @@
       background: $accent;
       @media (max-width: $breakpoint-sm) {
         margin-top: 50px;
+      }
+      @media (max-width: $breakpoint-xs) {
+        height: 70px;
+        margin-top: 24px;
       }
     }
   }

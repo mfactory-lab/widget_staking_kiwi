@@ -41,11 +41,22 @@
     margin-top: 90px;
     background: $warning;
 
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 48px;
+    }
+
     &__main {
       height: 500px;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      > img {
+        max-height: 65%;
+      }
+      @media (max-width: $breakpoint-xs) {
+        height: 150px;
+      }
     }
   }
 </style>

@@ -62,6 +62,17 @@
   .ensure-section {
     margin-top: 64px;
 
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      margin-bottom: 40px;
+      @media (max-width: $breakpoint-xs) {
+        margin-bottom: 16px;
+      }
+    }
+
     &__content {
       flex-basis: 0;
       flex-grow: 1;

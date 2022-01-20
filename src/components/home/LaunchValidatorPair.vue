@@ -36,7 +36,6 @@
           :key="item.title"
           :title="item.title"
           :icon="item.icon"
-          :apy="item.apy"
           :cap="item.cap"
         />
       </div>
@@ -63,6 +62,9 @@
     &__t-block {
       height: 90px;
       background: $accent;
+      @media (max-width: $breakpoint-xs) {
+        height: 70px;
+      }
     }
     &:not(:first-child) &__t-block {
       @media (max-width: $breakpoint-sm) {
@@ -77,6 +79,10 @@
       @media (max-width: $breakpoint-sm) {
         padding: 50px 0 0;
       }
+      @media (max-width: $breakpoint-sm) {
+        padding-top: 24px;
+        align-items: flex-start;
+      }
 
       > :first-child {
         @media (min-width: $breakpoint-sm) {
@@ -84,6 +90,9 @@
         }
         @media (max-width: $breakpoint-sm) {
           margin-bottom: 50px;
+        }
+        @media (max-width: $breakpoint-sm) {
+          margin-bottom: 24px;
         }
       }
       > :last-child {

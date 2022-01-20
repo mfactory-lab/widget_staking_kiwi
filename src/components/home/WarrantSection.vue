@@ -30,7 +30,7 @@
   <section class="warrant-section">
     <div class="container">
       <div class="column">
-        <div class="section-title text-center text-primary q-mb-xl">We warrant</div>
+        <div class="section-title text-center text-primary">We warrant</div>
         <div class="row no-wrap">
           <left-line :color="getColor('warning')" />
           <div class="column warrant-section__content">
@@ -81,6 +81,17 @@
 <style lang="scss" scoped>
   .warrant-section {
     margin-top: 64px;
+
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      margin-bottom: 40px;
+      @media (max-width: $breakpoint-xs) {
+        margin-bottom: 16px;
+      }
+    }
 
     &__content {
       flex-basis: 0;

@@ -1,4 +1,4 @@
-/*!
+/*
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,49 +26,34 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
+import { ref } from 'vue';
+import { Validator } from '@utils/launch-validators';
+import { LAUNCH_VALIDATORS } from '@/config';
+import { getTokensInfo } from '@/utils/launch-validators';
 
-.container,
-.container-sm,
-.container-md,
-.container-lg,
-.container-xl {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-}
+const launchValidators = ref<Array<Validator>>([]);
 
-@media (min-width: $breakpoint-xs) {
-  .container,
-  .container-sm {
-    max-width: 599px;
+export function useLaunchValidators() {
+  async function getCoinsInfo() {
+    const ids = LAUNCH_VALIDATORS.reduce((prev, curr) => {
+      if (prev) return `${prev},${curr.id}`;
+      return curr.id;
+    }, '');
+    const values = await getTokensInfo(ids);
+    const validatorsTemp: Validator[] = [];
+
+    for (const item of LAUNCH_VALIDATORS) {
+      const obj = values.find((coin) => coin.id === item.id);
+      if (obj) {
+        validatorsTemp.push({ ...item, cap: obj.market_cap });
+      }
+    }
+    launchValidators.value = validatorsTemp;
   }
-}
 
-@media (min-width: $breakpoint-sm) {
-  .container,
-  .container-sm,
-  .container-md {
-    max-width: 1020px;
-  }
-}
+  getCoinsInfo();
 
-@media (min-width: $breakpoint-md) {
-  .container,
-  .container-sm,
-  .container-md,
-  .container-lg {
-    max-width: 1140px;
-  }
-}
-
-@media (min-width: $breakpoint-lg) {
-  .container,
-  .container-sm,
-  .container-md,
-  .container-lg,
-  .container-xl {
-    max-width: 1440px;
-  }
+  return {
+    launchValidators,
+  };
 }

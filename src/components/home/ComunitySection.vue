@@ -71,6 +71,16 @@
   .comunity-section {
     margin-top: 40px;
 
+    @media (max-width: $breakpoint-xs) {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      margin-bottom: 48px;
+      @media (max-width: $breakpoint-xs) {
+        margin-bottom: 16px;
+      }
+    }
     &__content {
       flex-basis: 0;
       flex-grow: 1;
@@ -80,6 +90,11 @@
       width: 690px;
       margin: 80px auto 60px;
       border-bottom: 1px solid #000;
+
+      @media (max-width: $breakpoint-md) {
+        margin: 36px auto 0;
+        border: 0;
+      }
     }
   }
 </style>
