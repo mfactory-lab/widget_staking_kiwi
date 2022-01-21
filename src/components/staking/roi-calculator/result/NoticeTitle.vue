@@ -27,22 +27,27 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__results__notice-title">
+    <div class="sol-calculator__results__notice-text sol-calculator__results__notice-text--bold">
+      How to calculate APY
+    </div>
+    <div class="sol-calculator__results__notice-text sol-calculator__results__notice-text--light">
+      Current SOL price: 1 SOL = {{ solPriceShow }} USD
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { computed, defineComponent } from 'vue';
+  import { useCoinRateStore } from '@jpool/common/store';
+  import { formatMoney } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const coinRateStore = useCoinRateStore();
+      return {
+        solPriceShow: computed(() => formatMoney(coinRateStore.solPrice)),
+      };
     },
-    setup() {},
   });
 </script>

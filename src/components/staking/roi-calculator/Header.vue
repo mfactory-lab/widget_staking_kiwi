@@ -27,22 +27,25 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__header">
+    <h1 class="sol-calculator__header__title">Solana APY Interest Calculator</h1>
+    <q-btn padding="sm" color="transparent" unelevated :icon="evaClose" size="sm" @click="close" />
+  </div>
 </template>
 
 <script lang="ts">
+  import { evaClose } from '@quasar/extras/eva-icons';
+  import { useEmitter } from '@jpool/common/hooks';
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const emitter = useEmitter();
+
+      return {
+        evaClose,
+        close: () => emitter.emit('closeCalculator'),
+      };
     },
-    setup() {},
   });
 </script>

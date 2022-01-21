@@ -27,22 +27,24 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__form__group">
+    <div class="sol-calculator__form__text">Current APY Interest Rate</div>
+    <div class="sol-calculator__form__bigtext">≈{{ apy }}</div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { computed, defineComponent } from 'vue';
+  import { storeToRefs } from 'pinia';
+  import { useApyStore } from '@jpool/common/store';
+  import { formatPct } from '@jpool/common/utils';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const { apy } = storeToRefs(useApyStore());
+      return {
+        apy: computed(() => formatPct.format(apy.value)),
+      };
     },
-    setup() {},
   });
 </script>

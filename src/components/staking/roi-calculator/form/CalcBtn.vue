@@ -27,22 +27,42 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <q-btn
+    class="q-mt-sm sol-calculator__form__btn"
+    flat
+    padding="none"
+    label="calculate"
+    size="md"
+    :disable="isDisabled"
+    @click="calc"
+  />
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { computed, defineComponent } from 'vue';
+  import { useRoiCalculator } from '@jpool/common/hooks';
+  import { isInvalidFloat, isInvalidTime } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const roiCalculatorStore = useRoiCalculator();
+      const { investmentAmount, investmentTime, investmentPeriod } = roiCalculatorStore;
+      roiCalculatorStore.calc();
+      return {
+        investmentAmount,
+        investmentTime,
+        investmentPeriod,
+        isDisabled: computed(
+          () =>
+            isInvalidTime(investmentTime.value, investmentPeriod.value) ||
+            isInvalidFloat(investmentAmount.value) ||
+            Number(investmentAmount.value) < 0 ||
+            Number(investmentTime.value) < 0,
+        ),
+        calc() {
+          roiCalculatorStore.calc();
+        },
+      };
     },
-    setup() {},
   });
 </script>

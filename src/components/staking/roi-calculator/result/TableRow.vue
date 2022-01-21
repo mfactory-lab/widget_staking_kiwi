@@ -27,22 +27,49 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div
+    class="sol-calculator__results__table__row"
+    :class="{ 'sol-calculator__results__table__row--bold': isTitle }"
+  >
+    <div class="sol-calculator__results__table__text">{{ name }}</div>
+    <div class="sol-calculator__results__table__text">
+      {{ solShow }}
+    </div>
+    <div class="sol-calculator__results__table__text">
+      {{ solShow ? `$ ${moneyShow}` : '' }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { computed, defineComponent } from 'vue';
+  import { useCoinRateStore } from '@jpool/common/store';
+  import { formatAmount } from '@jpool/common/utils';
+  import { formatMoney } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    props: {
+      name: {
+        type: String,
+      },
+      sol: {
+        type: Number,
+        default: () => -1,
+      },
+      isTitle: {
+        type: Boolean,
+        required: false,
+        default: false,
+      },
     },
-    setup() {},
+    setup(props) {
+      const coinRateStore = useCoinRateStore();
+      return {
+        solShow: computed(() => (props.sol >= 0 ? formatAmount(props.sol, 3) : '')),
+        moneyShow: computed(() =>
+          props.sol >= 0 ? formatMoney(props.sol * coinRateStore.solPrice) : '',
+        ),
+      };
+    },
   });
 </script>

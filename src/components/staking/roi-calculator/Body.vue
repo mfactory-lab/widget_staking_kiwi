@@ -27,22 +27,20 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__body">
+    <roi-form />
+    <roi-results />
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import RoiForm from './Form.vue';
+  import RoiResults from './Results.vue';
 
-  export default defineComponent({
+  export default {
     components: {
-      StakingHeader,
-      MainSection,
+      RoiForm,
+      RoiResults,
     },
-    setup() {},
-  });
+  };
 </script>

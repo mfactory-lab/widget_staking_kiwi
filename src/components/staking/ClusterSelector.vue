@@ -27,22 +27,56 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <q-btn-dropdown
+    class="app-header__cluster-btn"
+    :label="filter(cluster)"
+    :model-value="false"
+    auto-close
+    color="secondary"
+    text-color="black"
+    rounded
+    :class="$style.btn"
+  >
+    <q-list>
+      <q-item v-for="item in items" :key="item.name" clickable @click="select(item)">
+        <q-item-section>
+          <q-item-label>
+            <b>{{ filter(item.name) }}</b>
+          </q-item-label>
+          {{ item.url }}
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-btn-dropdown>
 </template>
 
 <script lang="ts">
+  import { computed } from 'vue';
+  import { ENDPOINTS } from '@/config';
+  import { Endpoint, useConnectionStore, useWalletStore } from '@jpool/common/store';
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const connectionStore = useConnectionStore();
+      const walletStore = useWalletStore();
+      return {
+        items: ENDPOINTS,
+        cluster: computed(() => connectionStore.cluster),
+        select: (e: Endpoint) => {
+          if (!!walletStore.wallet?.publicKey && connectionStore.cluster !== e.name) {
+            walletStore.disconnect();
+          }
+          connectionStore.setCluster(e.name);
+        },
+        filter: (name: string) => name.replace('-beta', ''),
+      };
     },
-    setup() {},
   });
 </script>
+
+<style lang="scss" module>
+  //.btn {
+  //  width: 170px;
+  //}
+</style>

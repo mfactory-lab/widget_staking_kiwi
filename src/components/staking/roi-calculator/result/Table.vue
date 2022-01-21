@@ -27,22 +27,33 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__results__table">
+    <table-row name="Total return, SOL" :sol="totalAmount" :isTitle="true" />
+    <table-row name="Interest per Day" :sol="solDay" />
+    <table-row name="Interest per Month" :sol="solMonth" />
+    <table-row name="Interest per Year" :sol="solYear" />
+    <table-row />
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { useRoiCalculator } from '@jpool/common/hooks';
+
+  import TableRow from './TableRow.vue';
 
   export default defineComponent({
     components: {
-      StakingHeader,
-      MainSection,
+      TableRow,
     },
-    setup() {},
+    setup() {
+      const { totalAmount, solDay, solMonth, solYear } = useRoiCalculator();
+      return {
+        totalAmount,
+        solDay,
+        solMonth,
+        solYear,
+      };
+    },
   });
 </script>

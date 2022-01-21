@@ -27,22 +27,25 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__form">
+    <current-rate />
+    <investment-amount />
+    <investment-time />
+    <calc-btn />
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
-  export default defineComponent({
+  import CurrentRate from './form/CurrentRate.vue';
+  import InvestmentAmount from './form/InvestmentAmount.vue';
+  import InvestmentTime from './form/InvestmentTime.vue';
+  import CalcBtn from './form/CalcBtn.vue';
+  export default {
     components: {
-      StakingHeader,
-      MainSection,
+      CurrentRate,
+      InvestmentAmount,
+      InvestmentTime,
+      CalcBtn,
     },
-    setup() {},
-  });
+  };
 </script>

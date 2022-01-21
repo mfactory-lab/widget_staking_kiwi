@@ -38,7 +38,9 @@
         <div class="column col-12 col-md-9 col-lg-8">
           <div class="row">
             <div class="col-2">
-              <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
+              <router-link to="/staking">
+                <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
+              </router-link>
             </div>
             <div class="col-10 q-mt-md">
               <div class="column q-ml-md">

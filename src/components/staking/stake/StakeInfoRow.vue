@@ -27,22 +27,27 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="stake-info__table__row" :class="{ 'stake-info__table__row--bold': isBold }">
+    <div class="stake-info__table__text">{{ name }}</div>
+    <div class="stake-info__table__text">
+      {{ value }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    props: {
+      name: {
+        type: String,
+      },
+      value: {
+        type: Number,
+      },
+      isBold: {
+        type: Boolean,
+      },
     },
-    setup() {},
   });
 </script>

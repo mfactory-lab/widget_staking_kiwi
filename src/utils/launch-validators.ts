@@ -72,7 +72,6 @@ export async function getTokensInfo(ids = 'solana', vs_currencies = 'usd') {
       .then(
         (res) => {
           if (res.length > 0) {
-            console.log('res === ', res);
             resolve(res);
           } else {
             reject(Error('Promise rejected'));

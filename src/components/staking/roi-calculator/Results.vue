@@ -27,22 +27,22 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__results">
+    <roi-table />
+    <notice-title />
+    <notice-text />
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
-  export default defineComponent({
+  import RoiTable from './result/Table.vue';
+  import NoticeTitle from './result/NoticeTitle.vue';
+  import NoticeText from './result/NoticeText.vue';
+  export default {
     components: {
-      StakingHeader,
-      MainSection,
+      RoiTable,
+      NoticeTitle,
+      NoticeText,
     },
-    setup() {},
-  });
+  };
 </script>

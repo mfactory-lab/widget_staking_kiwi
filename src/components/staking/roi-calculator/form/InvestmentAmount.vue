@@ -27,22 +27,38 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__form__group">
+    <div class="sol-calculator__form__label">SOL Investment Amount</div>
+    <input
+      type="number"
+      class="sol-calculator__form__input"
+      :class="{ 'sol-calculator__form__input--invalid': isInvalid }"
+      v-model="investmentAmount"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
+  import { isInvalidFloat } from '@jpool/common/utils/check-number';
+  import { useRoiCalculator } from '@jpool/common/hooks';
+  import { computed, defineComponent, watch } from 'vue';
 
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    setup() {
+      const { investmentAmount } = useRoiCalculator();
+      watch(investmentAmount, (val) => {
+        if (val && Number(val) < 0) {
+          investmentAmount.value = '0';
+        }
+      });
+      return {
+        investmentAmount,
+        isInvalid: computed(
+          () =>
+            investmentAmount.value &&
+            (isInvalidFloat(investmentAmount.value) || Number(investmentAmount.value) < 0),
+        ),
+      };
     },
-    setup() {},
   });
 </script>

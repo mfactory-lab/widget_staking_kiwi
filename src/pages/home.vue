@@ -51,20 +51,20 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '../components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '../components/home/ValidatorsSection.vue';
-  import TriangleSection from '../components/home/TriangleSection.vue';
-  import HowSection from '../components/home/HowSection.vue';
-  import WarrantSection from '../components/home/WarrantSection.vue';
-  import TitleEnsureSection from '../components/home/TitleEnsureSection.vue';
-  import EnsureSection from '../components/home/EnsureSection.vue';
-  import TitleLaunchSection from '../components/home/TitleLaunchSection.vue';
-  import LaunchSection from '../components/home/LaunchSection.vue';
-  import ComunitySection from '../components/home/ComunitySection.vue';
-  import TeamSection from '../components/home/TeamSection.vue';
-  import FlowerSection from '../components/home/FlowerSection.vue';
-  import AppHeader from '../components/home/AppHeader.vue';
-  import AppFooter from '../components/home/AppFooter.vue';
+  import TitleValidatorsSection from '@/components/home/TitleValidatorsSection.vue';
+  import ValidatorsSection from '@/components/home/ValidatorsSection.vue';
+  import TriangleSection from '@/components/home/TriangleSection.vue';
+  import HowSection from '@/components/home/HowSection.vue';
+  import WarrantSection from '@/components/home/WarrantSection.vue';
+  import TitleEnsureSection from '@/components/home/TitleEnsureSection.vue';
+  import EnsureSection from '@/components/home/EnsureSection.vue';
+  import TitleLaunchSection from '@/components/home/TitleLaunchSection.vue';
+  import LaunchSection from '@/components/home/LaunchSection.vue';
+  import ComunitySection from '@/components/home/ComunitySection.vue';
+  import TeamSection from '@/components/home/TeamSection.vue';
+  import FlowerSection from '@/components/home/FlowerSection.vue';
+  import AppHeader from '@/components/home/AppHeader.vue';
+  import AppFooter from '@/components/home/AppFooter.vue';
   import { getCssVar } from 'quasar';
 
   export default defineComponent({

@@ -27,22 +27,15 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="sol-calculator__results__notice-text">
+    Annual percentage yield (APY) is the effective annual rate, or real rate, of return of an
+    investment if the interest earned each period is compounded. APY considers the effects of
+    compounding, since advertised rates are typically the rates of return for simple interest.
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
-  export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
-    },
-    setup() {},
-  });
+  export default {
+    name: 'NoticeText',
+  };
 </script>

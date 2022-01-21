@@ -27,22 +27,53 @@
   -->
 
 <template>
-  <q-page>
-    <staking-header />
-    <main-section />
-  </q-page>
+  <div class="stake-box__slider">
+    <slot></slot>
+    <div class="stake-box__slider__steps">
+      <span v-for="(val, idx) in steps" :key="idx">{{ val }}%</span>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
+    props: {
+      value: {
+        type: Number,
+      },
     },
-    setup() {},
+    setup() {
+      return {
+        steps: [0, 25, 50, 75, 100],
+      };
+    },
   });
 </script>
+
+<style lang="scss">
+  .stake-box {
+    &__slider {
+      margin-top: 5px;
+      padding: 0 28px 0 15px;
+      position: relative;
+      color: $blue-grey-3;
+
+      &__steps {
+        font-size: 12px;
+        margin-left: -5px;
+        width: calc(100% + 20px);
+        display: flex;
+        justify-content: space-between;
+
+        > span {
+          margin-left: 9px;
+          &:first-child,
+          &:last-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+</style>
