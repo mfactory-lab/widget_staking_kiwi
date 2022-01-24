@@ -35,6 +35,8 @@ $dark: #404246;
 $warning: #FFCD29;
 
 $textWhite: #FFFFFF;
+$lightGrayNatural: #E9E9E9;
+$red: #FF6B48;
 
 $generic-border-radius: 12px;
 
@@ -46,3 +48,11 @@ $button-padding: 9px 17px;
 $fontSecondary: 'Montserrat';
 
 $tooltip-background: $blue-grey-8;
+
+$primaryGradient: linear-gradient(
+    180deg,
+    transparentize($primary, 0.05) 0%,
+    transparentize($primary, 0.05) 50%,
+    $primary 50%,
+    $primary 100%
+  );

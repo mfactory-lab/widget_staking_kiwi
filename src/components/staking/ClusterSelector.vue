@@ -32,10 +32,9 @@
     :label="filter(cluster)"
     :model-value="false"
     auto-close
-    color="secondary"
-    text-color="black"
+    color="text-white"
+    text-color="primary"
     rounded
-    :class="$style.btn"
   >
     <q-list>
       <q-item v-for="item in items" :key="item.name" clickable @click="select(item)">
@@ -74,9 +73,3 @@
     },
   });
 </script>
-
-<style lang="scss" module>
-  //.btn {
-  //  width: 170px;
-  //}
-</style>

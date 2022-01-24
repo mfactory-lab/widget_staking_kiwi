@@ -27,51 +27,51 @@
   -->
 
 <template>
-  <div class="apy" :class="{ 'apy--selected': selected }">
-    CURRENT APY
-    <div class="apy__value">≈{{ apy }}</div>
-    <q-inner-loading :showing="apyLoading" />
-  </div>
+  <q-card class="wallet-balance">
+    <q-card-section class="wallet-balance__head">
+      <div>WALLET</div>
+    </q-card-section>
+    <q-card-section class="wallet-balance__body">
+      <q-list dense separator>
+        <q-item>
+          <q-item-section class="balance__value">
+            <span>{{ formatPrice(solBalance) }}</span>
+            <span class="balance__value__usd">${{ formatMoney(solUsd) }}</span>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>
+              <img alt="" src="@/assets/img/sol-logo.svg" />
+              <span>SOL</span>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script lang="ts">
-  import { useApyStore } from '@jpool/common/store';
-  import { storeToRefs } from 'pinia';
   import { computed, defineComponent } from 'vue';
-  import { formatPct } from '@jpool/common/utils';
+  import { storeToRefs } from 'pinia';
+  import { useBalanceStore, useCoinRateStore } from '@jpool/common/store';
+  import { longPriceFormatter } from '@jpool/common/utils';
+  import { formatMoney } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
-    props: {
-      selected: {
-        type: Boolean,
-        default: false,
-      },
-    },
     setup() {
-      const { apy, apyLoading } = storeToRefs(useApyStore());
+      const balanceStore = useBalanceStore();
+      const coinRateStore = useCoinRateStore();
+
+      const { solBalance } = storeToRefs(balanceStore);
+
+      const solUsd = computed(() => coinRateStore.solPrice * solBalance.value);
+
       return {
-        apyLoading,
-        apy: computed(() => formatPct.format(apy.value)),
+        solBalance,
+        solUsd,
+        formatPrice: (v: number) => longPriceFormatter.format(v),
+        formatMoney: (v: number) => formatMoney(v),
       };
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .apy {
-    font-size: 14px;
-    line-height: 14px;
-    color: $primary;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    &__value {
-      font-size: 50px;
-      line-height: 50px;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-  }
-</style>

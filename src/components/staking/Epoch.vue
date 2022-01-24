@@ -27,24 +27,23 @@
   -->
 
 <template>
-  <div class="epoch">
+  <div class="epoch row justify-center">
+    <div class="column items-center">
+      <div class="epoch__title">Epoch {{ epochNumber }}</div>
+      <div class="epoch__label">estimated time remaining</div>
+      <div class="epoch__value">{{ time.h }}h {{ time.m }}m {{ time.s }}s</div>
+    </div>
     <q-circular-progress
       show-value
-      class="q-mt-xs q-ma-mdepoch__progress"
+      class="q-ml-md q-my-auto epoch__progress"
       :value="epochProgress"
-      size="106px"
+      size="70px"
       :thickness="0.2"
-      color="natural-gray"
-      track-color="secondary"
+      color="warning"
+      track-color="accent"
       center-color="white"
     >
-      <div class="epoch__label">
-        <div class="epoch__label-title">Epoch</div>
-        <div class="epoch__label-number">
-          {{ epochNumber }}
-        </div>
-        <div class="epoch__label-value">{{ time.h }}:{{ time.m }}<br />{{ time.s }}</div>
-      </div>
+      <div class="epoch__number"> {{ epochProgress }}% </div>
     </q-circular-progress>
   </div>
 </template>
@@ -75,44 +74,29 @@
 
 <style scoped lang="scss">
   .epoch {
-    &__progress {
-      @media (max-width: $breakpoint-sm) {
-        width: 95px;
-      }
-    }
     &__label {
-      font-style: normal;
-      font-weight: normal;
-      text-align: center;
+      color: $primary;
+      font-size: 12px;
+      line-height: 16px;
+    }
 
-      &-title {
-        font-size: 10px;
-        line-height: 12px;
-        text-transform: uppercase;
-        color: #5c5c5c;
-      }
+    &__title {
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 35px;
+      text-transform: uppercase;
+      color: $accent;
+    }
 
-      &-value {
-        font-size: 18px;
-        line-height: 100%;
-        color: #5a7683;
-        font-weight: 500;
+    &__value {
+      color: $primary;
+      font-size: 22px;
+      line-height: 26px;
+    }
 
-        @media (max-width: $breakpoint-sm) {
-          font-size: 16px;
-        }
-      }
-
-      &-number {
-        color: #100808;
-        font-size: 18px;
-        margin-bottom: 3px;
-        font-weight: 500;
-
-        @media (max-width: $breakpoint-sm) {
-          font-size: 16px;
-        }
-      }
+    &__number {
+      color: #000;
+      font-size: 18px;
     }
   }
 </style>

@@ -44,7 +44,7 @@
         </div>
         <div class="stake-success__info">
           <div class="stake-success__info__title">SUCCESS!</div>
-          <div class="stake-success__info__text">YOU HAVE STAKED YOUR SOL THROUGH JPOOL.</div>
+          <div class="stake-success__info__text">YOU HAVE STAKED YOUR SOL THROUGH JSTAKING.</div>
         </div>
         <div class="stake-success__footer">
           <div class="stake-success__footer__text">SHARE YOU SUCCESS</div>

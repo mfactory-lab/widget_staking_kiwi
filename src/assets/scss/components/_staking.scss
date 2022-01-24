@@ -26,21 +26,29 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-.text-text-white {
-    color: $textWhite !important;
-}
-.bg-text-white {
-    background: $textWhite !important;
-}
-.text-natural-light-gray {
-    color: $lightGrayNatural !important;
-}
-.bg-natural-light-gray {
-    background: $lightGrayNatural !important;
-}
-.text-red {
-    color: $red !important;
-}
-.bg-red {
-    background: $red !important;
+.stake-box {
+  padding-bottom: 8px;
+  .q-field__control {
+    padding: 0 18px !important;
+  }
+  .q-card__section {
+    padding-bottom: 0;
+  }
+  .q-field__native {
+    padding-top: 8px;
+    font-size: 27px;
+    color: $textWhite;
+  }
+  &__top-section {
+    padding-bottom: 0;
+  }
+  &__sol-icon {
+    width: 36px;
+    margin-right: 12px;
+    margin-left: 4px;
+  }
+  &__symbol {
+    font-size: 18px;
+    color: $textWhite;
+  }
 }

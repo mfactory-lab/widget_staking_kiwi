@@ -27,20 +27,26 @@
   -->
 
 <template>
-  <section class="app-header q-py-lg">
+  <section class="staking-header q-py-lg">
     <div class="container">
-      <q-toolbar>
-        <router-link class="app-header__logo q-mr-auto" to="/">
-          <img src="@/assets/img/staking-logo.svg" alt="" class="app-header__logo" />
+      <div class="row items-center">
+        <router-link class="row items-center q-mr-auto" to="/">
+          <img src="@/assets/img/staking-logo.svg" alt="" class="staking-header__logo" />
         </router-link>
-        <div class="xs-hide">
-          <total-stacked />
+        <div class="row items-center">
+          <div class="q-mr-md staking-header__btn">
+            <total-stacked />
+          </div>
+          <div class="row">
+            <div class="q-mr-md staking-header__btn">
+              <cluster-selector />
+            </div>
+            <div class="q-mr-md staking-header__btn">
+              <connect-wallet />
+            </div>
+          </div>
         </div>
-        <div class="justify-end row">
-          <cluster-selector />
-          <connect-wallet />
-        </div>
-      </q-toolbar>
+      </div>
     </div>
   </section>
 </template>
@@ -62,40 +68,16 @@
 </script>
 
 <style lang="scss" scoped>
-  .app-header {
+  .staking-header {
     font-family: $fontSecondary;
-    background: $primary;
-    color: $textWhite;
-    &__logo {
+    background: $primaryGradient;
+    @media (max-width: $breakpoint-sm) {
+      background: $primary;
     }
-    &__title {
-      font-size: 82px;
-      line-height: 84px;
-      font-weight: 900;
-      margin: 8px 0 0;
-      @media (max-width: $breakpoint-xs) {
-        margin: -8px 0 0;
-        font-size: 36px;
-        line-height: 44px;
+    &__btn {
+      @media (max-width: $breakpoint-sm) {
+        margin-top: 16px;
       }
-    }
-    &__subtitle {
-      font-size: 35px;
-      line-height: 38px;
-      font-weight: 700;
-      margin: 0;
-      @media (max-width: $breakpoint-xs) {
-        font-size: 16px;
-        line-height: 20px;
-      }
-    }
-    &__flower {
-      position: absolute;
-      height: 400px;
-      top: 50px;
-    }
-    &__btns {
-      max-width: 760px;
     }
   }
 </style>

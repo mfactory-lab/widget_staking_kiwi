@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-9 q-lr-sm">charts</div>
+            <div class="col-9 q-lr-sm"><charts /></div>
             <div class="col-3">
               <q-btn
                 class="q-mx-lg q-mt-sm main-section__calc-btn"
@@ -64,7 +64,9 @@
               </q-btn>
             </div>
           </div>
-          <div class="row">wallet</div>
+          <div class="row">
+            <wallet-balance />
+          </div>
         </div>
       </div>
       <div class="row">My stake</div>
@@ -77,13 +79,17 @@
   import { defineComponent, ref } from 'vue';
   import { useEmitter } from '@jpool/common/hooks';
   import RoiCalculator from './roi-calculator/RoiCalculator.vue';
+  import WalletBalance from './WalletBalance.vue';
   import StakeBox from './stake/StakeBox.vue';
+  import Charts from './charts/Charts.vue';
   import Epoch from './Epoch.vue';
 
   export default defineComponent({
     components: {
       RoiCalculator,
+      WalletBalance,
       StakeBox,
+      Charts,
       Epoch,
     },
     setup() {
@@ -103,6 +109,11 @@
 
 <style lang="scss" scoped>
   .main-section {
+    padding: 32px 0;
+    min-height: calc(100vh - 96px);
+    background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
+    background-color: #f4f4f4;
+
     &__calc-btn {
       min-height: 48px !important;
       min-width: 48px !important;

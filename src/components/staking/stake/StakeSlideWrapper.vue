@@ -55,9 +55,9 @@
   .stake-box {
     &__slider {
       margin-top: 5px;
-      padding: 0 28px 0 15px;
+      padding: 0 28px 0 12px;
       position: relative;
-      color: $blue-grey-3;
+      color: $primary;
 
       &__steps {
         font-size: 12px;

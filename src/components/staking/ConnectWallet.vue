@@ -31,10 +31,9 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
-      color="primary-gray"
-      text-color="white"
+      color="primary"
+      text-color="text-white"
       rounded
-      unelevated
       @click="dialog = true"
     >
       {{ walletShortAddress }}
@@ -44,17 +43,13 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
-      color="primary-gray"
+      color="primary"
+      text-color="text-white"
       rounded
       :disable="connectionLost"
       @click="connect"
     >
       <div class="row items-center no-wrap">
-        <!-- <img
-          alt=""
-          class="q-icon"
-          src="@/assets/img/wallet.svg"
-        /> -->
         <span>CONNECT WALLET</span>
       </div>
     </q-btn>
@@ -83,7 +78,6 @@
       <q-separator />
       <q-card-section>
         <div class="q-gutter-md row justify-between">
-          <!--          <airdrop-btn/>-->
           <q-btn outline rounded @click="disconnect"> Disconnect </q-btn>
           <q-btn outline rounded @click="ok"> Ok </q-btn>
         </div>

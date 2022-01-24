@@ -75,11 +75,8 @@
     }
 
     &__table {
-      padding: 8px 8px 0;
-      // background: #fff;
-      // border-radius: 8px;
+      padding: 8px 0 0 8px;
       width: 100%;
-      // min-width: 265px;
 
       &__row {
         display: flex;
@@ -102,13 +99,13 @@
           padding: 6px 5px 6px 1px;
           border-right: 1px solid $colorBorder;
           text-align: left;
-          width: 102px;
+          width: 125px;
         }
 
         &:last-child {
           padding: 6px 1px 6px 5px;
           text-align: right;
-          width: calc(100% - 102px);
+          width: calc(100% - 125px);
         }
       }
     }

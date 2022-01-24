@@ -136,3 +136,17 @@ export const LAUNCH_VALIDATORS = [
     icon: minaIcon,
   },
 ];
+
+// charts
+export const CHARTS_PAIRS = [
+  {
+    title: 'SOL / USD & JSOL / USD',
+    pairs: [
+      {
+        id: 5426,
+        convertTo: 2781, // usd
+        chartName: 'SOL',
+      },
+    ],
+  },
+];

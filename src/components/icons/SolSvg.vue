@@ -27,51 +27,30 @@
   -->
 
 <template>
-  <div class="apy" :class="{ 'apy--selected': selected }">
-    CURRENT APY
-    <div class="apy__value">≈{{ apy }}</div>
-    <q-inner-loading :showing="apyLoading" />
-  </div>
+  <svg width="42" height="33" viewBox="0 0 42 33" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M6.82387 25.1867C7.0773 24.9326 7.42577 24.7844 7.79536 24.7844H41.3115C41.924 24.7844 42.2302 25.5255 41.7972 25.9596L35.1764 32.5977C34.9229 32.8518 34.5745 33 34.2049 33H0.688753C0.0762967 33 -0.229931 32.2589 0.203012 31.8248L6.82387 25.1867Z"
+      :fill="fill"
+    />
+    <path
+      d="M6.82362 0.40231C7.08761 0.148219 7.43608 0 7.79511 0H41.3112C41.9237 0 42.2299 0.741097 41.797 1.17517L35.1761 7.81328C34.9227 8.06737 34.5742 8.21559 34.2046 8.21559H0.688502C0.0760458 8.21559 -0.230182 7.47449 0.202761 7.04042L6.82362 0.40231Z"
+      :fill="fill"
+    />
+    <path
+      d="M35.1764 12.7151C34.9229 12.461 34.5745 12.3128 34.2049 12.3128H0.688753C0.0762967 12.3128 -0.229931 13.0539 0.203012 13.488L6.82387 20.1261C7.0773 20.3802 7.42577 20.5284 7.79536 20.5284H41.3115C41.924 20.5284 42.2302 19.7873 41.7972 19.3532L35.1764 12.7151Z"
+      :fill="fill"
+    />
+  </svg>
 </template>
 
 <script lang="ts">
-  import { useApyStore } from '@jpool/common/store';
-  import { storeToRefs } from 'pinia';
-  import { computed, defineComponent } from 'vue';
-  import { formatPct } from '@jpool/common/utils';
-
-  export default defineComponent({
+  export default {
+    name: 'SolSvg',
     props: {
-      selected: {
-        type: Boolean,
-        default: false,
+      fill: {
+        type: String,
+        default: '#1CE4B0',
       },
     },
-    setup() {
-      const { apy, apyLoading } = storeToRefs(useApyStore());
-      return {
-        apyLoading,
-        apy: computed(() => formatPct.format(apy.value)),
-      };
-    },
-  });
+  };
 </script>
-
-<style scoped lang="scss">
-  .apy {
-    font-size: 14px;
-    line-height: 14px;
-    color: $primary;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    &__value {
-      font-size: 50px;
-      line-height: 50px;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-  }
-</style>

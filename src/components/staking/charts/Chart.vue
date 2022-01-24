@@ -1,0 +1,172 @@
+<!--
+  - This file is part of the Web3 Library developed by mFactory GmbH.
+  -
+  - Copyright © 2021, mFactory GmbH
+  -
+  - Solana Reference Stake Pool is free software: you can redistribute it
+  - and/or modify it under the terms of the GNU Affero General Public License
+  - as published by the Free Software Foundation, either version 3
+  - of the License, or (at your option) any later version.
+  -
+  - Solana Reference Stake Pool is distributed in the hope that it
+  - will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  - warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  - See the GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+  -
+  - You can be released from the requirements of the Affero GNU General Public License
+  - by purchasing a commercial license. The purchase of such a license is
+  - mandatory as soon as you develop commercial activities using the
+  - Solana Reference Stake Pool code without disclosing the source code of
+  - your own applications.
+  -
+  - The developer of this program can be contacted at <info@mfactory.ch>.
+  -->
+
+<template>
+  <q-card class="charts__item shadow-0">
+    <!-- <div class="charts__title">{{ title }}</div> -->
+    <div>
+      <apexchart width="100%" type="area" :options="chartOptions" :series="series" />
+    </div>
+  </q-card>
+</template>
+
+<script lang="ts">
+  import { defineComponent } from 'vue';
+
+  export default defineComponent({
+    props: {
+      title: {
+        type: String,
+        required: true,
+      },
+      series: {
+        type: Array,
+        required: true,
+      },
+      categories: {
+        type: Array,
+        required: true,
+      },
+    },
+    data: function () {
+      return {};
+    },
+    computed: {
+      chartOptions() {
+        return {
+          colors: ['#1DE3B0', '#455A64'],
+          legend: {
+            showForSingleSeries: false,
+          },
+          fill: {
+            opacity: 0.9,
+            gradient: {
+              shade: 'light',
+              type: 'vertical',
+              shadeIntensity: 0.1,
+              opacityFrom: 1,
+              opacityTo: 0.7,
+            },
+            pattern: {
+              style: 'verticalLines',
+              strokeWidth: 30,
+            },
+          },
+          chart: {
+            height: '80px',
+            type: 'area',
+            // offsetX: -7,
+            offsetY: 0,
+            parentHeightOffset: 7,
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            show: true,
+            curve: 'smooth',
+            lineCap: 'butt',
+            width: 1,
+            dashArray: 0,
+          },
+          grid: {
+            show: true,
+            borderColor: '#ccc',
+            strokeDashArray: 2,
+            position: 'back',
+            xaxis: {
+              lines: {
+                show: true,
+              },
+            },
+            yaxis: {
+              lines: {
+                show: true,
+              },
+            },
+            row: {
+              colors: undefined,
+              opacity: 0.5,
+            },
+            column: {
+              colors: undefined,
+              opacity: 0.5,
+            },
+            padding: {
+              top: 0,
+              right: 10,
+              bottom: 0,
+              left: 0,
+            },
+          },
+          yaxis: {
+            axisBorder: {
+              show: false,
+            },
+            labels: {
+              show: true,
+              offsetX: -8,
+              style: {
+                colors: ['#707585'],
+                fontSize: '10px',
+              },
+              formatter: (value) => {
+                return `$${value}`;
+              },
+            },
+          },
+          xaxis: {
+            axisBorder: {
+              show: false,
+            },
+            axisTicks: {
+              show: false,
+            },
+            type: 'datetime',
+            labels: {
+              show: false,
+            },
+            categories: this.categories,
+            tooltip: {
+              enabled: false,
+            },
+          },
+          tooltip: {
+            // enabled: false,
+          },
+        };
+      },
+    },
+  });
+</script>

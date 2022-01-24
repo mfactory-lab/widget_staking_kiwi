@@ -27,23 +27,15 @@
   -->
 
 <template>
-  <div class="total-stacked">
-    <div class="total-stacked__label">Total Staked</div>
-    <div class="total-stacked__value">
-      <div class="total-stacked__sol">
-        {{ formatPrice(solStaked) }} /
-        <span v-if="maxSolToStake">
-          {{ formatPrice(maxSolToStake) }}
-        </span>
-      </div>
-      <div class="total-stacked__usd">≈&nbsp;${{ formatPrice(usdStacked) }}</div>
-      <div class="total-stacked__progressbar">
-        <div class="total-stacked__progressbar__value" :style="progressStyle"></div>
-        <q-tooltip v-if="maxSolToStake">
-          <b>STAKE LIMIT</b>
-          <br />
-          {{ formatPrice(solStaked) }} SOL / {{ formatPrice(maxSolToStake) }} SOL
-        </q-tooltip>
+  <div class="total-staked">
+    <div class="total-staked__logo">
+      <sol-svg class="q-icon" fill="#fff" />
+    </div>
+    <div class="total-staked__value">
+      <div class="total-staked__label">Total Staked</div>
+      <div class="row justify-between">
+        <div class="total-staked__sol">≈ {{ solStaked }}</div>
+        <div class="total-staked__usd">$ {{ usdStaked }}</div>
       </div>
     </div>
   </div>
@@ -51,13 +43,16 @@
 
 <script lang="ts">
   import { computed, defineComponent, toRef } from 'vue';
-  import { useCoinRateStore, useConnectionStore, useStakePoolStore } from '@jpool/common/store';
+  import { useCoinRateStore, useStakePoolStore } from '@jpool/common/store';
   import { formatAmount, lamportsToSol } from '@jpool/common/utils';
+  import SolSvg from '@/components/icons/TelegramSvg.vue';
 
   export default defineComponent({
+    components: {
+      SolSvg,
+    },
     setup() {
       const coinRateStore = useCoinRateStore();
-      const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
 
       const stakePool = toRef(stakePoolStore, 'stakePool');
@@ -66,122 +61,51 @@
         lamportsToSol(stakePool.value?.totalLamports.toNumber() ?? 0),
       );
 
-      const tokenSupply = computed(() =>
-        lamportsToSol(stakePool.value?.poolTokenSupply.toNumber() ?? 0),
-      );
-
-      const usdStacked = computed(() => solStaked.value * coinRateStore.solPrice);
-
-      const rate = computed(() =>
-        tokenSupply.value > 0 ? solStaked.value / tokenSupply.value : 0,
-      );
-
-      // reverse limit progress for rounded right part of progress bar
-      const progressStyle = computed(() => {
-        return {
-          width: `calc(100% * ${
-            connectionStore.stakeLimit ? 1 - solStaked.value / connectionStore.stakeLimit : 0
-          })`,
-        };
-      });
-
-      const maxSolToStake = computed(() => connectionStore.stakeLimit ?? 0);
-
       return {
-        solStaked,
-        tokenSupply,
-        usdStacked,
-        rate,
-        progressStyle,
-        maxSolToStake,
-        formatPrice: (v: number) => formatAmount(v, 1),
+        solStaked: computed(() => formatAmount(solStaked.value, 3)),
+        usdStaked: computed(() => formatAmount(solStaked.value * coinRateStore.solPrice, 1)),
       };
     },
   });
 </script>
 
 <style lang="scss" scoped>
-  .total-stacked {
+  .total-staked {
     position: relative;
-    padding-left: 1rem;
-    z-index: 2;
+    display: flex;
 
-    &__label {
-      text-transform: uppercase;
-      font-size: 14px;
-      color: #5c5c5c;
-      margin-bottom: 4px;
+    &__logo {
+      border-radius: 28px 0 0 28px;
+      display: flex;
+      background: $accent;
+      align-items: center;
+      padding: 0 12px 0 16px;
+
+      .q-icon {
+        width: 18px;
+      }
     }
-
     &__value {
-      height: 48px;
-      padding-right: 15px;
-      padding-left: 72px;
-      font-weight: 700;
+      border-radius: 0 28px 28px 0;
+      background: $textWhite;
+      font-weight: 500;
+      height: 42px;
+      font-size: 13px;
+      padding: 6px 24px 6px 12px;
       min-width: 150px;
       position: relative;
-      width: 220px;
-
-      &::before {
-        content: '';
-        //noinspection CssUnknownTarget
-        background: url(@/assets/img/sol-logo.svg) no-repeat center center;
-        background-size: contain;
-        width: 62px;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 2px;
-      }
     }
-
+    &__label {
+      text-transform: uppercase;
+      color: $primary;
+      font-size: 10px;
+    }
     &__sol {
-      white-space: nowrap;
-      font-size: 19px;
-      line-height: 1;
+      font-weight: 900;
+      color: $accent;
     }
-
     &__usd {
-      color: #5c5c5c;
-      font-size: 14px;
-      line-height: 1;
-      margin-top: 3px;
-      margin-bottom: 5px;
-    }
-
-    &__progressbar {
-      height: 9px;
-      display: flex;
-      border-radius: 12px;
-      background: $secondary;
-
-      &__value {
-        border-radius: 12px;
-        margin-left: auto;
-        background: $blue-grey-8;
-      }
-    }
-  }
-
-  .total-stacked-alter {
-    .total-stacked {
-      &__label {
-        color: #fff;
-      }
-      &__usd {
-        color: #fff;
-      }
-      &__sol {
-        color: #fff;
-      }
-
-      &__progressbar {
-        background: $secondary;
-
-        &__value {
-          background: #fff;
-        }
-      }
+      color: #647e82;
     }
   }
 </style>
