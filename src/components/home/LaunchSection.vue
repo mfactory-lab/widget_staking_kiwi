@@ -96,15 +96,6 @@
         border-right: 1px solid#CFCFCF;
       }
     }
-    &__square-link {
-      border-radius: 15px;
-      width: 110px;
-      height: 120px;
-      margin-right: 4px;
-      &:not(:last-child) {
-        margin-right: 20px;
-      }
-    }
     &__b-block {
       height: 150px;
       background: $accent;

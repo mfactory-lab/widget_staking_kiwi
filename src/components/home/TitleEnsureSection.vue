@@ -38,15 +38,11 @@
 
 <style lang="scss" scoped>
   .title-ensure-section {
-    margin-top: 90px;
+    margin-top: 48px;
     background: $warning;
 
-    @media (max-width: $breakpoint-sm) {
-      margin-top: 48px;
-    }
-
     &__main {
-      height: 500px;
+      height: 280px;
       display: flex;
       justify-content: center;
       align-items: center;

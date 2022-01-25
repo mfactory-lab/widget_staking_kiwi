@@ -29,10 +29,7 @@
 <template>
   <section :class="$style.footer">
     <div class="container">
-      <div class="row q-col-gutter-lg">
-        <div class="col justify-end d-flex column">
-          <div class="">© Copyright 2021 jpool.finance. All rights reserved.</div>
-        </div>
+      <div class="row justify-end">
         <div class="col col-12 col-md-auto justify-between d-flex column">
           <div :class="$style.buttons" class="">
             <q-btn :href="TELEGRAM_URL" color="white" round target="_blank" type="a" unelevated>
@@ -49,6 +46,14 @@
             <span class="q-px-sm">|</span>
             <router-link to="/impressum">Legal</router-link>
           </div> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col justify-end d-flex column">
+          <div class="">© Copyright 2021 jstaking.one. All rights reserved.</div>
+          <div class=""
+            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
+          >
         </div>
       </div>
     </div>
@@ -78,8 +83,8 @@
   .footer {
     background-color: $blue-grey-8 !important;
     color: #fff !important;
-    padding: 2rem 0 1.5rem;
-    font-size: 24px;
+    padding: 32px 0;
+    font-size: 18px;
     @media (max-width: $breakpoint-sm) {
       text-align: center;
     }
@@ -89,7 +94,7 @@
 
     a {
       color: #fff;
-      text-decoration: none;
+      text-decoration: underline;
     }
   }
 
@@ -112,18 +117,11 @@
     text-align: right;
     display: flex;
     justify-content: space-between;
-    margin: 8px 0 24px;
-
-    @media (max-width: $breakpoint-xs) {
-      margin: 8px 0;
-    }
+    margin: 8px 0;
 
     a {
       color: $blue-grey-8 !important;
-      font-size: 46px;
-      @media (max-width: $breakpoint-xs) {
-        font-size: 26px;
-      }
+      font-size: 26px;
     }
 
     @media (max-width: $breakpoint-sm) {

@@ -38,8 +38,8 @@
       :label="link.label"
       :color="link.color"
       text-color="text-white"
-      :size="$q.screen.gt.xs ? '26px' : '14px'"
-      :padding="$q.screen.gt.xs ? '6px 90px' : '6px 32px'"
+      size="14px"
+      :padding="$q.screen.gt.xs ? '8px 90px' : '8px 32px'"
       class="q-mt-md"
     />
   </div>
@@ -73,7 +73,7 @@
     align-items: center;
     padding-bottom: 24px;
     &__icon {
-      width: 256px;
+      width: 190px;
       margin-bottom: 16px;
       @media (max-width: $breakpoint-sm) {
         width: 96px;
@@ -81,8 +81,8 @@
     }
     &__title {
       font-weight: 500;
-      font-size: 26px;
-      line-height: 32px;
+      font-size: 20px;
+      line-height: 24px;
       text-align: center;
       text-transform: uppercase;
       color: $primary;

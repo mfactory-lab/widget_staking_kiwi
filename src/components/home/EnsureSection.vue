@@ -60,7 +60,7 @@
 
 <style lang="scss" scoped>
   .ensure-section {
-    margin-top: 64px;
+    margin-top: 32px;
 
     @media (max-width: $breakpoint-sm) {
       margin-top: 24px;

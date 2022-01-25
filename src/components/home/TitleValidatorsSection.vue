@@ -36,15 +36,11 @@
 
 <style lang="scss" scoped>
   .title-validators-section {
-    margin-top: 90px;
+    margin-top: 48px;
     background: $accent;
 
-    @media (max-width: $breakpoint-sm) {
-      margin-top: 50px;
-    }
-
     &__main {
-      height: 300px;
+      height: 160px;
       display: flex;
       justify-content: center;
       align-items: center;

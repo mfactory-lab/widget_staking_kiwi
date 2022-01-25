@@ -76,7 +76,7 @@
     display: flex;
     align-items: center;
     &__icon {
-      width: 160px;
+      width: 110px;
       margin-right: 32px;
       @media (max-width: $breakpoint-xs) {
         width: 80px;
@@ -85,8 +85,8 @@
     }
     &__title {
       font-family: $fontSecondary;
-      font-size: 34px;
-      line-height: 41px;
+      font-size: 28px;
+      line-height: 32px;
       color: $textColor;
       font-weight: 700;
       margin-bottom: auto;
@@ -102,19 +102,17 @@
     //   font-weight: 700;
     // }
     &__cap {
-      font-size: 23px;
-      line-height: 27px;
+      font-size: 16px;
+      line-height: 20px;
       color: $textColor;
       @media (max-width: $breakpoint-xs) {
-        font-size: 16px;
-        line-height: 20px;
         margin: 4px 0;
       }
     }
     &__soon {
       font-family: $fontSecondary;
-      font-size: 23px;
-      line-height: 28px;
+      font-size: 22px;
+      line-height: 26px;
       color: #000000;
       text-transform: uppercase;
       margin-top: auto;

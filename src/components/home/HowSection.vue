@@ -32,7 +32,7 @@
       <div class="how-section__main">
         <left-line />
         <div class="column how-section__content">
-          <div class="section-title">How a validator generates profit</div>
+          <div class="section-title text-center">How a validator generates profit</div>
           <ul class="how-section__list">
             <li>A new block is sent to validators for verification</li>
             <li>Validators verify the block and respond with true or false</li>
@@ -65,7 +65,7 @@
 
 <style lang="scss" scoped>
   .how-section {
-    margin-top: 64px;
+    margin-top: 32px;
     background: $primary;
 
     @media (max-width: $breakpoint-sm) {
@@ -90,7 +90,7 @@
     }
     &__list {
       margin-bottom: 0;
-      font-size: 28px;
+      font-size: 20px;
       @media (max-width: $breakpoint-sm) {
         font-size: 14px;
         padding-left: 24px;

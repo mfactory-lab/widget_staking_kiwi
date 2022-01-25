@@ -56,9 +56,9 @@
               padding="sm"
               class="validators-section__square-link"
             >
-              <div class="column items-center justify-center">
-                <img :src="item.icon" alt="" class="q-mt-xs full-width" />
-                <div class="text-center q-mt-sm">{{ item.label }}</div>
+              <div class="column items-center justify-between full-height">
+                <img :src="item.icon" alt="" class="full-width q-mt-xs" />
+                <div class="text-center">{{ item.label }}</div>
               </div>
             </q-btn>
           </div>
@@ -136,8 +136,9 @@
     }
     &__square-link {
       border-radius: 15px;
-      width: 110px;
-      height: 120px;
+      border: solid 1px #647e82;
+      width: 100px;
+      height: 110px;
       margin-right: 4px;
       &:not(:last-child) {
         margin-right: 20px;

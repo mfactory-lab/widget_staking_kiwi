@@ -37,13 +37,17 @@
       <div class="row">
         <div class="column col-12 col-md-9 col-lg-8">
           <div class="row">
-            <div class="col-2">
-              <router-link to="/staking">
-                <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
-              </router-link>
+            <div class="col-auto">
+              <img src="@/assets/img/logo.svg" alt="" class="app-header__logo" />
             </div>
-            <div class="col-10 q-mt-md">
+            <div class="col">
               <div class="column q-ml-md">
+                <div class="app-header__joogh"
+                  >formerly
+                  <a class="app-header__joogh__link" href="https://joogh.io" target="_blank"
+                    >joogh validator</a
+                  ></div
+                >
                 <h1 class="app-header__title">STAKING</h1>
                 <h3 class="app-header__subtitle"
                   >Dependable
@@ -52,19 +56,19 @@
               </div>
             </div>
           </div>
-          <div class="row justify-between q-mt-md app-header__btns">
-            <q-btn
-              type="a"
-              href="https://solstake.io/#/app/validator/DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao"
-              target="_blank"
-              rounded
-              label="STAKE SOLANA NOW"
-              color="secondary"
-              text-color="text-white"
-              :size="$q.screen.gt.xs ? '26px' : '14px'"
-              padding="6px 32px"
-              class="q-mr-md q-mt-md"
-            />
+          <div class="row q-mt-md app-header__btns">
+            <router-link to="/staking" custom v-slot="props">
+              <q-btn
+                v-bind="buttonProps(props)"
+                rounded
+                label="STAKE SOLANA NOW"
+                color="secondary"
+                text-color="text-white"
+                size="14px"
+                padding="6px 32px"
+                class="q-mr-md q-mt-md"
+              />
+            </router-link>
             <q-btn
               type="a"
               href="https://explorer.near.org/accounts/jstaking.poolv1.near"
@@ -73,7 +77,7 @@
               label="STAKE NEAR NOW"
               color="dark"
               text-color="text-white"
-              :size="$q.screen.gt.xs ? '26px' : '14px'"
+              size="14px"
               padding="6px 32px"
               class="q-mr-md q-mt-md"
             />
@@ -93,22 +97,40 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    setup() {},
+    setup() {
+      return {
+        buttonProps({ href }) {
+          const props = {
+            to: href,
+          };
+
+          return props;
+        },
+      };
+    },
   });
 </script>
 
 <style lang="scss" scoped>
   .app-header {
-    font-family: $fontSecondary;
     color: $primary;
     &__logo {
-      width: 100%;
+      width: 85px;
+    }
+    &__joogh {
+      color: #647e82;
+      font-size: 14px;
+      &__link {
+        color: #647e82;
+        text-decoration: underline;
+      }
     }
     &__title {
-      font-size: 82px;
-      line-height: 84px;
+      font-family: $fontSecondary;
+      font-size: 50px;
+      line-height: 50px;
       font-weight: 900;
-      margin: 8px 0 0;
+      margin: 0;
       @media (max-width: $breakpoint-xs) {
         margin: -8px 0 0;
         font-size: 36px;
@@ -116,10 +138,12 @@
       }
     }
     &__subtitle {
-      font-size: 35px;
-      line-height: 38px;
-      font-weight: 700;
+      font-family: $fontSecondary;
+      font-size: 25px;
+      line-height: 28px;
+      font-weight: 500;
       margin: 0;
+      text-transform: uppercase;
       @media (max-width: $breakpoint-xs) {
         font-size: 16px;
         line-height: 20px;
@@ -127,14 +151,11 @@
     }
     &__flower {
       position: absolute;
-      height: 400px;
-      top: 50px;
+      height: 300px;
+      top: 30px;
     }
     // &__links {
     //   font-size: 21px;
     // }
-    &__btns {
-      max-width: 760px;
-    }
   }
 </style>
