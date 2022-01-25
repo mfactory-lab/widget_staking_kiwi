@@ -29,19 +29,19 @@
 <template>
   <q-card class="wallet-balance">
     <q-card-section class="wallet-balance__head">
-      <div>WALLET</div>
+      <div>MY WALLET BALANCE</div>
     </q-card-section>
     <q-card-section class="wallet-balance__body">
-      <q-list dense separator>
+      <q-list v-if="connected" dense separator>
         <q-item>
           <q-item-section class="balance__value">
-            <span>{{ formatPrice(solBalance) }}</span>
             <span class="balance__value__usd">${{ formatMoney(solUsd) }}</span>
+            <span>{{ solBalance }}</span>
           </q-item-section>
           <q-item-section side>
             <q-item-label>
-              <img alt="" src="@/assets/img/sol-logo.svg" />
               <span>SOL</span>
+              <img alt="" src="@/assets/img/sol-logo.svg" />
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -53,23 +53,23 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useBalanceStore, useCoinRateStore } from '@jpool/common/store';
-  import { longPriceFormatter } from '@jpool/common/utils';
+  import { useBalanceStore, useCoinRateStore, useWalletStore } from '@jpool/common/store';
   import { formatMoney } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
     setup() {
       const balanceStore = useBalanceStore();
       const coinRateStore = useCoinRateStore();
+      const { connected } = storeToRefs(useWalletStore());
 
       const { solBalance } = storeToRefs(balanceStore);
 
       const solUsd = computed(() => coinRateStore.solPrice * solBalance.value);
 
       return {
+        connected,
         solBalance,
         solUsd,
-        formatPrice: (v: number) => longPriceFormatter.format(v),
         formatMoney: (v: number) => formatMoney(v),
       };
     },

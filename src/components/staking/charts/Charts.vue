@@ -87,19 +87,7 @@
 
 <style lang="scss">
   .charts {
-    @media (max-width: $breakpoint-sm) {
-      display: none;
-    }
-    &__item {
-      margin-bottom: 20px;
-    }
-    &__title {
-      font-size: 12px;
-      color: $primary;
-      text-align: right;
-      padding: 10px 10px 0;
-      font-weight: 500;
-      margin-bottom: -18px;
-    }
+    width: 100%;
+    padding: 0 8px;
   }
 </style>

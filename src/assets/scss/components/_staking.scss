@@ -28,6 +28,7 @@
 
 .stake-box {
   padding-bottom: 8px;
+  width: 100%;
   .q-field__control {
     padding: 0 18px !important;
   }
@@ -50,5 +51,8 @@
   &__symbol {
     font-size: 18px;
     color: $textWhite;
+  }
+  ::placeholder {
+    color: $textWhite !important;
   }
 }

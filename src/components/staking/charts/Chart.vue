@@ -27,12 +27,12 @@
   -->
 
 <template>
-  <q-card class="charts__item shadow-0">
+  <div class="charts__item">
     <!-- <div class="charts__title">{{ title }}</div> -->
     <div>
-      <apexchart width="100%" type="area" :options="chartOptions" :series="series" />
+      <apexchart width="100%" height="100px" type="area" :options="chartOptions" :series="series" />
     </div>
-  </q-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -78,11 +78,10 @@
             },
           },
           chart: {
-            height: '80px',
             type: 'area',
             // offsetX: -7,
             offsetY: 0,
-            parentHeightOffset: 7,
+            parentHeightOffset: 0,
             toolbar: {
               show: false,
             },
@@ -124,9 +123,9 @@
               opacity: 0.5,
             },
             padding: {
-              top: 0,
+              top: -12,
               right: 10,
-              bottom: 0,
+              bottom: -5,
               left: 0,
             },
           },

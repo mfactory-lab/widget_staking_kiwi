@@ -41,7 +41,7 @@
             <div class="q-mr-md staking-header__btn">
               <cluster-selector />
             </div>
-            <div class="q-mr-md staking-header__btn">
+            <div class="staking-header__btn">
               <connect-wallet />
             </div>
           </div>

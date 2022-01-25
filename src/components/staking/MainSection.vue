@@ -33,33 +33,51 @@
         <div class="col-12 col-md-6 row">
           <stake-box />
         </div>
-        <div class="col-12 col-md-6 q-pl-xl column">
-          <div class="row">
-            <div class="col-9 q-lr-sm"><epoch /></div>
-            <div class="col-3">
+        <div
+          class="col-12 col-md-6 column"
+          :class="{ 'q-pl-lg': $q.screen.gt.sm, 'q-mt-md': $q.screen.lt.md }"
+        >
+          <div class="row full-width">
+            <div
+              class="col main-section__block q-mb-md q-mr-md"
+              :class="{ 'col-12': $q.screen.lt.sm }"
+              ><epoch
+            /></div>
+            <div
+              class="main-section__rect-btn"
+              :class="{ 'q-mx-auto': $q.screen.lt.sm, 'q-mb-md': $q.screen.lt.sm }"
+            >
               <q-btn
-                class="q-mx-lg q-mt-sm main-section__calc-btn"
+                class="q-mx-lg main-section__calc-btn"
                 flat
                 padding="none"
                 color="white"
                 size="md"
                 @click="RoiDialog = true"
               >
-                <img src="@/assets/img/calculator.svg" alt="" />
+                <img src="@/assets/img/calculator.svg" alt="" class="q-mt-xs q-ml-xs" />
               </q-btn>
             </div>
           </div>
-          <div class="row">
-            <div class="col-9 q-lr-sm"><charts /></div>
-            <div class="col-3">
+          <div class="row full-width">
+            <div
+              class="col q-mb-md main-section__block q-mr-md"
+              :class="{ 'col-12': $q.screen.lt.sm }"
+              ><charts
+            /></div>
+            <div
+              class="main-section__rect-btn"
+              :class="{ 'q-mx-auto': $q.screen.lt.sm, 'q-mb-md': $q.screen.lt.sm }"
+            >
               <q-btn
-                class="q-mx-lg q-mt-sm main-section__calc-btn"
+                class="q-mx-lg main-section__calc-btn"
                 flat
                 padding="none"
                 color="white"
                 size="md"
                 @click="RoiDialog = true"
               >
+                <div class="main-section__faq-title">FAQ</div>
                 <img src="@/assets/img/question.svg" alt="" />
               </q-btn>
             </div>
@@ -114,18 +132,38 @@
     background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
     background-color: #f4f4f4;
 
+    &__rect-btn,
+    &__block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border-radius: 12px;
+      height: 100px;
+      box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+        0 3px 1px -2px rgb(0 0 0 / 12%);
+    }
+    &__rect-btn {
+      width: 100px;
+    }
     &__calc-btn {
-      min-height: 48px !important;
-      min-width: 48px !important;
-
-      @media (max-width: $breakpoint-sm) {
-        display: none;
-      }
+      min-height: 62px !important;
+      min-width: 62px !important;
 
       img {
         max-width: 100%;
         max-height: 100%;
       }
+    }
+    &__faq-title {
+      font-family: $fontSecondary;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 18px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 8px;
     }
   }
 </style>

@@ -147,7 +147,7 @@
     useStakePoolStore,
     useWalletStore,
   } from '@jpool/common/store';
-  import { formatAmount, formatAndTrimAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
+  import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useDeposit } from '@jpool/common/hooks';
   import StakeInfo from '@/components/staking/stake/StakeInfo.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
@@ -241,7 +241,6 @@
         stakeInfoData: computed(() => {
           const from = stake.from;
           const depositFeeVal = lamportsToSol(depositFee.value);
-          const value = from ? from - depositFeeVal : 0;
           return [
             {
               name: 'SOL to stake:',
@@ -250,10 +249,6 @@
             {
               name: 'Network Fee:',
               value: depositFeeVal + ' SOL',
-            },
-            {
-              name: `Validator Fee (${formatPct.format(fees.value.solDepositFee)}):`,
-              value: formatAndTrimAmount(value * fees.value.solDepositFee) + ' SOL',
             },
             {
               name: 'YOU GET:',
