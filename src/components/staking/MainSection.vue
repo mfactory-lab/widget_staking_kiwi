@@ -87,7 +87,9 @@
           </div>
         </div>
       </div>
-      <div class="row">My stake</div>
+      <div class="row">
+        <stake-accounts />
+      </div>
     </div>
   </section>
   <roi-calculator v-model="RoiDialog" />
@@ -97,6 +99,7 @@
   import { defineComponent, ref } from 'vue';
   import { useEmitter } from '@jpool/common/hooks';
   import RoiCalculator from './roi-calculator/RoiCalculator.vue';
+  import StakeAccounts from './my-stake/StakeAccounts.vue';
   import WalletBalance from './WalletBalance.vue';
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
@@ -105,6 +108,7 @@
   export default defineComponent({
     components: {
       RoiCalculator,
+      StakeAccounts,
       WalletBalance,
       StakeBox,
       Charts,

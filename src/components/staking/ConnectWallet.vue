@@ -120,7 +120,7 @@
   import { storeToRefs } from 'pinia';
   import { WALLET_PROVIDERS, shortenAddress } from '@jpool/common/utils';
   import { useStakePoolStore, useWalletStore } from '@jpool/common/store';
-  import CopyToClipboard from '@/components/staking/CopyToClipboard.vue';
+  import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { evaClose } from '@quasar/extras/eva-icons';
 
   export default defineComponent({
