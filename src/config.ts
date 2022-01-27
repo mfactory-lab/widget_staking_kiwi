@@ -82,8 +82,8 @@ export const ENDPOINTS: Endpoint[] = [
 ];
 
 export const DEFAULT_VALIDATOR = '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN';
-// export const DEFAULT_VOTER = 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao';
-export const DEFAULT_VOTER = '';
+export const DEFAULT_VOTER = 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao';
+// export const DEFAULT_VOTER = '';
 
 if (isDev) {
   ENDPOINTS.push({

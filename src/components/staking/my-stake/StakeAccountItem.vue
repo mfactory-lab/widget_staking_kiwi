@@ -99,7 +99,7 @@
             color="warning"
             :disabled="state === 'deactivating'"
             text-color="dark"
-            @click="deposit"
+            @click="activate"
           >
             ACTIVATE
           </q-btn>
@@ -155,9 +155,13 @@
 
       watchEffect(async () => {
         stateLoading.value = true;
-        stakeActivation.value = await connectionStore.connection!.getStakeActivation(
-          props.stakeAccount.pubkey,
-        );
+        try {
+          stakeActivation.value = await connectionStore.connection!.getStakeActivation(
+            props.stakeAccount.pubkey,
+          );
+        } catch (e) {
+          console.log('getStakeActivation err === ', e);
+        }
         stateLoading.value = false;
       });
 
@@ -176,7 +180,6 @@
         lamports: computed(() => props.stakeAccount?.account?.lamports),
         state: computed(() => stakeActivation.value?.state),
         stateColor: computed(() => {
-          console.log('stakeActivation ===== ', stakeActivation.value);
           switch (stakeActivation.value?.state) {
             case 'activating':
               return 'accent';
@@ -190,8 +193,9 @@
         }),
         stateLoading,
         epochProgress,
-        deposit() {
-          emit('deposit', props.stakeAccount);
+        activate() {
+          console.log('activate -----');
+          // emit('deposit', props.stakeAccount);
         },
         deactivate(address: string) {
           emit('deactivate', address);

@@ -25,3 +25,77 @@
  *
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
+
+import { computed, ref, watch } from 'vue';
+import { loadApyInfo, useConnectionStore, useEpochStore } from '@jpool/common/store';
+import { DEFAULT_APY, DEFAULT_VALIDATOR, DEFAULT_VOTER } from '@/config';
+
+const validatorId = ref<string>(DEFAULT_VALIDATOR);
+const voterKey = ref<string>(DEFAULT_VOTER);
+interface ApyValidatorInfo {
+  id: string;
+  vote: string;
+  apy: number;
+}
+interface ApyInfo {
+  beginTimestamp: number;
+  collectionTimestamp: number;
+  endTimestamp: number;
+  firstEpoch: number;
+  isEstimated: boolean;
+  lastEpoch: number;
+  validators: ApyValidatorInfo[];
+}
+
+import { useLocalStorage } from '@vueuse/core';
+
+export function useValidator() {
+  const apyInfo = useLocalStorage<ApyInfo>('apy', {
+    beginTimestamp: 0,
+    collectionTimestamp: 0,
+    endTimestamp: 0,
+    firstEpoch: 0,
+    isEstimated: false,
+    lastEpoch: 0,
+    validators: [],
+  });
+  const connectionStore = useConnectionStore();
+  const cluster = computed(() => connectionStore.cluster);
+  const epochStore = useEpochStore();
+  const epochInfo = computed(() => epochStore.epochInfo);
+  const loading = ref(!apyInfo.value?.lastEpoch);
+
+  watch([epochInfo], async ([epochInfo]) => {
+    if (epochInfo?.epoch) {
+      if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
+        loading.value = false;
+        return;
+      }
+      loading.value = true;
+      try {
+        const res = await loadApyInfo('prev10');
+        apyInfo.value = {
+          ...res,
+          validators: res?.validators.filter((v) => v.vote == voterKey.value) ?? [],
+        };
+      } finally {
+        loading.value = false;
+      }
+    }
+  });
+  const apy = computed(() => {
+    if (cluster.value !== 'mainnet-beta') {
+      return DEFAULT_APY;
+    }
+    const voteApy = apyInfo.value?.validators ?? [];
+    const validatorInfo = voteApy.find((v) => v.id == validatorId.value);
+    return validatorInfo?.apy ?? 0;
+  });
+
+  return {
+    validatorId,
+    voterKey,
+    apyLoading: computed(() => loading.value),
+    apy,
+  };
+}

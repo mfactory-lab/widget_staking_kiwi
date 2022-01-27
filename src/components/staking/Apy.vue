@@ -35,8 +35,7 @@
 </template>
 
 <script lang="ts">
-  import { useApyStore } from '@jpool/common/store';
-  import { storeToRefs } from 'pinia';
+  import { useValidator } from '@/hooks/validator';
   import { computed, defineComponent } from 'vue';
   import { formatPct } from '@jpool/common/utils';
 
@@ -48,7 +47,7 @@
       },
     },
     setup() {
-      const { apy, apyLoading } = storeToRefs(useApyStore());
+      const { apy, apyLoading } = useValidator();
       return {
         apyLoading,
         apy: computed(() => formatPct.format(apy.value)),
