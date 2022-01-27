@@ -105,7 +105,7 @@
       color: $accent;
     }
     &__usd {
-      color: #647e82;
+      color: $gray;
     }
   }
 </style>

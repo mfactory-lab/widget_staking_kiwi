@@ -118,10 +118,10 @@
       width: 85px;
     }
     &__joogh {
-      color: #647e82;
+      color: $gray;
       font-size: 14px;
       &__link {
-        color: #647e82;
+        color: $gray;
         text-decoration: underline;
       }
     }

@@ -1,5 +1,5 @@
 <!--
-  - This file is part of the Web3 Library developed by mFactory GmbH.
+  - This file is part of Solana Reference Stake Pool code.
   -
   - Copyright © 2021, mFactory GmbH
   -

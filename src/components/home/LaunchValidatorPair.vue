@@ -98,7 +98,7 @@
       > :last-child {
         @media (min-width: $breakpoint-sm) {
           padding-left: 49px;
-          border-left: 1px solid #647e82;
+          border-left: 1px solid $gray;
         }
       }
       @media (max-width: $breakpoint-sm) {

@@ -29,24 +29,97 @@
 
 .my-stake {
   min-height: 100px;
+
   .q-btn {
     font-weight: 400;
-    padding: 6px 17px;
+    padding: 7px 17px 5px;
   }
+
   .q-badge {
-    font-size: 10px;
+    font-size: 11px;
+    padding-top: 4px;
     text-transform: uppercase;
-    width: 90px;
+    width: 100px;
     justify-content: center;
   }
+
+  .q-item__section {
+    margin-top: 8px;
+  }
+
   &__address {
     font-size: 12px;
-    color: #647E82;
+    color: $gray;
+
     .q-btn {
       padding: 6px 6px;
     }
   }
+
   .q-item {
     flex-wrap: wrap;
+  }
+
+  &__index {
+    width: 26px;
+    height: 26px;
+    background: $primary;
+    border-radius: 50px;
+    font-family: $fontSecondary;
+    font-weight: 700;
+    font-size: 16px;
+    color: $textWhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: auto;
+  }
+
+  &__sol {
+    font-family: $fontSecondary;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 23px;
+    color: #000000;
+  }
+
+  &__usd {
+    font-family: $fontSecondary;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: $gray;
+  }
+  &__btns {
+    width: 225px;
+    padding-right: 0;
+
+    .q-btn {
+      min-width: 50%;
+    }
+    @media (max-width: $breakpoint-xs) {
+      margin-bottom: 8px;
+    }
+  }
+  &__epoch-info {
+    color: $primary;
+    font-size: 12px;
+    &__row {
+      display: flex;
+      &:first-child {
+        border-bottom: 1px solid $primary;
+      }
+
+      >div {
+        padding: 0 8px;
+        text-align: left;
+        width: 40px;
+        &:first-child {
+          border-right: 1px solid $primary;
+          text-align: right;
+          width: 123px;
+        }
+      }
+    }
   }
 }

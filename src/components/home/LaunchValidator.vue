@@ -71,7 +71,6 @@
 </script>
 
 <style lang="scss" scoped>
-  $textColor: #647e82;
   .launch-validator {
     display: flex;
     align-items: center;
@@ -87,7 +86,7 @@
       font-family: $fontSecondary;
       font-size: 28px;
       line-height: 32px;
-      color: $textColor;
+      color: $gray;
       font-weight: 700;
       margin-bottom: auto;
       @media (max-width: $breakpoint-xs) {
@@ -98,13 +97,13 @@
     // &__apy {
     //   font-size: 23px;
     //   line-height: 27px;
-    //   color: $textColor;
+    //   color: $gray;
     //   font-weight: 700;
     // }
     &__cap {
       font-size: 16px;
       line-height: 20px;
-      color: $textColor;
+      color: $gray;
       @media (max-width: $breakpoint-xs) {
         margin: 4px 0;
       }

@@ -136,7 +136,7 @@
     }
     &__square-link {
       border-radius: 15px;
-      border: solid 1px #647e82;
+      border: solid 1px $gray;
       width: 100px;
       height: 110px;
       margin-right: 4px;

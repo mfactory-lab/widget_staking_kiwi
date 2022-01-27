@@ -27,20 +27,20 @@
   -->
 
 <template>
-  <q-item class="q-pt-md">
-    <q-item-section side>
-      <div>{{ index }}</div>
+  <q-item class="justify-end">
+    <q-item-section side class="q-mr-auto">
+      <div class="my-stake__index">{{ index }}</div>
     </q-item-section>
     <q-item-section side>
       <q-item-label caption class="row">
-        <div class="column justify-evenly q-mr-sm">
-          <div>{{ amount }} SOL</div>
-          <div>$ {{ solUsd }}</div>
+        <div class="column justify-evenly q-mr-sm items-end">
+          <div class="my-stake__sol">{{ amount }} SOL</div>
+          <div class="my-stake__usd">$ {{ solUsd }}</div>
         </div>
         <img alt="" src="@/assets/img/sol-logo.svg" />
       </q-item-label>
     </q-item-section>
-    <q-item-section>
+    <q-item-section side>
       <q-item-label class="items-center">
         <q-badge :color="stateColor">
           {{ state }}
@@ -49,19 +49,43 @@
     </q-item-section>
 
     <q-item-section side>
+      <q-circular-progress
+        :show-value="false"
+        :value="state === 'activating' || state === 'deactivating' ? epochProgress : 0"
+        size="34px"
+        :thickness="0.2"
+        color="secondary"
+        track-color="primary"
+        center-color="white"
+      />
+    </q-item-section>
+
+    <q-item-section class="my-stake__epoch-info q-mr-sm" side>
+      <div class="my-stake__epoch-info__row">
+        <div>Activation epoch:</div>
+        <div>{{ activationEpoch ?? '---' }}</div>
+      </div>
+      <div class="my-stake__epoch-info__row">
+        <div>Deactivation epoch:</div>
+        <div>{{ deactivationEpoch ?? '---' }}</div>
+      </div>
+    </q-item-section>
+
+    <q-item-section class="my-stake__btns" side>
       <template v-if="state === 'active' || state === 'activating'">
         <q-btn
           rounded
           unelevated
           :disabled="state === 'activating'"
           color="primary"
+          class="full-width"
           @click="deactivate(address)"
         >
           DEACTIVATE
         </q-btn>
       </template>
       <template v-else>
-        <q-btn-group rounded unelevated>
+        <q-btn-group class="full-width" rounded unelevated>
           <q-btn
             :disabled="state === 'deactivating'"
             color="accent"
@@ -83,7 +107,7 @@
       </template>
     </q-item-section>
     <div class="row full-width justify-end items-center my-stake__address">
-      <span class="q-mx-sm">{{ address }}</span>
+      <span class="q-mx-sm">{{ $q.screen.gt.xs ? address : shortAddress }}</span>
       <copy-to-clipboard :text="address" />
     </div>
     <q-inner-loading :showing="loading || stateLoading">
@@ -94,9 +118,15 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watchEffect } from 'vue';
+  import { storeToRefs } from 'pinia';
   // @ts-ignore
   import type { StakeActivationData } from '@solana/web3.js';
-  import { ProgramAccount, useCoinRateStore, useConnectionStore } from '@jpool/common/store';
+  import {
+    ProgramAccount,
+    useCoinRateStore,
+    useConnectionStore,
+    useEpochStore,
+  } from '@jpool/common/store';
   import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
@@ -121,6 +151,7 @@
       const stakeActivation = ref<StakeActivationData>();
       const stateLoading = ref(true);
       const coinRateStore = useCoinRateStore();
+      const { epochProgress } = storeToRefs(useEpochStore());
 
       watchEffect(async () => {
         stateLoading.value = true;
@@ -141,22 +172,24 @@
         voter: computed(
           () => props.stakeAccount.account.data?.parsed?.info?.stake?.delegation?.voter,
         ),
-        shortAddress: computed(() => shortenAddress(props.stakeAccount.pubkey.toBase58())),
+        shortAddress: computed(() => shortenAddress(props.stakeAccount.pubkey.toBase58(), 10)),
         lamports: computed(() => props.stakeAccount?.account?.lamports),
         state: computed(() => stakeActivation.value?.state),
         stateColor: computed(() => {
+          console.log('stakeActivation ===== ', stakeActivation.value);
           switch (stakeActivation.value?.state) {
             case 'activating':
-              return 'positive';
+              return 'accent';
             case 'active':
               return 'secondary';
             case 'inactive':
-              return 'accent';
+              return 'negative';
             default:
               return 'primary';
           }
         }),
         stateLoading,
+        epochProgress,
         deposit() {
           emit('deposit', props.stakeAccount);
         },

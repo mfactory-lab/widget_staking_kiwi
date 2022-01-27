@@ -51,7 +51,7 @@
               @deposit="deposit"
             />
           </q-list>
-          <div v-else class="flex flex-center">
+          <div v-else class="flex flex-center q-mt-sm q-mb-xs">
             Your stake accounts will be shown here.
             <br />
             You don't have any valid stake accounts.
@@ -65,7 +65,6 @@
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { evaClose } from '@quasar/extras/eva-icons';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
   import {
@@ -77,6 +76,7 @@
   } from '@jpool/common/store';
   import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
+  import { DEFAULT_VOTER } from '@/config';
 
   export default defineComponent({
     components: { StakeAccountItem },
@@ -103,6 +103,7 @@
 
       const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
+      const voter = computed(() => (props.voter ? props.voter : DEFAULT_VOTER));
       const loadingPubkey = ref();
 
       return {
@@ -112,9 +113,9 @@
         loadingPubkey,
 
         accounts: computed(() => {
-          if (props.voter) {
+          if (voter.value) {
             return stakeAccountStore.data.filter(
-              (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == props.voter,
+              (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voter.value,
             );
           }
           return stakeAccountStore.data;
@@ -170,7 +171,6 @@
           await stakeAccountStore.load();
           emit('afterWithdraw');
         },
-        evaClose,
       };
     },
   });
