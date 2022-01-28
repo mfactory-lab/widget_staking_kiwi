@@ -63,11 +63,11 @@
     <q-item-section class="my-stake__epoch-info q-mr-sm" side>
       <div class="my-stake__epoch-info__row">
         <div>Activation epoch:</div>
-        <div>{{ activationEpoch ?? '---' }}</div>
+        <div>{{ activationEpoch }}</div>
       </div>
       <div class="my-stake__epoch-info__row">
         <div>Deactivation epoch:</div>
-        <div>{{ deactivationEpoch ?? '---' }}</div>
+        <div>{{ deactivationEpoch }}</div>
       </div>
     </q-item-section>
 
@@ -130,6 +130,9 @@
   import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
+  import BN from 'bn.js';
+
+  const MAX_EPOCH = new BN(2).pow(new BN(64)).sub(new BN(1));
 
   export default defineComponent({
     components: { CopyToClipboard },
@@ -145,8 +148,12 @@
         required: true,
       },
     },
-    emits: ['deposit', 'deactivate', 'withdraw'],
+    emits: ['activate', 'deactivate', 'withdraw'],
     setup(props, { emit }) {
+      const formatEpoch = (epoch: string) => {
+        const bnEpoch = new BN(epoch);
+        return bnEpoch.eq(MAX_EPOCH) ? '---' : epoch;
+      };
       const connectionStore = useConnectionStore();
       const stakeActivation = ref<StakeActivationData>();
       const stateLoading = ref(true);
@@ -176,6 +183,16 @@
         voter: computed(
           () => props.stakeAccount.account.data?.parsed?.info?.stake?.delegation?.voter,
         ),
+        activationEpoch: computed(() =>
+          formatEpoch(
+            props.stakeAccount.account.data?.parsed?.info?.stake?.delegation?.activationEpoch,
+          ),
+        ),
+        deactivationEpoch: computed(() =>
+          formatEpoch(
+            props.stakeAccount.account.data?.parsed?.info?.stake?.delegation?.deactivationEpoch,
+          ),
+        ),
         shortAddress: computed(() => shortenAddress(props.stakeAccount.pubkey.toBase58(), 10)),
         lamports: computed(() => props.stakeAccount?.account?.lamports),
         state: computed(() => stakeActivation.value?.state),
@@ -194,8 +211,7 @@
         stateLoading,
         epochProgress,
         activate() {
-          console.log('activate -----');
-          // emit('deposit', props.stakeAccount);
+          emit('activate', props.stakeAccount);
         },
         deactivate(address: string) {
           emit('deactivate', address);

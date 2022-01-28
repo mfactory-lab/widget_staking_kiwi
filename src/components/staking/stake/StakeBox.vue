@@ -106,7 +106,7 @@
         <div class="col-sm-6 col-xs-12 q-mt-md" :class="{ 'q-mb-md': $q.screen.lt.sm }">
           <div v-if="connected" class="text-right q-ml-auto">
             <q-btn
-              :loading="depositing"
+              :loading="creating"
               class="stake-box__btn q-ml-auto"
               color="red"
               rounded
@@ -134,7 +134,6 @@
       </div>
     </q-card-section>
   </q-card>
-  <stake-success-dialog v-model="stakeSuccessDialog" />
 </template>
 
 <script lang="ts">
@@ -148,21 +147,18 @@
     useWalletStore,
   } from '@jpool/common/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
-  import { useDeposit } from '@jpool/common/hooks';
+  import { useStakeAccounts } from '@/hooks/stake-accounts';
   import StakeInfo from '@/components/staking/stake/StakeInfo.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
-  import StakeSuccessDialog from '@/components/staking/stake/StakeSuccessDialog.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import { useApyStore } from '@jpool/common/store/modules/apy';
   import { clickOutside } from '@jpool/common/directives';
-  import { useEmitter } from '@jpool/common/hooks';
 
   export default defineComponent({
     components: {
       ConnectWallet,
       StakeInfo,
       StakeSlideWrapper,
-      StakeSuccessDialog,
     },
     directives: {
       clickOutside,
@@ -173,14 +169,8 @@
       const { connected } = storeToRefs(useWalletStore());
       const { solBalance } = storeToRefs(useBalanceStore());
       const { fees, connectionLost } = storeToRefs(useStakePoolStore());
-      const { depositFee, depositing, depositSol, stakeSuccessDialog } = useDeposit();
+      const { depositFee, creating, createAccount } = useStakeAccounts();
       const { apy } = storeToRefs(useApyStore());
-
-      const emitter = useEmitter();
-
-      emitter.on('closeStakeSuccessDialog', () => {
-        stakeSuccessDialog.value = false;
-      });
 
       const stake = reactive<{ from: any; to: any }>({
         from: null,
@@ -204,7 +194,6 @@
           return 0;
         }
         let value = sol - lamportsToSol(depositFee.value);
-        value -= value * fees.value.solDepositFee;
         return value > 0 ? value : 0;
       });
 
@@ -232,10 +221,9 @@
         stake,
         cluster: computed(() => connectionStore.cluster),
         connected,
-        depositing,
+        creating,
         stakeFromInput,
         stakePercent,
-        stakeSuccessDialog,
         connectionLost,
         apy: computed(() => formatPct.format(apy.value)),
         stakeInfoData: computed(() => {
@@ -277,7 +265,7 @@
             stakeFromInput.value?.focus();
             return;
           }
-          await depositSol(stake.from - lamportsToSol(depositFee.value));
+          await createAccount(stake.from - lamportsToSol(depositFee.value));
           stake.from = 0;
           stake.to = 0;
         },

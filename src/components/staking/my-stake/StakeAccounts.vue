@@ -48,7 +48,7 @@
               :loading="acc.pubkey.toBase58() === loadingPubkey"
               @deactivate="deactivate"
               @withdraw="withdraw"
-              @deposit="deposit"
+              @activate="activate"
             />
           </q-list>
           <div v-else class="flex flex-center q-mt-sm q-mb-xs">
@@ -74,18 +74,13 @@
     useStakeAccountStore,
     useWalletStore,
   } from '@jpool/common/store';
-  import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
+  import { useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
-  import { DEFAULT_VOTER } from '@/config';
+  import { useValidator } from '@/hooks/validator';
+  import { useStakeAccounts } from '@/hooks/stake-accounts';
 
   export default defineComponent({
     components: { StakeAccountItem },
-    props: {
-      voter: {
-        type: String,
-        required: false,
-      },
-    },
     emits: [
       'beforeDeposit',
       'afterDeposit',
@@ -94,16 +89,16 @@
       'beforeWithdraw',
       'afterWithdraw',
     ],
-    setup(props, { emit }) {
+    setup(_props, { emit }) {
       const connectionStore = useConnectionStore();
       const { wallet, connected } = storeToRefs(useWalletStore());
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
-      const { depositStake } = useDeposit();
+      const { voterKey } = useValidator();
+      const { delegateAccount } = useStakeAccounts();
 
       const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
-      const voter = computed(() => (props.voter ? props.voter : DEFAULT_VOTER));
       const loadingPubkey = ref();
 
       return {
@@ -113,9 +108,10 @@
         loadingPubkey,
 
         accounts: computed(() => {
-          if (voter.value) {
+          // TODO: remove && 0
+          if (voterKey.value && 0) {
             return stakeAccountStore.data.filter(
-              (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voter.value,
+              (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
             );
           }
           return stakeAccountStore.data;
@@ -123,12 +119,12 @@
 
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
-        deposit: async (stakeAccount: ProgramAccount) => {
+        activate: async (stakeAccount: ProgramAccount) => {
+          console.log('======= activate stakeAccount ======= ');
           emit('beforeDeposit');
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
-          await depositStake(stakeAccount);
+          await delegateAccount(stakeAccount.pubkey);
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
           emit('afterDeposit');
         },
 

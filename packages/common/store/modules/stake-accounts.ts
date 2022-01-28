@@ -31,7 +31,7 @@ import { computed, ref, watch } from 'vue';
 import { useConnectionStore, useWalletStore } from '@jpool/common/store';
 import { getFilteredProgramAccounts, lamportsToSol } from '@jpool/common/utils';
 import { STAKE_PROGRAM_ID } from '@/config';
-import { AccountInfo, ParsedAccountData, PublicKey } from "@solana/web3.js";
+import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js';
 
 export interface ProgramAccount {
   pubkey: PublicKey;

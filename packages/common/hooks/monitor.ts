@@ -58,7 +58,13 @@ export function useMonitorTransaction() {
 
     sending.value = true;
 
-    const signature = String(await signatureOrPromise);
+    let signature = '';
+    try {
+      signature = String(await signatureOrPromise);
+    } catch {
+      sending.value = false;
+      return dismiss();
+    }
 
     // https://solscan.io/tx/{id}
     const explorerUrl = `https://explorer.solana.com/tx/${signature}?cluster=${cluster.value}`;
