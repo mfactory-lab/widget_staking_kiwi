@@ -81,9 +81,16 @@ export const ENDPOINTS: Endpoint[] = [
   // },
 ];
 
-export const DEFAULT_VALIDATOR = '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN';
-export const DEFAULT_VOTER = 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao';
-// export const DEFAULT_VOTER = '';
+export const DEFAULT_VALIDATOR = {
+  'mainnet-beta': {
+    idPubkey: '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN',
+    voterKey: 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao',
+  },
+  testnet: {
+    idPubkey: '6ZHmHdYmKXyyCYNrbsx2d233H59ZL34Yryxqk5QvkKKX',
+    voterKey: 'PFCYZTCoC9FskunxXGv7bAmThK1jPvu92TxbU6odiUG',
+  },
+};
 
 if (isDev) {
   ENDPOINTS.push({

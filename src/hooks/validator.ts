@@ -28,10 +28,10 @@
 
 import { computed, ref, watch } from 'vue';
 import { loadApyInfo, useConnectionStore, useEpochStore } from '@jpool/common/store';
-import { DEFAULT_APY, DEFAULT_VALIDATOR, DEFAULT_VOTER } from '@/config';
+import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 
-const validatorId = ref<string>(DEFAULT_VALIDATOR);
-const voterKey = ref<string>(DEFAULT_VOTER);
+const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
+const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
 interface ApyValidatorInfo {
   id: string;
   vote: string;
@@ -65,6 +65,14 @@ export function useValidator() {
   const epochInfo = computed(() => epochStore.epochInfo);
   const loading = ref(!apyInfo.value?.lastEpoch);
 
+  watch(
+    [cluster],
+    async ([cluster]) => {
+      validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
+      voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
+    },
+    { immediate: true },
+  );
   watch([epochInfo], async ([epochInfo]) => {
     if (epochInfo?.epoch) {
       if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
