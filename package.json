@@ -24,7 +24,7 @@
     "linter:fix": "eslint -c .eslintrc.js --fix --ext .js,.vue,.ts, src",
     "stylelint": "stylelint --config stylelint.config.js 'src/**/*.{vue,scss}'",
     "stylelint:fix": "stylelint --config stylelint.config.js --fix 'src/**/*.{vue,scss}'",
-    "deploy:gh-pages": "push-dir --dir=dist --branch=gh-pages-new --cleanup"
+    "deploy:gh-pages": "push-dir --dir=dist --branch=gh-pages --force"
   },
   "dependencies": {
     "@quasar/extras": "^1.12.3",
