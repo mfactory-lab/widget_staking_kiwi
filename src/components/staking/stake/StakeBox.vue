@@ -113,7 +113,6 @@
               size="14px"
               padding="9px xl"
               text-color="text-white"
-              :disable="connectionLost || Number(stake.from) > Number(availableSol)"
               @click="stakeHandler"
             >
               STAKE NOW
@@ -268,6 +267,7 @@
           await createAccount(stake.from - lamportsToSol(depositFee.value));
           stake.from = 0;
           stake.to = 0;
+          stakePercent.value = 0;
         },
 
         formatPct(v: number) {

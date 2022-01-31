@@ -133,11 +133,12 @@ export function useStakeAccounts() {
         await monitorTransaction(
           sendTransaction(connectionStore.connection, wallet.value!, transaction.instructions, []),
           {
-            onSuccess: () => {},
+            onSuccess: () => {
+              delegateAccount(stakePubkey);
+            },
             onError: () => {},
           },
         );
-        await delegateAccount(stakePubkey);
       } catch (e: any) {
         notify({ message: e.message, type: 'negative' });
         throw e;

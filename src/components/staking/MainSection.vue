@@ -75,6 +75,7 @@
                 padding="none"
                 color="white"
                 size="md"
+                @click="FaqDialog = true"
               >
                 <div class="main-section__faq-title">FAQ</div>
                 <img src="@/assets/img/question.svg" alt="" />
@@ -92,6 +93,7 @@
     </div>
   </section>
   <roi-calculator v-model="RoiDialog" />
+  <faq-dialog v-model="FaqDialog" />
 </template>
 
 <script lang="ts">
@@ -102,6 +104,7 @@
   import WalletBalance from './WalletBalance.vue';
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
+  import FaqDialog from './FaqDialog.vue';
   import Epoch from './Epoch.vue';
 
   export default defineComponent({
@@ -109,20 +112,27 @@
       RoiCalculator,
       StakeAccounts,
       WalletBalance,
+      FaqDialog,
       StakeBox,
       Charts,
       Epoch,
     },
     setup() {
       const RoiDialog = ref(false);
+      const FaqDialog = ref(false);
       const emitter = useEmitter();
 
       emitter.on('closeCalculator', () => {
         RoiDialog.value = false;
       });
 
+      emitter.on('closeFaq', () => {
+        FaqDialog.value = false;
+      });
+
       return {
         RoiDialog,
+        FaqDialog,
       };
     },
   });

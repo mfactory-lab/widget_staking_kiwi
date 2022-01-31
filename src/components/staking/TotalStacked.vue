@@ -119,7 +119,7 @@
     }
     &__sol {
       font-size: 16px;
-      font-weight: 900;
+      font-weight: 700;
       @media (max-width: $breakpoint-sm) {
         font-size: 14px;
       }
