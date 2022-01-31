@@ -30,7 +30,20 @@
   <div class="validator">
     <img :src="icon" alt="" class="validator__icon" />
     <div class="validator__title">{{ title }}</div>
+    <router-link :to="link.href" v-if="isRouter" custom v-slot="props">
+      <q-btn
+        v-bind="buttonProps(props)"
+        rounded
+        :label="link.label"
+        :color="link.color"
+        text-color="text-white"
+        size="14px"
+        :padding="$q.screen.gt.xs ? '8px 90px' : '8px 32px'"
+        class="q-mt-md"
+      />
+    </router-link>
     <q-btn
+      v-else
       type="a"
       :href="link.href"
       target="_blank"
@@ -59,9 +72,21 @@
       link: {
         type: Object,
       },
+      isRouter: {
+        type: Boolean,
+        default: false,
+      },
     },
     setup() {
-      return {};
+      return {
+        buttonProps({ href }) {
+          const props = {
+            to: href,
+          };
+
+          return props;
+        },
+      };
     },
   });
 </script>

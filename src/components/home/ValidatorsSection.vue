@@ -36,8 +36,9 @@
           <validator
             title="SOLANA NETWORK validator"
             :icon="solIcon"
+            :isRouter="true"
             :link="{
-              href: 'https://solstake.io/#/app/validator/DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao',
+              href: '/staking',
               label: 'STAKE SOL NOW',
               color: 'accent',
             }"
