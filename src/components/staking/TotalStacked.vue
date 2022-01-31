@@ -29,22 +29,27 @@
 <template>
   <div class="total-staked">
     <div class="total-staked__logo">
-      <sol-svg class="q-icon" fill="#fff" />
+      <sol-svg class="q-icon" />
     </div>
     <div class="total-staked__value">
       <div class="total-staked__label">Total Staked</div>
       <div class="row justify-between">
         <div class="total-staked__sol">≈ {{ solStaked }}</div>
-        <div class="total-staked__usd">$ {{ usdStaked }}</div>
+      </div>
+    </div>
+    <div class="total-staked__value">
+      <div class="total-staked__label">Validator Fee</div>
+      <div class="row justify-between">
+        <div class="total-staked__sol">{{ commission }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, toRef } from 'vue';
-  import { useCoinRateStore, useStakePoolStore } from '@jpool/common/store';
-  import { formatAmount, lamportsToSol } from '@jpool/common/utils';
+  import { computed, defineComponent } from 'vue';
+  import { useValidator } from '@/hooks/validator';
+  import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
 
   export default defineComponent({
@@ -52,18 +57,13 @@
       SolSvg,
     },
     setup() {
-      const coinRateStore = useCoinRateStore();
-      const stakePoolStore = useStakePoolStore();
+      const { totalStake, commission } = useValidator();
 
-      const stakePool = toRef(stakePoolStore, 'stakePool');
-
-      const solStaked = computed(() =>
-        lamportsToSol(stakePool.value?.totalLamports.toNumber() ?? 0),
-      );
+      const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));
 
       return {
         solStaked: computed(() => formatAmount(solStaked.value, 3)),
-        usdStaked: computed(() => formatAmount(solStaked.value * coinRateStore.solPrice, 1)),
+        commission: computed(() => formatPct.format(commission.value / 100)),
       };
     },
   });
@@ -75,37 +75,54 @@
     display: flex;
 
     &__logo {
-      border-radius: 28px 0 0 28px;
       display: flex;
-      background: $accent;
       align-items: center;
-      padding: 0 12px 0 16px;
+      padding: 0 4px 0 24px;
+
+      @media (max-width: $breakpoint-sm) {
+        padding: 0 4px 0 0;
+      }
 
       .q-icon {
-        width: 18px;
+        width: 44px;
+        height: 33px;
       }
     }
     &__value {
-      border-radius: 0 28px 28px 0;
-      background: $textWhite;
       font-weight: 500;
       height: 42px;
-      font-size: 13px;
-      padding: 6px 24px 6px 12px;
-      min-width: 150px;
-      position: relative;
+      padding: 0 24px 0 8px;
+      color: $textWhite;
+      border-right: 1px solid $textWhite;
+
+      @media (max-width: $breakpoint-sm) {
+        padding: 4px 8px 0 8px;
+      }
+
+      &:not(:last-child) {
+        @media (min-width: $breakpoint-sm) {
+          margin-right: 16px;
+        }
+      }
+      &:last-child {
+        @media (max-width: $breakpoint-sm) {
+          border-right: 0;
+        }
+      }
     }
     &__label {
       text-transform: uppercase;
-      color: $primary;
-      font-size: 10px;
+      font-size: 14px;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 11px;
+      }
     }
     &__sol {
+      font-size: 16px;
       font-weight: 900;
-      color: $accent;
-    }
-    &__usd {
-      color: $gray;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 14px;
+      }
     }
   }
 </style>

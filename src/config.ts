@@ -86,9 +86,10 @@ export const DEFAULT_VALIDATOR = {
     idPubkey: '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN',
     voterKey: 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao',
   },
+  // is random validator for testnet
   testnet: {
-    idPubkey: '6ZHmHdYmKXyyCYNrbsx2d233H59ZL34Yryxqk5QvkKKX',
-    voterKey: 'PFCYZTCoC9FskunxXGv7bAmThK1jPvu92TxbU6odiUG',
+    idPubkey: '75A6FVv8hAZn3n4KsTkURtQP7GDU4SDiZxcTzkTHZM3b',
+    voterKey: 'BcX6qjy6fxYSHPyRmy5uJV6Z9MzK8v5ZS8UUiREoEYWW',
   },
 };
 

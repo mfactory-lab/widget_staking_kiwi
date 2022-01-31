@@ -75,7 +75,6 @@
                 padding="none"
                 color="white"
                 size="md"
-                @click="RoiDialog = true"
               >
                 <div class="main-section__faq-title">FAQ</div>
                 <img src="@/assets/img/question.svg" alt="" />

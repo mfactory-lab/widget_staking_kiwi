@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="apy" :class="{ 'apy--selected': selected }">
+  <div class="apy q-mt-lg" :class="{ 'apy--selected': selected }">
     CURRENT APY
     <div class="apy__value">≈{{ apy }}</div>
     <q-inner-loading :showing="apyLoading" />
@@ -67,9 +67,9 @@
     position: relative;
 
     &__value {
-      font-size: 50px;
-      line-height: 50px;
-      font-weight: 500;
+      font-size: 40px;
+      line-height: 45px;
+      font-weight: 900;
       margin-top: 4px;
     }
   }

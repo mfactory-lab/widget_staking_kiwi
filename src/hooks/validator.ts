@@ -29,9 +29,12 @@
 import { computed, ref, watch } from 'vue';
 import { loadApyInfo, useConnectionStore, useEpochStore } from '@jpool/common/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
+import { useLocalStorage } from '@vueuse/core';
 
 const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
 const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
+const totalStake = ref(0);
+const commission = ref(0);
 interface ApyValidatorInfo {
   id: string;
   vote: string;
@@ -47,8 +50,6 @@ interface ApyInfo {
   validators: ApyValidatorInfo[];
 }
 
-import { useLocalStorage } from '@vueuse/core';
-
 export function useValidator() {
   const apyInfo = useLocalStorage<ApyInfo>('apy', {
     beginTimestamp: 0,
@@ -61,6 +62,7 @@ export function useValidator() {
   });
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
+  const connection = computed(() => connectionStore.connection);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
   const loading = ref(!apyInfo.value?.lastEpoch);
@@ -100,9 +102,27 @@ export function useValidator() {
     return validatorInfo?.apy ?? 0;
   });
 
+  watch(
+    [voterKey],
+    async ([voterKey]) => {
+      const validators = await connection.value.getVoteAccounts();
+      const voterData = validators.current.find((item) => item.votePubkey === voterKey);
+      if (voterData) {
+        totalStake.value = voterData.activatedStake;
+        commission.value = voterData.commission;
+      } else {
+        totalStake.value = 0;
+        commission.value = 0;
+      }
+    },
+    { immediate: true },
+  );
+
   return {
     validatorId,
     voterKey,
+    totalStake,
+    commission,
     apyLoading: computed(() => loading.value),
     apy,
   };

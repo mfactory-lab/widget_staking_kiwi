@@ -34,7 +34,7 @@
           <img src="@/assets/img/staking-logo.svg" alt="" class="staking-header__logo" />
         </router-link>
         <div class="row items-center">
-          <div class="q-mr-md staking-header__btn">
+          <div class="q-mr-lg staking-header__btn">
             <total-stacked />
           </div>
           <div class="row">

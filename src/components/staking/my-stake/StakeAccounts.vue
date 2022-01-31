@@ -109,7 +109,7 @@
 
         accounts: computed(() => {
           // TODO: remove && 0
-          if (voterKey.value && 0) {
+          if (voterKey.value) {
             return stakeAccountStore.data.filter(
               (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
             );
@@ -120,7 +120,6 @@
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
         activate: async (stakeAccount: ProgramAccount) => {
-          console.log('======= activate stakeAccount ======= ');
           emit('beforeDeposit');
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
           await delegateAccount(stakeAccount.pubkey);
@@ -143,6 +142,7 @@
             ),
           );
           loadingPubkey.value = null;
+          await stakeAccountStore.load();
           emit('afterDeactivate');
         },
 
