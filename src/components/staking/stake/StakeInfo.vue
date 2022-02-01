@@ -99,13 +99,13 @@
           padding: 6px 5px 6px 1px;
           border-right: 1px solid $colorBorder;
           text-align: left;
-          width: 125px;
+          width: 105px;
         }
 
         &:last-child {
           padding: 6px 1px 6px 5px;
           text-align: right;
-          width: calc(100% - 125px);
+          width: calc(100% - 105px);
         }
       }
     }

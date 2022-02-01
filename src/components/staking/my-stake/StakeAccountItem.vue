@@ -73,14 +73,7 @@
 
     <q-item-section class="my-stake__btns" side>
       <template v-if="state === 'active' || state === 'activating'">
-        <q-btn
-          rounded
-          unelevated
-          :disabled="state === 'activating'"
-          color="primary"
-          class="full-width"
-          @click="deactivate(address)"
-        >
+        <q-btn rounded unelevated color="primary" class="full-width" @click="deactivate(address)">
           DEACTIVATE
         </q-btn>
       </template>
@@ -195,7 +188,11 @@
         ),
         shortAddress: computed(() => shortenAddress(props.stakeAccount.pubkey.toBase58(), 10)),
         lamports: computed(() => props.stakeAccount?.account?.lamports),
-        state: computed(() => stakeActivation.value?.state),
+        state: computed(() =>
+          props.stakeAccount.account.data?.parsed?.type !== 'delegated'
+            ? 'not delegated'
+            : stakeActivation.value?.state,
+        ),
         stateColor: computed(() => {
           switch (stakeActivation.value?.state) {
             case 'activating':

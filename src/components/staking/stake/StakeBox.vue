@@ -167,7 +167,7 @@
       const connectionStore = useConnectionStore();
       const { connected } = storeToRefs(useWalletStore());
       const { solBalance } = storeToRefs(useBalanceStore());
-      const { fees, connectionLost } = storeToRefs(useStakePoolStore());
+      const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositFee, creating, createAccount } = useStakeAccounts();
       const { apy } = storeToRefs(useApyStore());
 
@@ -186,13 +186,23 @@
         });
       });
 
+      watch([stake, connected, solBalance], ([amount, connected, solBalance]) => {
+        if (amount.from < 0) stake.from = 0;
+        if (!connected) return;
+        const sol = Number(amount.from);
+        const solFee = lamportsToSol(depositFee.value);
+        if (solBalance && sol + solFee > solBalance) {
+          stake.from = solBalance - solFee;
+        }
+      });
+
       // Calculate amount to deposit
       const depositAmount = computed(() => {
         const sol = Number(stake.from);
         if (sol <= 0) {
           return 0;
         }
-        let value = sol - lamportsToSol(depositFee.value);
+        let value = sol + lamportsToSol(depositFee.value);
         return value > 0 ? value : 0;
       });
 
@@ -201,7 +211,7 @@
           stake.to = null;
           return;
         }
-        stake.to = amount > 0 ? amount.toFixed(5) : 0;
+        stake.to = amount > 0 ? amount.toFixed(9) : 0;
       });
 
       const stakePercent = ref(0);
@@ -238,21 +248,16 @@
               value: depositFeeVal + ' SOL',
             },
             {
-              name: 'YOU GET:',
+              name: 'Total Sol:',
               value: `${stake.to ? stake.to : '0'} SOL`,
               isBold: true,
             },
           ];
         }),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
-        solDepositFee: computed(() => fees?.value.solDepositFee),
 
         stakeMax() {
           if (!connected.value) {
-            notify({
-              message: 'Wallet is not connected',
-              caption: 'Please connect your wallet',
-            });
             return;
           }
           stake.from = solBalance.value;
@@ -264,7 +269,7 @@
             stakeFromInput.value?.focus();
             return;
           }
-          await createAccount(stake.from - lamportsToSol(depositFee.value));
+          await createAccount(stake.from);
           stake.from = 0;
           stake.to = 0;
           stakePercent.value = 0;

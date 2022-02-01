@@ -34,7 +34,8 @@
     <div class="total-staked__value">
       <div class="total-staked__label">Total Staked</div>
       <div class="row justify-between">
-        <div class="total-staked__sol">≈ {{ solStaked }}</div>
+        <div class="total-staked__sol">≈ {{ solStakedFormat }}</div>
+        <q-tooltip class="bg-gray text-body2" :offset="[10, 10]"> {{ solStaked }} SOL</q-tooltip>
       </div>
     </div>
     <div class="total-staked__value">
@@ -62,7 +63,8 @@
       const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));
 
       return {
-        solStaked: computed(() => formatAmount(solStaked.value, 3)),
+        solStaked,
+        solStakedFormat: computed(() => formatAmount(solStaked.value, 3)),
         commission: computed(() => formatPct.format(commission.value / 100)),
       };
     },

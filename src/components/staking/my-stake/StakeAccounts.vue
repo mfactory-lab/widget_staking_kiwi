@@ -28,12 +28,24 @@
 
 <template>
   <q-card class="q-mt-lg full-width my-stake">
-    <q-card-section v-if="loading" class="flex flex-center">
+    <q-card-section v-if="loading && 0" class="flex flex-center">
       <q-spinner size="md" />
     </q-card-section>
 
     <template v-else>
       <q-card-section class="wallet-balance__head">
+        <q-spinner size="md" v-if="loading" class="wallet-balance__head__loader" />
+        <q-btn
+          rounded
+          outline
+          color="white"
+          class="q-mr-md q-mb-xs"
+          padding="4px 12px 1px"
+          :disable="connectionLost"
+          @click="refresh"
+        >
+          Refresh
+        </q-btn>
         <div>MY STAKE</div>
       </q-card-section>
 
@@ -110,8 +122,11 @@
         accounts: computed(() => {
           // TODO: remove && 0
           if (voterKey.value) {
+            console.log('stakeAccountStore ========== ', stakeAccountStore.data);
             return stakeAccountStore.data.filter(
-              (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
+              (acc) =>
+                acc.account.data?.parsed?.type !== 'delegated' ||
+                acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
             );
           }
           return stakeAccountStore.data;
@@ -144,6 +159,10 @@
           loadingPubkey.value = null;
           await stakeAccountStore.load();
           emit('afterDeactivate');
+        },
+
+        refresh: () => {
+          stakeAccountStore.load();
         },
 
         withdraw: async (address: string, lamports: number) => {

@@ -80,7 +80,14 @@
     height: 42px;
     padding-top: 10px;
     color: #fff;
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    &__loader {
+      position: absolute;
+      right: calc(50% - 18px);
+    }
   }
 
   &__body {

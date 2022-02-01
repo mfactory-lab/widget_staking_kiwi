@@ -32,7 +32,6 @@ import { storeToRefs } from 'pinia';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
   sendTransaction,
-  useBalanceStore,
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
@@ -43,11 +42,10 @@ import { useValidator } from '@/hooks/validator';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature, minRentBalance } = storeToRefs(useStakePoolStore());
+  const { lamportsPerSignature } = storeToRefs(useStakePoolStore());
   const walletStore = useWalletStore();
   const { wallet, walletPubKey, connected } = storeToRefs(walletStore);
   const { monitorTransaction, sending } = useMonitorTransaction();
-  const { hasTokenAccount } = storeToRefs(useBalanceStore());
   const { notify } = useQuasar();
   const loading = ref(false);
   const seed = ref('0');
@@ -102,11 +100,7 @@ export function useStakeAccounts() {
   };
 
   return {
-    depositFee: computed(() =>
-      connected.value
-        ? lamportsPerSignature.value * 2 + (!hasTokenAccount.value ? minRentBalance.value : 0)
-        : 0,
-    ),
+    depositFee: computed(() => (connected.value ? lamportsPerSignature.value : 0)),
     creating: computed(() => loading.value || sending.value),
     createAccount: async (amount) => {
       if (!walletPubKey.value) {
@@ -130,11 +124,22 @@ export function useStakeAccounts() {
           lamports: LAMPORTS_PER_SOL * amount,
         });
 
+        const transactionDelegate = StakeProgram.delegate({
+          stakePubkey,
+          authorizedPubkey: walletPubKey.value,
+          votePubkey: new PublicKey(voterKey.value),
+        });
+
         await monitorTransaction(
-          sendTransaction(connectionStore.connection, wallet.value!, transaction.instructions, []),
+          sendTransaction(
+            connectionStore.connection,
+            wallet.value!,
+            [...transaction.instructions, ...transactionDelegate.instructions],
+            [],
+          ),
           {
-            onSuccess: () => {
-              delegateAccount(stakePubkey);
+            onSuccess: async () => {
+              await stakeAccountStore.load();
             },
             onError: () => {},
           },
