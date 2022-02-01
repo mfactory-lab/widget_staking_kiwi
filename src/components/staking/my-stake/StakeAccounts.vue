@@ -120,9 +120,7 @@
         loadingPubkey,
 
         accounts: computed(() => {
-          // TODO: remove && 0
           if (voterKey.value) {
-            console.log('stakeAccountStore ========== ', stakeAccountStore.data);
             return stakeAccountStore.data.filter(
               (acc) =>
                 acc.account.data?.parsed?.type !== 'delegated' ||

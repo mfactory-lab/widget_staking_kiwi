@@ -133,11 +133,39 @@
       </div>
     </q-card-section>
   </q-card>
+  <q-dialog v-model="maxStakeDialog">
+    <q-card>
+      <q-card-section class="relative-position">
+        <div class="text-h6 text-center">Warning</div>
+        <q-btn
+          padding="md"
+          color="transparent"
+          text-color="primary-gray"
+          unelevated
+          class="absolute-right"
+          :icon="evaClose"
+          size="md"
+          @click="maxStakeDialog = false"
+        />
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        After the transaction, the funds in the account may not be enough for the network commission
+        of the next transaction
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <div class="q-gutter-md row justify-between">
+          <q-btn outline rounded @click="maxStakeDialog = false"> Cancel </q-btn>
+          <q-btn outline rounded @click="doStake"> Ok </q-btn>
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
-  import { useQuasar } from 'quasar';
   import { storeToRefs } from 'pinia';
   import {
     useBalanceStore,
@@ -152,6 +180,7 @@
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import { useApyStore } from '@jpool/common/store/modules/apy';
   import { clickOutside } from '@jpool/common/directives';
+  import { evaClose } from '@quasar/extras/eva-icons';
 
   export default defineComponent({
     components: {
@@ -163,13 +192,13 @@
       clickOutside,
     },
     setup() {
-      const { notify } = useQuasar();
       const connectionStore = useConnectionStore();
       const { connected } = storeToRefs(useWalletStore());
       const { solBalance } = storeToRefs(useBalanceStore());
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositFee, creating, createAccount } = useStakeAccounts();
       const { apy } = storeToRefs(useApyStore());
+      const maxStakeDialog = ref(false);
 
       const stake = reactive<{ from: any; to: any }>({
         from: null,
@@ -226,14 +255,24 @@
 
       const highlightFix = ref(true);
 
+      const doStake = async () => {
+        if (maxStakeDialog.value) maxStakeDialog.value = false;
+        await createAccount(stake.from);
+        stake.from = 0;
+        stake.to = 0;
+        stakePercent.value = 0;
+      };
+
       return {
         stake,
         cluster: computed(() => connectionStore.cluster),
+        evaClose,
         connected,
         creating,
         stakeFromInput,
         stakePercent,
         connectionLost,
+        maxStakeDialog,
         apy: computed(() => formatPct.format(apy.value)),
         stakeInfoData: computed(() => {
           const from = stake.from;
@@ -263,17 +302,19 @@
           stake.from = solBalance.value;
         },
 
-        stakeHandler: async () => {
+        stakeHandler: () => {
           if (depositAmount.value <= 0) {
             // @ts-ignore
             stakeFromInput.value?.focus();
             return;
           }
-          await createAccount(stake.from);
-          stake.from = 0;
-          stake.to = 0;
-          stakePercent.value = 0;
+          if (Number(stake.to) + lamportsToSol(depositFee.value) > solBalance.value) {
+            maxStakeDialog.value = true;
+          } else {
+            doStake();
+          }
         },
+        doStake,
 
         formatPct(v: number) {
           return formatPct.format(v);
