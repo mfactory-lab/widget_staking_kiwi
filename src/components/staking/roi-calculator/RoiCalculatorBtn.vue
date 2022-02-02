@@ -27,55 +27,52 @@
   -->
 
 <template>
-  <div class="apy" :class="{ 'apy--selected': selected }">
-    AVERAGE APY
-    <div class="apy__value">≈{{ apy }}</div>
-    <q-inner-loading :showing="apyLoading" />
-  </div>
+  <q-btn
+    class="q-mx-lg roi-calc-btn"
+    flat
+    padding="none"
+    color="white"
+    size="md"
+    @click="RoiDialog = true"
+  >
+    <img src="@/assets/img/calculator.svg" alt="" class="q-mt-xs q-ml-xs" />
+  </q-btn>
+  <roi-calculator v-model="RoiDialog" />
 </template>
 
 <script lang="ts">
-  import { useValidator } from '@/hooks/validator';
-  import { computed, defineComponent } from 'vue';
-  import { formatPct } from '@jpool/common/utils';
+  import RoiCalculator from './RoiCalculator.vue';
+  import { defineComponent, ref } from 'vue';
+  import { useEmitter } from '@jpool/common/hooks';
 
   export default defineComponent({
-    props: {
-      selected: {
-        type: Boolean,
-        default: false,
-      },
+    components: {
+      RoiCalculator,
     },
     setup() {
-      const { apy, apyLoading } = useValidator();
+      const RoiDialog = ref(false);
+
+      const emitter = useEmitter();
+
+      emitter.on('closeCalculator', () => {
+        RoiDialog.value = false;
+      });
+
       return {
-        apyLoading,
-        apy: computed(() => formatPct.format(apy.value)),
+        RoiDialog,
       };
     },
   });
 </script>
 
-<style scoped lang="scss">
-  .apy {
-    font-size: 14px;
-    line-height: 14px;
-    color: $primary;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+<style lang="scss">
+  roi-calc-btn {
+    min-height: 46px !important;
+    min-width: 46px !important;
 
-    &__value {
-      font-size: 40px;
-      line-height: 45px;
-      font-weight: 900;
-      margin-top: 4px;
-
-      @media (max-width: $breakpoint-xs) {
-        font-size: 36px;
-        line-height: 40px;
-      }
+    img {
+      max-width: 100%;
+      max-height: 100%;
     }
   }
 </style>

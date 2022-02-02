@@ -34,6 +34,7 @@
   }
   .q-card__section {
     padding-bottom: 0;
+    padding-top: 8px;
   }
   .q-field__native {
     padding-top: 8px;
@@ -54,5 +55,8 @@
   }
   ::placeholder {
     color: $textWhite !important;
+  }
+  &__bottom-section {
+    border-top: 1px solid $primary;
   }
 }

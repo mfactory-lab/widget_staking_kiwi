@@ -63,12 +63,11 @@
               @activate="activate"
             />
           </q-list>
-          <div v-else class="flex flex-center q-mt-sm q-mb-xs">
-            Your stake accounts will be shown here.
-            <br />
-            You don't have any valid stake accounts.
+          <div v-else class="flex flex-center q-mt-md q-mb-xs">
+            Your stake accounts will be shown here. You don't have any valid stake accounts.
           </div>
         </div>
+        <div v-else class="text-center q-mt-md text-bold">Please connect a wallet</div>
       </q-card-section>
     </template>
   </q-card>
@@ -113,22 +112,42 @@
       const loading = computed(() => stakeAccountStore.loading);
       const loadingPubkey = ref();
 
+      const accounts = computed(() => {
+        if (voterKey.value) {
+          return stakeAccountStore.data.filter(
+            (acc) =>
+              acc.account.data?.parsed?.type !== 'delegated' ||
+              acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
+          );
+        }
+        return stakeAccountStore.data;
+      });
+
+      // const statusWeights = {
+      //   active: 0,
+      //   activating: 1,
+      //   deactivating: 2,
+      //   inactive: 3,
+      // };
+
+      // const getStatusWeight = (acc) => {
+      //   if (acc.account.data?.parsed?.type !== 'delegated') return 4;
+      //   return 3;
+      // }
+
       return {
         connected,
         dialog,
         loading,
         loadingPubkey,
+        accounts,
 
-        accounts: computed(() => {
-          if (voterKey.value) {
-            return stakeAccountStore.data.filter(
-              (acc) =>
-                acc.account.data?.parsed?.type !== 'delegated' ||
-                acc.account.data?.parsed?.info?.stake?.delegation?.voter == voterKey.value,
-            );
-          }
-          return stakeAccountStore.data;
-        }),
+        // accountsSorted: computed(() => {
+        //   return accounts.value.filter((a, b) => {
+        //     let status
+        //     return b.lamports - a.lamports
+        //   });
+        // }),
 
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 

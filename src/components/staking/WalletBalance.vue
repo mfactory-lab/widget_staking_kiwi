@@ -46,6 +46,7 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div v-else class="text-center q-mt-sm text-bold">Please connect a wallet</div>
     </q-card-section>
   </q-card>
 </template>

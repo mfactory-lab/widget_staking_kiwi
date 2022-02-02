@@ -54,7 +54,7 @@ export const GTAG_ID = isProd ? null : null;
 
 // Social links
 export const TELEGRAM_URL = 'https://t.me/jstaking';
-export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jpoolsolana';
+export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
 
 // Stake
 export const STAKE_PROGRAM_ID = StakeProgram.programId;

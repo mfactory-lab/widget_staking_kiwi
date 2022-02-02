@@ -30,13 +30,8 @@
   <q-card class="stake-box shadow-sm q-pa-sm">
     <q-card-section class="stake-box__top-section">
       <div class="row justify-center">
-        <div class="col-xs-12 col-sm-6">
-          <div class="stake-box__title"> Amount to stake </div>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-          <div class="stake-box__title" :class="{ 'text-right': $q.screen.gt.xs }">
-            Available {{ availableSol }} SOL
-          </div>
+        <div class="col-12">
+          <div class="stake-box__title"> Available: {{ availableSol }} SOL </div>
         </div>
       </div>
       <div
@@ -86,7 +81,7 @@
 
     <q-card-section>
       <div class="row items-between">
-        <div class="col-sm-6 col-xs-12 q-pr-sm q-mt-sm">
+        <div class="col-sm-6 col-xs-12 q-pr-sm">
           <stake-slide-wrapper :value="stakePercent">
             <q-slider
               v-model="stakePercent"
@@ -103,12 +98,12 @@
           </stake-slide-wrapper>
         </div>
 
-        <div class="col-sm-6 col-xs-12 q-mt-md" :class="{ 'q-mb-md': $q.screen.lt.sm }">
+        <div class="col-sm-6 col-xs-12 q-mt-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
           <div v-if="connected" class="text-right q-ml-auto">
             <q-btn
               :loading="creating"
               class="stake-box__btn q-ml-auto"
-              color="red"
+              color="accent"
               rounded
               size="14px"
               padding="9px xl"
@@ -123,11 +118,12 @@
           </div>
         </div>
       </div>
-      <div class="row items-between q-mt-sm">
-        <div class="col-sm-5 col-xs-12 column justify-center">
-          <apy />
-        </div>
-        <div class="col-sm-7 col-xs-12">
+      <div class="row justify-end items-end q-mt-sm">
+        <roi-calculator-btn />
+        <apy />
+      </div>
+      <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
+        <div class="col-sm-6 col-xs-12">
           <stake-info :data="stakeInfoData" :isStake="true" />
         </div>
       </div>
@@ -178,6 +174,7 @@
   import StakeInfo from '@/components/staking/stake/StakeInfo.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
+  import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
   import { useApyStore } from '@jpool/common/store/modules/apy';
   import { clickOutside } from '@jpool/common/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
@@ -187,6 +184,7 @@
       ConnectWallet,
       StakeInfo,
       StakeSlideWrapper,
+      RoiCalculatorBtn,
     },
     directives: {
       clickOutside,

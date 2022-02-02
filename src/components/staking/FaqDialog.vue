@@ -71,7 +71,7 @@
     }
 
     &__header {
-      background: #455a64;
+      background: $primary;
       opacity: 0.95;
       border-radius: 8px 8px 0px 0px;
       display: flex;

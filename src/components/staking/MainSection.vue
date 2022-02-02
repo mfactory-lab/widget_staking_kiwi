@@ -39,24 +39,12 @@
         >
           <div class="row full-width">
             <div
-              class="col main-section__block q-mb-md q-mr-md"
-              :class="{ 'col-12': $q.screen.lt.sm }"
+              class="col main-section__block q-mb-md"
+              :class="{ 'col-12': $q.screen.lt.sm, 'q-mr-md': $q.screen.gt.sm }"
               ><epoch
             /></div>
-            <div
-              class="main-section__rect-btn"
-              :class="{ 'q-mx-auto': $q.screen.lt.sm, 'q-mb-md': $q.screen.lt.sm }"
-            >
-              <q-btn
-                class="q-mx-lg main-section__calc-btn"
-                flat
-                padding="none"
-                color="white"
-                size="md"
-                @click="RoiDialog = true"
-              >
-                <img src="@/assets/img/calculator.svg" alt="" class="q-mt-xs q-ml-xs" />
-              </q-btn>
+            <div class="main-section__rect-btn main-section__rect-btn--logo">
+              <sol-svg class="q-icon" />
             </div>
           </div>
           <div class="row full-width">
@@ -65,22 +53,9 @@
               :class="{ 'col-12': $q.screen.lt.sm }"
               ><charts
             /></div>
-            <div
-              class="main-section__rect-btn"
-              :class="{ 'q-mx-auto': $q.screen.lt.sm, 'q-mb-md': $q.screen.lt.sm }"
-            >
-              <q-btn
-                class="q-mx-lg main-section__calc-btn"
-                flat
-                padding="none"
-                color="white"
-                size="md"
-                @click="FaqDialog = true"
-              >
-                <div class="main-section__faq-title">FAQ</div>
-                <img src="@/assets/img/question.svg" alt="" />
-              </q-btn>
-            </div>
+            <div class="col q-mb-md main-section__block" :class="{ 'col-12': $q.screen.lt.sm }"
+              ><price-stats
+            /></div>
           </div>
           <div class="row">
             <wallet-balance />
@@ -92,48 +67,33 @@
       </div>
     </div>
   </section>
-  <roi-calculator v-model="RoiDialog" />
   <faq-dialog v-model="FaqDialog" />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { useEmitter } from '@jpool/common/hooks';
-  import RoiCalculator from './roi-calculator/RoiCalculator.vue';
+  import { defineComponent } from 'vue';
   import StakeAccounts from './my-stake/StakeAccounts.vue';
   import WalletBalance from './WalletBalance.vue';
+  import PriceStats from './PriceStats.vue';
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
   import FaqDialog from './FaqDialog.vue';
   import Epoch from './Epoch.vue';
+  import SolSvg from '@/components/icons/TelegramSvg.vue';
 
   export default defineComponent({
     components: {
-      RoiCalculator,
       StakeAccounts,
       WalletBalance,
+      PriceStats,
       FaqDialog,
       StakeBox,
       Charts,
       Epoch,
+      SolSvg,
     },
     setup() {
-      const RoiDialog = ref(false);
-      const FaqDialog = ref(false);
-      const emitter = useEmitter();
-
-      emitter.on('closeCalculator', () => {
-        RoiDialog.value = false;
-      });
-
-      emitter.on('closeFaq', () => {
-        FaqDialog.value = false;
-      });
-
-      return {
-        RoiDialog,
-        FaqDialog,
-      };
+      return {};
     },
   });
 </script>
@@ -152,20 +112,26 @@
       align-items: center;
       background: #fff;
       border-radius: 12px;
-      height: 100px;
+      height: 105px;
+      background: linear-gradient(107.48deg, #fcfcfc 2%, #ffffff 97.35%);
       box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
         0 3px 1px -2px rgb(0 0 0 / 12%);
     }
     &__rect-btn {
       width: 100px;
-    }
-    &__calc-btn {
-      min-height: 62px !important;
-      min-width: 62px !important;
 
-      img {
-        max-width: 100%;
-        max-height: 100%;
+      &--logo {
+        background: none;
+        box-shadow: none;
+
+        svg {
+          width: 77px;
+          height: 59px;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          display: none;
+        }
       }
     }
     &__faq-title {

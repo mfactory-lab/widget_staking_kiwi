@@ -200,7 +200,7 @@
             case 'active':
               return 'secondary';
             case 'inactive':
-              return 'negative';
+              return 'gray-inactive';
             default:
               return 'primary';
           }

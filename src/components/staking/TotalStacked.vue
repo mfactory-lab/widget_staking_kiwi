@@ -35,7 +35,9 @@
       <div class="total-staked__label">Total Staked</div>
       <div class="row justify-between">
         <div class="total-staked__sol">≈ {{ solStakedFormat }}</div>
-        <q-tooltip class="bg-gray text-body2" :offset="[10, 10]"> {{ solStaked }} SOL</q-tooltip>
+        <q-tooltip class="bg-gray text-body2" :offset="[10, 10]">
+          {{ formatMoney(solStaked) }} SOL</q-tooltip
+        >
       </div>
     </div>
     <div class="total-staked__value">
@@ -52,6 +54,7 @@
   import { useValidator } from '@/hooks/validator';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
+  import { formatMoney } from '@jpool/common/utils/check-number';
 
   export default defineComponent({
     components: {
@@ -64,6 +67,7 @@
 
       return {
         solStaked,
+        formatMoney,
         solStakedFormat: computed(() => formatAmount(solStaked.value, 3)),
         commission: computed(() => formatPct.format(commission.value / 100)),
       };

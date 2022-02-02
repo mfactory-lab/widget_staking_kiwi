@@ -75,7 +75,7 @@
     }
 
     &__table {
-      padding: 8px 0 0 8px;
+      padding: 0 0 0 8px;
       width: 100%;
 
       &__row {
