@@ -110,16 +110,10 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watchEffect } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
   import { storeToRefs } from 'pinia';
   // @ts-ignore
-  import type { StakeActivationData } from '@solana/web3.js';
-  import {
-    ProgramAccount,
-    useCoinRateStore,
-    useConnectionStore,
-    useEpochStore,
-  } from '@jpool/common/store';
+  import { ProgramAccount, useCoinRateStore, useEpochStore } from '@jpool/common/store';
   import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
@@ -140,6 +134,7 @@
         type: Object as () => ProgramAccount,
         required: true,
       },
+      status: String,
     },
     emits: ['activate', 'deactivate', 'withdraw'],
     setup(props, { emit }) {
@@ -147,23 +142,10 @@
         const bnEpoch = new BN(epoch);
         return bnEpoch.eq(MAX_EPOCH) ? '---' : epoch;
       };
-      const connectionStore = useConnectionStore();
-      const stakeActivation = ref<StakeActivationData>();
-      const stateLoading = ref(true);
+
+      const stateLoading = ref(false);
       const coinRateStore = useCoinRateStore();
       const { epochProgress } = storeToRefs(useEpochStore());
-
-      watchEffect(async () => {
-        stateLoading.value = true;
-        try {
-          stakeActivation.value = await connectionStore.connection!.getStakeActivation(
-            props.stakeAccount.pubkey,
-          );
-        } catch (e) {
-          console.log('getStakeActivation err === ', e);
-        }
-        stateLoading.value = false;
-      });
 
       const amount = computed(() => {
         return formatAmount(lamportsToSol(props.stakeAccount?.account?.lamports ?? 0));
@@ -191,10 +173,10 @@
         state: computed(() =>
           props.stakeAccount.account.data?.parsed?.type !== 'delegated'
             ? 'not delegated'
-            : stakeActivation.value?.state,
+            : props.status,
         ),
         stateColor: computed(() => {
-          switch (stakeActivation.value?.state) {
+          switch (props.status) {
             case 'activating':
               return 'accent';
             case 'active':

@@ -51,13 +51,14 @@
 
       <q-card-section class="q-py-none">
         <div v-if="connected">
-          <q-list v-if="accounts.length > 0" separator>
+          <q-list v-if="accountsSorted.length > 0" separator>
             <stake-account-item
-              v-for="(acc, index) in accounts"
+              v-for="(acc, index) in accountsSorted"
               :index="index + 1"
-              :key="acc.pubkey"
-              :stake-account="acc"
-              :loading="acc.pubkey.toBase58() === loadingPubkey"
+              :key="acc.stakeAccount.pubkey"
+              :stake-account="acc.stakeAccount"
+              :status="acc.state"
+              :loading="acc.stakeAccount.pubkey.toBase58() === loadingPubkey"
               @deactivate="deactivate"
               @withdraw="withdraw"
               @activate="activate"
@@ -74,7 +75,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
@@ -90,6 +91,10 @@
   import { useValidator } from '@/hooks/validator';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
 
+  interface StakeAccount {
+    stakeAccount: ProgramAccount;
+    state: String;
+  }
   export default defineComponent({
     components: { StakeAccountItem },
     emits: [
@@ -122,18 +127,38 @@
         }
         return stakeAccountStore.data;
       });
+      const accountsSorted = ref<StakeAccount[]>([]);
 
-      // const statusWeights = {
-      //   active: 0,
-      //   activating: 1,
-      //   deactivating: 2,
-      //   inactive: 3,
-      // };
+      const statusWeights = {
+        active: 0,
+        activating: 1,
+        deactivating: 2,
+        inactive: 3,
+      };
 
-      // const getStatusWeight = (acc) => {
-      //   if (acc.account.data?.parsed?.type !== 'delegated') return 4;
-      //   return 3;
-      // }
+      const getStatusWeight = (acc, status) => {
+        if (acc.account.data?.parsed?.type !== 'delegated') return 4;
+        return statusWeights[status];
+      };
+
+      watch(accounts, async () => {
+        const accountsSorts = await Promise.all(
+          accounts.value.map(async (acc) => {
+            const stakeActivation = await connectionStore.connection!.getStakeActivation(
+              acc.pubkey,
+            );
+            return {
+              stakeAccount: acc,
+              state: stakeActivation.state,
+            };
+          }),
+        );
+        accountsSorted.value = accountsSorts.sort((a, b) => {
+          return (
+            getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
+          );
+        });
+      });
 
       return {
         connected,
@@ -141,15 +166,13 @@
         loading,
         loadingPubkey,
         accounts,
-
-        // accountsSorted: computed(() => {
-        //   return accounts.value.filter((a, b) => {
-        //     let status
-        //     return b.lamports - a.lamports
-        //   });
-        // }),
+        accountsSorted,
 
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
+
+        refresh: () => {
+          stakeAccountStore.load();
+        },
 
         activate: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
@@ -176,10 +199,6 @@
           loadingPubkey.value = null;
           await stakeAccountStore.load();
           emit('afterDeactivate');
-        },
-
-        refresh: () => {
-          stakeAccountStore.load();
         },
 
         withdraw: async (address: string, lamports: number) => {
