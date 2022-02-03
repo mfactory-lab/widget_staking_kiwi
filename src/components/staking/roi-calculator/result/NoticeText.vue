@@ -1,4 +1,4 @@
-<!--
+src/components/staking/roi-calculator/RoiCalculator.vue<!--
   - This file is part of the Web3 Library developed by mFactory GmbH.
   -
   - Copyright © 2021, mFactory GmbH

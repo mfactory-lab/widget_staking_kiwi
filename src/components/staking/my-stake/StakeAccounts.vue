@@ -73,7 +73,7 @@
               @deactivate="deactivate"
               @withdraw="withdraw"
               @activate="activate"
-              @depositJpool="depositJpool"
+              @deposit-jpool="depositJpool"
             />
           </q-list>
           <div v-else class="flex flex-center q-mt-md q-mb-xs">
@@ -181,15 +181,6 @@
         return statusWeights[status];
       };
 
-      // watch(
-      //   [jpoolVoters, voterKey],
-      //   async () => {
-      //     console.log('watchjpool jpoolVoters === ', jpoolVoters);
-      //     console.log('watchjpoolvoterKey === ', voterKey);
-      //     console.log('watchjpool has === ', jpoolVoters.value.indexOf(voterKey.value));
-      //   },
-      //   { immediate: true },
-      // );
       watch(accounts, async () => {
         totalStats.value.forEach((item) => {
           item.value = 0;
@@ -303,7 +294,6 @@
                 authorizedPubkey: wallet.value!.publicKey!,
                 toPubkey: wallet.value!.publicKey!,
                 lamports: lamports,
-                // custodianPubkey: wallet.value!.publicKey!,
               }).instructions,
               [],
             ),
