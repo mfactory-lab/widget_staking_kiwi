@@ -33,14 +33,24 @@
     </q-card-section>
     <q-card-section class="wallet-balance__body">
       <q-list v-if="connected" dense separator>
-        <q-item>
+        <q-item v-if="tokenBalance" class="col-12 col-sm-6">
           <q-item-section class="balance__value">
-            <span class="balance__value__usd">${{ formatMoney(solUsd) }}</span>
-            <span>{{ solBalance }}</span>
-          </q-item-section>
-          <q-item-section side>
+            <div class="column">
+              <span>{{ tokenBalance }}</span>
+              <span class="balance__value__usd">${{ formatMoney(jsolUsd) }}</span>
+            </div>
             <q-item-label>
-              <span>SOL</span>
+              <jsol-svg />
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item class="col-12 col-sm-6">
+          <q-item-section class="balance__value">
+            <div class="column">
+              <span>{{ solBalance }} SOL</span>
+              <span class="balance__value__usd">${{ formatMoney(solUsd) }}</span>
+            </div>
+            <q-item-label>
               <img alt="" src="@/assets/img/sol-logo.svg" />
             </q-item-label>
           </q-item-section>
@@ -54,23 +64,37 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useBalanceStore, useCoinRateStore, useWalletStore } from '@jpool/common/store';
+  import {
+    useBalanceStore,
+    useCoinRateStore,
+    useStakePoolStore,
+    useWalletStore,
+  } from '@jpool/common/store';
   import { formatMoney } from '@jpool/common/utils/check-number';
+  import JsolSvg from '@/components/icons/JsolSvg.vue';
 
   export default defineComponent({
+    components: { JsolSvg },
     setup() {
+      const stakePoolStore = useStakePoolStore();
       const balanceStore = useBalanceStore();
       const coinRateStore = useCoinRateStore();
       const { connected } = storeToRefs(useWalletStore());
 
-      const { solBalance } = storeToRefs(balanceStore);
+      const { solBalance, tokenBalance } = storeToRefs(balanceStore);
 
       const solUsd = computed(() => coinRateStore.solPrice * solBalance.value);
+
+      const jsolUsd = computed(
+        () => (coinRateStore.solPrice * tokenBalance.value) / stakePoolStore.exchangeRate,
+      );
 
       return {
         connected,
         solBalance,
+        tokenBalance,
         solUsd,
+        jsolUsd,
         formatMoney: (v: number) => formatMoney(v),
       };
     },

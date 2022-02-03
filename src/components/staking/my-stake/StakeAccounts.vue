@@ -138,12 +138,12 @@
           value: 0,
         },
         {
-          title: 'INACTIVE STAKE ON VALITATOR',
+          title: 'INACTIVE STAKE ON VALIDATOR',
           color: '#647E82',
           value: 0,
         },
         {
-          title: 'ACTIVE STAKE ON VALITATOR',
+          title: 'ACTIVE STAKE ON VALIDATOR',
           color: '#00A5B9',
           value: 0,
         },

@@ -52,6 +52,9 @@ export const POOL_CONNECTION_DELAY = 30000;
 // export const GTAG_ID = isProd ? 'G-FXXRMT54JE' : null;
 export const GTAG_ID = isProd ? null : null;
 
+export const JSOL_LOGO =
+  'https://raw.githubusercontent.com/mfactory-lab/jpool-pub/main/assets/images/jsol.png';
+
 // Social links
 export const TELEGRAM_URL = 'https://t.me/jstaking';
 export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
