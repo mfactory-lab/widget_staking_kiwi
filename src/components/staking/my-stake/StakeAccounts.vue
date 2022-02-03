@@ -51,6 +51,16 @@
 
       <q-card-section class="q-py-none">
         <div v-if="connected">
+          <div v-if="accountsSorted.length > 0" class="my-stake__total-stats row justify-end">
+            <stake-stats
+              v-for="(item, i) in totalStats"
+              :key="i"
+              :title="item.title"
+              :title-color="item.color"
+              :sol="item.value"
+            />
+            <sol-svg class="q-pl-md q-icon my-stake__total-stats__logo" />
+          </div>
           <q-list v-if="accountsSorted.length > 0" separator>
             <stake-account-item
               v-for="(acc, index) in accountsSorted"
@@ -84,19 +94,23 @@
     sendTransaction,
     useConnectionStore,
     useStakeAccountStore,
+    useStakePoolStore,
     useWalletStore,
   } from '@jpool/common/store';
   import { useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
+  import StakeStats from './StakeStats.vue';
   import { useValidator } from '@/hooks/validator';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
+  import { lamportsToSol } from '@jpool/common/utils';
+  import SolSvg from '@/components/icons/TelegramSvg.vue';
 
   interface StakeAccount {
     stakeAccount: ProgramAccount;
     state: String;
   }
   export default defineComponent({
-    components: { StakeAccountItem },
+    components: { StakeAccountItem, StakeStats, SolSvg },
     emits: [
       'beforeDeposit',
       'afterDeposit',
@@ -112,10 +126,33 @@
       const { monitorTransaction } = useMonitorTransaction();
       const { voterKey } = useValidator();
       const { delegateAccount } = useStakeAccounts();
+      const { connectionLost } = storeToRefs(useStakePoolStore());
 
       const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
       const loadingPubkey = ref();
+      const totalStats = ref([
+        {
+          title: 'NOT DELEGATED STAKE',
+          color: '#FF6B48',
+          value: 0,
+        },
+        {
+          title: 'INACTIVE STAKE ON VALITATOR',
+          color: '#FF6B48',
+          value: 0,
+        },
+        {
+          title: 'ACTIVE STAKE ON VALITATOR',
+          color: '#00A5B9',
+          value: 0,
+        },
+        {
+          title: 'TOTAL STAKE',
+          color: '#37A98C',
+          value: 0,
+        },
+      ]);
 
       const accounts = computed(() => {
         if (voterKey.value) {
@@ -131,8 +168,8 @@
 
       const statusWeights = {
         active: 0,
-        activating: 1,
-        deactivating: 2,
+        deactivating: 1,
+        activating: 2,
         inactive: 3,
       };
 
@@ -142,17 +179,45 @@
       };
 
       watch(accounts, async () => {
+        totalStats.value.forEach((item) => {
+          item.value = 0;
+        });
         const accountsSorts = await Promise.all(
           accounts.value.map(async (acc) => {
             const stakeActivation = await connectionStore.connection!.getStakeActivation(
               acc.pubkey,
             );
+            if (acc.account.data?.parsed?.type == 'delegated') {
+              if (stakeActivation.state === 'active' || stakeActivation.state === 'deactivating') {
+                if (totalStats.value[2]) {
+                  totalStats.value[2].value += lamportsToSol(acc.account.lamports);
+                }
+              } else {
+                if (totalStats.value[1]) {
+                  totalStats.value[1].value += lamportsToSol(acc.account.lamports);
+                }
+              }
+            } else {
+              if (totalStats.value[0]) {
+                totalStats.value[0].value += lamportsToSol(acc.account.lamports);
+              }
+            }
+            if (
+              totalStats.value[0] &&
+              totalStats.value[1] &&
+              totalStats.value[2] &&
+              totalStats.value[3]
+            ) {
+              totalStats.value[3].value =
+                totalStats.value[0].value + totalStats.value[1].value + totalStats.value[2].value;
+            }
             return {
               stakeAccount: acc,
               state: stakeActivation.state,
             };
           }),
         );
+        console.log('total stats === ', totalStats.value);
         accountsSorted.value = accountsSorts.sort((a, b) => {
           return (
             getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
@@ -167,6 +232,8 @@
         loadingPubkey,
         accounts,
         accountsSorted,
+        totalStats,
+        connectionLost,
 
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
@@ -226,3 +293,20 @@
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .my-stake {
+    &__total-stats {
+      border-bottom: 1px solid $primary;
+      margin: 0 -16px;
+      padding: 16px;
+      @media (max-width: $breakpoint-sm) {
+        padding-bottom: 0;
+      }
+      &__logo {
+        width: 38px;
+        height: 30px;
+      }
+    }
+  }
+</style>

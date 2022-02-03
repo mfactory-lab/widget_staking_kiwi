@@ -67,7 +67,6 @@
       </div>
     </div>
   </section>
-  <faq-dialog v-model="FaqDialog" />
 </template>
 
 <script lang="ts">
@@ -77,7 +76,6 @@
   import PriceStats from './PriceStats.vue';
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
-  import FaqDialog from './FaqDialog.vue';
   import Epoch from './Epoch.vue';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
 
@@ -86,7 +84,6 @@
       StakeAccounts,
       WalletBalance,
       PriceStats,
-      FaqDialog,
       StakeBox,
       Charts,
       Epoch,

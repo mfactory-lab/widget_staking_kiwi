@@ -58,7 +58,7 @@
       const { epochTimeRemaining, epochProgress, epochNumber } = storeToRefs(useEpochStore());
       return {
         epochNumber,
-        epochProgress,
+        epochProgress: computed(() => Number(epochProgress.value)),
         time: computed(() => {
           const timeInMs = epochTimeRemaining.value;
           const _h = timeInMs / 1000 / 60 / 60;

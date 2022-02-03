@@ -43,7 +43,7 @@
         type: String,
       },
       value: {
-        type: Number,
+        type: String,
       },
       isBold: {
         type: Boolean,
