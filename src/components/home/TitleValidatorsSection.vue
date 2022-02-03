@@ -44,7 +44,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: $textWhite;
+      color: $text-white;
       @media (max-width: $breakpoint-sm) {
         height: 100px;
       }

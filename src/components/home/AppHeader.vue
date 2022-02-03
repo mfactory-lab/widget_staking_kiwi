@@ -126,7 +126,7 @@
       }
     }
     &__title {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-size: 50px;
       line-height: 50px;
       font-weight: 900;
@@ -138,7 +138,7 @@
       }
     }
     &__subtitle {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-size: 25px;
       line-height: 28px;
       font-weight: 500;

@@ -41,24 +41,6 @@
   import { defineComponent } from 'vue';
   export default defineComponent({
     name: 'FaqSectionItem',
-    props: {
-      icon: {
-        type: String,
-        required: true,
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      texts: {
-        type: Array,
-        required: true,
-      },
-      link: {
-        type: String,
-        required: true,
-      },
-    },
     setup() {
       return {};
     },

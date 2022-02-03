@@ -39,7 +39,7 @@
   .q-field__native {
     padding-top: 8px;
     font-size: 27px;
-    color: $textWhite;
+    color: $text-white;
   }
   &__top-section {
     padding-bottom: 0;
@@ -51,10 +51,10 @@
   }
   &__symbol {
     font-size: 18px;
-    color: $textWhite;
+    color: $text-white;
   }
   ::placeholder {
-    color: $textWhite !important;
+    color: $text-white !important;
   }
   &__bottom-section {
     border-top: 1px solid $primary;

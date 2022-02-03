@@ -55,7 +55,6 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'FaqSection',
     components: {
       FaqSectionItem,
     },
@@ -66,7 +65,7 @@
   $faqText: #000;
   .faq-section {
     &__title {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-weight: 500;
       font-size: 30px;
       color: $faqText;

@@ -40,7 +40,7 @@ a {
   font-size: 50px;
   font-weight: 700;
   line-height: 56px;
-  font-family: $fontSecondary;
+  font-family: $font-secondary;
   text-transform: uppercase;
   @media (max-width: $breakpoint-xs) {
     font-size: 24px;
@@ -54,7 +54,7 @@ a {
   text-transform: uppercase;
   color: #252B42;
   font-weight: 700;
-  font-family: $fontSecondary;
+  font-family: $font-secondary;
   @media (max-width: $breakpoint-xs) {
     font-size: 16px;
     line-height: 20px;

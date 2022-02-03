@@ -32,7 +32,8 @@
 
   .q-btn {
     font-weight: 400;
-    padding: 7px 17px 5px;
+    // padding: 7px 17px 5px;
+    padding: 7px 12px 5px;
   }
 
   .q-badge {
@@ -65,10 +66,10 @@
     height: 26px;
     background: $primary;
     border-radius: 50px;
-    font-family: $fontSecondary;
+    font-family: $font-secondary;
     font-weight: 700;
     font-size: 16px;
-    color: $textWhite;
+    color: $text-white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +77,7 @@
   }
 
   &__sol {
-    font-family: $fontSecondary;
+    font-family: $font-secondary;
     font-weight: 500;
     font-size: 19px;
     line-height: 23px;
@@ -84,14 +85,14 @@
   }
 
   &__usd {
-    font-family: $fontSecondary;
+    font-family: $font-secondary;
     font-weight: 500;
     font-size: 14px;
     line-height: 17px;
     color: $gray;
   }
   &__btns {
-    width: 225px;
+    width: 300px;
     padding-right: 0;
 
     .q-btn {

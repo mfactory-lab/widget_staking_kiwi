@@ -67,7 +67,7 @@
     &__main {
       width: 602px;
       max-width: 100% !important;
-      background: $textWhite;
+      background: $text-white;
     }
 
     &__header {

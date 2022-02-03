@@ -73,7 +73,25 @@
 
     <q-item-section class="my-stake__btns" side>
       <template v-if="state === 'active' || state === 'activating'">
-        <q-btn rounded unelevated color="primary" class="full-width" @click="deactivate(address)">
+        <q-btn-group
+          v-if="jpoolPossible && state === 'active'"
+          class="full-width"
+          rounded
+          unelevated
+        >
+          <q-btn rounded unelevated color="primary" class="full-width" @click="deactivate(address)">
+            DEACTIVATE
+          </q-btn>
+          <q-btn color="warning" text-color="dark" @click="depositJpool"> DEPOSIT TO JPOOL </q-btn>
+        </q-btn-group>
+        <q-btn
+          v-else
+          rounded
+          unelevated
+          color="primary"
+          class="full-width"
+          @click="deactivate(address)"
+        >
           DEACTIVATE
         </q-btn>
       </template>
@@ -126,6 +144,7 @@
     props: {
       index: Number,
       loading: Boolean,
+      jpoolPossible: Boolean,
       onlyDeposit: {
         type: Boolean,
         default: false,
@@ -136,7 +155,7 @@
       },
       status: String,
     },
-    emits: ['activate', 'deactivate', 'withdraw'],
+    emits: ['activate', 'deactivate', 'withdraw', 'depositJpool'],
     setup(props, { emit }) {
       const formatEpoch = (epoch: string) => {
         const bnEpoch = new BN(epoch);
@@ -188,7 +207,7 @@
           }
         }),
         stateLoading,
-        epochProgress,
+        epochProgress: computed(() => Number(epochProgress.value)),
         activate() {
           emit('activate', props.stakeAccount);
         },
@@ -197,6 +216,9 @@
         },
         withdraw(address: string, lamports: number) {
           emit('withdraw', address, lamports);
+        },
+        depositJpool() {
+          emit('depositJpool', props.stakeAccount);
         },
       };
     },

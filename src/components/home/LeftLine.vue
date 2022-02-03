@@ -53,7 +53,7 @@
     flex-basis: 42px;
     flex-grow: 0;
     margin-right: 32px;
-    background: $textWhite;
+    background: $text-white;
     @media (max-width: $breakpoint-xs) {
       width: 18px;
       flex-basis: 18px;

@@ -69,9 +69,11 @@
               :stake-account="acc.stakeAccount"
               :status="acc.state"
               :loading="acc.stakeAccount.pubkey.toBase58() === loadingPubkey"
+              :jpool-possible="jpoolPossible"
               @deactivate="deactivate"
               @withdraw="withdraw"
               @activate="activate"
+              @depositJpool="depositJpool"
             />
           </q-list>
           <div v-else class="flex flex-center q-mt-md q-mb-xs">
@@ -97,7 +99,7 @@
     useStakePoolStore,
     useWalletStore,
   } from '@jpool/common/store';
-  import { useMonitorTransaction } from '@jpool/common/hooks';
+  import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
   import StakeStats from './StakeStats.vue';
   import { useValidator } from '@/hooks/validator';
@@ -124,9 +126,10 @@
       const { wallet, connected } = storeToRefs(useWalletStore());
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
-      const { voterKey } = useValidator();
+      const { voterKey, jpoolVoters } = useValidator();
       const { delegateAccount } = useStakeAccounts();
       const { connectionLost } = storeToRefs(useStakePoolStore());
+      const { depositStake } = useDeposit();
 
       const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
@@ -178,6 +181,15 @@
         return statusWeights[status];
       };
 
+      // watch(
+      //   [jpoolVoters, voterKey],
+      //   async () => {
+      //     console.log('watchjpool jpoolVoters === ', jpoolVoters);
+      //     console.log('watchjpoolvoterKey === ', voterKey);
+      //     console.log('watchjpool has === ', jpoolVoters.value.indexOf(voterKey.value));
+      //   },
+      //   { immediate: true },
+      // );
       watch(accounts, async () => {
         totalStats.value.forEach((item) => {
           item.value = 0;
@@ -235,6 +247,8 @@
         totalStats,
         connectionLost,
 
+        jpoolPossible: computed(() => jpoolVoters.value.indexOf(voterKey.value) !== -1),
+
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
         refresh: () => {
@@ -246,6 +260,15 @@
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
           await delegateAccount(stakeAccount.pubkey);
           loadingPubkey.value = null;
+          emit('afterDeposit');
+        },
+
+        depositJpool: async (stakeAccount: ProgramAccount) => {
+          emit('beforeDeposit');
+          loadingPubkey.value = stakeAccount.pubkey.toBase58();
+          await depositStake(stakeAccount);
+          loadingPubkey.value = null;
+          await stakeAccountStore.load();
           emit('afterDeposit');
         },
 

@@ -45,7 +45,6 @@
 
 <script lang="ts">
   export default {
-    name: 'SolSvg',
     props: {
       fill: {
         type: String,

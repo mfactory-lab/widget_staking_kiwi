@@ -37,7 +37,6 @@
 
 <script lang="ts">
   export default {
-    name: 'TelegramSvg',
     props: {
       fill: {
         type: String,

@@ -27,7 +27,12 @@
  */
 
 import { computed, ref, watch } from 'vue';
-import { loadApyInfo, useConnectionStore, useEpochStore } from '@jpool/common/store';
+import {
+  loadApyInfo,
+  useConnectionStore,
+  useEpochStore,
+  useValidatorStore,
+} from '@jpool/common/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 
@@ -66,12 +71,14 @@ export function useValidator() {
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
   const loading = ref(!apyInfo.value?.lastEpoch);
+  const validatorStore = useValidatorStore();
 
   watch(
-    [cluster],
-    async ([cluster]) => {
+    cluster,
+    async (cluster) => {
       validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
       voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
+      validatorStore.load();
     },
     { immediate: true },
   );
@@ -119,6 +126,7 @@ export function useValidator() {
   );
 
   return {
+    jpoolVoters: computed(() => validatorStore.voteIds),
     validatorId,
     voterKey,
     totalStake,

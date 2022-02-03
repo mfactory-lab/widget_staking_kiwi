@@ -34,9 +34,9 @@ $accent: #00A5B9;
 $dark: #404246;
 $warning: #FFCD29;
 
-$textWhite: #FFFFFF;
-$lightGrayNatural: #E9E9E9;
-$grayInactive: #CFCFCF;
+$text-white: #FFFFFF;
+$light-gray-natural: #E9E9E9;
+$gray-inactive: #CFCFCF;
 $red: #FF6B48;
 $gray: #647E82;
 
@@ -47,11 +47,11 @@ $body-font-size: 1rem;
 
 $button-padding: 9px 17px;
 
-$fontSecondary: 'Montserrat';
+$font-secondary: 'Montserrat';
 
 $tooltip-background: $blue-grey-8;
 
-$primaryGradient: linear-gradient(
+$primary-gradient: linear-gradient(
     180deg,
     transparentize($primary, 0.05) 0%,
     transparentize($primary, 0.05) 50%,

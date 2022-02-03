@@ -41,7 +41,7 @@
 
   .section-title {
     @media (max-width: $breakpoint-sm) {
-      color: $textWhite !important;
+      color: $text-white !important;
     }
   }
 
@@ -116,7 +116,7 @@
   &__name {
     text-align: center;
     font-size: 20px;
-    color: $textWhite;
+    color: $text-white;
     font-weight: bold;
     padding: 0 10px;
     @media (max-width: $breakpoint-sm) {
@@ -126,7 +126,7 @@
   }
 
   &__pos {
-    color: $textWhite;
+    color: $text-white;
     margin: 10px 0 0;
     font-size: 18px;
     line-height: 26px;

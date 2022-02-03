@@ -98,8 +98,8 @@
       font-weight: 500;
       height: 42px;
       padding: 0 24px 0 8px;
-      color: $textWhite;
-      border-right: 1px solid $textWhite;
+      color: $text-white;
+      border-right: 1px solid $text-white;
 
       @media (max-width: $breakpoint-sm) {
         padding: 4px 8px 0 8px;

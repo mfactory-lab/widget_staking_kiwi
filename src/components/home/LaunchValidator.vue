@@ -83,7 +83,7 @@
       }
     }
     &__title {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-size: 28px;
       line-height: 32px;
       color: $gray;
@@ -109,7 +109,7 @@
       }
     }
     &__soon {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-size: 22px;
       line-height: 26px;
       color: #000000;

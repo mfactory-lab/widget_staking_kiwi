@@ -37,7 +37,6 @@
 
 <script lang="ts">
   export default {
-    name: 'TwitterSvg',
     props: {
       fill: {
         type: String,

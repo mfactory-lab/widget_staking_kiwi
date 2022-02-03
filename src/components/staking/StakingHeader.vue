@@ -69,8 +69,8 @@
 
 <style lang="scss" scoped>
   .staking-header {
-    font-family: $fontSecondary;
-    background: $primaryGradient;
+    font-family: $font-secondary;
+    background: $primary-gradient;
     @media (max-width: $breakpoint-sm) {
       background: $primary;
     }

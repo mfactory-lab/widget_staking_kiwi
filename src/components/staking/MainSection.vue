@@ -129,7 +129,7 @@
       }
     }
     &__faq-title {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-weight: 700;
       font-size: 15px;
       line-height: 18px;

@@ -85,14 +85,14 @@
       }
     }
     &__title {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-weight: 500;
       font-size: 12px;
       line-height: 15px;
       text-transform: uppercase;
     }
     &__values {
-      font-family: $fontSecondary;
+      font-family: $font-secondary;
       font-weight: 500;
       font-size: 14px;
       line-height: 17px;

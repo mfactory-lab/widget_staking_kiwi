@@ -82,7 +82,7 @@
       display: flex;
       padding: 62px 0;
       justify-content: center;
-      color: $textWhite;
+      color: $text-white;
     }
     &__content {
       flex-basis: 0;

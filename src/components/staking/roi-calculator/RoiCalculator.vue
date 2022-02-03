@@ -48,16 +48,16 @@
 </script>
 
 <style lang="scss">
-  $colorMain: #5c5c5c;
-  $colorDark: #000000;
-  $colorBorder: #b3b3b3;
-  $fontFamily: Roboto;
-  $mobileSize: 601px;
+  $color-main: #5c5c5c;
+  $color-dark: #000000;
+  $color-border: #b3b3b3;
+  $font-family: Roboto;
+  $mobile-size: 601px;
 
   .sol-calculator {
     display: flex;
     justify-content: center;
-    font-family: $fontFamily;
+    font-family: $font-family;
 
     &__main {
       width: 602px;
@@ -85,11 +85,11 @@
       background: #ffffff;
       border-radius: 0 0 8px 8px;
       padding: 16px 24px;
-      color: $colorMain;
+      color: $color-main;
       display: flex;
       justify-content: space-between;
 
-      @media (max-width: $mobileSize) {
+      @media (max-width: $mobile-size) {
         flex-direction: column;
       }
     }
@@ -98,7 +98,7 @@
       width: 130px;
       margin-right: 33px;
 
-      @media (max-width: $mobileSize) {
+      @media (max-width: $mobile-size) {
         width: 100%;
         margin-right: 0;
         margin-bottom: 20px;
@@ -108,7 +108,7 @@
         font-weight: bold;
         font-size: 11px;
         line-height: 13px;
-        color: $colorMain;
+        color: $color-main;
         text-align: center;
       }
 
@@ -116,7 +116,7 @@
         font-weight: 500;
         font-size: 20px;
         text-align: center;
-        color: $colorDark;
+        color: $color-dark;
       }
 
       &__group {
@@ -147,13 +147,13 @@
       &__label {
         font-size: 11px;
         line-height: 13px;
-        color: $colorMain;
+        color: $color-main;
       }
 
       &__input {
         font-size: 15px;
         line-height: 18px;
-        color: $colorDark;
+        color: $color-dark;
         height: 29px;
         text-align: right;
         max-width: 100%;
@@ -171,7 +171,7 @@
         font-size: 15px;
         line-height: 35px;
         text-align: center;
-        color: $colorDark;
+        color: $color-dark;
         border: 0;
         width: 100%;
         text-transform: uppercase;
@@ -185,12 +185,12 @@
     }
 
     &__results {
-      border-left: 1px solid $colorBorder;
+      border-left: 1px solid $color-border;
       padding-left: 25px;
       flex-grow: 1;
       flex-basis: 0;
 
-      @media (max-width: $mobileSize) {
+      @media (max-width: $mobile-size) {
         border-left: 0;
         padding-left: 0;
       }
@@ -205,7 +205,7 @@
         font-weight: 300;
         font-size: 10px;
         line-height: 15px;
-        color: $colorDark;
+        color: $color-dark;
 
         &--bold {
           font-size: 11px;
@@ -213,7 +213,7 @@
         }
 
         &--light {
-          color: $colorMain;
+          color: $color-main;
           font-weight: normal;
         }
       }
@@ -223,7 +223,7 @@
 
         &__row {
           display: flex;
-          border-bottom: 1px solid $colorBorder;
+          border-bottom: 1px solid $color-border;
 
           &:last-child {
             border-bottom: 0;
@@ -240,7 +240,7 @@
           font-size: 13px;
           line-height: 14px;
           text-align: center;
-          border-right: 1px solid $colorBorder;
+          border-right: 1px solid $color-border;
 
           &:first-child {
             text-align: left;
