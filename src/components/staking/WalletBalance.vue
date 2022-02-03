@@ -44,7 +44,7 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        <q-item class="col-12 col-sm-6">
+        <q-item class="col-12 col-sm-6 q-ml-auto">
           <q-item-section class="balance__value">
             <div class="column">
               <span>{{ solBalance }} SOL</span>
