@@ -52,7 +52,7 @@
 <script lang="ts">
   import { computed } from 'vue';
   import { ENDPOINTS } from '@/config';
-  import { Endpoint, useConnectionStore, useWalletStore } from '@jpool/common/store';
+  import { Endpoint, useConnectionStore, useWalletStore } from '@/store';
   import { defineComponent } from 'vue';
 
   export default defineComponent({

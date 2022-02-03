@@ -26,21 +26,4 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { createApp } from 'vue';
-import { setupRouter } from '@/router';
-import { setupPlugins } from '@/plugins';
-import { setupStore } from '@/store';
-
-import App from './App.vue';
-
-async function bootstrap() {
-  const app = createApp(App);
-
-  setupStore(app);
-  setupRouter(app);
-  setupPlugins(app);
-
-  app.mount('#app');
-}
-
-bootstrap().then();
+export * from './validator-jstaking';

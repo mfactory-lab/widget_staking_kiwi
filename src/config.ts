@@ -27,7 +27,7 @@
  */
 
 import { Commitment, StakeProgram } from '@solana/web3.js';
-import { Endpoint } from '@jpool/common/store';
+import { Endpoint } from '@/store';
 import ethIcon from '@/assets/img/eth.svg';
 import dotIcon from '@/assets/img/dot.svg';
 import atomIcon from '@/assets/img/atom.svg';

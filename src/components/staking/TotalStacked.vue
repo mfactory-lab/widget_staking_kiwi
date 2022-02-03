@@ -51,17 +51,18 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useValidator } from '@/hooks/validator';
+  import { useValidatorJstakingStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
+  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {
       SolSvg,
     },
     setup() {
-      const { totalStake, commission } = useValidator();
+      const { totalStake, commission } = storeToRefs(useValidatorJstakingStore());
 
       const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));
 

@@ -131,7 +131,7 @@
   import { computed, defineComponent, ref } from 'vue';
   import { storeToRefs } from 'pinia';
   // @ts-ignore
-  import { ProgramAccount, useCoinRateStore, useEpochStore } from '@jpool/common/store';
+  import { ProgramAccount, useCoinRateStore, useEpochStore } from '@/store';
   import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';

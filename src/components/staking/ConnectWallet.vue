@@ -119,7 +119,7 @@
   import { computed, defineComponent, ref } from 'vue';
   import { storeToRefs } from 'pinia';
   import { WALLET_PROVIDERS, shortenAddress } from '@jpool/common/utils';
-  import { useStakePoolStore, useWalletStore } from '@jpool/common/store';
+  import { useStakePoolStore, useWalletStore } from '@/store';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import { evaClose } from '@quasar/extras/eva-icons';
 

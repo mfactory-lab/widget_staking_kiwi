@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-  import { useEpochStore } from '@jpool/common/store';
+  import { useEpochStore } from '@/store';
   import { storeToRefs } from 'pinia';
   import { computed, defineComponent } from 'vue';
 

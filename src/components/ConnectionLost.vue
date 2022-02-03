@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-  import { useStakePoolStore } from '@jpool/common/store';
+  import { useStakePoolStore } from '@/store';
   import { storeToRefs } from 'pinia';
   import { defineComponent, ref } from 'vue';
 

@@ -26,13 +26,9 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
+import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import {
-  loadApyInfo,
-  useConnectionStore,
-  useEpochStore,
-  useValidatorStore,
-} from '@jpool/common/store';
+import { loadApyInfo, useConnectionStore, useEpochStore, useValidatorStore } from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 
@@ -55,7 +51,7 @@ interface ApyInfo {
   validators: ApyValidatorInfo[];
 }
 
-export function useValidator() {
+export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
   const apyInfo = useLocalStorage<ApyInfo>('apy', {
     beginTimestamp: 0,
     collectionTimestamp: 0,
@@ -75,13 +71,14 @@ export function useValidator() {
 
   watch(
     cluster,
-    async (cluster) => {
+    (cluster) => {
       validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
       voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
       validatorStore.load();
     },
     { immediate: true },
   );
+
   watch([epochInfo], async ([epochInfo]) => {
     if (epochInfo?.epoch) {
       if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
@@ -134,4 +131,4 @@ export function useValidator() {
     apyLoading: computed(() => loading.value),
     apy,
   };
-}
+});

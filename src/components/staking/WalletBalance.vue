@@ -64,12 +64,7 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import {
-    useBalanceStore,
-    useCoinRateStore,
-    useStakePoolStore,
-    useWalletStore,
-  } from '@jpool/common/store';
+  import { useBalanceStore, useCoinRateStore, useStakePoolStore, useWalletStore } from '@/store';
   import { formatMoney } from '@jpool/common/utils/check-number';
   import JsolSvg from '@/components/icons/JsolSvg.vue';
 

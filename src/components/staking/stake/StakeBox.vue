@@ -164,18 +164,18 @@
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import {
+    useApyStore,
     useBalanceStore,
     useConnectionStore,
     useStakePoolStore,
     useWalletStore,
-  } from '@jpool/common/store';
+  } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import StakeInfo from '@/components/staking/stake/StakeInfo.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
-  import { useApyStore } from '@jpool/common/store/modules/apy';
   import { clickOutside } from '@jpool/common/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
 

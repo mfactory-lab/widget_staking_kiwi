@@ -26,21 +26,17 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { createApp } from 'vue';
-import { setupRouter } from '@/router';
-import { setupPlugins } from '@/plugins';
-import { setupStore } from '@/store';
+import type { App } from 'vue';
+import { createPinia } from 'pinia';
+import { useCoinRateStore } from '@jpool/common/store/modules';
 
-import App from './App.vue';
+const store = createPinia();
 
-async function bootstrap() {
-  const app = createApp(App);
-
-  setupStore(app);
-  setupRouter(app);
-  setupPlugins(app);
-
-  app.mount('#app');
+export function setupStore(app: App<Element>) {
+  app.use(store);
+  useCoinRateStore().init();
 }
 
-bootstrap().then();
+export { store };
+export * from './modules';
+export * from '@jpool/common/store/modules';

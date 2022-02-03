@@ -35,9 +35,10 @@
 </template>
 
 <script lang="ts">
-  import { useValidator } from '@/hooks/validator';
+  import { useValidatorJstakingStore } from '@/store';
   import { computed, defineComponent } from 'vue';
   import { formatPct } from '@jpool/common/utils';
+  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     props: {
@@ -47,7 +48,7 @@
       },
     },
     setup() {
-      const { apy, apyLoading } = useValidator();
+      const { apy, apyLoading } = storeToRefs(useValidatorJstakingStore());
       return {
         apyLoading,
         apy: computed(() => formatPct.format(apy.value)),

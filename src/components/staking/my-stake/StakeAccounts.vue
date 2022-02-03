@@ -98,11 +98,11 @@
     useStakeAccountStore,
     useStakePoolStore,
     useWalletStore,
-  } from '@jpool/common/store';
+  } from '@/store';
   import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
   import StakeStats from './StakeStats.vue';
-  import { useValidator } from '@/hooks/validator';
+  import { useValidatorJstakingStore } from '@/store';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import { lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
@@ -126,7 +126,7 @@
       const { wallet, connected } = storeToRefs(useWalletStore());
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
-      const { voterKey, jpoolVoters } = useValidator();
+      const { voterKey, jpoolVoters } = storeToRefs(useValidatorJstakingStore());
       const { delegateAccount } = useStakeAccounts();
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositStake } = useDeposit();

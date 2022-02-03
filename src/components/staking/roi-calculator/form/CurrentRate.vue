@@ -36,7 +36,7 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useApyStore } from '@jpool/common/store';
+  import { useApyStore } from '@/store';
   import { formatPct } from '@jpool/common/utils';
 
   export default defineComponent({

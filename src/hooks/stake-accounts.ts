@@ -35,10 +35,10 @@ import {
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
+  useValidatorJstakingStore,
   useWalletStore,
-} from '@jpool/common/store';
+} from '@/store';
 import { useMonitorTransaction } from '@jpool/common/hooks/monitor';
-import { useValidator } from '@/hooks/validator';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
@@ -50,7 +50,7 @@ export function useStakeAccounts() {
   const loading = ref(false);
   const seed = ref('0');
   const stakeAccountStore = useStakeAccountStore();
-  const { voterKey } = useValidator();
+  const { voterKey } = storeToRefs(useValidatorJstakingStore());
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;
