@@ -75,7 +75,7 @@
 <style lang="scss" scoped>
   .stake-stats {
     &:not(:first-child) {
-      @media (min-width: $breakpoint-md) {
+      @media (min-width: $breakpoint-sm) {
         border-left: 1px solid $primary;
       }
     }

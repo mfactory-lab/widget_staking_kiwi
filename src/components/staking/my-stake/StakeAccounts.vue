@@ -139,7 +139,7 @@
         },
         {
           title: 'INACTIVE STAKE ON VALITATOR',
-          color: '#FF6B48',
+          color: '#647E82',
           value: 0,
         },
         {

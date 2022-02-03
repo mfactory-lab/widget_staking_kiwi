@@ -98,9 +98,6 @@
 <style lang="scss" scoped>
   .main-section {
     padding: 32px 0;
-    min-height: calc(100vh - 96px);
-    background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
-    background-color: #f4f4f4;
 
     &__rect-btn,
     &__block {

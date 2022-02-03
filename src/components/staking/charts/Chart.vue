@@ -28,7 +28,7 @@
 
 <template>
   <div class="charts__item">
-    <!-- <div class="charts__title">{{ title }}</div> -->
+    <div v-if="title" class="charts__title">{{ title }}</div>
     <div>
       <apexchart width="100%" height="100px" type="area" :options="chartOptions" :series="series" />
     </div>
@@ -42,7 +42,7 @@
     props: {
       title: {
         type: String,
-        required: true,
+        required: false,
       },
       series: {
         type: Array,
@@ -52,6 +52,10 @@
         type: Array,
         required: true,
       },
+      colors: {
+        type: Array,
+        default: () => ['#1DE3B0', '#455A64'],
+      },
     },
     data: function () {
       return {};
@@ -59,7 +63,7 @@
     computed: {
       chartOptions() {
         return {
-          colors: ['#1DE3B0', '#455A64'],
+          colors: this.colors,
           legend: {
             showForSingleSeries: false,
           },

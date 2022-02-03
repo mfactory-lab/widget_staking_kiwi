@@ -27,32 +27,40 @@
   -->
 
 <template>
-  <q-page class="staking-page">
-    <staking-header />
-    <main-section />
-    <faq-section />
-  </q-page>
+  <div class="faq-section__item q-mt-md">
+    <div class="faq-section__item__title">
+      <slot name="title"></slot>
+    </div>
+    <div class="column faq-section__item__text">
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-  import FaqSection from '@/components/staking/faq/FaqSection.vue';
-
   export default defineComponent({
-    components: {
-      StakingHeader,
-      MainSection,
-      FaqSection,
+    name: 'FaqSectionItem',
+    props: {
+      icon: {
+        type: String,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+      },
+      texts: {
+        type: Array,
+        required: true,
+      },
+      link: {
+        type: String,
+        required: true,
+      },
     },
-    setup() {},
+    setup() {
+      return {};
+    },
   });
 </script>
-
-<style lang="scss" scoped>
-  .staking-page {
-    background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
-    background-color: #f4f4f4;
-  }
-</style>

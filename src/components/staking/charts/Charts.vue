@@ -31,7 +31,6 @@
     <chart
       v-for="(series, index) in pairsData"
       :key="index"
-      :title="series.title"
       :series="series.series"
       :categories="categories"
     />
