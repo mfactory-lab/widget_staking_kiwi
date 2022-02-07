@@ -124,7 +124,9 @@
         <apy />
       </div>
       <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
-        <div class="col-sm-6 col-xs-12"></div>
+        <div class="col-xs-12">
+          <!-- <apy-chart /> -->
+        </div>
       </div>
     </q-card-section>
   </q-card>
@@ -176,12 +178,14 @@
   import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
   import { clickOutside } from '@jpool/common/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
+  // import ApyChart from '@/components/staking/charts/ApyChart.vue';
 
   export default defineComponent({
     components: {
       ConnectWallet,
       StakeSlideWrapper,
       RoiCalculatorBtn,
+      // ApyChart,
     },
     directives: {
       clickOutside,
