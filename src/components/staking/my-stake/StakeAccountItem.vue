@@ -29,7 +29,7 @@
 <template>
   <q-item class="justify-end">
     <q-item-section side class="q-mr-auto">
-      <div class="my-stake__index">{{ index }}</div>
+      <div :class="`my-stake__index my-stake__index--${state}`">{{ index }}</div>
     </q-item-section>
     <q-item-section side>
       <q-item-label caption class="row">
@@ -42,7 +42,7 @@
     </q-item-section>
     <q-item-section side>
       <q-item-label class="items-center">
-        <q-badge :color="stateColor">
+        <q-badge class="my-stake__state" :color="stateColor">
           {{ state }}
         </q-badge>
       </q-item-label>
@@ -73,17 +73,15 @@
 
     <q-item-section class="my-stake__btns" side>
       <template v-if="state === 'active' || state === 'activating'">
-        <q-btn-group
-          v-if="jpoolPossible && state === 'active'"
-          class="full-width"
-          rounded
-          unelevated
-        >
-          <q-btn rounded unelevated color="primary" class="full-width" @click="deactivate(address)">
+        <div v-if="jpoolPossible && state === 'active'" class="my-stake__btns-diff">
+          <q-btn rounded unelevated color="warning" text-color="dark" @click="depositJpool">
+            DEPOSIT TO JPOOL
+            <q-badge color="red-dark" rounded class="my-stake__btn-badge"> new </q-badge>
+          </q-btn>
+          <q-btn rounded unelevated color="primary" @click="deactivate(address)">
             DEACTIVATE
           </q-btn>
-          <q-btn color="warning" text-color="dark" @click="depositJpool"> DEPOSIT TO JPOOL </q-btn>
-        </q-btn-group>
+        </div>
         <q-btn
           v-else
           rounded
@@ -122,7 +120,7 @@
       <copy-to-clipboard :text="address" />
     </div>
     <q-inner-loading :showing="loading || stateLoading">
-      <q-spinner color="primary" />
+      <q-spinner-gears size="48px" color="warning" />
     </q-inner-loading>
   </q-item>
 </template>
@@ -159,7 +157,7 @@
     setup(props, { emit }) {
       const formatEpoch = (epoch: string) => {
         const bnEpoch = new BN(epoch);
-        return bnEpoch.eq(MAX_EPOCH) ? '---' : epoch;
+        return !epoch || bnEpoch.eq(MAX_EPOCH) ? '---' : epoch;
       };
 
       const stateLoading = ref(false);

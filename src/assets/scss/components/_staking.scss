@@ -59,4 +59,18 @@
   &__bottom-section {
     border-top: 1px solid $primary;
   }
+  &__fee-info {
+    font-size: 11px;
+    line-height: 13px;
+    color: $primary;
+
+    @media (max-width: $breakpoint-xs) {
+      width: 100%;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+  }
+  .q-btn {
+    width: 100%;
+  }
 }

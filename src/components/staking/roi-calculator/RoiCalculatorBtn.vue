@@ -35,7 +35,7 @@
     size="md"
     @click="RoiDialog = true"
   >
-    <img src="@/assets/img/calculator.svg" alt="" class="q-mt-xs q-ml-xs" />
+    <img src="@/assets/img/calculator.svg" alt="" class="q-ml-xs" />
   </q-btn>
   <roi-calculator v-model="RoiDialog" />
 </template>
@@ -66,9 +66,9 @@
 </script>
 
 <style lang="scss">
-  roi-calc-btn {
-    min-height: 46px !important;
-    min-width: 46px !important;
+  .roi-calc-btn {
+    height: 46px !important;
+    width: 46px !important;
 
     img {
       max-width: 100%;

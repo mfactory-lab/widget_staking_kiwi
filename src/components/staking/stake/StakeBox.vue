@@ -31,7 +31,7 @@
     <q-card-section class="stake-box__top-section">
       <div class="row justify-center">
         <div class="col-12">
-          <div class="stake-box__title"> Available: {{ availableSol }} SOL </div>
+          <div class="stake-box__title"> Balance: {{ availableSol }} SOL </div>
         </div>
       </div>
       <div
@@ -81,7 +81,7 @@
 
     <q-card-section>
       <div class="row items-between">
-        <div class="col-sm-6 col-xs-12 q-pr-sm">
+        <div class="col-sm-7 col-xs-12 q-pr-sm">
           <stake-slide-wrapper :value="stakePercent">
             <q-slider
               v-model="stakePercent"
@@ -98,11 +98,11 @@
           </stake-slide-wrapper>
         </div>
 
-        <div class="col-sm-6 col-xs-12 q-mt-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
-          <div v-if="connected" class="text-right q-ml-auto">
+        <div class="col-sm-5 col-xs-12 q-mt-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
+          <div v-if="connected" class="text-right q-ml-md">
             <q-btn
               :loading="creating"
-              class="stake-box__btn q-ml-auto"
+              class="stake-box__btn"
               color="accent"
               rounded
               size="14px"
@@ -119,13 +119,12 @@
         </div>
       </div>
       <div class="row justify-end items-end q-mt-sm">
+        <div class="q-mr-auto stake-box__fee-info">Network Fee: {{ depositFeeVal }} SOL</div>
         <roi-calculator-btn />
         <apy />
       </div>
       <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
-        <div class="col-sm-6 col-xs-12">
-          <stake-info :data="stakeInfoData" :isStake="true" />
-        </div>
+        <div class="col-sm-6 col-xs-12"></div>
       </div>
     </q-card-section>
   </q-card>
@@ -172,7 +171,6 @@
   } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
-  import StakeInfo from '@/components/staking/stake/StakeInfo.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
@@ -182,7 +180,6 @@
   export default defineComponent({
     components: {
       ConnectWallet,
-      StakeInfo,
       StakeSlideWrapper,
       RoiCalculatorBtn,
     },
@@ -272,25 +269,7 @@
         connectionLost,
         maxStakeDialog,
         apy: computed(() => formatPct.format(apy.value)),
-        stakeInfoData: computed(() => {
-          const from = stake.from;
-          const depositFeeVal = lamportsToSol(depositFee.value);
-          return [
-            {
-              name: 'SOL to stake:',
-              value: `${from ? from : '0'} SOL`,
-            },
-            {
-              name: 'Network Fee:',
-              value: depositFeeVal + ' SOL',
-            },
-            {
-              name: 'Total Sol:',
-              value: `${stake.to ? stake.to : '0'} SOL`,
-              isBold: true,
-            },
-          ];
-        }),
+        depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
 
         stakeMax() {

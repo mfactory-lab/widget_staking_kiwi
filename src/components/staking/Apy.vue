@@ -59,7 +59,7 @@
 
 <style scoped lang="scss">
   .apy {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 14px;
     color: $primary;
     display: flex;
@@ -68,14 +68,14 @@
     position: relative;
 
     &__value {
-      font-size: 40px;
-      line-height: 45px;
+      font-size: 26px;
+      line-height: 30px;
       font-weight: 900;
       margin-top: 4px;
 
       @media (max-width: $breakpoint-xs) {
-        font-size: 36px;
-        line-height: 40px;
+        font-size: 24px;
+        line-height: 28px;
       }
     }
   }

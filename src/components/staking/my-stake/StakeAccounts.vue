@@ -39,14 +39,14 @@
           rounded
           outline
           color="white"
-          class="q-mr-md q-mb-xs"
+          class="q-mr-md"
           padding="4px 12px 1px"
           :disable="connectionLost"
           @click="refresh"
         >
           Refresh
         </q-btn>
-        <div>MY STAKE</div>
+        <div>MY STAKING ACCOUNTS</div>
       </q-card-section>
 
       <q-card-section class="q-py-none">
@@ -136,22 +136,22 @@
       const loadingPubkey = ref();
       const totalStats = ref([
         {
-          title: 'NOT DELEGATED STAKE',
-          color: '#FF6B48',
+          title: 'NON-DELEGATED',
+          color: '#E33B3B',
           value: 0,
         },
         {
-          title: 'INACTIVE STAKE ON VALIDATOR',
+          title: 'INACTIVE',
           color: '#647E82',
           value: 0,
         },
         {
-          title: 'ACTIVE STAKE ON VALIDATOR',
+          title: 'ACTIVE',
           color: '#00A5B9',
           value: 0,
         },
         {
-          title: 'TOTAL STAKE',
+          title: 'TOTAL',
           color: '#37A98C',
           value: 0,
         },
@@ -306,20 +306,3 @@
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .my-stake {
-    &__total-stats {
-      border-bottom: 1px solid $primary;
-      margin: 0 -16px;
-      padding: 16px;
-      @media (max-width: $breakpoint-sm) {
-        padding-bottom: 0;
-      }
-      &__logo {
-        width: 38px;
-        height: 30px;
-      }
-    }
-  }
-</style>

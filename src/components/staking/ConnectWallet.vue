@@ -31,8 +31,8 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
-      color="primary"
-      text-color="text-white"
+      color="warning"
+      text-color="primary"
       rounded
       @click="dialog = true"
     >
@@ -43,8 +43,8 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
-      color="primary"
-      text-color="text-white"
+      color="warning"
+      text-color="primary"
       rounded
       :disable="connectionLost"
       @click="connect"

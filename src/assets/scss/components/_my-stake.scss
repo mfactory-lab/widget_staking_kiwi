@@ -32,16 +32,18 @@
 
   .q-btn {
     font-weight: 400;
-    // padding: 7px 17px 5px;
-    padding: 7px 12px 5px;
+    padding: 7px 14px 5px;
   }
 
   .q-badge {
     font-size: 11px;
     padding-top: 4px;
     text-transform: uppercase;
-    width: 100px;
     justify-content: center;
+  }
+
+  &__state {
+    width: 100px;
   }
 
   .q-item__section {
@@ -61,11 +63,24 @@
     flex-wrap: wrap;
   }
 
+  &__total-stats {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 0 -16px;
+    padding: 16px;
+    @media (max-width: $breakpoint-sm) {
+      padding-bottom: 0;
+    }
+    &__logo {
+      width: 38px;
+      height: 30px;
+    }
+  }
+
   &__index {
     width: 26px;
     height: 26px;
-    background: $primary;
     border-radius: 50px;
+    background: $gray-inactive;
     font-family: $font-secondary;
     font-weight: 700;
     font-size: 16px;
@@ -74,6 +89,22 @@
     justify-content: center;
     align-items: center;
     margin-bottom: auto;
+
+    &--active {
+      background: $secondary;
+    }
+
+    &--deactivating {
+      background: $primary;
+    }
+
+    &--inactive {
+      background: $gray-inactive;
+    }
+
+    &--activating {
+      background: $accent;
+    }
   }
 
   &__sol {
@@ -91,6 +122,10 @@
     line-height: 17px;
     color: $gray;
   }
+
+  .q-btn {
+    height: 36px;
+  }
   &__btns {
     width: 300px;
     padding-right: 0;
@@ -100,6 +135,25 @@
     }
     @media (max-width: $breakpoint-xs) {
       margin-bottom: 8px;
+    }
+  }
+  &__btns-diff {
+    display: flex;
+    justify-content: flex-end;
+    @media (max-width: $breakpoint-xs) {
+      flex-direction: column;
+      margin-top: 8px;
+      width: 100%;
+    }
+    .q-btn {
+      min-width: 140px;
+      &:not(:last-child) {
+        margin-right: 8px;
+        @media (max-width: $breakpoint-xs) {
+          margin-right: 0;
+          margin-bottom: 8px;
+        }
+      }
     }
   }
   &__epoch-info {
@@ -121,6 +175,48 @@
           width: 123px;
         }
       }
+    }
+  }
+
+  &__btn-badge {
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    border-radius: 5px;
+    height: 16px;
+    width: 45px;
+  }
+}
+
+.stake-stats {
+  &:not(:first-child) {
+    @media (min-width: $breakpoint-sm) {
+      border-left: 1px solid $primary;
+    }
+  }
+  &:not(:last-child) {
+    @media (max-width: $breakpoint-sm) {
+      margin-bottom: 16px;
+    }
+  }
+  &__title {
+    font-family: $font-secondary;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    text-transform: uppercase;
+  }
+  &__values {
+    font-family: $font-secondary;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: uppercase;
+    &__sol {
+      color: #000;
+    }
+    &__usd {
+      color: $primary;
     }
   }
 }

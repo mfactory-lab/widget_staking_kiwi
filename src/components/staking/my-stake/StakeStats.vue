@@ -60,7 +60,6 @@
       },
     },
     setup(props) {
-      console.log('stats props ==== ', props);
       const coinRateStore = useCoinRateStore();
       return {
         solShow: computed(() => (props.sol >= 0 ? formatAmount(Number(props.sol), 6) : '')),
@@ -71,38 +70,3 @@
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .stake-stats {
-    &:not(:first-child) {
-      @media (min-width: $breakpoint-sm) {
-        border-left: 1px solid $primary;
-      }
-    }
-    &:not(:last-child) {
-      @media (max-width: $breakpoint-sm) {
-        margin-bottom: 16px;
-      }
-    }
-    &__title {
-      font-family: $font-secondary;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 15px;
-      text-transform: uppercase;
-    }
-    &__values {
-      font-family: $font-secondary;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 17px;
-      text-transform: uppercase;
-      &__sol {
-        color: #000;
-      }
-      &__usd {
-        color: $primary;
-      }
-    }
-  }
-</style>
