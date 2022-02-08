@@ -36,12 +36,12 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useApyStore } from '@/store';
+  import { useValidatorJstakingStore } from '@/store';
   import { formatPct } from '@jpool/common/utils';
 
   export default defineComponent({
     setup() {
-      const { apy } = storeToRefs(useApyStore());
+      const { apy } = storeToRefs(useValidatorJstakingStore());
       return {
         apy: computed(() => formatPct.format(apy.value)),
       };

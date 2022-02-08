@@ -164,15 +164,10 @@
 <script lang="ts">
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
-  import {
-    useApyStore,
-    useBalanceStore,
-    useConnectionStore,
-    useStakePoolStore,
-    useWalletStore,
-  } from '@/store';
+  import { useBalanceStore, useConnectionStore, useStakePoolStore, useWalletStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
+  import Apy from '@/components/staking/Apy.vue';
   import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
@@ -182,6 +177,7 @@
 
   export default defineComponent({
     components: {
+      Apy,
       ConnectWallet,
       StakeSlideWrapper,
       RoiCalculatorBtn,
@@ -196,7 +192,6 @@
       const { solBalance } = storeToRefs(useBalanceStore());
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositFee, creating, createAccount } = useStakeAccounts();
-      const { apy } = storeToRefs(useApyStore());
       const maxStakeDialog = ref(false);
 
       const stake = reactive<{ from: any; to: any }>({
@@ -272,7 +267,6 @@
         stakePercent,
         connectionLost,
         maxStakeDialog,
-        apy: computed(() => formatPct.format(apy.value)),
         depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
 

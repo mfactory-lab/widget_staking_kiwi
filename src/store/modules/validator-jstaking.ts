@@ -32,7 +32,7 @@ import { loadApyInfo, useConnectionStore, useEpochStore, useValidatorStore } fro
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 
-const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
+// const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
 const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
 const totalStake = ref(0);
 const commission = ref(0);
@@ -72,51 +72,63 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   watch(
     cluster,
     (cluster) => {
-      validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
-      voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
+      // validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
+      const queryString = location.search;
+      const params = new URLSearchParams(queryString);
+      const validator = params.get('validator');
+      if (!!validator) {
+        voterKey.value = validator;
+      } else {
+        voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
+      }
       validatorStore.load();
     },
     { immediate: true },
   );
 
-  watch([epochInfo], async ([epochInfo]) => {
-    if (epochInfo?.epoch) {
-      if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
-        loading.value = false;
-        return;
+  watch(
+    [epochInfo],
+    async ([epochInfo]) => {
+      if (epochInfo?.epoch) {
+        if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
+          loading.value = false;
+          return;
+        }
+        loading.value = true;
+        try {
+          const res = await loadApyInfo('prev10');
+          apyInfo.value = {
+            ...res,
+            validators: res?.validators ?? [],
+          };
+        } finally {
+          loading.value = false;
+        }
       }
-      loading.value = true;
-      try {
-        const res = await loadApyInfo('prev10');
-        apyInfo.value = {
-          ...res,
-          validators: res?.validators.filter((v) => v.vote == voterKey.value) ?? [],
-        };
-      } finally {
-        loading.value = false;
-      }
-    }
-  });
+    },
+    { immediate: true },
+  );
   const apy = computed(() => {
     if (cluster.value !== 'mainnet-beta') {
       return DEFAULT_APY;
     }
     const voteApy = apyInfo.value?.validators ?? [];
-    const validatorInfo = voteApy.find((v) => v.id == validatorId.value);
+    const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
     return validatorInfo?.apy ?? 0;
   });
 
   watch(
     [voterKey],
-    async ([voterKey]) => {
+    async ([voter]) => {
       const validators = await connection.value.getVoteAccounts();
-      const voterData = validators.current.find((item) => item.votePubkey === voterKey);
+      const voterData = validators.current.find((item) => item.votePubkey === voter);
       if (voterData) {
         totalStake.value = voterData.activatedStake;
         commission.value = voterData.commission;
       } else {
-        totalStake.value = 0;
-        commission.value = 0;
+        voterKey.value = DEFAULT_VALIDATOR[cluster.value].voterKey;
+        // totalStake.value = 0;
+        // commission.value = 0;
       }
     },
     { immediate: true },
@@ -124,7 +136,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
 
   return {
     jpoolVoters: computed(() => validatorStore.voteIds),
-    validatorId,
+    // validatorId,
     voterKey,
     totalStake,
     commission,

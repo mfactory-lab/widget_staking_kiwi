@@ -44,7 +44,7 @@ export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
   const { lamportsPerSignature } = storeToRefs(useStakePoolStore());
   const walletStore = useWalletStore();
-  const { wallet, walletPubKey, connected } = storeToRefs(walletStore);
+  const { wallet, walletPubKey } = storeToRefs(walletStore);
   const { monitorTransaction, sending } = useMonitorTransaction();
   const { notify } = useQuasar();
   const loading = ref(false);
@@ -100,7 +100,7 @@ export function useStakeAccounts() {
   };
 
   return {
-    depositFee: computed(() => (connected.value ? lamportsPerSignature.value : 0)),
+    depositFee: computed(() => lamportsPerSignature.value),
     creating: computed(() => loading.value || sending.value),
     createAccount: async (amount) => {
       if (!walletPubKey.value) {
