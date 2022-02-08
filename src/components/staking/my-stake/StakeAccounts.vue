@@ -39,8 +39,8 @@
           rounded
           outline
           color="white"
-          class="q-mr-md"
-          padding="4px 12px 1px"
+          class="q-mr-md my-stake__refresh-btn"
+          padding="2px 12px 1px"
           :disable="connectionLost"
           @click="refresh"
         >

@@ -30,6 +30,10 @@
 .my-stake {
   min-height: 100px;
 
+  &__refresh-btn {
+    height: 30px !important;
+  }
+
   .q-btn {
     font-weight: 400;
     padding: 7px 14px 5px;
