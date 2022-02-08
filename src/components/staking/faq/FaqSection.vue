@@ -32,18 +32,43 @@
       <div class="faq-section__title text-center">FAQ</div>
       <div class="faq-section__items">
         <faq-section-item>
-          <template #title> What is "staking"? </template>
+          <template #title>What is "staking"?</template>
           <div
-            >By staking your SOL tokens, you help secure the network and earn rewards while doing
-            so. You can stake by delegating your tokens to validators who process transactions and
-            run the Solana network.</div
+            >By staking your SOL tokens, you help secure the network and
+            <a href="https://docs.solana.com/implemented-proposals/staking-rewards" target="_blank"
+              >earn rewards</a
+            >
+            while doing so. You can stake by delegating your tokens to validators who process
+            transactions and run the Solana network.</div
+          >
+        </faq-section-item>
+        <faq-section-item>
+          <template #title>Who is a delegator?</template>
+          <div
+            >You are. Any user who delegates their SOL to a validator, enabling them to validate new
+            blocks and keep the network alive, becomes a delegator.</div
           >
           <div
-            >Read more at
-            <a href="https://docs.solana.com/staking" target="_blank"
-              >https://docs.solana.com/staking</a
-            ></div
-          >
+            >Anyone who has some SOL in their wallet may delegate it – and earn rewards by doing so.
+          </div>
+        </faq-section-item>
+        <faq-section-item>
+          <template #title>What is a validator?</template>
+          <div
+            >For the Solana network to be fast, efficient, and censorship-resistant, it requires a
+            number of independent validator nodes (or simply Validators). Validators participate in
+            adding new blocks to the blockchain, which happens every 400 milliseconds—and to do it,
+            they vote with <strong>your</strong> delegated SOL. This is what you get your rewards
+            for.
+          </div>
+        </faq-section-item>
+        <faq-section-item>
+          <template #title>What is a staking account?</template>
+          <div
+            >It is a separate account where you place your SOL that you want to delegate (stake to a
+            validator). When you stake, it is created automatically, then delegated to the
+            validator. You can see it in your wallet—and watch your rewards stack up!
+          </div>
         </faq-section-item>
       </div>
     </div>
@@ -95,7 +120,7 @@
           margin-top: 16px;
 
           a {
-            color: $faqText;
+            color: $accent;
           }
         }
       }
