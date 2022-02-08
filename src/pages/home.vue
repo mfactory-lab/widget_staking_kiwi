@@ -64,7 +64,7 @@
   import TeamSection from '@/components/home/TeamSection.vue';
   import FlowerSection from '@/components/home/FlowerSection.vue';
   import AppHeader from '@/components/home/AppHeader.vue';
-  import AppFooter from '@/components/home/AppFooter.vue';
+  import AppFooter from '@/components/AppFooter.vue';
   import { getCssVar } from 'quasar';
 
   export default defineComponent({

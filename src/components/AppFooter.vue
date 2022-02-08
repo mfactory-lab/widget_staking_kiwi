@@ -29,8 +29,14 @@
 <template>
   <section :class="$style.footer">
     <div class="container">
-      <div class="row justify-end">
-        <div class="col col-12 col-md-auto justify-between d-flex column">
+      <div class="row justify-between">
+        <div class="col-12 col-sm-10 justify-center q-mr-auto d-flex column">
+          <div class="">© Copyright 2021 jstaking.one. All rights reserved.</div>
+          <div class=""
+            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
+          >
+        </div>
+        <div class="col-12 col-sm-auto justify-between d-flex column">
           <div :class="$style.buttons" class="">
             <q-btn :href="TELEGRAM_URL" color="white" round target="_blank" type="a" unelevated>
               <telegram-svg class="q-icon" />
@@ -46,14 +52,6 @@
             <span class="q-px-sm">|</span>
             <router-link to="/impressum">Legal</router-link>
           </div> -->
-        </div>
-      </div>
-      <div class="row">
-        <div class="col justify-end d-flex column">
-          <div class="">© Copyright 2021 jstaking.one. All rights reserved.</div>
-          <div class=""
-            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
-          >
         </div>
       </div>
     </div>

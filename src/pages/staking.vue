@@ -31,6 +31,7 @@
     <staking-header />
     <main-section />
     <faq-section />
+    <app-footer />
   </q-page>
 </template>
 
@@ -39,12 +40,14 @@
   import StakingHeader from '@/components/staking/StakingHeader.vue';
   import MainSection from '@/components/staking/MainSection.vue';
   import FaqSection from '@/components/staking/faq/FaqSection.vue';
+  import AppFooter from '@/components/AppFooter.vue';
 
   export default defineComponent({
     components: {
       StakingHeader,
       MainSection,
       FaqSection,
+      AppFooter,
     },
     setup() {},
   });
