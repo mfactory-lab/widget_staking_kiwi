@@ -33,11 +33,11 @@
     padding="none"
     color="white"
     size="md"
-    @click="RoiDialog = true"
+    @click="roiDialog = true"
   >
     <img src="@/assets/img/calculator.svg" alt="" class="q-ml-xs" />
   </q-btn>
-  <roi-calculator v-model="RoiDialog" />
+  <roi-calculator v-model="roiDialog" />
 </template>
 
 <script lang="ts">
@@ -50,16 +50,16 @@
       RoiCalculator,
     },
     setup() {
-      const RoiDialog = ref(false);
+      const roiDialog = ref(false);
 
       const emitter = useEmitter();
 
       emitter.on('closeCalculator', () => {
-        RoiDialog.value = false;
+        roiDialog.value = false;
       });
 
       return {
-        RoiDialog,
+        roiDialog,
       };
     },
   });
