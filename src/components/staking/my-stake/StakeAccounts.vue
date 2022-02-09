@@ -182,9 +182,7 @@
       };
 
       watch(accounts, async () => {
-        totalStats.value.forEach((item) => {
-          item.value = 0;
-        });
+        const newStats = [0, 0, 0, 0];
         const accountsSorts = await Promise.all(
           accounts.value.map(async (acc) => {
             const stakeActivation = await connectionStore.connection!.getStakeActivation(
@@ -192,35 +190,23 @@
             );
             if (acc.account.data?.parsed?.type == 'delegated') {
               if (stakeActivation.state === 'active' || stakeActivation.state === 'deactivating') {
-                if (totalStats.value[2]) {
-                  totalStats.value[2].value += lamportsToSol(acc.account.lamports);
-                }
+                newStats[2] += lamportsToSol(acc.account.lamports);
               } else {
-                if (totalStats.value[1]) {
-                  totalStats.value[1].value += lamportsToSol(acc.account.lamports);
-                }
+                newStats[1] += lamportsToSol(acc.account.lamports);
               }
             } else {
-              if (totalStats.value[0]) {
-                totalStats.value[0].value += lamportsToSol(acc.account.lamports);
-              }
+              newStats[0] += lamportsToSol(acc.account.lamports);
             }
-            if (
-              totalStats.value[0] &&
-              totalStats.value[1] &&
-              totalStats.value[2] &&
-              totalStats.value[3]
-            ) {
-              totalStats.value[3].value =
-                totalStats.value[0].value + totalStats.value[1].value + totalStats.value[2].value;
-            }
+            newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
+            totalStats.value.forEach((item, index) => {
+              item.value = newStats[index] ?? 0;
+            });
             return {
               stakeAccount: acc,
               state: stakeActivation.state,
             };
           }),
         );
-        console.log('total stats === ', totalStats.value);
         accountsSorted.value = accountsSorts.sort((a, b) => {
           return (
             getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)

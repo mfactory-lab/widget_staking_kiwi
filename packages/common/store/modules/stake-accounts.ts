@@ -79,20 +79,31 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
 
     loading.value = true;
 
-    // @ts-ignore
-    data.value = await getFilteredProgramAccounts(
-      connectionStore.connection,
-      STAKE_PROGRAM_ID,
-      filters,
-    );
+    try {
+      // @ts-ignore
+      data.value = await getFilteredProgramAccounts(
+        connectionStore.connection,
+        STAKE_PROGRAM_ID,
+        filters,
+      );
 
-    console.log('[Stake accounts] Data:', data.value);
-    console.log(data.value.map((acc) => acc.pubkey.toBase58()).join('\n'));
-
-    loading.value = false;
+      console.log('[Stake accounts] Data:', data.value);
+      console.log(data.value.map((acc) => acc.pubkey.toBase58()).join('\n'));
+    } catch (e) {
+      console.error('[Stake accounts] Error:', e);
+    } finally {
+      loading.value = false;
+    }
   }
 
-  watch(walletPubKey, load, { immediate: true });
+  watch(
+    walletPubKey,
+    () => {
+      loading.value = false;
+      load();
+    },
+    { immediate: true },
+  );
 
   watch(dialog, () => {
     if (dialog.value == false) {
