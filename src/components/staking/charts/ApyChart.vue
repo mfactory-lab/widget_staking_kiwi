@@ -72,7 +72,7 @@
 
       async function getApyHistory() {
         return new Promise<Array<ApyStats>>((resolve, _reject) => {
-          fetch(`${API_URL}/history?voter_id=${voterKey.value}`)
+          fetch(`${API_URL}apy/history?voter_id=${voterKey.value}`)
             .then((res) => res.json())
             .then(
               (res) => {

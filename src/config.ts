@@ -84,7 +84,7 @@ export const ENDPOINTS: Endpoint[] = [
   // },
 ];
 
-export const API_URL = 'http://142.132.235.37/apy';
+export const API_URL = 'https://api.thevalidators.io/';
 
 export const DEFAULT_VALIDATOR = {
   'mainnet-beta': {
