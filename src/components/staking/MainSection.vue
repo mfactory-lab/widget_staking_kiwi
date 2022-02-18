@@ -77,7 +77,7 @@
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
   import Epoch from './Epoch.vue';
-  import SolSvg from '@/components/icons/TelegramSvg.vue';
+  import SolSvg from '@/components/icons/SolSvg.vue';
 
   export default defineComponent({
     components: {

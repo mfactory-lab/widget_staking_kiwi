@@ -84,6 +84,8 @@ export const ENDPOINTS: Endpoint[] = [
   // },
 ];
 
+export const API_URL = 'http://142.132.235.37/apy';
+
 export const DEFAULT_VALIDATOR = {
   'mainnet-beta': {
     idPubkey: '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN',

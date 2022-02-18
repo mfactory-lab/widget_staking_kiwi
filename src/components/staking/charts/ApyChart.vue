@@ -27,16 +27,28 @@
   -->
 
 <template>
-  <div class="apy-chart" v-if="data.data.length > 0">
+  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">
     <div class="apy-chart__title">HISTORIC APY</div>
     <div>
       <apexchart width="100%" height="84px" type="area" :options="chartOptions" :series="[data]" />
     </div>
   </div>
+  <div class="apy-chart" v-else>
+    <sol-svg class="q-icon" />
+  </div>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, onMounted, ref } from 'vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
+  import { useConnectionStore, useEpochStore, useValidatorJstakingStore } from '@/store';
+  import { storeToRefs } from 'pinia';
+  import { API_URL } from '@/config';
+  import SolSvg from '@/components/icons/SolSvg.vue';
+
+  interface ApyStats {
+    apy: number;
+    epoch: number;
+  }
 
   interface ChartData {
     data: number[];
@@ -44,31 +56,61 @@
   }
 
   export default defineComponent({
+    components: {
+      SolSvg,
+    },
     setup() {
       const data = ref<ChartData>({
         name: '',
         data: [],
       });
       const categories = ref<Array<number | string>>([]);
+      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const connectionStore = useConnectionStore();
+      const cluster = computed(() => connectionStore.cluster);
+      const { epochNumber } = storeToRefs(useEpochStore());
 
-      onMounted(async () => {
-        data.value = {
-          name: 'APY',
-          data: [
-            6.77, 6.47, 6.37, 6.27, 6.43, 6.21, 6.11, 6.33, 6.37, 6.38, 6.51, 6.54, 6.77, 6.34,
-            6.88, 6.99, 6.65, 6.32, 6.22, 6.22, 6.11, 6.61, 6.12, 6.12, 6.11, 6.87, 6.64, 6.73,
-            6.34, 6.67,
-          ],
-        };
-        categories.value = [
-          200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217,
-          218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229,
-        ];
-      });
+      async function getApyHistory() {
+        return new Promise<Array<ApyStats>>((resolve, _reject) => {
+          fetch(`${API_URL}/history?voter_id=${voterKey.value}`)
+            .then((res) => res.json())
+            .then(
+              (res) => {
+                if (res.data?.length > 0) {
+                  resolve(res.data);
+                } else {
+                  resolve([]);
+                  // reject(Error('Promise rejected'));
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+            );
+        });
+      }
+
+      watch(
+        [voterKey, epochNumber],
+        async () => {
+          if (cluster.value === 'mainnet-beta') {
+            const apyData = await getApyHistory();
+
+            data.value = {
+              name: 'APY',
+              data: apyData.map((item) => item.apy * 100),
+            };
+            categories.value = apyData.map((item) => item.epoch);
+          }
+        },
+        { immediate: true },
+      );
 
       return {
+        voterKey,
         categories,
         data,
+        cluster,
         chartOptions: computed(() => ({
           colors: ['#455A64'],
           legend: {
@@ -203,6 +245,11 @@
       line-height: 14px;
       text-transform: uppercase;
       color: $primary;
+    }
+    .q-icon {
+      height: 82px;
+      width: 100%;
+      padding: 8px 0;
     }
   }
 </style>
