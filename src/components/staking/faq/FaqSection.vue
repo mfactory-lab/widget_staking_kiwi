@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <section class="faq-section q-pb-lg">
+  <section id="faq-section" class="faq-section q-pb-lg">
     <div class="container">
       <div class="faq-section__title text-center">FAQ</div>
       <div class="faq-section__items">

@@ -29,7 +29,7 @@
 <template>
   <div class="total-staked">
     <div class="total-staked__logo">
-      <sol-svg class="q-icon" />
+      <sol-svg fill="#FFCD29" class="q-icon" />
     </div>
     <div class="total-staked__value">
       <div class="total-staked__label">Total Staked</div>
@@ -53,7 +53,7 @@
   import { computed, defineComponent } from 'vue';
   import { useValidatorJstakingStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
-  import SolSvg from '@/components/icons/TelegramSvg.vue';
+  import SolSvg from '@/components/icons/SolSvg.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
   import { storeToRefs } from 'pinia';
 

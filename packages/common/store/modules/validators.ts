@@ -28,19 +28,27 @@
 
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { Connection, ParsedAccountData, PublicKey, ValidatorInfo } from '@solana/web3.js';
-import { findWithdrawAuthorityProgramAddress } from "@solana/spl-stake-pool/src/utils";
-import { STAKE_POOL_PROGRAM_ID } from "@solana/spl-stake-pool/src";
-import { getStakeAccountsByWithdrawAuthority } from "@jpool/common/utils/stake";
+import {
+  Connection,
+  ParsedAccountData,
+  PublicKey,
+  ValidatorInfo,
+  VoteAccountInfo,
+} from '@solana/web3.js';
+import { findWithdrawAuthorityProgramAddress } from '@solana/spl-stake-pool/src/utils';
+import { STAKE_POOL_PROGRAM_ID } from '@solana/spl-stake-pool/src';
+import { getStakeAccountsByWithdrawAuthority } from '@jpool/common/utils/stake';
 import { shortenAddress } from '@jpool/common/utils';
 import { useConnectionStore } from '@jpool/common/store';
-import { STAKE_PROGRAM_ID } from "@/config";
+import { STAKE_PROGRAM_ID } from '@/config';
 // import { VALIDATORS_LIMIT } from '@/config';
 
 export interface ValidatorData {
   id: string;
+  fee: number;
   voter: string;
   lamports: number;
+  totalStake: number;
   name: string;
   details: string | undefined;
   website: string | undefined;
@@ -54,6 +62,8 @@ export const useValidatorStore = defineStore('validators', () => {
   const loading = ref(false);
   const data = ref<ValidatorData[]>([]);
   const voteIds = ref<string[]>([]);
+  const voteAccounts = ref<VoteAccountInfo[]>([]);
+  const validatorsInfos = ref<ValidatorInfo[]>([]);
 
   const load = async () => {
     loading.value = true;
@@ -88,6 +98,9 @@ export const useValidatorStore = defineStore('validators', () => {
       getValidatorInfos(connectionStore.connection),
     ]);
 
+    voteAccounts.value = voteAccountStatus.current;
+    validatorsInfos.value = validatorInfos;
+
     // const voteAccountStatus = await connection.value.getVoteAccounts();
     const delinquent = voteAccountStatus.delinquent.filter((acc) =>
       voteIds.value.includes(acc.votePubkey),
@@ -114,7 +127,9 @@ export const useValidatorStore = defineStore('validators', () => {
 
       items.push({
         id: pubKey,
+        fee: voteAccountInfo.commission,
         voter: voteAccountInfo.votePubkey,
+        totalStake: voteAccountInfo?.activatedStake,
         name: validatorInfo?.info?.name ?? shortenAddress(pubKey),
         details: validatorInfo?.info?.details,
         website: validatorInfo?.info?.website,
@@ -137,6 +152,8 @@ export const useValidatorStore = defineStore('validators', () => {
   return {
     loading,
     data,
+    voteAccounts,
+    validatorsInfos,
     voteIds,
     load,
     clear: () => (data.value = []),
@@ -150,7 +167,11 @@ async function getStakeAccounts(connection: Connection, stakePoolAddress: Public
     STAKE_POOL_PROGRAM_ID,
     stakePoolAddress,
   );
-  const items = await getStakeAccountsByWithdrawAuthority(connection, STAKE_PROGRAM_ID, poolWithdrawAuthority);
+  const items = await getStakeAccountsByWithdrawAuthority(
+    connection,
+    STAKE_PROGRAM_ID,
+    poolWithdrawAuthority,
+  );
 
   return items.sort((a, b) => b.account.lamports - a.account.lamports);
   // .slice(0, VALIDATORS_LIMIT)

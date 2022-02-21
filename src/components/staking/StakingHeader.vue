@@ -27,22 +27,29 @@
   -->
 
 <template>
-  <section class="staking-header q-py-lg">
-    <div class="container">
-      <div class="row items-center">
-        <router-link class="row items-center q-mr-auto" to="/">
-          <img src="@/assets/img/staking-logo.svg" alt="" class="staking-header__logo" />
-        </router-link>
+  <section class="staking-header">
+    <div class="staking-header__top q-py-lg text-right">
+      <div class="container">
+        <div class="staking-header__faq-btn" @click="scrollToFaq">How to use staking.kiwi</div>
+      </div>
+    </div>
+    <div class="staking-header__main q-py-lg">
+      <div class="container">
         <div class="row items-center">
-          <div class="q-mr-lg staking-header__btn">
-            <total-stacked />
-          </div>
-          <div class="row">
-            <div class="q-mr-md staking-header__btn">
-              <cluster-selector />
+          <router-link class="row items-center q-mr-auto" to="/">
+            <img src="@/assets/img/kiwi-logo.svg" alt="" class="staking-header__logo" />
+          </router-link>
+          <div class="row items-center">
+            <div class="q-mr-lg staking-header__btn">
+              <total-stacked />
             </div>
-            <div class="staking-header__btn">
-              <connect-wallet />
+            <div class="row">
+              <div class="q-mr-md staking-header__btn">
+                <cluster-selector />
+              </div>
+              <div class="staking-header__btn">
+                <connect-wallet />
+              </div>
             </div>
           </div>
         </div>
@@ -56,6 +63,7 @@
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
+  import handleScroll from '@jpool/common/utils/scroller';
 
   export default defineComponent({
     components: {
@@ -63,16 +71,37 @@
       TotalStacked,
       ConnectWallet,
     },
-    setup() {},
+    setup() {
+      return {
+        scrollToFaq() {
+          handleScroll('faq-section');
+        },
+      };
+    },
   });
 </script>
 
 <style lang="scss" scoped>
   .staking-header {
+    background: #fff;
     font-family: $font-secondary;
-    background: $primary-gradient;
-    @media (max-width: $breakpoint-sm) {
+    &__top {
+      position: relative;
+      z-index: 1;
+    }
+    &__faq-btn {
+      cursor: pointer;
+      font-family: $font-secondary;
+      font-weight: 500;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+    &__main {
       background: $primary;
+    }
+    &__logo {
+      margin-top: -86px;
+      margin-left: -28px;
     }
     &__btn {
       @media (max-width: $breakpoint-sm) {

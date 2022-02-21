@@ -31,11 +31,8 @@ import { computed, ref, watch } from 'vue';
 import { loadApyInfo, useConnectionStore, useEpochStore, useValidatorStore } from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
-
-// const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
-const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
-const totalStake = ref(0);
-const commission = ref(0);
+import { PublicKey } from '@solana/web3.js';
+import { shortenAddress } from '@jpool/common/utils';
 interface ApyValidatorInfo {
   id: string;
   vote: string;
@@ -61,18 +58,27 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     lastEpoch: 0,
     validators: [],
   });
+  const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
+  const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
+  const totalStake = ref(0);
+  const commission = ref(0);
+  const validatorName = ref('');
+  const validatorDetails = ref(<string | undefined>'');
+  const validatorImage = ref(<string | undefined>'');
+  const validatorUrl = ref(<string | undefined>'');
+
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
-  const connection = computed(() => connectionStore.connection);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
   const loading = ref(!apyInfo.value?.lastEpoch);
   const validatorStore = useValidatorStore();
+  const voteAccounts = computed(() => validatorStore.voteAccounts);
+  const validatorsInfos = computed(() => validatorStore.validatorsInfos);
 
   watch(
     cluster,
-    (cluster) => {
-      // validatorId.value = DEFAULT_VALIDATOR[cluster].idPubkey;
+    async (cluster) => {
       const queryString = location.search;
       const params = new URLSearchParams(queryString);
       const validator = params.get('validator');
@@ -81,7 +87,35 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       } else {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
       }
-      validatorStore.load();
+      await validatorStore.load();
+
+      let voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
+      console.log('[Validators] voterData 1 === ', voterData);
+
+      if (!voterData) {
+        voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
+        voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
+        console.log('[Validators] voterData 2 === ', voterData);
+      }
+
+      if (voterData) {
+        const network = connectionStore.cluster.replace('-beta', '');
+        const pubKey = voterData.nodePubkey;
+
+        totalStake.value = voterData.activatedStake;
+        commission.value = voterData.commission;
+        validatorId.value = pubKey;
+
+        const validatorInfo = validatorsInfos.value.find((info) =>
+          info.key.equals(new PublicKey(pubKey)),
+        );
+        validatorName.value = validatorInfo?.info?.name ?? shortenAddress(pubKey);
+        validatorDetails.value = validatorInfo?.info?.details;
+        validatorImage.value = validatorInfo?.info?.keybaseUsername
+          ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
+          : undefined;
+        validatorUrl.value = `https://www.validators.app/validators/${network}/${pubKey}`;
+      }
     },
     { immediate: true },
   );
@@ -117,30 +151,17 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     return validatorInfo?.apy ?? 0;
   });
 
-  watch(
-    [voterKey],
-    async ([voter]) => {
-      const validators = await connection.value.getVoteAccounts();
-      const voterData = validators.current.find((item) => item.votePubkey === voter);
-      if (voterData) {
-        totalStake.value = voterData.activatedStake;
-        commission.value = voterData.commission;
-      } else {
-        voterKey.value = DEFAULT_VALIDATOR[cluster.value].voterKey;
-        // totalStake.value = 0;
-        // commission.value = 0;
-      }
-    },
-    { immediate: true },
-  );
-
   return {
     jpoolVoters: computed(() => validatorStore.voteIds),
-    // validatorId,
+    validatorId,
     voterKey,
     totalStake,
     commission,
     apyLoading: computed(() => loading.value),
     apy,
+    validatorName,
+    validatorDetails,
+    validatorImage,
+    validatorUrl,
   };
 });

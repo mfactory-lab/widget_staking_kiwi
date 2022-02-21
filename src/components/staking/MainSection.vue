@@ -30,6 +30,9 @@
   <section class="main-section">
     <div class="container">
       <div class="row">
+        <validator-item />
+      </div>
+      <div class="row">
         <div class="col-12 col-md-6 row">
           <stake-box />
         </div>
@@ -71,6 +74,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import ValidatorItem from './ValidatorItem.vue';
   import StakeAccounts from './my-stake/StakeAccounts.vue';
   import WalletBalance from './WalletBalance.vue';
   import PriceStats from './PriceStats.vue';
@@ -81,6 +85,7 @@
 
   export default defineComponent({
     components: {
+      ValidatorItem,
       StakeAccounts,
       WalletBalance,
       PriceStats,

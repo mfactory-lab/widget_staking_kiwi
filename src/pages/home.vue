@@ -27,67 +27,35 @@
   -->
 
 <template>
-  <q-page>
-    <app-header />
-    <title-validators-section />
-    <triangle-section :color="getColor('accent')" />
-    <validators-section />
-    <how-section />
-    <triangle-section :color="getColor('primary')" />
-    <warrant-section />
-    <title-ensure-section />
-    <triangle-section :color="getColor('warning')" />
-    <ensure-section />
-    <title-launch-section />
-    <triangle-section :color="getColor('accent')" />
-    <launch-section />
-    <triangle-section :color="getColor('accent')" />
-    <comunity-section />
-    <team-section />
-    <flower-section />
+  <q-page class="staking-page">
+    <staking-header />
+    <main-section />
+    <faq-section />
     <app-footer />
   </q-page>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import TitleValidatorsSection from '@/components/home/TitleValidatorsSection.vue';
-  import ValidatorsSection from '@/components/home/ValidatorsSection.vue';
-  import TriangleSection from '@/components/home/TriangleSection.vue';
-  import HowSection from '@/components/home/HowSection.vue';
-  import WarrantSection from '@/components/home/WarrantSection.vue';
-  import TitleEnsureSection from '@/components/home/TitleEnsureSection.vue';
-  import EnsureSection from '@/components/home/EnsureSection.vue';
-  import TitleLaunchSection from '@/components/home/TitleLaunchSection.vue';
-  import LaunchSection from '@/components/home/LaunchSection.vue';
-  import ComunitySection from '@/components/home/ComunitySection.vue';
-  import TeamSection from '@/components/home/TeamSection.vue';
-  import FlowerSection from '@/components/home/FlowerSection.vue';
-  import AppHeader from '@/components/home/AppHeader.vue';
+  import StakingHeader from '@/components/staking/StakingHeader.vue';
+  import MainSection from '@/components/staking/MainSection.vue';
+  import FaqSection from '@/components/staking/faq/FaqSection.vue';
   import AppFooter from '@/components/AppFooter.vue';
-  import { getCssVar } from 'quasar';
 
   export default defineComponent({
     components: {
-      TitleValidatorsSection,
-      ValidatorsSection,
-      TriangleSection,
-      HowSection,
-      WarrantSection,
-      TitleEnsureSection,
-      EnsureSection,
-      TitleLaunchSection,
-      LaunchSection,
-      ComunitySection,
-      TeamSection,
-      FlowerSection,
-      AppHeader,
+      StakingHeader,
+      MainSection,
+      FaqSection,
       AppFooter,
     },
-    setup() {
-      return {
-        getColor: (val: string) => getCssVar(val),
-      };
-    },
+    setup() {},
   });
 </script>
+
+<style lang="scss" scoped>
+  .staking-page {
+    background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
+    background-color: #f4f4f4;
+  }
+</style>
