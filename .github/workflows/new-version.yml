@@ -2,7 +2,7 @@ name: Development Build and Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [ new-version ]
+    branches: [ main ]
     paths-ignore:
       - '.github/workflows/**'
       - '**.md'
