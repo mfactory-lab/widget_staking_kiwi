@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="validator-item__btns row q-px-sm items-center justify-center">
-        <q-skeleton width="33%" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
         <q-btn
           v-else
           type="a"
@@ -78,7 +78,7 @@
           :icon="'img:' + validatorsAppsImg"
           class="validator-item__btns__btn q-mx-sm"
         />
-        <q-skeleton width="33%" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
         <q-btn
           v-else
           type="a"
@@ -92,7 +92,7 @@
           :icon="'img:' + solanaBeachImg"
           class="validator-item__btns__btn q-mx-sm"
         />
-        <q-skeleton width="33%" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
         <q-btn
           v-else
           type="a"
@@ -109,12 +109,12 @@
         />
       </div>
       <div class="validator-item__address column items-end justify-start">
-        <q-skeleton width="100%" v-if="loading" />
+        <q-skeleton width="350px" style="max-width: 100%" v-if="loading" />
         <div class="text-right" v-else>
           <span class="validator-item__address__text">{{ validatorId }}</span>
           <copy-to-clipboard :text="validatorId" />
         </div>
-        <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
+        <q-skeleton width="350px" style="max-width: 100%" class="q-mt-sm" v-if="loading" />
         <div class="text-right" v-else>
           <span class="validator-item__address__text">{{ voterKey }}</span>
           <copy-to-clipboard :text="voterKey" />
