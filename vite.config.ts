@@ -165,7 +165,10 @@ export default defineConfig(({ mode }) => {
           find: /~(.+)/,
           replacement: resolve('node_modules/$1'),
         },
-        { find: '@', replacement: resolve(__dirname, './src') },
+        {
+          find: '@/',
+          replacement: `${resolve(__dirname, 'src')}/`,
+        },
       ],
     },
 
