@@ -66,6 +66,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const validatorDetails = ref(<string | undefined>'');
   const validatorImage = ref(<string | undefined>'');
   const validatorUrl = ref(<string | undefined>'');
+  const validatorSolanaBeach = ref(<string | undefined>'');
+  const validatorWebsite = ref(<string | undefined>'');
 
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
@@ -90,16 +92,16 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       await validatorStore.load();
 
       let voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
-      console.log('[Validators] voterData 1 === ', voterData);
 
       if (!voterData) {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
         voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
-        console.log('[Validators] voterData 2 === ', voterData);
       }
 
       if (voterData) {
         const network = connectionStore.cluster.replace('-beta', '');
+        const clusterSolanaBeach = connectionStore.cluster.replace('mainnet-beta', '');
+        const networkSolanaBeach = clusterSolanaBeach ? `?cluster=${clusterSolanaBeach}` : '';
         const pubKey = voterData.nodePubkey;
 
         totalStake.value = voterData.activatedStake;
@@ -109,12 +111,16 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         const validatorInfo = validatorsInfos.value.find((info) =>
           info.key.equals(new PublicKey(pubKey)),
         );
+        // console.log('[Validators] voterData  === ', voterData);
+        // console.log('[Validators] validatorInfo  === ', validatorInfo);
         validatorName.value = validatorInfo?.info?.name ?? shortenAddress(pubKey);
         validatorDetails.value = validatorInfo?.info?.details;
         validatorImage.value = validatorInfo?.info?.keybaseUsername
           ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
           : undefined;
         validatorUrl.value = `https://www.validators.app/validators/${network}/${pubKey}`;
+        validatorSolanaBeach.value = `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach}`;
+        validatorWebsite.value = validatorInfo?.info?.website;
       }
     },
     { immediate: true },
@@ -163,5 +169,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     validatorDetails,
     validatorImage,
     validatorUrl,
+    validatorSolanaBeach,
+    validatorWebsite,
   };
 });

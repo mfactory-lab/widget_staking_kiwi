@@ -27,40 +27,42 @@
   -->
 
 <template>
-  <q-card class="shadow-sm q-pa-md q-mb-md">
-    <div class="validator-item row justify-between">
-      <div class="validator-item__logo column q-mr-md q-mt-sm justify-center">
-        <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-        <a v-else :href="validatorUrl" target="_blank">
-          <q-avatar class="shadow-1" size="60px">
-            <q-img :src="validatorImage" spinner-color="white">
-              <template #default v-if="!validatorImage">
-                <q-icon :name="evaPerson" />
-              </template>
-              <template #error>
-                <q-icon :name="evaPerson" />
-              </template>
-            </q-img>
-          </q-avatar>
-        </a>
-      </div>
-      <div class="validator-item__name column q-mr-sm q-mt-sm justify-start">
-        <q-skeleton width="100%" v-if="loading" />
-        <div v-else class="q-mt-xs">
-          {{ validatorName }}
-          <q-tooltip class="text-body2">
+  <q-card class="shadow-sm q-pa-md q-mb-md full-width">
+    <div class="validator-item">
+      <div class="validator-item__name row items-center">
+        <div class="validator-item__logo column q-mr-md justify-center">
+          <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
+          <a v-else :href="validatorUrl" target="_blank">
+            <q-avatar class="shadow-1" size="60px">
+              <q-img :src="validatorImage" spinner-color="white">
+                <template #default v-if="!validatorImage">
+                  <q-icon :name="evaPerson" />
+                </template>
+                <template #error>
+                  <q-icon :name="evaPerson" />
+                </template>
+              </q-img>
+            </q-avatar>
+          </a>
+        </div>
+        <div class="validator-item__name__text column justify-start">
+          <q-skeleton width="100%" v-if="loading" />
+          <div v-else class="q-mt-xs">
             {{ validatorName }}
-          </q-tooltip>
-        </div>
-        <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
-        <div v-else class="validator-item__name__details q-mt-xs">
-          {{ validatorDetails }}
-          <q-tooltip class="text-body2">
+            <q-tooltip class="text-body2">
+              {{ validatorName }}
+            </q-tooltip>
+          </div>
+          <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
+          <div v-else class="validator-item__name__details q-mt-xs">
             {{ validatorDetails }}
-          </q-tooltip>
+            <q-tooltip class="text-body2">
+              {{ validatorDetails }}
+            </q-tooltip>
+          </div>
         </div>
       </div>
-      <div class="validator-item__address column q-mr-sm q-mt-sm items-center justify-start">
+      <div class="validator-item__btns row q-px-sm items-center justify-center">
         <q-skeleton width="33%" v-if="loading" />
         <q-btn
           v-else
@@ -68,57 +70,53 @@
           :href="validatorUrl"
           target="_blank"
           outline
-          rounded
-          label="PERFORMANCE"
+          label=""
           color="primary-gray"
           text-color="primary-gray"
-          size="12px"
-          padding="0 12px"
-          :icon="'img:' + validatorsApps"
-          class="validator-item__address__link"
+          size="19px"
+          padding="8px"
+          :icon="'img:' + validatorsAppsImg"
+          class="validator-item__btns__btn q-mx-sm"
         />
         <q-skeleton width="33%" v-if="loading" />
         <q-btn
           v-else
           type="a"
-          :href="validatorUrl"
+          :href="validatorSolanaBeach"
+          unelevated
           target="_blank"
-          outline
-          rounded
-          label="PERFORMANCE"
-          color="primary-gray"
-          text-color="primary-gray"
-          size="12px"
-          padding="0 12px"
-          :icon="'img:' + validatorsApps"
-          class="validator-item__address__link"
+          label=""
+          color="solana-dark"
+          size="19px"
+          padding="8px"
+          :icon="'img:' + solanaBeachImg"
+          class="validator-item__btns__btn q-mx-sm"
         />
         <q-skeleton width="33%" v-if="loading" />
         <q-btn
           v-else
           type="a"
-          :href="validatorUrl"
+          :href="validatorWebsite"
+          unelevated
           target="_blank"
-          outline
-          rounded
-          label="PERFORMANCE"
-          color="primary-gray"
-          text-color="primary-gray"
-          size="12px"
-          padding="0 12px"
-          :icon="'img:' + validatorsApps"
-          class="validator-item__address__link"
+          label=""
+          color="solana-dark"
+          text-color="text-white"
+          size="19px"
+          padding="8px"
+          :icon="evaGlobe"
+          class="validator-item__btns__btn q-mx-sm"
         />
       </div>
-      <div class="validator-item__address column q-mt-sm items-center justify-start">
+      <div class="validator-item__address column items-end justify-start">
         <q-skeleton width="100%" v-if="loading" />
-        <div v-else>
+        <div class="text-right" v-else>
           <span class="validator-item__address__text">{{ validatorId }}</span>
           <copy-to-clipboard :text="validatorId" />
         </div>
         <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
-        <div v-else>
-          <span class="validator-item__address__text q-mt-sm">{{ voterKey }}</span>
+        <div class="text-right" v-else>
+          <span class="validator-item__address__text">{{ voterKey }}</span>
           <copy-to-clipboard :text="voterKey" />
         </div>
       </div>
@@ -128,9 +126,10 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { evaPerson } from '@quasar/extras/eva-icons';
+  import { evaGlobe, evaPerson } from '@quasar/extras/eva-icons';
   import { storeToRefs } from 'pinia';
-  import validatorsApps from '@/assets/img/validators-apps.png';
+  import validatorsAppsImg from '@/assets/img/validators-apps.png';
+  import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorStore } from '@/store';
 
   export default defineComponent({
@@ -143,12 +142,16 @@
         validatorDetails,
         validatorImage,
         validatorUrl,
+        validatorSolanaBeach,
+        validatorWebsite,
       } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorStore());
 
       return {
+        evaGlobe,
         evaPerson,
-        validatorsApps,
+        validatorsAppsImg,
+        solanaBeachImg,
         loading,
         validatorId,
         voterKey,
@@ -156,6 +159,8 @@
         validatorDetails,
         validatorImage,
         validatorUrl,
+        validatorSolanaBeach,
+        validatorWebsite,
       };
     },
   });
