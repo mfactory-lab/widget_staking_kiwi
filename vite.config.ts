@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
-  const base = isProd ? '/staling-kiwi/' : '/';
+  const base = isProd ? '/staking-kiwi/' : '/';
 
   const plugins: (PluginOption | PluginOption[])[] = [
     injectHtml({
