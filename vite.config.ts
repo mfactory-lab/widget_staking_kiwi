@@ -41,8 +41,6 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
-  const base = isProd ? '/staking_kiwi/' : '/';
-
   const plugins: (PluginOption | PluginOption[])[] = [
     injectHtml({
       data: {
@@ -142,8 +140,6 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    base,
-
     build,
     plugins,
     optimizeDeps,
@@ -165,10 +161,7 @@ export default defineConfig(({ mode }) => {
           find: /~(.+)/,
           replacement: resolve('node_modules/$1'),
         },
-        {
-          find: '@/',
-          replacement: `${resolve(__dirname, 'src')}/`,
-        },
+        { find: '@', replacement: resolve(__dirname, './src') },
       ],
     },
 
