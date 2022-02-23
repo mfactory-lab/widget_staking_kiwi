@@ -44,6 +44,7 @@
   import { storeToRefs } from 'pinia';
   import { API_URL } from '@/config';
   import SolSvg from '@/components/icons/SolSvg.vue';
+  import { useQuasar } from 'quasar';
 
   interface ApyStats {
     apy: number;
@@ -69,6 +70,7 @@
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
       const { epochNumber } = storeToRefs(useEpochStore());
+      const { dark } = useQuasar();
 
       async function getApyHistory() {
         return new Promise<Array<ApyStats>>((resolve, _reject) => {
@@ -112,7 +114,7 @@
         data,
         cluster,
         chartOptions: computed(() => ({
-          colors: ['#455A64'],
+          colors: [dark.isActive ? '#1DE3B0' : '#455A64'],
           legend: {
             showForSingleSeries: false,
           },
@@ -190,7 +192,7 @@
               show: true,
               offsetX: -8,
               style: {
-                colors: ['#707585'],
+                colors: [dark.isActive ? '#fff' : '#707585'],
                 fontSize: '10px',
               },
               formatter: (value) => {
@@ -234,22 +236,3 @@
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .apy-chart {
-    width: 100%;
-    padding: 8px 0 0;
-    &__title {
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 14px;
-      text-transform: uppercase;
-      color: $primary;
-    }
-    .q-icon {
-      height: 82px;
-      width: 100%;
-      padding: 8px 0;
-    }
-  }
-</style>

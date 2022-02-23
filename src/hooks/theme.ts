@@ -1,4 +1,4 @@
-/*!
+/*
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,38 +26,23 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
+import { useQuasar } from 'quasar';
+import { useLocalStorage } from '@vueuse/core';
 
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
+export function useDarkTheme() {
+  const { dark } = useQuasar();
+  const isActive = useLocalStorage<boolean>('theme-mode', dark.isActive);
+  dark.set(isActive.value);
 
-$text-white: #FFFFFF;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
-
-$generic-border-radius: 12px;
-
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
-
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+  return {
+    isActive,
+    set(status: boolean | 'auto') {
+      dark.set(status);
+      isActive.value = dark.isActive;
+    },
+    toggle() {
+      dark.toggle();
+      isActive.value = dark.isActive;
+    },
+  };
+}

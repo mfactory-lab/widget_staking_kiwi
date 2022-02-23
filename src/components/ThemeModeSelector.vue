@@ -27,25 +27,23 @@
   -->
 
 <template>
-  <div class="stake-box__slider">
-    <slot></slot>
-    <div class="stake-box__slider__steps">
-      <span v-for="(val, idx) in steps" :key="idx">{{ val }}%</span>
-    </div>
-  </div>
+  <q-btn :icon="icon" flat round @click="toggle" />
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { evaMoon, evaSun } from '@quasar/extras/eva-icons';
+  import { computed, defineComponent, watchEffect } from 'vue';
+  import { useDarkTheme } from '@/hooks';
+
   export default defineComponent({
-    props: {
-      value: {
-        type: Number,
-      },
-    },
     setup() {
+      const { toggle, isActive } = useDarkTheme();
+      watchEffect(() => {
+        console.log(isActive.value ? 'On dark mode' : 'On light mode');
+      });
       return {
-        steps: [0, 25, 50, 75, 100],
+        toggle,
+        icon: computed(() => (isActive.value ? evaMoon : evaSun)),
       };
     },
   });

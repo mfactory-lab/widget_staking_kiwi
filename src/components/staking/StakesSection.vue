@@ -27,26 +27,25 @@
   -->
 
 <template>
-  <div class="stake-box__slider">
-    <slot></slot>
-    <div class="stake-box__slider__steps">
-      <span v-for="(val, idx) in steps" :key="idx">{{ val }}%</span>
+  <section class="stakes-section">
+    <div class="container">
+      <div class="row">
+        <stake-accounts />
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import StakeAccounts from './my-stake/StakeAccounts.vue';
+
   export default defineComponent({
-    props: {
-      value: {
-        type: Number,
-      },
+    components: {
+      StakeAccounts,
     },
     setup() {
-      return {
-        steps: [0, 25, 50, 75, 100],
-      };
+      return {};
     },
   });
 </script>

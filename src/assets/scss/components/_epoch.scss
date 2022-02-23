@@ -26,38 +26,43 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
+.epoch {
+  &__label {
+    color: $primary;
+    font-size: 12px;
+    line-height: 16px;
+  }
 
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
+  &__title {
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 35px;
+    text-transform: uppercase;
+    color: $accent;
+  }
 
-$text-white: #FFFFFF;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
+  &__value {
+    color: $primary;
+    font-size: 22px;
+    line-height: 26px;
+  }
 
-$generic-border-radius: 12px;
+  &__number {
+    color: #000;
+    font-size: 18px;
+  }
+}
 
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
+// Dark mode
 
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+body.body--dark {
+  .epoch {
+    &__value {
+      color: $text-white;
+    }
+  
+    &__label {
+      color: $text-white;
+    }
+  }
+}

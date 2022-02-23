@@ -30,6 +30,7 @@
   <q-page class="staking-page">
     <staking-header />
     <main-section />
+    <stakes-section />
     <faq-section />
     <app-footer />
   </q-page>
@@ -39,6 +40,7 @@
   import { defineComponent } from 'vue';
   import StakingHeader from '@/components/staking/StakingHeader.vue';
   import MainSection from '@/components/staking/MainSection.vue';
+  import StakesSection from '@/components/staking/StakesSection.vue';
   import FaqSection from '@/components/staking/faq/FaqSection.vue';
   import AppFooter from '@/components/AppFooter.vue';
 
@@ -46,6 +48,7 @@
     components: {
       StakingHeader,
       MainSection,
+      StakesSection,
       FaqSection,
       AppFooter,
     },

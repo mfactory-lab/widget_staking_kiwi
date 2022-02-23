@@ -26,38 +26,54 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
+.staking-header {
+  background: #fff;
+  font-family: $font-secondary;
+  &__top {
+    position: relative;
+    z-index: 1;
+    @media (max-width: $breakpoint-xs) {
+      margin-bottom: 40px;
+    }
+  }
+  &__faq-btn {
+    cursor: pointer;
+    font-family: $font-secondary;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  &__main {
+    background: $primary;
+  }
+  &__logo {
+    margin-top: -75px;
+    // margin-top: -86px;
+    // margin-left: -28px;
+  }
+  &__btn {
+    @media (max-width: $breakpoint-sm) {
+      margin-top: 16px;
+    }
+  }
+  &__beta {
+    font-weight: 7;
+    font-size: 19px;
+    line-height: 22px;
+    text-transform: uppercase;
+    color: #E60000;
+    margin-top: -125px;
+    margin-left: -15px;
+    @media (max-width: 340px) {
+      font-size: 15px;
+    }
+  }
+}
 
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
+// Dark mode
 
-$text-white: #FFFFFF;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
-
-$generic-border-radius: 12px;
-
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
-
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+body.body--dark {
+  .staking-header {
+    background: $primary;
+  }
+}

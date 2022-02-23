@@ -26,7 +26,6 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-
 .wallet {
   .btn {
     font-weight: 400;
@@ -158,5 +157,23 @@
   .q-list--dense>.q-item,
   .q-item--dense {
     padding: 2px;
+  }
+}
+
+// Dark mode
+
+body.body--dark {
+  .wallet-balance {
+    &__head {
+      background: $warning;
+      color: $primary;
+    }
+  }
+  .balance__value {
+    color: $text-white;
+
+    &__usd {
+      color: $text-white;
+    }
   }
 }

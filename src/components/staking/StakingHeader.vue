@@ -28,16 +28,20 @@
 
 <template>
   <section class="staking-header">
-    <div class="staking-header__top q-py-lg text-right">
-      <div class="container">
-        <div class="staking-header__faq-btn" @click="scrollToFaq">How to use staking.kiwi</div>
+    <div class="staking-header__top q-pt-md q-pb-xs text-right">
+      <div class="container row items-center justify-end">
+        <theme-mode-selector />
+        <div class="staking-header__faq-btn q-ml-sm" @click="scrollToFaq"
+          >How to use staking.kiwi</div
+        >
       </div>
     </div>
     <div class="staking-header__main q-py-lg">
       <div class="container">
         <div class="row items-center">
           <router-link class="row items-center q-mr-auto" to="/">
-            <img src="@/assets/img/kiwi-logo.svg" alt="" class="staking-header__logo" />
+            <img src="@/assets/img/kiwi-logo-2.png" alt="" class="staking-header__logo" />
+            <div class="staking-header__beta">BETA VERSION</div>
           </router-link>
           <div class="row items-center">
             <div class="q-mr-lg staking-header__btn">
@@ -63,6 +67,7 @@
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
+  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
 
   export default defineComponent({
@@ -70,6 +75,7 @@
       ClusterSelector,
       TotalStacked,
       ConnectWallet,
+      ThemeModeSelector,
     },
     setup() {
       return {
@@ -80,33 +86,3 @@
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .staking-header {
-    background: #fff;
-    font-family: $font-secondary;
-    &__top {
-      position: relative;
-      z-index: 1;
-    }
-    &__faq-btn {
-      cursor: pointer;
-      font-family: $font-secondary;
-      font-weight: 500;
-      font-size: 14px;
-      text-transform: uppercase;
-    }
-    &__main {
-      background: $primary;
-    }
-    &__logo {
-      margin-top: -86px;
-      margin-left: -28px;
-    }
-    &__btn {
-      @media (max-width: $breakpoint-sm) {
-        margin-top: 16px;
-      }
-    }
-  }
-</style>

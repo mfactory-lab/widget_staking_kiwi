@@ -1,5 +1,5 @@
 /*!
- * This file is part of Solana Reference Stake Pool code.
+ * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -117,4 +117,12 @@
 
 .q-tooltip {
   max-width: 320px !important;
+}
+
+// Dark mode
+
+body.body--dark {
+  .validator-item__address__text {
+    color: $text-white;
+  }
 }

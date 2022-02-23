@@ -26,10 +26,15 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-
 @import './components/layout';
-@import './components/sections';
 @import './components/staking';
 @import './components/wallet';
 @import './components/my-stake';
 @import './components/validator';
+@import './components/header';
+@import './components/sections';
+@import './components/epoch';
+@import './components/total-staked';
+@import './components/price-stats';
+@import './components/apy';
+@import './components/apy-chart';

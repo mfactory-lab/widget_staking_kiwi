@@ -36,7 +36,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
+  import { useQuasar } from 'quasar';
 
   export default defineComponent({
     props: {
@@ -57,13 +58,12 @@
         default: () => ['#1DE3B0', '#455A64'],
       },
     },
-    data: function () {
-      return {};
-    },
-    computed: {
-      chartOptions() {
-        return {
-          colors: this.colors,
+    setup(props) {
+      const { dark } = useQuasar();
+
+      return {
+        chartOptions: computed(() => ({
+          colors: props.colors,
           legend: {
             showForSingleSeries: false,
           },
@@ -74,7 +74,7 @@
               type: 'vertical',
               shadeIntensity: 0.1,
               opacityFrom: 1,
-              opacityTo: 0.7,
+              opacityTo: 0.9,
             },
             pattern: {
               style: 'verticalLines',
@@ -83,7 +83,6 @@
           },
           chart: {
             type: 'area',
-            // offsetX: -7,
             offsetY: 0,
             parentHeightOffset: 0,
             toolbar: {
@@ -141,7 +140,7 @@
               show: true,
               offsetX: -8,
               style: {
-                colors: ['#707585'],
+                colors: [dark.isActive ? '#fff' : '#707585'],
                 fontSize: '10px',
               },
               formatter: (value) => {
@@ -160,7 +159,7 @@
             labels: {
               show: false,
             },
-            categories: this.categories,
+            categories: props.categories,
             tooltip: {
               enabled: false,
             },
@@ -168,8 +167,8 @@
           tooltip: {
             // enabled: false,
           },
-        };
-      },
+        })),
+      };
     },
   });
 </script>

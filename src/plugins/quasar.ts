@@ -50,6 +50,7 @@ export const quasarConfig = {
     // notify: {
     //   position: 'center',
     // },
+    dark: true,
     globalProperties: {},
   },
   iconSet: iconSet,

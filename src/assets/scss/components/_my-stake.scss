@@ -224,3 +224,35 @@
     }
   }
 }
+
+// Dark mode
+
+body.body--dark {
+  .my-stake {
+    .wallet-balance {
+      &__head {
+        background: $gray-secondary;
+        color: $text-white;
+      }
+    }
+    &__list {
+      border-top: 1px solid $text-white;
+    }
+    &__total-stats {
+      box-shadow: none;
+      background: linear-gradient(107.48deg, #FCFCFC 2%, #FFFFFF 97.35%);
+    }
+    &__address {
+      color: $text-white;
+    }
+    &__sol {
+      color: $text-white;
+    }
+    &__usd {
+      color: $text-white;
+    }
+  }
+  .q-card--dark {
+    background: $gray-secondary;
+  }
+}

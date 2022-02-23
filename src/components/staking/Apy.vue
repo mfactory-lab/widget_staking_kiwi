@@ -56,27 +56,3 @@
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .apy {
-    font-size: 12px;
-    line-height: 14px;
-    color: $primary;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    &__value {
-      font-size: 26px;
-      line-height: 30px;
-      font-weight: 900;
-      margin-top: 4px;
-
-      @media (max-width: $breakpoint-xs) {
-        font-size: 24px;
-        line-height: 28px;
-      }
-    }
-  }
-</style>

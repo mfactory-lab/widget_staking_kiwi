@@ -68,11 +68,12 @@
           v-else
           type="a"
           :href="validatorUrl"
+          unelevated
           target="_blank"
-          outline
+          :outline="!$q.dark.isActive"
           label=""
-          color="primary-gray"
-          text-color="primary-gray"
+          :color="$q.dark.isActive ? 'text-white' : 'primary'"
+          :text-color="$q.dark.isActive ? 'text-white' : 'primary'"
           size="19px"
           padding="8px"
           :icon="'img:' + validatorsAppsImg"
@@ -100,8 +101,8 @@
           unelevated
           target="_blank"
           label=""
-          color="solana-dark"
-          text-color="text-white"
+          :text-color="$q.dark.isActive ? 'primary' : 'text-white'"
+          :color="$q.dark.isActive ? 'text-white' : 'primary'"
           size="19px"
           padding="8px"
           :icon="evaGlobe"

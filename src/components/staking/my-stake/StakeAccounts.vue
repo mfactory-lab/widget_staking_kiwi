@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <q-card class="q-mt-lg full-width my-stake">
+  <q-card class="q-mt-md full-width my-stake">
     <q-card-section v-if="loading && 0" class="flex flex-center">
       <q-spinner size="md" />
     </q-card-section>
@@ -49,7 +49,7 @@
         <div>MY STAKING ACCOUNTS</div>
       </q-card-section>
 
-      <q-card-section class="q-py-none">
+      <q-card-section class="my-stake__list q-py-none">
         <div v-if="connected">
           <div v-if="accountsSorted.length > 0" class="my-stake__total-stats row justify-end">
             <stake-stats

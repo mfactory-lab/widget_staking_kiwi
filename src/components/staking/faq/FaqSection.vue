@@ -29,8 +29,7 @@
 <template>
   <section id="faq-section" class="faq-section q-pb-lg">
     <div class="container">
-      <div class="faq-section__title text-center">FAQ</div>
-      <div class="faq-section__items">
+      <div class="faq-section__items q-pt-md">
         <faq-section-item>
           <template #title>What is "staking"?</template>
           <div
@@ -85,45 +84,3 @@
     },
   });
 </script>
-
-<style lang="scss">
-  $faqText: #000;
-  .faq-section {
-    &__title {
-      font-family: $font-secondary;
-      font-weight: 500;
-      font-size: 30px;
-      color: $faqText;
-    }
-    &__item {
-      padding: 20px 32px;
-      border: 1px solid #fff;
-      background: #f5f5f5;
-      box-shadow: -4px -4px 14px rgba(255, 255, 255, 0.71), 0px 4px 4px rgba(192, 191, 191, 0.25);
-      border-radius: 12px;
-
-      &__title {
-        font-size: 20px;
-        line-height: 23px;
-        text-transform: uppercase;
-        color: $faqText;
-        padding-bottom: 10px;
-        border-bottom: 1px solid $primary;
-      }
-
-      &__text {
-        font-size: 14px;
-        line-height: 16px;
-        color: $faqText;
-
-        > div {
-          margin-top: 16px;
-
-          a {
-            color: $accent;
-          }
-        }
-      }
-    }
-  }
-</style>

@@ -65,9 +65,6 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <stake-accounts />
-      </div>
     </div>
   </section>
 </template>
@@ -75,7 +72,6 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import ValidatorItem from './ValidatorItem.vue';
-  import StakeAccounts from './my-stake/StakeAccounts.vue';
   import WalletBalance from './WalletBalance.vue';
   import PriceStats from './PriceStats.vue';
   import StakeBox from './stake/StakeBox.vue';
@@ -86,7 +82,6 @@
   export default defineComponent({
     components: {
       ValidatorItem,
-      StakeAccounts,
       WalletBalance,
       PriceStats,
       StakeBox,
@@ -99,49 +94,3 @@
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .main-section {
-    padding: 32px 0;
-
-    &__rect-btn,
-    &__block {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #fff;
-      border-radius: 12px;
-      height: 105px !important;
-      background: linear-gradient(107.48deg, #fcfcfc 2%, #ffffff 97.35%);
-      box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
-        0 3px 1px -2px rgb(0 0 0 / 12%);
-    }
-    &__rect-btn {
-      width: 100px;
-
-      &--logo {
-        background: none;
-        box-shadow: none;
-
-        svg {
-          width: 77px;
-          height: 59px;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-          display: none;
-        }
-      }
-    }
-    &__faq-title {
-      font-family: $font-secondary;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 18px;
-      text-align: center;
-      text-transform: uppercase;
-      color: #000000;
-      margin-bottom: 8px;
-    }
-  }
-</style>

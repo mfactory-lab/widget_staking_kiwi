@@ -82,12 +82,9 @@
     background-color: $blue-grey-8 !important;
     color: #fff !important;
     padding: 32px 0;
-    font-size: 18px;
+    font-size: 12px;
     @media (max-width: $breakpoint-sm) {
       text-align: center;
-    }
-    @media (max-width: $breakpoint-xs) {
-      font-size: 12px;
     }
 
     a {
@@ -119,7 +116,7 @@
 
     a {
       color: $blue-grey-8 !important;
-      font-size: 26px;
+      font-size: 16px;
     }
 
     @media (max-width: $breakpoint-sm) {

@@ -53,10 +53,10 @@
         :show-value="false"
         :value="state === 'activating' || state === 'deactivating' ? epochProgress : 0"
         size="34px"
-        :thickness="0.2"
+        :thickness="0.4"
         color="secondary"
-        track-color="primary"
-        center-color="white"
+        :center-color="$q.dark.isActive ? 'primary' : 'white'"
+        :track-color="$q.dark.isActive ? 'white' : 'primary'"
       />
     </q-item-section>
 
@@ -117,7 +117,7 @@
     </q-item-section>
     <div class="row full-width justify-end items-center my-stake__address">
       <span class="q-mx-sm">{{ $q.screen.gt.xs ? address : shortAddress }}</span>
-      <copy-to-clipboard :text="address" />
+      <copy-to-clipboard :text="address" :fill="$q.dark.isActive ? '#fff' : undefined" />
     </div>
     <q-inner-loading :showing="loading || stateLoading">
       <q-spinner-gears size="48px" color="warning" />

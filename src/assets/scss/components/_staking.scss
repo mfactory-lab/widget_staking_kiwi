@@ -31,6 +31,7 @@
   width: 100%;
   .q-field__control {
     padding: 0 18px !important;
+    border-radius: 8px;
   }
   .q-card__section {
     padding-bottom: 0;
@@ -72,5 +73,59 @@
   }
   .q-btn {
     width: 100%;
+  }
+  &__slider {
+    margin-top: 5px;
+    padding: 0 28px 0 12px;
+    position: relative;
+    color: $primary;
+
+    &__steps {
+      font-size: 12px;
+      margin-left: -5px;
+      width: calc(100% + 20px);
+      display: flex;
+      justify-content: space-between;
+
+      > span {
+        margin-left: 9px;
+        &:first-child,
+        &:last-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode
+
+body.body--dark {
+  .stake-box {
+    color: $text-white;
+    .q-field__native {
+      color: $primary;
+    }
+    &__symbol {
+      color: $primary;
+    }
+    ::placeholder {
+      color: $primary !important;
+    }
+    &__bottom-section {
+      color: $text-white;
+    }
+    &__bottom-section {
+      border-top: 1px solid $primary;
+    }
+    &__fee-info {
+      color: $text-white;
+    }
+    &__bottom-section {
+      border-top: 1px solid $light-gray-natural;
+    }
+    &__slider {
+      color: $text-white;
+    }
   }
 }

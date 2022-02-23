@@ -46,9 +46,10 @@
       <q-input
         ref="stakeFromInput"
         :maxlength="14"
+        rounded
         v-model="stake.from"
-        color="text-white"
-        bg-color="primary"
+        :color="$q.dark.isActive ? 'primary' : 'text-white'"
+        :bg-color="$q.dark.isActive ? 'text-white' : 'primary'"
         label=""
         class="stake-box__input"
         input-class="stake-box__input__field"
@@ -63,8 +64,8 @@
         <template #append>
           <q-btn
             dense
-            color="natural-light-gray"
-            text-color="primary"
+            :color="$q.dark.isActive ? 'primary' : 'natural-light-gray'"
+            :text-color="$q.dark.isActive ? 'text-white' : 'primary'"
             class="q-mr-sm"
             unelevated
             size="12px"
@@ -88,12 +89,12 @@
               :disable="!connected"
               track-size="2px"
               thumb-size="33px"
-              thumb-color="primary"
+              :thumb-color="$q.dark.isActive ? 'text-white' : 'primary'"
               :min="0"
               :max="100"
               :step="25"
               :label="false"
-              color="primary"
+              :color="$q.dark.isActive ? 'text-white' : 'primary'"
             />
           </stake-slide-wrapper>
         </div>
@@ -136,8 +137,8 @@
         <div class="text-h6 text-center">Warning</div>
         <q-btn
           padding="md"
-          color="transparent"
-          text-color="primary-gray"
+          :color="$q.dark.isActive ? 'primary-gray' : 'text-white'"
+          :text-color="$q.dark.isActive ? 'text-white' : 'primary-gray'"
           unelevated
           class="absolute-right"
           :icon="evaClose"

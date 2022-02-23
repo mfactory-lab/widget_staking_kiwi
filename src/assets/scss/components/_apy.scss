@@ -26,38 +26,35 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
+.apy {
+  font-size: 12px;
+  line-height: 14px;
+  color: $primary;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
+  &__value {
+    font-size: 26px;
+    line-height: 30px;
+    font-weight: 900;
+    margin-top: 4px;
 
-$text-white: #FFFFFF;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
+    @media (max-width: $breakpoint-xs) {
+      font-size: 24px;
+      line-height: 28px;
+    }
+  }
+}
 
-$generic-border-radius: 12px;
+// Dark mode
 
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
-
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+body.body--dark {
+  .apy {
+    color: $text-white;
+    .q-inner-loading--dark {
+      background: none;
+    }
+  }
+}

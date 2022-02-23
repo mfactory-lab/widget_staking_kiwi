@@ -71,32 +71,3 @@
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .epoch {
-    &__label {
-      color: $primary;
-      font-size: 12px;
-      line-height: 16px;
-    }
-
-    &__title {
-      font-weight: 500;
-      font-size: 30px;
-      line-height: 35px;
-      text-transform: uppercase;
-      color: $accent;
-    }
-
-    &__value {
-      color: $primary;
-      font-size: 22px;
-      line-height: 26px;
-    }
-
-    &__number {
-      color: #000;
-      font-size: 18px;
-    }
-  }
-</style>
