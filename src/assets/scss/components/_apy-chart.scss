@@ -52,9 +52,9 @@ body.body--dark {
     }
   }
   .apexcharts-tooltip {
-    background: $gray-secondary;
+    background: $primary;
     .apexcharts-tooltip-title {
-      background: $primary;
+      background: $gray-dark-theme;
     }
   }
 }

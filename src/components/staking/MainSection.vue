@@ -43,12 +43,17 @@
           <div class="row full-width">
             <div
               class="col main-section__block q-mb-md"
-              :class="{ 'col-12': $q.screen.lt.sm, 'q-mr-md': $q.screen.gt.sm }"
+              :class="{ 'col-12': $q.screen.lt.xs, 'q-mr-md': $q.screen.gt.xs }"
               ><epoch
             /></div>
-            <div class="main-section__rect-btn main-section__rect-btn--logo">
-              <sol-svg class="q-icon" />
-            </div>
+            <a
+              href="https://jpool.one"
+              target="_blank"
+              class="main-section__block main-section__rect-btn main-section__rect-btn--logo"
+            >
+              stake on
+              <img src="@/assets/img/jpool-logo.svg" alt="" />
+            </a>
           </div>
           <div class="row full-width">
             <div
@@ -77,7 +82,6 @@
   import StakeBox from './stake/StakeBox.vue';
   import Charts from './charts/Charts.vue';
   import Epoch from './Epoch.vue';
-  import SolSvg from '@/components/icons/SolSvg.vue';
 
   export default defineComponent({
     components: {
@@ -87,7 +91,6 @@
       StakeBox,
       Charts,
       Epoch,
-      SolSvg,
     },
     setup() {
       return {};

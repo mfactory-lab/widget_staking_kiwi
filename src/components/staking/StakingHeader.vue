@@ -40,7 +40,7 @@
       <div class="container">
         <div class="row items-center">
           <router-link class="row items-center q-mr-auto" to="/">
-            <img src="@/assets/img/kiwi-logo-2.png" alt="" class="staking-header__logo" />
+            <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
             <div class="staking-header__beta">BETA VERSION</div>
           </router-link>
           <div class="row items-center">

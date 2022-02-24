@@ -46,15 +46,22 @@
     width: 100px;
 
     &--logo {
-      background: none;
-      box-shadow: none;
+      // background: none;
+      // box-shadow: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: $primary;
 
-      svg {
-        width: 77px;
-        height: 59px;
+      img {
+        width: 66px;
       }
 
-      @media (max-width: $breakpoint-sm) {
+      @media (max-width: $breakpoint-xs) {
         display: none;
       }
     }
@@ -122,10 +129,15 @@ body.body--dark {
   .main-section {
     background: $gray-secondary;
     .q-card--dark {
-      background: $primary;
+      background: $gray-dark-theme;
     }
     &__block {
-      background: $primary;
+      background: $gray-dark-theme;
+    }
+    &__rect-btn {
+      &--logo {
+        color: $text-white;
+      }
     }
   }
   .stakes-section {
@@ -136,8 +148,8 @@ body.body--dark {
     background: $primary;
     &__item {
       box-shadow: none;
-      border: 1px solid $gray-secondary;
-      background: $gray-secondary;
+      border: 1px solid $gray-dark-theme;
+      background: $gray-dark-theme;
 
       &__title {
         border-bottom: 1px solid #F5F5F5;

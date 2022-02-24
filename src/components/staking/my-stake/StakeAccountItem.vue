@@ -78,7 +78,12 @@
             DEPOSIT TO JPOOL
             <q-badge color="red-dark" rounded class="my-stake__btn-badge"> new </q-badge>
           </q-btn>
-          <q-btn rounded unelevated color="primary" @click="deactivate(address)">
+          <q-btn
+            rounded
+            unelevated
+            :color="$q.dark.isActive ? 'gray-secondary' : 'primary'"
+            @click="deactivate(address)"
+          >
             DEACTIVATE
           </q-btn>
         </div>
@@ -86,7 +91,7 @@
           v-else
           rounded
           unelevated
-          color="primary"
+          :color="$q.dark.isActive ? 'gray-secondary' : 'primary'"
           class="full-width"
           @click="deactivate(address)"
         >

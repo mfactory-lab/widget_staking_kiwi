@@ -231,7 +231,7 @@ body.body--dark {
   .my-stake {
     .wallet-balance {
       &__head {
-        background: $gray-secondary;
+        background: $gray-dark-theme;
         color: $text-white;
       }
     }
@@ -253,6 +253,6 @@ body.body--dark {
     }
   }
   .q-card--dark {
-    background: $gray-secondary;
+    background: $gray-dark-theme;
   }
 }
