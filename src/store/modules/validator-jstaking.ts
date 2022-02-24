@@ -113,7 +113,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         );
         // console.log('[Validators] voterData  === ', voterData);
         // console.log('[Validators] validatorInfo  === ', validatorInfo);
-        validatorName.value = validatorInfo?.info?.name ?? shortenAddress(pubKey);
         validatorDetails.value = validatorInfo?.info?.details;
         validatorImage.value = validatorInfo?.info?.keybaseUsername
           ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
@@ -121,6 +120,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         validatorUrl.value = `https://www.validators.app/validators/${network}/${pubKey}`;
         validatorSolanaBeach.value = `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach}`;
         validatorWebsite.value = validatorInfo?.info?.website;
+        validatorName.value = validatorInfo?.info?.name ?? shortenAddress(pubKey);
       }
     },
     { immediate: true },

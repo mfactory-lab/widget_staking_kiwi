@@ -31,11 +31,22 @@
     <div class="validator-item">
       <div class="validator-item__name row items-center">
         <div class="validator-item__logo column q-mr-md justify-center">
-          <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-          <a v-else :href="validatorUrl" target="_blank">
+          <q-skeleton
+            v-if="loading && !savedValidator"
+            type="QAvatar"
+            class="shadow-5"
+            size="60px"
+          />
+          <a v-else :href="loading ? savedValidator.validatorUrl : validatorUrl" target="_blank">
             <q-avatar class="shadow-1" size="60px">
-              <q-img :src="validatorImage" spinner-color="white">
-                <template #default v-if="!validatorImage">
+              <q-img
+                :src="loading ? savedValidator.validatorImage : validatorImage"
+                spinner-color="white"
+              >
+                <template
+                  #default
+                  v-if="!((loading && savedValidator.validatorImage) || validatorImage)"
+                >
                   <q-icon :name="evaPerson" />
                 </template>
                 <template #error>
@@ -46,28 +57,28 @@
           </a>
         </div>
         <div class="validator-item__name__text column justify-start">
-          <q-skeleton width="100%" v-if="loading" />
+          <q-skeleton width="100%" v-if="loading && !savedValidator" />
           <div v-else class="q-mt-xs">
-            {{ validatorName }}
+            {{ loading ? savedValidator.validatorName : validatorName }}
             <q-tooltip class="text-body2">
-              {{ validatorName }}
+              {{ loading ? savedValidator.validatorName : validatorName }}
             </q-tooltip>
           </div>
-          <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
+          <q-skeleton width="100%" class="q-mt-sm" v-if="loading && !savedValidator" />
           <div v-else class="validator-item__name__details q-mt-xs">
-            {{ validatorDetails }}
+            {{ loading ? savedValidator.validatorDetails : validatorDetails }}
             <q-tooltip class="text-body2">
-              {{ validatorDetails }}
+              {{ loading ? savedValidator.validatorDetails : validatorDetails }}
             </q-tooltip>
           </div>
         </div>
       </div>
       <div class="validator-item__btns row q-px-sm items-center justify-center">
-        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading && !savedValidator" />
         <q-btn
           v-else
           type="a"
-          :href="validatorUrl"
+          :href="loading ? savedValidator.validatorUrl : validatorUrl"
           unelevated
           target="_blank"
           :outline="!$q.dark.isActive"
@@ -79,11 +90,11 @@
           :icon="'img:' + validatorsAppsImg"
           class="validator-item__btns__btn q-mx-sm"
         />
-        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading && !savedValidator" />
         <q-btn
           v-else
           type="a"
-          :href="validatorSolanaBeach"
+          :href="loading ? savedValidator.validatorSolanaBeach : validatorSolanaBeach"
           unelevated
           target="_blank"
           label=""
@@ -93,11 +104,11 @@
           :icon="'img:' + solanaBeachImg"
           class="validator-item__btns__btn q-mx-sm"
         />
-        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading" />
+        <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading && !savedValidator" />
         <q-btn
           v-else
           type="a"
-          :href="validatorWebsite"
+          :href="loading ? savedValidator.validatorWebsite : validatorWebsite"
           unelevated
           target="_blank"
           label=""
@@ -110,12 +121,19 @@
         />
       </div>
       <div class="validator-item__address column items-end justify-start">
-        <q-skeleton width="350px" style="max-width: 100%" v-if="loading" />
+        <q-skeleton width="350px" style="max-width: 100%" v-if="loading && !savedValidator" />
         <div class="text-right" v-else>
-          <span class="validator-item__address__text">{{ validatorId }}</span>
-          <copy-to-clipboard :text="validatorId" />
+          <span class="validator-item__address__text">{{
+            loading ? savedValidator.validatorId : validatorId
+          }}</span>
+          <copy-to-clipboard :text="loading ? savedValidator.validatorId : validatorId" />
         </div>
-        <q-skeleton width="350px" style="max-width: 100%" class="q-mt-sm" v-if="loading" />
+        <q-skeleton
+          width="350px"
+          style="max-width: 100%"
+          class="q-mt-sm"
+          v-if="loading && !savedValidator"
+        />
         <div class="text-right" v-else>
           <span class="validator-item__address__text">{{ voterKey }}</span>
           <copy-to-clipboard :text="voterKey" />
@@ -126,12 +144,23 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  interface ValidatorInfo {
+    voterKey: string;
+    validatorId: string;
+    validatorName: string;
+    validatorDetails: string | undefined;
+    validatorImage: string | undefined;
+    validatorUrl: string | undefined;
+    validatorSolanaBeach: string | undefined;
+    validatorWebsite: string | undefined;
+  }
+  import { defineComponent, ref, watch } from 'vue';
   import { evaGlobe, evaPerson } from '@quasar/extras/eva-icons';
   import { storeToRefs } from 'pinia';
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { useLocalStorage } from '@vueuse/core';
 
   export default defineComponent({
     components: {},
@@ -147,8 +176,41 @@
         validatorWebsite,
       } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorStore());
+      const savedValidators = useLocalStorage<ValidatorInfo[]>('validators-cached', []);
+      const savedValidator = ref<ValidatorInfo>();
+      if (savedValidators.value.length > 0) {
+        const savedVal = savedValidators.value.find((val) => val.voterKey === voterKey.value);
+        if (savedVal) {
+          savedValidator.value = savedVal;
+        }
+      }
+      watch([validatorName], () => {
+        const savedValIndex = savedValidators.value.findIndex(
+          (val) => val.voterKey === voterKey.value,
+        );
+        const saveVal = {
+          voterKey: voterKey.value,
+          validatorId: validatorId.value,
+          validatorName: validatorName.value,
+          validatorDetails: validatorDetails.value,
+          validatorImage: validatorImage.value,
+          validatorUrl: validatorUrl.value,
+          validatorSolanaBeach: validatorSolanaBeach.value,
+          validatorWebsite: validatorWebsite.value,
+        };
+        if (savedValIndex > -1) {
+          savedValidators.value = [
+            ...savedValidators.value.slice(0, savedValIndex),
+            saveVal,
+            ...savedValidators.value.slice(savedValIndex + 1),
+          ];
+        } else {
+          savedValidators.value = [...savedValidators.value, saveVal];
+        }
+      });
 
       return {
+        savedValidator,
         evaGlobe,
         evaPerson,
         validatorsAppsImg,
