@@ -31,7 +31,11 @@
     <div class="total-staked__logo">
       <sol-svg fill="#FFCD29" class="q-icon" />
     </div>
-    <div class="total-staked__value">
+    <div class="q-ml-sm total-staked__value" v-if="loading">
+      <q-skeleton width="70px" height="18px" class="q-mx-sm" />
+      <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
+    </div>
+    <div class="q-ml-sm total-staked__value" v-else>
       <div class="total-staked__label">Total Staked</div>
       <div class="row justify-between">
         <div class="total-staked__sol">≈ {{ solStakedFormat }}</div>
@@ -40,7 +44,11 @@
         >
       </div>
     </div>
-    <div class="total-staked__value">
+    <div class="q-ml-sm total-staked__value" v-if="loading">
+      <q-skeleton width="70px" height="18px" class="q-mx-sm" />
+      <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
+    </div>
+    <div class="total-staked__value" v-else>
       <div class="total-staked__label">Validator Fee</div>
       <div class="row justify-between">
         <div class="total-staked__sol">{{ commission }}</div>
@@ -61,7 +69,10 @@
     components: {
       SolSvg,
     },
-    setup() {
+    props: {
+      loading: Boolean,
+    },
+    setup(_props) {
       const { totalStake, commission } = storeToRefs(useValidatorJstakingStore());
 
       const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));

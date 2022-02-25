@@ -29,58 +29,65 @@
 <template>
   <section id="faq-section" class="faq-section q-pb-lg">
     <div class="container">
-      <div class="faq-section__items q-pt-md">
-        <faq-section-item>
-          <template #title>What is "staking"?</template>
-          <div
-            >By staking your SOL tokens, you help secure the network and
-            <a href="https://docs.solana.com/implemented-proposals/staking-rewards" target="_blank"
-              >earn rewards</a
-            >
-            while doing so. You can stake by delegating your tokens to validators who process
-            transactions and run the Solana network.</div
-          >
-        </faq-section-item>
-        <faq-section-item>
-          <template #title>Who is a delegator?</template>
-          <div
-            >You are. Any user who delegates their SOL to a validator, enabling them to validate new
-            blocks and keep the network alive, becomes a delegator.</div
-          >
-          <div
-            >Anyone who has some SOL in their wallet may delegate it – and earn rewards by doing so.
-          </div>
-        </faq-section-item>
-        <faq-section-item>
-          <template #title>What is a validator?</template>
-          <div
-            >For the Solana network to be fast, efficient, and censorship-resistant, it requires a
-            number of independent validator nodes (or simply Validators). Validators participate in
-            adding new blocks to the blockchain, which happens every 400 milliseconds—and to do it,
-            they vote with <strong>your</strong> delegated SOL. This is what you get your rewards
-            for.
-          </div>
-        </faq-section-item>
-        <faq-section-item>
-          <template #title>What is a staking account?</template>
-          <div
-            >It is a separate account where you place your SOL that you want to delegate (stake to a
-            validator). When you stake, it is created automatically, then delegated to the
-            validator. You can see it in your wallet—and watch your rewards stack up!
-          </div>
-        </faq-section-item>
+      <div class="faq-section__title">TO STAKE SOL FROM YOUR WALLET</div>
+      <ul class="faq-section__list">
+        <li class="faq-section__list__item">Connect your wallet.</li>
+        <li class="faq-section__list__item">Enter the amount of SOL you want to stake.</li>
+        <li class="faq-section__list__item">Click STAKE NOW</li>
+        <li class="faq-section__list__item"
+          >Done! You have staked your SOL to <span v-if="loading && !savedValidator">Validator</span
+          ><span v-else>{{ loading ? savedValidator.validatorName : validatorName }}</span></li
+        >
+      </ul>
+      <div class="faq-section__title">MANAGING YOUR STAKING ACCOUNTS</div>
+      <div class="faq-section__text">
+        <div class="faq-section__text__item"
+          >Account inactive or in the process of deactivation:</div
+        >
+        <div class="faq-section__text__item"
+          >Click DEACTIVATE if you want to withdraw your SOL at the end of the current epoc</div
+        >
+      </div>
+      <div class="faq-section__text">
+        <div class="faq-section__text__item">Account active or in the process of activation:</div>
+        <div class="faq-section__text__item"
+          >Click ACTIVATE so the account starts producing rewards in the next epoch.</div
+        >
+      </div>
+      <div class="faq-section__text">
+        <div class="faq-section__text__item">Account inactive:</div>
+        <div class="faq-section__text__item">You can WITHDRAW your SOL at any time.</div>
+      </div>
+      <div class="faq-section__text">
+        <div class="faq-section__text__item"
+          >If an account is active and delegated to a validator within a stake pool, you can move
+          your staking account into that pool without deactivating it. You will receive the pool’s
+          token (e.g. JSOL for JPool) and immediately start to earn rewards from the pool.</div
+        >
+        <div class="faq-section__text__item"
+          >Click DEPOSIT TO JPOOL to move your staking account into the pool.</div
+        >
       </div>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-  import FaqSectionItem from './FaqSectionItem.vue';
   import { defineComponent } from 'vue';
+  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
-    components: {
-      FaqSectionItem,
+    components: {},
+    setup() {
+      const { savedValidator, validatorName } = storeToRefs(useValidatorJstakingStore());
+      const { loading } = storeToRefs(useValidatorStore());
+
+      return {
+        savedValidator,
+        validatorName,
+        loading,
+      };
     },
   });
 </script>

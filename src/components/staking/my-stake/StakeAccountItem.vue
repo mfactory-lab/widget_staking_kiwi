@@ -42,7 +42,7 @@
     </q-item-section>
     <q-item-section side>
       <q-item-label class="items-center">
-        <q-badge class="my-stake__state" :color="stateColor">
+        <q-badge class="my-stake__state" :color="stateColor" :text-color="stateTextColor">
           {{ state }}
         </q-badge>
       </q-item-label>
@@ -207,6 +207,18 @@
               return 'gray-inactive';
             default:
               return 'primary';
+          }
+        }),
+        stateTextColor: computed(() => {
+          switch (props.status) {
+            case 'activating':
+              return 'text-white';
+            case 'active':
+              return 'text-black';
+            case 'inactive':
+              return 'text-black';
+            default:
+              return 'text-white';
           }
         }),
         stateLoading,

@@ -48,6 +48,20 @@ interface ApyInfo {
   validators: ApyValidatorInfo[];
 }
 
+interface ValidatorInfo {
+  voterKey: string;
+  validatorId: string;
+  validatorName: string;
+  validatorFee: number;
+  validatorStake: number;
+  validatorDetails: string | undefined;
+  validatorImage: string | undefined;
+  validatorUrl: string | undefined;
+  validatorSolanaBeach: string | undefined;
+  validatorWebsite: string | undefined;
+  epoch: number | undefined;
+}
+
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
   const apyInfo = useLocalStorage<ApyInfo>('apy', {
     beginTimestamp: 0,
@@ -77,6 +91,48 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const validatorStore = useValidatorStore();
   const voteAccounts = computed(() => validatorStore.voteAccounts);
   const validatorsInfos = computed(() => validatorStore.validatorsInfos);
+
+  const savedValidators = useLocalStorage<ValidatorInfo[]>('validators-cached', []);
+  const savedValidator = ref<ValidatorInfo>();
+
+  watch(
+    [voterKey, epochInfo],
+    () => {
+      if (savedValidators.value.length > 0) {
+        const savedVal = savedValidators.value.find((val) => val.voterKey === voterKey.value);
+        if (savedVal && savedVal.epoch === epochInfo.value?.epoch) {
+          savedValidator.value = savedVal;
+        }
+      }
+    },
+    { immediate: true },
+  );
+
+  watch([validatorName], () => {
+    const savedValIndex = savedValidators.value.findIndex((val) => val.voterKey === voterKey.value);
+    const saveVal = {
+      voterKey: voterKey.value,
+      validatorId: validatorId.value,
+      validatorName: validatorName.value,
+      validatorFee: commission.value,
+      validatorStake: totalStake.value,
+      validatorDetails: validatorDetails.value,
+      validatorImage: validatorImage.value,
+      validatorUrl: validatorUrl.value,
+      validatorSolanaBeach: validatorSolanaBeach.value,
+      validatorWebsite: validatorWebsite.value,
+      epoch: epochInfo.value?.epoch,
+    };
+    if (savedValIndex > -1) {
+      savedValidators.value = [
+        ...savedValidators.value.slice(0, savedValIndex),
+        saveVal,
+        ...savedValidators.value.slice(savedValIndex + 1),
+      ];
+    } else {
+      savedValidators.value = [...savedValidators.value, saveVal];
+    }
+  });
 
   watch(
     cluster,
@@ -111,8 +167,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         const validatorInfo = validatorsInfos.value.find((info) =>
           info.key.equals(new PublicKey(pubKey)),
         );
-        // console.log('[Validators] voterData  === ', voterData);
-        // console.log('[Validators] validatorInfo  === ', validatorInfo);
         validatorDetails.value = validatorInfo?.info?.details;
         validatorImage.value = validatorInfo?.info?.keybaseUsername
           ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
@@ -171,5 +225,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     validatorUrl,
     validatorSolanaBeach,
     validatorWebsite,
+    savedValidator,
   };
 });

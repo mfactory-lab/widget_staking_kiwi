@@ -29,49 +29,8 @@
 <template>
   <q-card class="shadow-sm q-pa-md q-mb-md full-width">
     <div class="validator-item">
-      <div class="validator-item__name row items-center">
-        <div class="validator-item__logo column q-mr-md justify-center">
-          <q-skeleton
-            v-if="loading && !savedValidator"
-            type="QAvatar"
-            class="shadow-5"
-            size="60px"
-          />
-          <a v-else :href="loading ? savedValidator.validatorUrl : validatorUrl" target="_blank">
-            <q-avatar class="shadow-1" size="60px">
-              <q-img
-                :src="loading ? savedValidator.validatorImage : validatorImage"
-                spinner-color="white"
-              >
-                <template
-                  #default
-                  v-if="!((loading && savedValidator.validatorImage) || validatorImage)"
-                >
-                  <q-icon :name="evaPerson" />
-                </template>
-                <template #error>
-                  <q-icon :name="evaPerson" />
-                </template>
-              </q-img>
-            </q-avatar>
-          </a>
-        </div>
-        <div class="validator-item__name__text column justify-start">
-          <q-skeleton width="100%" v-if="loading && !savedValidator" />
-          <div v-else class="q-mt-xs">
-            {{ loading ? savedValidator.validatorName : validatorName }}
-            <q-tooltip class="text-body2">
-              {{ loading ? savedValidator.validatorName : validatorName }}
-            </q-tooltip>
-          </div>
-          <q-skeleton width="100%" class="q-mt-sm" v-if="loading && !savedValidator" />
-          <div v-else class="validator-item__name__details q-mt-xs">
-            {{ loading ? savedValidator.validatorDetails : validatorDetails }}
-            <q-tooltip class="text-body2">
-              {{ loading ? savedValidator.validatorDetails : validatorDetails }}
-            </q-tooltip>
-          </div>
-        </div>
+      <div class="validator-item__stats row items-center">
+        <total-stacked :loading="loading && !savedValidator" />
       </div>
       <div class="validator-item__btns row q-px-sm items-center justify-center">
         <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading && !savedValidator" />
@@ -144,26 +103,16 @@
 </template>
 
 <script lang="ts">
-  interface ValidatorInfo {
-    voterKey: string;
-    validatorId: string;
-    validatorName: string;
-    validatorDetails: string | undefined;
-    validatorImage: string | undefined;
-    validatorUrl: string | undefined;
-    validatorSolanaBeach: string | undefined;
-    validatorWebsite: string | undefined;
-  }
-  import { defineComponent, ref, watch } from 'vue';
+  import { defineComponent } from 'vue';
   import { evaGlobe, evaPerson } from '@quasar/extras/eva-icons';
   import { storeToRefs } from 'pinia';
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorStore } from '@/store';
-  import { useLocalStorage } from '@vueuse/core';
+  import TotalStacked from '@/components/staking/TotalStacked.vue';
 
   export default defineComponent({
-    components: {},
+    components: { TotalStacked },
     setup() {
       const {
         validatorId,
@@ -174,40 +123,9 @@
         validatorUrl,
         validatorSolanaBeach,
         validatorWebsite,
+        savedValidator,
       } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorStore());
-      const savedValidators = useLocalStorage<ValidatorInfo[]>('validators-cached', []);
-      const savedValidator = ref<ValidatorInfo>();
-      if (savedValidators.value.length > 0) {
-        const savedVal = savedValidators.value.find((val) => val.voterKey === voterKey.value);
-        if (savedVal) {
-          savedValidator.value = savedVal;
-        }
-      }
-      watch([validatorName], () => {
-        const savedValIndex = savedValidators.value.findIndex(
-          (val) => val.voterKey === voterKey.value,
-        );
-        const saveVal = {
-          voterKey: voterKey.value,
-          validatorId: validatorId.value,
-          validatorName: validatorName.value,
-          validatorDetails: validatorDetails.value,
-          validatorImage: validatorImage.value,
-          validatorUrl: validatorUrl.value,
-          validatorSolanaBeach: validatorSolanaBeach.value,
-          validatorWebsite: validatorWebsite.value,
-        };
-        if (savedValIndex > -1) {
-          savedValidators.value = [
-            ...savedValidators.value.slice(0, savedValIndex),
-            saveVal,
-            ...savedValidators.value.slice(savedValIndex + 1),
-          ];
-        } else {
-          savedValidators.value = [...savedValidators.value, saveVal];
-        }
-      });
 
       return {
         savedValidator,

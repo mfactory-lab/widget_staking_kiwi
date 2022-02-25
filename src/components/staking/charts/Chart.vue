@@ -104,7 +104,7 @@
           },
           grid: {
             show: true,
-            borderColor: '#ccc',
+            borderColor: '#cccccc70',
             strokeDashArray: 2,
             position: 'back',
             xaxis: {
@@ -140,7 +140,7 @@
               show: true,
               offsetX: -8,
               style: {
-                colors: [dark.isActive ? '#fff' : '#707585'],
+                colors: [dark.isActive ? '#ffffff90' : '#707585'],
                 fontSize: '10px',
               },
               formatter: (value) => {

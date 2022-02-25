@@ -29,27 +29,35 @@
  .total-staked {
   position: relative;
   display: flex;
+  height: 100%;
+  @media (max-width: $breakpoint-sm) {
+    margin: 0 auto;
+  }
 
   &__logo {
     display: flex;
     align-items: center;
-    padding: 0 4px 0 24px;
+    padding: 0 4px 0 0;
 
     @media (max-width: $breakpoint-sm) {
       padding: 0 4px 0 0;
     }
 
     .q-icon {
-      width: 44px;
-      height: 33px;
+      width: 50px;
+      height: 38px;
     }
   }
   &__value {
     font-weight: 500;
-    height: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 0 24px 0 8px;
-    color: $text-white;
-    border-right: 1px solid $text-white;
+    color: $gray-dark-theme;
+    &:not(:last-child) {
+      border-right: 1px solid #CFCFCF;
+    }
 
     @media (max-width: $breakpoint-sm) {
       padding: 4px 8px 0 8px;
@@ -58,11 +66,6 @@
     &:not(:last-child) {
       @media (min-width: $breakpoint-sm) {
         margin-right: 16px;
-      }
-    }
-    &:last-child {
-      @media (max-width: $breakpoint-sm) {
-        border-right: 0;
       }
     }
   }
@@ -78,6 +81,19 @@
     font-weight: 700;
     @media (max-width: $breakpoint-sm) {
       font-size: 14px;
+    }
+  }
+}
+
+// Dark mode
+
+body.body--dark {
+  .total-staked {
+    &__value {
+      color: $text-white;
+      &:not(:last-child) {
+        border-right: 1px solid $text-white;
+      }
     }
   }
 }

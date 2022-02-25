@@ -29,23 +29,23 @@
 <template>
   <section class="staking-header">
     <div class="staking-header__top q-pt-md q-pb-xs text-right">
-      <div class="container row items-center justify-end">
+      <div class="container row items-center justify-end q-mb-sm">
         <theme-mode-selector />
         <div class="staking-header__faq-btn q-ml-sm" @click="scrollToFaq"
           >How to use staking.kiwi</div
         >
       </div>
     </div>
-    <div class="staking-header__main q-py-lg">
+    <div class="staking-header__main q-py-md">
       <div class="container">
         <div class="row items-center">
-          <router-link class="row items-center q-mr-auto" to="/">
+          <router-link class="row items-center q-mr-lg" to="/">
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
             <div class="staking-header__beta">BETA VERSION</div>
           </router-link>
-          <div class="row items-center">
-            <div class="q-mr-lg staking-header__btn">
-              <total-stacked />
+          <div class="row items-center col-grow">
+            <div class="q-mr-auto staking-header__btn">
+              <validator-name />
             </div>
             <div class="row">
               <div class="q-mr-md staking-header__btn">
@@ -65,7 +65,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
-  import TotalStacked from '@/components/staking/TotalStacked.vue';
+  import ValidatorName from '@/components/staking/ValidatorName.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
@@ -73,7 +73,7 @@
   export default defineComponent({
     components: {
       ClusterSelector,
-      TotalStacked,
+      ValidatorName,
       ConnectWallet,
       ThemeModeSelector,
     },

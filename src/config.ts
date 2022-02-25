@@ -66,7 +66,8 @@ export const STAKE_PROGRAM_ID = StakeProgram.programId;
 export const ENDPOINTS: Endpoint[] = [
   {
     name: 'mainnet-beta',
-    url: 'https://mainnet.rpcpool.com/', // clusterApiUrl('mainnet-beta'),
+    // url: 'https://mainnet.rpcpool.com/', // clusterApiUrl('mainnet-beta'),
+    url: 'https://ssc-dao.genesysgo.net/',
     stakePoolAddress: 'CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1',
     stakeLimit: 1500000,
   },
@@ -84,6 +85,14 @@ export const ENDPOINTS: Endpoint[] = [
   // },
 ];
 
+if (isDev) {
+  ENDPOINTS.push({
+    name: 'localnet',
+    url: 'http://127.0.0.1:8899',
+    stakePoolAddress: 'HYgufSTxQ8Ma6qgzQ8n2vD5gPTB7YgP5JjurYCgQqFPR',
+  });
+}
+
 export const API_URL = 'https://api.thevalidators.io/';
 
 export const DEFAULT_VALIDATOR = {
@@ -97,14 +106,6 @@ export const DEFAULT_VALIDATOR = {
     voterKey: 'BcX6qjy6fxYSHPyRmy5uJV6Z9MzK8v5ZS8UUiREoEYWW',
   },
 };
-
-if (isDev) {
-  ENDPOINTS.push({
-    name: 'localnet',
-    url: 'http://127.0.0.1:8899',
-    stakePoolAddress: 'HYgufSTxQ8Ma6qgzQ8n2vD5gPTB7YgP5JjurYCgQqFPR',
-  });
-}
 
 export const DEFAULT_ENDPOINT = ENDPOINTS[0] as Endpoint;
 

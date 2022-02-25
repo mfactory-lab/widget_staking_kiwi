@@ -45,11 +45,10 @@
   }
   &__main {
     background: $primary;
+    min-height: 90px;
   }
   &__logo {
-    margin-top: -75px;
-    // margin-top: -86px;
-    // margin-left: -28px;
+    margin-top: -55px;
   }
   &__btn {
     @media (max-width: $breakpoint-sm) {
@@ -62,7 +61,7 @@
     line-height: 22px;
     text-transform: uppercase;
     color: #E60000;
-    margin-top: -125px;
+    margin-top: -115px;
     margin-left: -15px;
     margin-right: -125px;
     @media (max-width: 340px) {
