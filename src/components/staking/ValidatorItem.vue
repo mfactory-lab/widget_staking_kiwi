@@ -30,7 +30,7 @@
   <q-card class="shadow-sm q-pa-md q-mb-md full-width">
     <div class="validator-item">
       <div class="validator-item__stats row items-center">
-        <total-stacked :loading="loading && !savedValidator" />
+        <total-stacked />
       </div>
       <div class="validator-item__btns row q-px-sm items-center justify-center">
         <q-skeleton width="48px" height="48px" class="q-mx-sm" v-if="loading && !savedValidator" />

@@ -31,7 +31,7 @@
     <div class="total-staked__logo">
       <sol-svg fill="#FFCD29" class="q-icon" />
     </div>
-    <div class="q-ml-sm total-staked__value" v-if="loading">
+    <div class="q-ml-sm total-staked__value" v-if="loading && !savedValidator">
       <q-skeleton width="70px" height="18px" class="q-mx-sm" />
       <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
     </div>
@@ -44,7 +44,7 @@
         >
       </div>
     </div>
-    <div class="q-ml-sm total-staked__value" v-if="loading">
+    <div class="q-ml-sm total-staked__value" v-if="loading && !savedValidator">
       <q-skeleton width="70px" height="18px" class="q-mx-sm" />
       <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
     </div>
@@ -59,7 +59,7 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useValidatorJstakingStore } from '@/store';
+  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/SolSvg.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
@@ -69,19 +69,31 @@
     components: {
       SolSvg,
     },
-    props: {
-      loading: Boolean,
-    },
     setup(_props) {
-      const { totalStake, commission } = storeToRefs(useValidatorJstakingStore());
+      const { savedValidator, totalStake, commission } = storeToRefs(useValidatorJstakingStore());
+      const { loading } = storeToRefs(useValidatorStore());
 
-      const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));
+      const solStaked = computed(() =>
+        lamportsToSol(
+          loading && savedValidator.value
+            ? savedValidator.value.validatorStake
+            : totalStake.value ?? 0,
+        ),
+      );
 
       return {
+        loading,
+        savedValidator,
         solStaked,
         formatMoney,
         solStakedFormat: computed(() => formatAmount(solStaked.value, 3)),
-        commission: computed(() => formatPct.format(commission.value / 100)),
+        commission: computed(() =>
+          formatPct.format(
+            (loading && savedValidator.value
+              ? savedValidator.value.validatorFee
+              : commission.value) / 100,
+          ),
+        ),
       };
     },
   });
