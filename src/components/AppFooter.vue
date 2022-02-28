@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <section :class="$style.footer">
+  <q-footer :class="$style.footer">
     <div class="container">
       <div class="row justify-between">
         <div class="col-12 col-sm-10 justify-center q-mr-auto d-flex column">
@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </q-footer>
 </template>
 
 <script lang="ts">
@@ -83,6 +83,7 @@
     color: #fff !important;
     padding: 32px 0;
     font-size: 12px;
+
     @media (max-width: $breakpoint-sm) {
       text-align: center;
     }
@@ -126,9 +127,11 @@
 </style>
 
 <style lang="scss" scoped>
-  // .footer-links {
-  //   @media (max-width: $breakpoint-sm) {
-  //     margin-top: 10px;
-  //   }
-  // }
+  // Dark mode
+
+  body.body--dark {
+    .q-footer {
+      border-top: 2px solid #f4f4f4 !important;
+    }
+  }
 </style>

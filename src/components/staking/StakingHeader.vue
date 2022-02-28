@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <section class="staking-header">
+  <q-header class="staking-header">
     <div class="staking-header__top q-pt-md q-pb-xs text-right">
       <div class="container row items-center justify-end q-mb-sm">
         <theme-mode-selector />
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </q-header>
 </template>
 
 <script lang="ts">

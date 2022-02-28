@@ -27,13 +27,13 @@
   -->
 
 <template>
+  <staking-header />
   <q-page class="staking-page">
-    <staking-header />
     <main-section />
     <stakes-section />
     <faq-section />
-    <app-footer />
   </q-page>
+  <app-footer />
 </template>
 
 <script lang="ts">
@@ -55,10 +55,3 @@
     setup() {},
   });
 </script>
-
-<style lang="scss" scoped>
-  .staking-page {
-    background: url(/src/assets/img/bg-sol.svg) no-repeat center center;
-    background-color: #f4f4f4;
-  }
-</style>
