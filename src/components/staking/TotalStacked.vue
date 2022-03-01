@@ -28,14 +28,11 @@
 
 <template>
   <div class="total-staked">
-    <div class="total-staked__logo">
-      <sol-svg fill="#FFCD29" class="q-icon" />
-    </div>
-    <div class="q-ml-sm total-staked__value" v-if="loading && !savedValidator">
+    <div class="q-mr-md total-staked__value" v-if="loading && !savedValidator">
       <q-skeleton width="70px" height="18px" class="q-mx-sm" />
       <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
     </div>
-    <div class="q-ml-sm total-staked__value" v-else>
+    <div class="q-mr-md total-staked__value" v-else>
       <div class="total-staked__label">Total Staked</div>
       <div class="row justify-between">
         <div class="total-staked__sol">≈ {{ solStakedFormat }}</div>
@@ -44,7 +41,7 @@
         >
       </div>
     </div>
-    <div class="q-ml-sm total-staked__value" v-if="loading && !savedValidator">
+    <div class="total-staked__value" v-if="loading && !savedValidator">
       <q-skeleton width="70px" height="18px" class="q-mx-sm" />
       <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
     </div>
@@ -61,14 +58,11 @@
   import { computed, defineComponent } from 'vue';
   import { useValidatorJstakingStore, useValidatorStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
-  import SolSvg from '@/components/icons/SolSvg.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
   import { storeToRefs } from 'pinia';
 
   export default defineComponent({
-    components: {
-      SolSvg,
-    },
+    components: {},
     setup(_props) {
       const { savedValidator, totalStake, commission } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorStore());

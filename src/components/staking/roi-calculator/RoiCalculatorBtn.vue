@@ -28,7 +28,7 @@
 
 <template>
   <q-btn
-    class="q-mx-lg roi-calc-btn"
+    class="q-mr-md roi-calc-btn"
     flat
     padding="none"
     color="white"

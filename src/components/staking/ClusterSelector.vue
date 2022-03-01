@@ -28,15 +28,17 @@
 
 <template>
   <q-btn-dropdown
-    class="app-header__cluster-btn"
+    class="cluster-selector"
     :label="filter(cluster)"
     :model-value="false"
     auto-close
-    color="text-white"
-    text-color="primary"
+    color="primary"
+    text-color="text-white"
+    padding="5px 16px 3px"
+    size="11px"
     rounded
   >
-    <q-list>
+    <q-list class="cluster-selector__list">
       <q-item v-for="item in items" :key="item.name" clickable @click="select(item)">
         <q-item-section>
           <q-item-label>

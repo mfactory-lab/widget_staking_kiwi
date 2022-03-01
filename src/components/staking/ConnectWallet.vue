@@ -34,6 +34,8 @@
       color="warning"
       text-color="primary"
       rounded
+      padding="5px 16px 3px"
+      size="11px"
       @click="dialog = true"
     >
       {{ walletShortAddress }}
@@ -46,6 +48,8 @@
       color="warning"
       text-color="primary"
       rounded
+      padding="5px 16px 3px"
+      size="11px"
       :disable="connectionLost"
       @click="connect"
     >

@@ -27,30 +27,16 @@
   -->
 
 <template>
-  <staking-header />
-  <q-page class="staking-page">
-    <main-section />
-    <stakes-section />
-    <faq-section />
-  </q-page>
-  <app-footer />
+  <main-section />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import StakingHeader from '@/components/staking/StakingHeader.vue';
   import MainSection from '@/components/staking/MainSection.vue';
-  import StakesSection from '@/components/staking/StakesSection.vue';
-  import FaqSection from '@/components/staking/faq/FaqSection.vue';
-  import AppFooter from '@/components/AppFooter.vue';
 
   export default defineComponent({
     components: {
-      StakingHeader,
       MainSection,
-      StakesSection,
-      FaqSection,
-      AppFooter,
     },
     setup() {},
   });

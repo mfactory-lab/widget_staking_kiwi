@@ -28,7 +28,7 @@
 
 <template>
   <div class="epoch row justify-center">
-    <div class="column items-center">
+    <div class="column items-start">
       <div class="epoch__title">Epoch {{ epochNumber }}</div>
       <div class="epoch__label">estimated time remaining</div>
       <div class="epoch__value">{{ time.h }}h {{ time.m }}m {{ time.s }}s</div>

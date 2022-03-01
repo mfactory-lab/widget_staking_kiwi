@@ -27,18 +27,18 @@
   -->
 
 <template>
-  <q-card class="stake-box shadow-sm q-pa-sm">
+  <q-card class="stake-box shadow-sm q-px-none q-py-sm">
     <q-card-section class="stake-box__top-section">
-      <div class="row justify-center">
-        <div class="col-12">
-          <div class="stake-box__title"> Balance: {{ availableSol }} SOL </div>
+      <div class="row justify-between items-center q-mb-xs">
+        <div class="stake-box__title q-mt-sm"> Balance: {{ availableSol }} SOL </div>
+        <div class="q-ml-auto row justify-end q-mb-xs">
+          <div>
+            <cluster-selector />
+          </div>
+          <div class="q-ml-sm">
+            <connect-wallet />
+          </div>
         </div>
-      </div>
-      <div
-        v-if="connected && Number(stake.from) > Number(availableSol)"
-        class="stake-box__warning lt-sm"
-      >
-        Insufficient funds to stake
       </div>
     </q-card-section>
 
@@ -81,53 +81,57 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="row items-between">
-        <div class="col-sm-7 col-xs-12 q-pr-sm">
-          <stake-slide-wrapper :value="stakePercent">
-            <q-slider
-              v-model="stakePercent"
-              :disable="!connected"
-              track-size="2px"
-              thumb-size="33px"
-              :thumb-color="$q.dark.isActive ? 'text-white' : 'primary'"
-              :min="0"
-              :max="100"
-              :step="25"
-              :label="false"
-              :color="$q.dark.isActive ? 'text-white' : 'primary'"
-            />
-          </stake-slide-wrapper>
+      <div
+        class="row items-center q-mt-sm"
+        :class="{ 'justify-center': $q.screen.lt.sm, 'justify-between': !$q.screen.lt.sm }"
+      >
+        <div class="row justify-center q-mb-sm">
+          <total-stacked />
         </div>
 
-        <div class="col-sm-5 col-xs-12 q-mt-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
-          <div v-if="connected" class="text-right q-ml-md">
+        <div class="col-auto q-mb-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
+          <div v-if="connected" class="text-right">
             <q-btn
               :loading="creating"
               class="stake-box__btn"
               color="accent"
               rounded
               size="14px"
-              padding="9px xl"
+              padding="9px 24px"
               text-color="text-white"
               @click="stakeHandler"
             >
               STAKE NOW
             </q-btn>
           </div>
-          <div v-else class="text-right q-ml-auto">
-            <connect-wallet />
+          <div v-else class="text-center text-bold">Please connect a wallet</div>
+        </div>
+      </div>
+      <div
+        class="row items-center"
+        :class="{ 'justify-center': $q.screen.lt.sm, 'justify-between': !$q.screen.lt.sm }"
+      >
+        <div class="main-section__block q-my-sm">
+          <epoch />
+        </div>
+        <div class="main-section__block column q-my-sm">
+          <div class="row justify-end items-end">
+            <roi-calculator-btn />
+            <apy />
           </div>
+          <div class="q-mt-sm stake-box__fee-info text-center"
+            >Network Fee: {{ depositFeeVal }} SOL</div
+          >
         </div>
       </div>
-      <div class="row justify-end items-end q-mt-sm">
-        <div class="q-mr-auto stake-box__fee-info">Network Fee: {{ depositFeeVal }} SOL</div>
-        <roi-calculator-btn />
-        <apy />
-      </div>
-      <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
-        <div class="col-xs-12">
-          <apy-chart />
-        </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="row items-center q-mb-sm">
+        <div class="stake-box__powered__line"></div>
+        <a class="stake-box__powered__link q-mx-md" href="https://staking.kiwi/" target="_blank"
+          >powered by staking.kiwi</a
+        >
+        <div class="stake-box__powered__line"></div>
       </div>
     </q-card-section>
   </q-card>
@@ -166,23 +170,25 @@
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useBalanceStore, useConnectionStore, useStakePoolStore, useWalletStore } from '@/store';
-  import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
+  import { formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import Apy from '@/components/staking/Apy.vue';
-  import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
   import { clickOutside } from '@jpool/common/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
-  import ApyChart from '@/components/staking/charts/ApyChart.vue';
+  import TotalStacked from '@/components/staking/TotalStacked.vue';
+  import Epoch from '@/components/staking/Epoch.vue';
+  import ClusterSelector from '@/components/staking/ClusterSelector.vue';
 
   export default defineComponent({
     components: {
       Apy,
       ConnectWallet,
-      StakeSlideWrapper,
+      ClusterSelector,
       RoiCalculatorBtn,
-      ApyChart,
+      TotalStacked,
+      Epoch,
     },
     directives: {
       clickOutside,
@@ -238,16 +244,6 @@
         stake.to = amount > 0 ? amount.toFixed(9) : 0;
       });
 
-      const stakePercent = ref(0);
-      watch(stakePercent, () => {
-        if (stakePercent.value === 100) {
-          stake.from = solBalance.value;
-        } else {
-          const value = solBalance.value * stakePercent.value;
-          stake.from = value ? formatAmount(value / 100) : value;
-        }
-      });
-
       const highlightFix = ref(true);
 
       const doStake = async () => {
@@ -255,7 +251,6 @@
         await createAccount(stake.from);
         stake.from = 0;
         stake.to = 0;
-        stakePercent.value = 0;
       };
 
       return {
@@ -265,7 +260,6 @@
         connected,
         creating,
         stakeFromInput,
-        stakePercent,
         connectionLost,
         maxStakeDialog,
         depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
