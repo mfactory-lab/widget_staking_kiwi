@@ -29,6 +29,8 @@
 .stake-box {
   padding-bottom: 8px;
   width: 100%;
+  margin-left: 1px;
+  margin-top: 1px;
   .q-field__control {
     padding: 0 18px !important;
     border-radius: 8px;
@@ -44,7 +46,7 @@
   }
   &__title {
     font-size: 13px;
-    @media (max-width: $breakpoint-xs) {
+    @media (max-width: 440px) {
       order: 2;
       width: 100%;
     }
@@ -69,12 +71,18 @@
     line-height: 13px;
     color: $primary;
 
-    @media (max-width: $breakpoint-xs) {
+    @media (max-width: 440px) {
       width: 100%;
     }
   }
   .q-btn {
     width: 100%;
+  }
+  &__row {
+    justify-content: space-between;
+    @media (max-width: 440px) {
+      justify-content: center;
+    }
   }
 }
 

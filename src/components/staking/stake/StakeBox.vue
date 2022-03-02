@@ -81,15 +81,12 @@
     </q-card-section>
 
     <q-card-section>
-      <div
-        class="row items-center q-mt-sm"
-        :class="{ 'justify-center': $q.screen.lt.sm, 'justify-between': !$q.screen.lt.sm }"
-      >
+      <div class="row items-center q-mt-sm stake-box__row">
         <div class="row justify-center q-mb-sm">
           <total-stacked />
         </div>
 
-        <div class="col-auto q-mb-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
+        <div class="col-auto q-mb-sm">
           <div v-if="connected" class="text-right">
             <q-btn
               :loading="creating"
@@ -114,10 +111,7 @@
         <div class="main-section__block q-my-sm">
           <kiwi-link />
         </div>
-        <div
-          class="main-section__block"
-          :class="{ 'q-ml-sm': $q.screen.lt.sm, 'q-ma-sm': !$q.screen.lt.sm }"
-        >
+        <div class="main-section__block main-section__block--epoch">
           <epoch />
         </div>
         <div class="main-section__block column q-my-sm">

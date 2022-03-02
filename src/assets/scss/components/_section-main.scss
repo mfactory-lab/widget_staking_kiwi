@@ -40,6 +40,13 @@
     padding: 10px 14px;
     flex-grow: 1;
     border: 1px solid #F2F2F2;
+
+    &--epoch {
+      margin-left: 8px;
+      @media (min-width: 440px) {
+        margin-right: 8px;
+      }
+    }
   }
 }
 
