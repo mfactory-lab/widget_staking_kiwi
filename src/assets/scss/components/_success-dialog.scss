@@ -26,33 +26,51 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-.main-section {
-  width: 470px;
-  max-width: 100%;
+.stake-success {
+  text-align: center;
+  &__body {
+    padding: 20px 0 0;
+    position: relative;
+  }
+  &__header {
+    background: $primary;
+  }
+  &__info {
+    padding: 20px;
 
-  &__block {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #fff;
-    border-radius: 12px;
-    background: #F2F2F2;
-    padding: 10px 14px;
-    flex-grow: 1;
-    border: 1px solid #F2F2F2;
+    &__title {
+      font-family: $font-secondary;
+      font-weight: 900;
+      font-size: 33px;
+      line-height: 40px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #009C74;
+    }
+
+    &__text {
+      color: $primary;
+      font-size: 13px;
+      line-height: 15px;
+    }
   }
 }
-
 // Dark mode
 
 body.body--dark {
-  .main-section {
-    .q-card--dark {
+  .stake-success {
+    &__header {
       background: $gray-dark-theme;
     }
-    &__block {
-      background: $gray-dark-theme;
-      border: 1px solid $text-white;
+    &__info {
+      background: $primary;
+      &__title {
+        color: $text-white;
+      }
+  
+      &__text {
+        color: $text-white;
+      }
     }
   }
 }

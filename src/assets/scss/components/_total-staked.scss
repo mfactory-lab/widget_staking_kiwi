@@ -54,9 +54,6 @@
     justify-content: center;
     padding: 0 16px 0 0px;
     color: $gray-dark-theme;
-    &:not(:last-child) {
-      border-right: 1px solid #CFCFCF;
-    }
     &:last-child {
       padding-right: 0;
     }
@@ -77,9 +74,6 @@ body.body--dark {
   .total-staked {
     &__value {
       color: $text-white;
-      &:not(:last-child) {
-        border-right: 1px solid $text-white;
-      }
     }
   }
 }

@@ -29,6 +29,7 @@
 <template>
   <section class="main-section">
     <connection-lost />
+    <theme-mode-selector v-show="false" />
     <stake-box />
   </section>
 </template>
@@ -37,11 +38,13 @@
   import { defineComponent } from 'vue';
   import StakeBox from './stake/StakeBox.vue';
   import ConnectionLost from '@/components/ConnectionLost.vue';
+  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
 
   export default defineComponent({
     components: {
       StakeBox,
       ConnectionLost,
+      ThemeModeSelector,
     },
     setup() {
       return {};

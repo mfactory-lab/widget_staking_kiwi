@@ -27,17 +27,13 @@
   -->
 
 <template>
-  <div class="epoch row justify-center">
-    <div class="column items-start">
-      <div class="epoch__title">Epoch {{ epochNumber }}</div>
-      <div class="epoch__label">estimated time remaining</div>
-      <div class="epoch__value">{{ time.h }}h {{ time.m }}m {{ time.s }}s</div>
-    </div>
+  <div class="epoch column items-center justify-between">
+    <div class="epoch__title">Epoch {{ epochNumber }}</div>
     <q-circular-progress
       show-value
-      class="q-ml-md q-my-auto epoch__progress"
+      class="epoch__progress"
       :value="epochProgress"
-      size="70px"
+      size="51px"
       :thickness="0.2"
       color="warning"
       track-color="accent"
@@ -55,18 +51,10 @@
 
   export default defineComponent({
     setup() {
-      const { epochTimeRemaining, epochProgress, epochNumber } = storeToRefs(useEpochStore());
+      const { epochProgress, epochNumber } = storeToRefs(useEpochStore());
       return {
         epochNumber,
         epochProgress: computed(() => Number(epochProgress.value)),
-        time: computed(() => {
-          const timeInMs = epochTimeRemaining.value;
-          const _h = timeInMs / 1000 / 60 / 60;
-          const h = Math.floor(_h);
-          const m = Math.floor((_h - h) * 60);
-          const s = Math.ceil(((_h - h) * 60 - m) * 60);
-          return { h, m: m < 10 ? `0${m}` : m, s: s < 10 ? `0${s}` : s };
-        }),
       };
     },
   });

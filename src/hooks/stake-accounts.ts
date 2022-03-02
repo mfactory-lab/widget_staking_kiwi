@@ -51,6 +51,7 @@ export function useStakeAccounts() {
   const seed = ref('0');
   const stakeAccountStore = useStakeAccountStore();
   const { voterKey } = storeToRefs(useValidatorJstakingStore());
+  const stakeSuccessDialog = ref(false);
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;
@@ -100,6 +101,7 @@ export function useStakeAccounts() {
   };
 
   return {
+    stakeSuccessDialog,
     depositFee: computed(() => lamportsPerSignature.value),
     creating: computed(() => loading.value || sending.value),
     createAccount: async (amount) => {
@@ -139,6 +141,7 @@ export function useStakeAccounts() {
           ),
           {
             onSuccess: async () => {
+              stakeSuccessDialog.value = true;
               await stakeAccountStore.load();
             },
             onError: () => {},

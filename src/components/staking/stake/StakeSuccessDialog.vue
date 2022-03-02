@@ -27,27 +27,40 @@
   -->
 
 <template>
-  <div class="stake-info__table__row" :class="{ 'stake-info__table__row--bold': isBold }">
-    <div class="stake-info__table__text">{{ name }}</div>
-    <div class="stake-info__table__text">
-      {{ value }}
-    </div>
-  </div>
+  <q-dialog>
+    <q-card class="stake-success">
+      <q-card-section class="stake-success__header">
+        <q-btn
+          padding="sm"
+          color="transparent"
+          unelevated
+          class="absolute-top-right"
+          :icon="evaClose"
+          size="sm"
+          @click="close"
+        />
+      </q-card-section>
+      <q-card-section class="stake-success__info">
+        <div class="stake-success__info__text">YOU HAVE STAKED YOUR SOL</div>
+        <div class="stake-success__info__title">SUCCESS!</div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
+  import { evaClose } from '@quasar/extras/eva-icons';
+  import { useEmitter } from '@jpool/common/hooks';
   import { defineComponent } from 'vue';
+
   export default defineComponent({
-    props: {
-      name: {
-        type: String,
-      },
-      value: {
-        type: String,
-      },
-      isBold: {
-        type: Boolean,
-      },
+    components: {},
+    setup() {
+      const emitter = useEmitter();
+      return {
+        evaClose,
+        close: () => emitter.emit('closeStakeSuccessDialog'),
+      };
     },
   });
 </script>

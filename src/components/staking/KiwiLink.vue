@@ -27,25 +27,34 @@
   -->
 
 <template>
-  <div class="stake-box__slider">
-    <slot></slot>
-    <div class="stake-box__slider__steps">
-      <span v-for="(val, idx) in steps" :key="idx">{{ val }}%</span>
-    </div>
+  <div class="kiwi-link column items-center justify-between">
+    <div class="kiwi-link__title">STAKE ACCOUNTS</div>
+    <div class="kiwi-link__text">& more details</div>
+    <q-btn
+      type="a"
+      :href="`https://staking.kiwi/?validator=${voterKey}`"
+      target="_blank"
+      rounded
+      label="STAKING.KIWI"
+      color="primary"
+      text-color="text-white"
+      size="10px"
+      padding="5px 12px"
+      class="q-mt-sm"
+    />
   </div>
 </template>
 
 <script lang="ts">
+  import { useValidatorJstakingStore } from '@/store';
   import { defineComponent } from 'vue';
+  import { storeToRefs } from 'pinia';
+
   export default defineComponent({
-    props: {
-      value: {
-        type: Number,
-      },
-    },
     setup() {
+      const { voterKey } = storeToRefs(useValidatorJstakingStore());
       return {
-        steps: [0, 25, 50, 75, 100],
+        voterKey,
       };
     },
   });

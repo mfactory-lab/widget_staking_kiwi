@@ -58,20 +58,6 @@
     font-size: 18px;
     color: $text-white;
   }
-  &__powered {
-    &__line {
-      height: 1px;
-      flex-basis: 0;
-      flex-grow: 1;
-      background-color: #CFCFCF;
-    }
-    &__link {
-      font-size: 10px;
-      line-height: 12px;
-      text-decoration-line: underline;
-      color: $accent;
-    }
-  }
   ::placeholder {
     color: $text-white !important;
   }
@@ -85,34 +71,10 @@
 
     @media (max-width: $breakpoint-xs) {
       width: 100%;
-      margin-bottom: 8px;
-      text-align: right;
     }
   }
   .q-btn {
     width: 100%;
-  }
-  &__slider {
-    margin-top: 5px;
-    padding: 0 28px 0 12px;
-    position: relative;
-    color: $primary;
-
-    &__steps {
-      font-size: 12px;
-      margin-left: -5px;
-      width: calc(100% + 20px);
-      display: flex;
-      justify-content: space-between;
-
-      > span {
-        margin-left: 9px;
-        &:first-child,
-        &:last-child {
-          margin-left: 0;
-        }
-      }
-    }
   }
 }
 
@@ -138,9 +100,6 @@ body.body--dark {
     }
     &__bottom-section {
       border-top: 1px solid $light-gray-natural;
-    }
-    &__slider {
-      color: $text-white;
     }
   }
 }

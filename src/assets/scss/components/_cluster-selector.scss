@@ -31,3 +31,9 @@
     font-size: 12px;
   }
 }
+
+body.body--dark {
+  .q-menu--dark {
+    background: $gray-dark-theme;
+  }
+}

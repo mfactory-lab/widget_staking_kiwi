@@ -112,6 +112,12 @@
         :class="{ 'justify-center': $q.screen.lt.sm, 'justify-between': !$q.screen.lt.sm }"
       >
         <div class="main-section__block q-my-sm">
+          <kiwi-link />
+        </div>
+        <div
+          class="main-section__block"
+          :class="{ 'q-ml-sm': $q.screen.lt.sm, 'q-ma-sm': !$q.screen.lt.sm }"
+        >
           <epoch />
         </div>
         <div class="main-section__block column q-my-sm">
@@ -123,15 +129,6 @@
             >Network Fee: {{ depositFeeVal }} SOL</div
           >
         </div>
-      </div>
-    </q-card-section>
-    <q-card-section>
-      <div class="row items-center q-mb-sm">
-        <div class="stake-box__powered__line"></div>
-        <a class="stake-box__powered__link q-mx-md" href="https://staking.kiwi/" target="_blank"
-          >powered by staking.kiwi</a
-        >
-        <div class="stake-box__powered__line"></div>
       </div>
     </q-card-section>
   </q-card>
@@ -164,6 +161,7 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+  <stake-success-dialog v-model="stakeSuccessDialog" />
 </template>
 
 <script lang="ts">
@@ -179,7 +177,10 @@
   import { evaClose } from '@quasar/extras/eva-icons';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
   import Epoch from '@/components/staking/Epoch.vue';
+  import KiwiLink from '@/components/staking/KiwiLink.vue';
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
+  import StakeSuccessDialog from '@/components/staking/stake/StakeSuccessDialog.vue';
+  import { useEmitter } from '@jpool/common/hooks';
 
   export default defineComponent({
     components: {
@@ -189,6 +190,8 @@
       RoiCalculatorBtn,
       TotalStacked,
       Epoch,
+      KiwiLink,
+      StakeSuccessDialog,
     },
     directives: {
       clickOutside,
@@ -198,7 +201,7 @@
       const { connected } = storeToRefs(useWalletStore());
       const { solBalance } = storeToRefs(useBalanceStore());
       const { connectionLost } = storeToRefs(useStakePoolStore());
-      const { depositFee, creating, createAccount } = useStakeAccounts();
+      const { depositFee, creating, createAccount, stakeSuccessDialog } = useStakeAccounts();
       const maxStakeDialog = ref(false);
 
       const stake = reactive<{ from: any; to: any }>({
@@ -253,6 +256,11 @@
         stake.to = 0;
       };
 
+      const emitter = useEmitter();
+      emitter.on('closeStakeSuccessDialog', () => {
+        stakeSuccessDialog.value = false;
+      });
+
       return {
         stake,
         cluster: computed(() => connectionStore.cluster),
@@ -262,6 +270,7 @@
         stakeFromInput,
         connectionLost,
         maxStakeDialog,
+        stakeSuccessDialog,
         depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
 

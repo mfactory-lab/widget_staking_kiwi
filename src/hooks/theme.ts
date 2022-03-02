@@ -32,6 +32,15 @@ import { useLocalStorage } from '@vueuse/core';
 export function useDarkTheme() {
   const { dark } = useQuasar();
   const isActive = useLocalStorage<boolean>('theme-mode', dark.isActive);
+
+  const queryString = location.search;
+  const params = new URLSearchParams(queryString);
+  const theme = params.get('theme');
+  if (theme === 'dark') {
+    isActive.value = true;
+  } else {
+    isActive.value = false;
+  }
   dark.set(isActive.value);
 
   return {

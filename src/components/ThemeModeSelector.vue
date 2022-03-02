@@ -53,6 +53,7 @@
       watch([isActive], () => {
         isDark.value = isActive.value;
       });
+
       return {
         isDark,
         evaMoon,
