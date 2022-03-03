@@ -32,6 +32,7 @@
     <main-section />
     <stakes-section />
     <faq-section />
+    <widget-section />
   </q-page>
   <app-footer />
 </template>
@@ -42,6 +43,7 @@
   import MainSection from '@/components/staking/MainSection.vue';
   import StakesSection from '@/components/staking/StakesSection.vue';
   import FaqSection from '@/components/staking/faq/FaqSection.vue';
+  import WidgetSection from '@/components/staking/WidgetSection.vue';
   import AppFooter from '@/components/AppFooter.vue';
 
   export default defineComponent({
@@ -50,6 +52,7 @@
       MainSection,
       StakesSection,
       FaqSection,
+      WidgetSection,
       AppFooter,
     },
     setup() {},

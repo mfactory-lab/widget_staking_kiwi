@@ -80,7 +80,8 @@
     setup() {
       return {
         scrollToFaq() {
-          handleScroll('faq-section');
+          const header = document.querySelector('.q-header');
+          handleScroll('faq-section', header?.offsetHeight ?? 0);
         },
       };
     },
