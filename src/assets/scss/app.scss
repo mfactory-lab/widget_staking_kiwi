@@ -42,7 +42,7 @@ a {
   line-height: 56px;
   font-family: $font-secondary;
   text-transform: uppercase;
-  @media (max-width: 440px) {
+  @media (max-width: 443px) {
     font-size: 24px;
     line-height: 30px;
   }
@@ -55,7 +55,7 @@ a {
   color: #252B42;
   font-weight: 700;
   font-family: $font-secondary;
-  @media (max-width: 440px) {
+  @media (max-width: 443px) {
     font-size: 16px;
     line-height: 20px;
   }
@@ -64,7 +64,7 @@ a {
 .section-text {
   font-size: 20px;
   line-height: 24px;
-  @media (max-width: 440px) {
+  @media (max-width: 443px) {
     font-size: 14px;
     line-height: 18px;
   }

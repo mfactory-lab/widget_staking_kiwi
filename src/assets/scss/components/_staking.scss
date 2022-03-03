@@ -46,7 +46,7 @@
   }
   &__title {
     font-size: 13px;
-    @media (max-width: 440px) {
+    @media (max-width: 443px) {
       order: 2;
       width: 100%;
     }
@@ -71,7 +71,7 @@
     line-height: 13px;
     color: $primary;
 
-    @media (max-width: 440px) {
+    @media (max-width: 443px) {
       width: 100%;
     }
   }
@@ -80,7 +80,7 @@
   }
   &__row {
     justify-content: space-between;
-    @media (max-width: 440px) {
+    @media (max-width: 443px) {
       justify-content: center;
     }
   }

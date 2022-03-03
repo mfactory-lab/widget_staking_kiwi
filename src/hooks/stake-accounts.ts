@@ -142,15 +142,15 @@ export function useStakeAccounts() {
           {
             onSuccess: async () => {
               stakeSuccessDialog.value = true;
-              await stakeAccountStore.load();
             },
-            onError: () => {},
+            onError: async () => {},
           },
         );
       } catch (e: any) {
         notify({ message: e.message, type: 'negative' });
         throw e;
       } finally {
+        await stakeAccountStore.load();
         loading.value = false;
       }
     },

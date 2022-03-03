@@ -145,7 +145,9 @@
         walletShortAddress,
         dialog,
         connected,
-        providers: WALLET_PROVIDERS,
+        providers: WALLET_PROVIDERS.filter(
+          (item) => item.name === 'Solflare' || item.name === 'Sollet Web',
+        ),
         select(provider) {
           walletStore.select(provider);
           dialog.value = false;
