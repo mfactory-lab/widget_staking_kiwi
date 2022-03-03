@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <section id="faq-section" class="faq-section q-pb-lg">
+  <section id="widget-section" class="faq-section q-pb-lg">
     <div class="container">
       <q-card class="faq-section__block q-pa-md q-mb-md">
         <div class="faq-section__title">How to embed our widget on your page </div>

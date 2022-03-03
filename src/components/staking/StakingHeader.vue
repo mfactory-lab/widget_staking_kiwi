@@ -31,8 +31,11 @@
     <div class="staking-header__top q-pt-md q-pb-xs text-right">
       <div class="container row items-center justify-end q-mb-sm">
         <theme-mode-selector />
-        <div class="staking-header__faq-btn q-ml-sm" @click="scrollToFaq"
+        <div class="staking-header__faq-btn q-ml-sm" @click="scrollTo('faq-section')"
           >How to use staking.kiwi</div
+        >
+        <div class="staking-header__faq-btn q-ml-md" @click="scrollTo('widget-section')"
+          >widget</div
         >
       </div>
     </div>
@@ -79,9 +82,9 @@
     },
     setup() {
       return {
-        scrollToFaq() {
+        scrollTo(id) {
           const header = document.querySelector('.q-header');
-          handleScroll('faq-section', header?.offsetHeight ?? 0);
+          handleScroll(id, header?.offsetHeight - 10 ?? 0);
         },
       };
     },
