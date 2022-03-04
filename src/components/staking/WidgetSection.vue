@@ -96,6 +96,24 @@
             text-color="text-white"
           />
         </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="faq-section__text">
+              <div class="faq-section__text__item">And</div>
+            </div>
+          </div>
+        </div>
+        <div class="widget-section__src q-mt-lg q-pa-md">
+          {{ scriptSrc }}
+        </div>
+        <div class="row justify-end q-mt-md">
+          <copy-to-clipboard-big
+            :text="scriptSrc"
+            btn-text="COPY CODE"
+            btn-color="primary"
+            text-color="text-white"
+          />
+        </div>
       </q-card>
     </div>
   </section>
@@ -120,6 +138,9 @@
         evaMoon,
         voteKey,
         widgetTheme,
+        scriptSrc: computed(
+          () => `<script src="https://widget.staking.kiwi/js/widget.min.js"><\/script>`,
+        ),
         iframeSrc: computed(
           () => `<iframe
           id="staking-kiwi-widget-0"
@@ -128,7 +149,7 @@
           allowtransparency="true"
           allowfullscreen="true"
           class=""
-          style="position: static; visibility: visible; width: 472px"
+          style="position: static; visibility: visible; width: 472px; height: 302px"
           title="Staking Kiwi widget"
           src="https://widget.staking.kiwi/?validator=${voteKey.value}&theme=${
             widgetTheme.value ? 'dark' : 'light'
