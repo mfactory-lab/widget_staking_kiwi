@@ -71,10 +71,14 @@
           <div class="col-12 col-sm-5">
             <div class="">
               <div class="widget-section__preview">
-                <img v-show="widgetTheme" src="@/assets/img/widget-dark.png" alt="widget preview" />
+                <img
+                  v-show="widgetTheme"
+                  src="@/assets/img/widget-dark-2x.png"
+                  alt="widget preview"
+                />
                 <img
                   v-show="!widgetTheme"
-                  src="@/assets/img/widget-light.png"
+                  src="@/assets/img/widget-light-2x.png"
                   alt="widget preview"
                 />
               </div>
