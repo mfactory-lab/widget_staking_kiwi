@@ -64,7 +64,7 @@
             <div class="faq-section__text q-mb-sm">
               <div class="faq-section__text__item">Done.</div>
               <div class="faq-section__text__item"
-                >Done!<br>Delegators can now stake to your validator directly on your website.
+                >Delegators can now stake to your validator directly on your website.
               </div
               >
             </div>
