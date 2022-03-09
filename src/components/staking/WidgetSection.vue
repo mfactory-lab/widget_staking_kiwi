@@ -42,7 +42,7 @@
               </div>
             </div>
             <div class="faq-section__text">
-              <div class="faq-section__text__item">Choose a theme</div>
+              <div class="faq-section__text__item">light/dark theme</div>
               <div class="faq-section__text__item">
                 <q-toggle
                   v-model="widgetTheme"
