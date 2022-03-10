@@ -78,7 +78,7 @@
       </div>
     </div>
     <div class="validator-row__btns column q-mt-sm justify-start">
-      <q-skeleton class="q-mt-sm" v-if="loading" width="100%" />
+      <q-skeleton class="q-mt-md q-mr-md" v-if="loading" width="106px" />
       <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
         <q-btn
           v-bind="buttonProps(props)"
@@ -87,7 +87,7 @@
           color="warning"
           text-color="primary"
           size="14px"
-          padding="6px 32px"
+          padding="5px 32px 7px"
           class="q-mr-md q-mt-md"
         />
       </router-link>

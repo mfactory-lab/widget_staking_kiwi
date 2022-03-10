@@ -58,9 +58,9 @@
                 class="fit row wrap justify-start items-start content-start"
                 style="min-height: 100px"
               >
-                <template v-if="items.length">
+                <template v-if="itemsSorted.length">
                   <div
-                    v-for="item of items"
+                    v-for="item of itemsShowed"
                     :key="item.name"
                     class="stake-accounts-container col-12 q-px-md q-pt-sm"
                   >
@@ -76,16 +76,17 @@
             </div>
           </div>
         </q-card>
-        <div class="q-pa-lg flex flex-center">
+        <div class="q-pt-sm q-pb-lg flex flex-center">
           <q-pagination
             v-model="currentPage"
-            :max="5"
+            :max="pages"
+            :max-pages="5"
             direction-links
             boundary-links
-            icon-first="skip_previous"
-            icon-last="skip_next"
-            icon-prev="fast_rewind"
-            icon-next="fast_forward"
+            icon-first="eva-arrowhead-left-outline"
+            icon-last="eva-arrowhead-right-outline"
+            icon-prev="eva-arrow-ios-back-outline"
+            icon-next="eva-arrow-ios-forward-outline"
           />
         </div>
       </div>
@@ -97,6 +98,7 @@
   import { computed, defineComponent, onMounted, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import {
+    ApyInfo,
     useApyStore,
     useConnectionStore,
     useStakeAccountStore,
@@ -106,6 +108,8 @@
   } from '@/store';
   import { formatAmount, formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
+  import { PublicKey } from '@solana/web3.js';
+  import { shortenAddress } from '@jpool/common/utils';
 
   export default defineComponent({
     components: { ValidatorRow },
@@ -117,7 +121,30 @@
 
       const { connected } = storeToRefs(useWalletStore());
       const { connectionLost } = storeToRefs(stakePoolStore);
-      const { apyInfo } = storeToRefs(useApyStore());
+      const { apyInfoAll } = storeToRefs(useApyStore());
+      const voteAccounts = computed(() => validatorStore.voteAccounts);
+      const validatorsInfos = computed(() => validatorStore.validatorsInfos);
+      const sortParam = ref('apyNum');
+      const currentPage = ref(1);
+      const perPage = ref(10);
+      const apyInfos = ref<ApyInfo>();
+
+      watch(
+        apyInfoAll,
+        (apyInfoAll) => {
+          if (!apyInfos.value || apyInfos.value.lastEpoch !== apyInfoAll.lastEpoch) {
+            apyInfos.value = {
+              ...apyInfoAll,
+              validators: apyInfoAll.validators.map((item) => {
+                return {
+                  ...item,
+                };
+              }),
+            };
+          }
+        },
+        { immediate: true },
+      );
 
       const refresh = async () => {
         await validatorStore.load();
@@ -139,45 +166,110 @@
         return priceFormatter.format(val);
       }
 
+      const items = computed(() => {
+        // skeleton preloader
+        if (validatorStore.loading) {
+          return Array(8).fill({});
+        }
+
+        const voteApy = apyInfos.value?.validators ?? [];
+
+        return voteAccounts.value.map((voteAccount) => {
+          const validatorInfo = validatorsInfos.value.find((info) =>
+            info.key.equals(new PublicKey(voteAccount.nodePubkey)),
+          );
+
+          const pubKey = voteAccount.nodePubkey;
+          const network = connectionStore.cluster.replace('-beta', '');
+
+          const info = {
+            id: pubKey,
+            fee: voteAccount.commission,
+            voter: voteAccount.votePubkey,
+            totalStake: voteAccount?.activatedStake,
+            name: validatorInfo?.info?.name ?? shortenAddress(pubKey),
+            details: validatorInfo?.info?.details,
+            website: validatorInfo?.info?.website,
+            keybaseUsername: validatorInfo?.info?.keybaseUsername,
+            image: validatorInfo?.info?.keybaseUsername
+              ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
+              : undefined,
+            url: `https://www.validators.app/validators/${network}/${pubKey}`,
+            lamports: 0,
+          };
+
+          const apyInfo = voteApy.find((v) => v.id == info.id);
+          const solTotalJpool = lamportsToSol(info.lamports);
+          const solTotal = lamportsToSol(info.totalStake);
+
+          return {
+            ...info,
+            fee: formatPct.format(info.fee / 100),
+            apy: formatPct.format(apyInfo?.apy ?? 0),
+            apyNum: apyInfo?.apy ?? 0,
+            solStackedNum: stakeAccountStore.voterStake(info.voter).value ?? 0,
+            solStacked: formatAmount(stakeAccountStore.voterStake(info.voter).value, 6),
+            totalSolJpool: formatAmountPrice(solTotalJpool),
+            totalSolStacked: formatAmountPrice(solTotal),
+          };
+        });
+      });
+
+      const itemsSorted = computed(() =>
+        [...items.value].sort((a, b) => {
+          return b[sortParam.value] - a[sortParam.value];
+        }),
+      );
+
+      const pages = computed(() => Math.ceil(items.value.length / perPage.value));
+      watch(pages, (pages) => {
+        if (pages < currentPage.value) {
+          currentPage.value = pages;
+        }
+      });
+
       return {
-        currentPage: ref(1),
+        currentPage,
+        perPage,
+        pages,
         cluster,
         connected,
         connectionLost,
         loading: computed(() => validatorStore.loading),
-        items: computed(() => {
-          // skeleton preloader
-          if (validatorStore.loading) {
-            return Array(8).fill({});
-          }
-          const voteApy = apyInfo.value?.validators ?? [];
+        itemsSorted,
+        itemsShowed: computed(() =>
+          itemsSorted.value.slice(
+            perPage.value * (currentPage.value - 1),
+            perPage.value * currentPage.value,
+          ),
+        ),
+        // items: computed(() => {
+        //   // skeleton preloader
+        //   if (validatorStore.loading) {
+        //     return Array(8).fill({});
+        //   }
+        //   const voteApy = apyInfo.value?.validators ?? [];
 
-          return validatorStore.data
-            .map((info) => {
-              const apyInfo = voteApy.find((v) => v.id == info.id);
-              const solTotalJpool = lamportsToSol(info.lamports);
-              const solTotal = lamportsToSol(info.totalStake);
-              return {
-                ...info,
-                fee: formatPct.format(info.fee / 100),
-                apy: formatPct.format(apyInfo?.apy ?? 0),
-                apyNum: apyInfo?.apy ?? 0,
-                solStackedNum: stakeAccountStore.voterStake(info.voter).value ?? 0,
-                solStacked: formatAmount(stakeAccountStore.voterStake(info.voter).value, 6),
-                totalSolJpool: formatAmountPrice(solTotalJpool),
-                totalSolStacked: formatAmountPrice(solTotal),
-              };
-            })
-            .sort((a, b) => {
-              if (b.solStackedNum > 0 && a.solStackedNum === 0) {
-                return 1;
-              }
-              if (a.solStackedNum > 0 && b.solStackedNum === 0) {
-                return -1;
-              }
-              return b.apyNum - a.apyNum;
-            });
-        }),
+        //   return validatorStore.data
+        //     .map((info) => {
+        //       const apyInfo = voteApy.find((v) => v.id == info.id);
+        //       const solTotalJpool = lamportsToSol(info.lamports);
+        //       const solTotal = lamportsToSol(info.totalStake);
+        //       return {
+        //         ...info,
+        //         fee: formatPct.format(info.fee / 100),
+        //         apy: formatPct.format(apyInfo?.apy ?? 0),
+        //         apyNum: apyInfo?.apy ?? 0,
+        //         solStackedNum: stakeAccountStore.voterStake(info.voter).value ?? 0,
+        //         solStacked: formatAmount(stakeAccountStore.voterStake(info.voter).value, 6),
+        //         totalSolJpool: formatAmountPrice(solTotalJpool),
+        //         totalSolStacked: formatAmountPrice(solTotal),
+        //       };
+        //     })
+        //     .sort((a, b) => {
+        //       return b.apyNum - a.apyNum;
+        //     });
+        // }),
         refresh,
       };
     },

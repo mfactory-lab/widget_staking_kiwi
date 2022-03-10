@@ -28,26 +28,18 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { loadApyInfo, useConnectionStore, useEpochStore, useValidatorStore } from '@/store';
+import {
+  ApyInfo,
+  loadApyInfo,
+  useConnectionStore,
+  useEpochStore,
+  useValidatorStore,
+} from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { PublicKey } from '@solana/web3.js';
 import { shortenAddress } from '@jpool/common/utils';
 import router from '@/router';
-interface ApyValidatorInfo {
-  id: string;
-  vote: string;
-  apy: number;
-}
-interface ApyInfo {
-  beginTimestamp: number;
-  collectionTimestamp: number;
-  endTimestamp: number;
-  firstEpoch: number;
-  isEstimated: boolean;
-  lastEpoch: number;
-  validators: ApyValidatorInfo[];
-}
 
 interface ValidatorInfo {
   voterKey: string;
@@ -99,6 +91,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   watch(
     [voterKey, epochInfo],
     () => {
+      savedValidator.value = undefined;
       if (savedValidators.value.length > 0) {
         const savedVal = savedValidators.value.find((val) => val.voterKey === voterKey.value);
         if (savedVal && savedVal.epoch === epochInfo.value?.epoch) {
@@ -138,6 +131,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   watch(
     [cluster, router.currentRoute],
     async ([cluster, route]) => {
+      const isValidatorPage = route.matched.find((item) => item.path === '/app/:validator');
+      if (!isValidatorPage) return;
       const validator = route.params.validator;
       if (!!validator && typeof validator === 'string') {
         voterKey.value = validator;

@@ -113,7 +113,10 @@
       }
 
       .validator-row__name {
-        width: 318px;
+        width: 418px;
+        @media (max-width: $breakpoint-sm) {
+          width: 318px;
+        }
       }
       > div:not(:last-child) {
         align-items: flex-start;
@@ -187,7 +190,10 @@
 
   &__name {
     font-weight: 500;
-    width: 242px;
+    width: 342px;
+    @media (max-width: $breakpoint-sm) {
+      width: 242px;
+    }
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
