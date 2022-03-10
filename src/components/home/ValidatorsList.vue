@@ -83,6 +83,8 @@
             :max-pages="5"
             direction-links
             boundary-links
+            :color="$q.dark.isActive ? 'text-white' : 'primary'"
+            :text-color="$q.dark.isActive ? 'primary' : 'text-white'"
             icon-first="eva-arrowhead-left-outline"
             icon-last="eva-arrowhead-right-outline"
             icon-prev="eva-arrow-ios-back-outline"

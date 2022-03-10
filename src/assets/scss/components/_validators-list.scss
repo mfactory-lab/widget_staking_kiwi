@@ -258,3 +258,35 @@
     }
   }
 }
+
+// Dark mode
+
+body.body--dark {
+  .home-page {
+    background: $gray-secondary;
+  }
+  .validators-list {
+    &__title__text {
+      color: $text-white;
+    }
+    &__list__head {
+      background: $gray-dark-theme;
+    }
+  }
+  .validator-row {
+    &__apy {
+      &__val {
+        color: $text-white;
+      }
+      &__fee {
+        color: $text-white;
+      }
+    }
+    &__stake__sol {
+      color: $text-white;
+    }
+  }
+  .stake-accounts-container {
+    background: $primary;
+  }
+}
