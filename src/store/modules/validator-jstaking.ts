@@ -33,6 +33,7 @@ import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { PublicKey } from '@solana/web3.js';
 import { shortenAddress } from '@jpool/common/utils';
+import router from '@/router';
 interface ApyValidatorInfo {
   id: string;
   vote: string;
@@ -135,12 +136,10 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   });
 
   watch(
-    cluster,
-    async (cluster) => {
-      const queryString = location.search;
-      const params = new URLSearchParams(queryString);
-      const validator = params.get('validator');
-      if (!!validator) {
+    [cluster, router.currentRoute],
+    async ([cluster, route]) => {
+      const validator = route.params.validator;
+      if (!!validator && typeof validator === 'string') {
         voterKey.value = validator;
       } else {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;

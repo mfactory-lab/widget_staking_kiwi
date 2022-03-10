@@ -27,19 +27,28 @@
   -->
 
 <template>
-  <q-page class="home-page">
-    <div class="container">
-      <validators-list />
-    </div>
+  <q-page class="staking-page">
+    <main-section />
+    <stakes-section />
+    <faq-section />
+    <widget-section />
   </q-page>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import ValidatorsList from '@/components/home/ValidatorsList.vue';
+  import MainSection from '@/components/staking/MainSection.vue';
+  import StakesSection from '@/components/staking/StakesSection.vue';
+  import FaqSection from '@/components/staking/faq/FaqSection.vue';
+  import WidgetSection from '@/components/staking/WidgetSection.vue';
 
   export default defineComponent({
-    components: { ValidatorsList },
+    components: {
+      MainSection,
+      StakesSection,
+      FaqSection,
+      WidgetSection,
+    },
     setup() {},
   });
 </script>

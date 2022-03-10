@@ -48,7 +48,7 @@
           </router-link>
           <div class="row items-center col-grow">
             <div class="q-mr-auto staking-header__btn">
-              <validator-name />
+              <validator-name v-if="showValidator" />
             </div>
             <div class="row">
               <div class="q-mr-md staking-header__btn">
@@ -66,12 +66,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
   import ValidatorName from '@/components/staking/ValidatorName.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
+  import router from '@/router';
 
   export default defineComponent({
     components: {
@@ -82,6 +83,13 @@
     },
     setup() {
       return {
+        showValidator: computed(() => {
+          const validator = router.currentRoute.value.params.validator;
+          if (!!validator && typeof validator === 'string') {
+            return true;
+          }
+          return false;
+        }),
         scrollTo(id) {
           const header = document.querySelector('.q-header');
           handleScroll(id, header?.offsetHeight - 10 ?? 0);
