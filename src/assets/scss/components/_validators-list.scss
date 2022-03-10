@@ -48,6 +48,9 @@
 }
 
 .validators-list {
+  .q-field__native {
+    font-size: 16px;
+  }
   &__no-validators {
     position: sticky;
     left: 0px;
@@ -91,11 +94,16 @@
     overflow-x: auto;
   }
 
+  &__dropdown-label {
+    font-size: 12px;
+  }
+
   &__list {
     width: 960px !important;
     @media (max-width: $breakpoint-sm) {
       width: 836px !important;
     }
+    
     &__head {
       background: $primary;
       font-size: 14px;
@@ -113,9 +121,9 @@
       }
 
       .validator-row__name {
-        width: 418px;
+        width: 408px;
         @media (max-width: $breakpoint-sm) {
-          width: 318px;
+          width: 308px;
         }
       }
       > div:not(:last-child) {
@@ -190,9 +198,9 @@
 
   &__name {
     font-weight: 500;
-    width: 342px;
+    width: 332px;
     @media (max-width: $breakpoint-sm) {
-      width: 242px;
+      width: 232px;
     }
     overflow: hidden;
     white-space: nowrap;
@@ -234,7 +242,7 @@
   }
 
   &__stake {
-    width: 210px;
+    width: 220px;
     padding-left: 8px;
     padding-right: 16px;
 

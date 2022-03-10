@@ -28,7 +28,7 @@
 
 <template>
   <section class="validators-list">
-    <div class="validators-list__main bg-white">
+    <div class="validators-list__main">
       <div class="container">
         <div class="validators-list__title container q-py-md">
           <div class="validators-list__title__text">Validators</div>
@@ -42,6 +42,60 @@
           >
             Refresh
           </q-btn>
+        </div>
+
+        <div class="q-pt-sm q-pb-md row">
+          <q-input v-model="nameFilter" class="q-mr-md" label="Filter by name" stack-label />
+
+          <div class="column q-mr-auto">
+            <div class="validators-list__dropdown-label q-mt-sm">Sort by</div>
+            <q-btn-dropdown
+              class=""
+              :label="sortParam.title"
+              :model-value="false"
+              auto-close
+              color="text-white"
+              text-color="primary"
+            >
+              <q-list>
+                <q-item
+                  v-for="item in sortOptions"
+                  :key="item.value"
+                  clickable
+                  @click="sortParam = item"
+                >
+                  <q-item-section>
+                    {{ item.title }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
+
+          <div class="column">
+            <div class="validators-list__dropdown-label q-mt-sm">Per page</div>
+            <q-btn-dropdown
+              class=""
+              :label="perPage"
+              :model-value="false"
+              auto-close
+              color="text-white"
+              text-color="primary"
+            >
+              <q-list>
+                <q-item
+                  v-for="item in perPageOptions"
+                  :key="item"
+                  clickable
+                  @click="perPage = item"
+                >
+                  <q-item-section>
+                    {{ item }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
         </div>
 
         <q-card class="q-mb-md full-width validators-list__main">
@@ -108,7 +162,7 @@
     useValidatorStore,
     useWalletStore,
   } from '@/store';
-  import { formatAmount, formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
+  import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import { PublicKey } from '@solana/web3.js';
   import { shortenAddress } from '@jpool/common/utils';
@@ -126,10 +180,25 @@
       const { apyInfoAll } = storeToRefs(useApyStore());
       const voteAccounts = computed(() => validatorStore.voteAccounts);
       const validatorsInfos = computed(() => validatorStore.validatorsInfos);
-      const sortParam = ref('apyNum');
       const currentPage = ref(1);
       const perPage = ref(10);
       const apyInfos = ref<ApyInfo>();
+      const nameFilter = ref('');
+      const perPageOptions = [5, 10, 15, 25, 50];
+      const sortParam = ref({
+        value: 'apyNum',
+        title: 'APY',
+      });
+      const sortOptions = [
+        {
+          value: 'apyNum',
+          title: 'APY',
+        },
+        {
+          value: 'totalStake',
+          title: 'Total staked',
+        },
+      ];
 
       watch(
         apyInfoAll,
@@ -171,7 +240,7 @@
       const items = computed(() => {
         // skeleton preloader
         if (validatorStore.loading) {
-          return Array(8).fill({});
+          return Array(10).fill({});
         }
 
         const voteApy = apyInfos.value?.validators ?? [];
@@ -201,7 +270,6 @@
           };
 
           const apyInfo = voteApy.find((v) => v.id == info.id);
-          const solTotalJpool = lamportsToSol(info.lamports);
           const solTotal = lamportsToSol(info.totalStake);
 
           return {
@@ -209,21 +277,27 @@
             fee: formatPct.format(info.fee / 100),
             apy: formatPct.format(apyInfo?.apy ?? 0),
             apyNum: apyInfo?.apy ?? 0,
-            solStackedNum: stakeAccountStore.voterStake(info.voter).value ?? 0,
-            solStacked: formatAmount(stakeAccountStore.voterStake(info.voter).value, 6),
-            totalSolJpool: formatAmountPrice(solTotalJpool),
             totalSolStacked: formatAmountPrice(solTotal),
           };
         });
       });
 
+      const itemsFiltered = computed(() => {
+        if (nameFilter.value) {
+          return items.value.filter(
+            (item) => item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) > -1,
+          );
+        }
+        return items.value;
+      });
+
       const itemsSorted = computed(() =>
-        [...items.value].sort((a, b) => {
-          return b[sortParam.value] - a[sortParam.value];
+        [...itemsFiltered.value].sort((a, b) => {
+          return b[sortParam.value.value] - a[sortParam.value.value];
         }),
       );
 
-      const pages = computed(() => Math.ceil(items.value.length / perPage.value));
+      const pages = computed(() => Math.ceil(itemsFiltered.value.length / perPage.value));
       watch(pages, (pages) => {
         if (pages < currentPage.value) {
           currentPage.value = pages;
@@ -231,8 +305,12 @@
       });
 
       return {
+        sortOptions,
+        sortParam,
+        nameFilter,
         currentPage,
         perPage,
+        perPageOptions,
         pages,
         cluster,
         connected,
@@ -245,33 +323,6 @@
             perPage.value * currentPage.value,
           ),
         ),
-        // items: computed(() => {
-        //   // skeleton preloader
-        //   if (validatorStore.loading) {
-        //     return Array(8).fill({});
-        //   }
-        //   const voteApy = apyInfo.value?.validators ?? [];
-
-        //   return validatorStore.data
-        //     .map((info) => {
-        //       const apyInfo = voteApy.find((v) => v.id == info.id);
-        //       const solTotalJpool = lamportsToSol(info.lamports);
-        //       const solTotal = lamportsToSol(info.totalStake);
-        //       return {
-        //         ...info,
-        //         fee: formatPct.format(info.fee / 100),
-        //         apy: formatPct.format(apyInfo?.apy ?? 0),
-        //         apyNum: apyInfo?.apy ?? 0,
-        //         solStackedNum: stakeAccountStore.voterStake(info.voter).value ?? 0,
-        //         solStacked: formatAmount(stakeAccountStore.voterStake(info.voter).value, 6),
-        //         totalSolJpool: formatAmountPrice(solTotalJpool),
-        //         totalSolStacked: formatAmountPrice(solTotal),
-        //       };
-        //     })
-        //     .sort((a, b) => {
-        //       return b.apyNum - a.apyNum;
-        //     });
-        // }),
         refresh,
       };
     },
