@@ -30,7 +30,7 @@
   <section id="widget-section" class="faq-section q-pb-lg">
     <div class="container">
       <q-card class="faq-section__block q-pa-md q-mb-md">
-        <div class="faq-section__title">How to embed our widget on your page </div>
+        <div class="faq-section__title">HOW TO EMBED THE STAKING.KIWI WIDGET ON YOUR PAGE</div>
         <div class="row">
           <div class="col-12 col-sm-7" :class="{ 'q-pr-md': $q.screen.gt.xs }">
             <div class="faq-section__text">
@@ -42,7 +42,7 @@
               </div>
             </div>
             <div class="faq-section__text">
-              <div class="faq-section__text__item">Choose theme mode.</div>
+              <div class="faq-section__text__item">light/dark theme</div>
               <div class="faq-section__text__item">
                 <q-toggle
                   v-model="widgetTheme"
@@ -57,14 +57,15 @@
             </div>
             <div class="faq-section__text">
               <div class="faq-section__text__item"
-                >Copy the code below and paste the copied code on your page between the tags</div
+                >Copy the code below and paste it into your page, between the tags</div
               >
               <div class="faq-section__text__item">{{ `<body>....</body>` }}</div>
             </div>
             <div class="faq-section__text q-mb-sm">
               <div class="faq-section__text__item">Done.</div>
               <div class="faq-section__text__item"
-                >Now your deligators can stake to your validator without leaving your page</div
+                >Delegators can now stake to your validator directly on your website.
+              </div
               >
             </div>
           </div>
@@ -99,7 +100,7 @@
         <div class="row">
           <div class="col-12">
             <div class="faq-section__text">
-              <div class="faq-section__text__item">And</div>
+              <div class="faq-section__text__item">and</div>
             </div>
           </div>
         </div>

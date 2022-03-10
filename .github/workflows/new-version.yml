@@ -7,7 +7,7 @@ on:
       - '.github/workflows/**'
       - '**.md'
 env:
-  URL: jstaking.io
+  URL: staking.kiwi
 
 jobs:
   build:
