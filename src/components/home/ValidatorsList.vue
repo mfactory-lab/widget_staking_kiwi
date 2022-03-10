@@ -30,7 +30,7 @@
   <section class="validators-list">
     <div class="validators-list__main">
       <div class="container">
-        <div class="validators-list__title container q-py-md">
+        <div class="validators-list__title container q-pt-md q-pb-sm">
           <div class="validators-list__title__text">Validators</div>
           <q-btn
             rounded
@@ -44,7 +44,7 @@
           </q-btn>
         </div>
 
-        <div class="q-pt-sm q-pb-md row">
+        <div class="q-pt-sm q-pb-lg row">
           <q-input v-model="nameFilter" class="q-mr-md" label="Filter by name" stack-label />
 
           <div class="column q-mr-auto">
