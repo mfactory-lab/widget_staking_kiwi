@@ -1,5 +1,5 @@
 {
-  "name": "staking-kiwi",
+  "name": "staking-kiwi-widget",
   "version": "0.0.6",
   "license": "ISC",
   "private": true,
@@ -8,12 +8,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mfactory-lab/staking_kiwi.git"
+    "url": "git+https://github.com/mfactory-lab/widget_staking_kiwi.git"
   },
   "bugs": {
-    "url": "https://github.com/mfactory-lab/staking_kiwi/issues"
+    "url": "https://github.com/mfactory-lab/widget_staking_kiwi/issues"
   },
-  "homepage": "https://github.com/mfactory-lab/staking_kiwi#readme",
+  "homepage": "https://github.com/mfactory-lab/widget_staking_kiwi#readme",
   "scripts": {
     "dev": "vite --port 3333",
     "build": "vite build --mode production",
