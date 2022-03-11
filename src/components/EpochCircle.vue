@@ -75,7 +75,7 @@
 <style scoped lang="scss">
   .epoch-circle {
     position: absolute;
-    left: 50%;
+    left: calc(50% - 53px);
     bottom: 5px;
     @media (max-width: $breakpoint-sm) {
       bottom: 50px;
