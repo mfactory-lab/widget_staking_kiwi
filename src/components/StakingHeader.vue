@@ -29,7 +29,7 @@
 <template>
   <q-header class="staking-header">
     <div class="staking-header__top q-pt-md q-pb-xs text-right">
-      <div class="container row items-center justify-end q-mb-sm">
+      <div class="container row items-center justify-end q-mb-md">
         <theme-mode-selector />
         <div class="staking-header__faq-btn q-ml-sm" @click="scrollTo('faq-section')"
           >How to use staking.kiwi</div
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="staking-header__main q-py-md">
-      <div class="container">
+      <div class="container relative-position">
         <div class="row items-center">
           <router-link class="row items-center q-mr-lg" to="/">
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
@@ -49,7 +49,9 @@
           <div class="row items-center col-grow">
             <div class="q-mr-auto staking-header__btn">
               <validator-name v-if="showValidator" />
+              <validators-total v-if="!showValidator" />
             </div>
+            <epoch-circle v-if="!showValidator" />
             <div class="row">
               <div class="q-mr-md staking-header__btn">
                 <cluster-selector />
@@ -73,6 +75,8 @@
   import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
   import router from '@/router';
+  import EpochCircle from '@/components/EpochCircle.vue';
+  import ValidatorsTotal from '@/components/home/ValidatorsTotal.vue';
 
   export default defineComponent({
     components: {
@@ -80,6 +84,8 @@
       ValidatorName,
       ConnectWallet,
       ThemeModeSelector,
+      EpochCircle,
+      ValidatorsTotal,
     },
     setup() {
       return {

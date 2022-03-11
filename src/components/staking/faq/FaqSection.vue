@@ -29,7 +29,7 @@
 <template>
   <section id="faq-section" class="faq-section q-pb-lg">
     <div class="container">
-      <div class="section-title q-my-md">How to use staking.kiwi</div>
+      <div class="section-title q-py-md">How to use staking.kiwi</div>
       <q-card class="faq-section__block q-pa-md q-mb-md">
         <div class="faq-section__title">TO STAKE SOL FROM YOUR WALLET</div>
         <ul class="faq-section__list">
@@ -37,7 +37,7 @@
           <li class="faq-section__list__item">Enter the amount of SOL you want to stake.</li>
           <li class="faq-section__list__item">Click STAKE NOW</li>
           <li class="faq-section__list__item"
-          >Done! You have staked your SOL to
+            >Done! You have staked your SOL to
             <span v-if="loading && !savedValidator">Validator</span
             ><span v-else>{{ loading ? savedValidator.validatorName : validatorName }}</span></li
           >
@@ -47,20 +47,17 @@
         <div class="faq-section__title">MANAGING YOUR STAKING ACCOUNTS</div>
         <div class="faq-section__text">
           <div class="faq-section__text__item"
-          >Account inactive or in the process of deactivation:
-          </div
-          >
+            >Account inactive or in the process of deactivation:
+          </div>
           <div class="faq-section__text__item"
-          >Click DEACTIVATE if you want to withdraw your SOL at the end of the current epoc
-          </div
-          >
+            >Click DEACTIVATE if you want to withdraw your SOL at the end of the current epoc
+          </div>
         </div>
         <div class="faq-section__text">
           <div class="faq-section__text__item">Account active or in the process of activation:</div>
           <div class="faq-section__text__item"
-          >Click ACTIVATE so the account starts producing rewards in the next epoch.
-          </div
-          >
+            >Click ACTIVATE so the account starts producing rewards in the next epoch.
+          </div>
         </div>
         <div class="faq-section__text">
           <div class="faq-section__text__item">Account inactive:</div>
@@ -68,14 +65,13 @@
         </div>
         <div class="faq-section__text">
           <div class="faq-section__text__item"
-          >If an account is active and delegated to a validator within a stake pool, you can move your staking account into that pool without deactivating it. You will receive the pool’s token (e.g.
-            JSOL for JPool) and immediately start to earn rewards from the pool
-          </div
-          >
+            >If an account is active and delegated to a validator within a stake pool, you can move
+            your staking account into that pool without deactivating it. You will receive the pool’s
+            token (e.g. JSOL for JPool) and immediately start to earn rewards from the pool
+          </div>
           <div class="faq-section__text__item"
-          >Click DEPOSIT TO JPOOL to move your staking account into the pool.
-          </div
-          >
+            >Click DEPOSIT TO JPOOL to move your staking account into the pool.
+          </div>
         </div>
       </q-card>
     </div>
@@ -83,21 +79,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useValidatorJstakingStore, useValidatorStore } from "@/store";
-import { storeToRefs } from "pinia";
+  import { defineComponent } from 'vue';
+  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { storeToRefs } from 'pinia';
 
-export default defineComponent({
-  components: {},
-  setup() {
-    const { savedValidator, validatorName } = storeToRefs(useValidatorJstakingStore());
-    const { loading } = storeToRefs(useValidatorStore());
+  export default defineComponent({
+    components: {},
+    setup() {
+      const { savedValidator, validatorName } = storeToRefs(useValidatorJstakingStore());
+      const { loading } = storeToRefs(useValidatorStore());
 
-    return {
-      savedValidator,
-      validatorName,
-      loading
-    };
-  }
-});
+      return {
+        savedValidator,
+        validatorName,
+        loading,
+      };
+    },
+  });
 </script>

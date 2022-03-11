@@ -88,10 +88,13 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const items = computed(() => {
     // skeleton preloader
+    console.log('[validators all] start');
     if (validatorStore.loading) {
+      console.log('[validators all] skeleton');
       return Array(10).fill({});
     }
 
+    console.log('[validators all] calc ', voteAccounts.value.length);
     const voteApy = apyInfos.value?.validators ?? [];
 
     return voteAccounts.value.map((voteAccount) => {
@@ -104,7 +107,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
       const info = {
         id: pubKey,
-        fee: voteAccount.commission,
+        feeNum: voteAccount.commission,
         voter: voteAccount.votePubkey,
         totalStake: voteAccount?.activatedStake,
         name: validatorInfo?.info?.name ?? shortenAddress(pubKey),
@@ -123,7 +126,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
       return {
         ...info,
-        fee: formatPct.format(info.fee / 100),
+        fee: formatPct.format(info.feeNum / 100),
         apy: formatPct.format(apyInfo?.apy ?? 0),
         apyNum: apyInfo?.apy ?? 0,
         totalSolStacked: formatAmountPrice(solTotal),
@@ -132,6 +135,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   const itemsFiltered = computed(() => {
+    console.log('[validators all] filter');
     if (nameFilter.value) {
       return items.value.filter(
         (item) => item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) > -1,
@@ -140,11 +144,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     return items.value;
   });
 
-  const itemsSorted = computed(() =>
-    [...itemsFiltered.value].sort((a, b) => {
+  const itemsSorted = computed(() => {
+    console.log('[validators all] sort');
+    return [...itemsFiltered.value].sort((a, b) => {
       return b[sortParam.value.value] - a[sortParam.value.value];
-    }),
-  );
+    });
+  });
 
   const pages = computed(() => Math.ceil(itemsFiltered.value.length / perPage.value));
   watch(pages, (pages) => {

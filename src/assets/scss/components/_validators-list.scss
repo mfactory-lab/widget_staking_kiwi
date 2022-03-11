@@ -54,7 +54,7 @@
   &__no-validators {
     position: sticky;
     left: 0px;
-    width: 960px;
+    width: 990px;
     height: 100px;
     display: flex;
     justify-content: center;
@@ -99,9 +99,9 @@
   }
 
   &__list {
-    width: 960px !important;
+    width: 990px !important;
     @media (max-width: $breakpoint-sm) {
-      width: 836px !important;
+      width: 866px !important;
     }
     
     &__head {
@@ -115,9 +115,9 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      width: 960px !important;
+      width: 990px !important;
       @media (max-width: $breakpoint-sm) {
-        width: 836px !important;
+        width: 866px !important;
       }
 
       .validator-row__name {

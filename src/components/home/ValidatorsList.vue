@@ -45,7 +45,7 @@
         </div>
 
         <div class="q-pt-sm q-pb-lg row">
-          <q-input v-model="nameFilter" class="q-mr-md" label="Filter by name" stack-label />
+          <q-input v-model="nameFilter" class="q-mr-md" label="Search by name" stack-label />
 
           <div class="column q-mr-auto">
             <div class="validators-list__dropdown-label q-mt-sm">Sort by</div>
@@ -189,14 +189,6 @@
       };
 
       onMounted(async () => {
-        console.log('sortOptions === ', sortOptions.value);
-        console.log('sortParam === ', sortParam.value);
-        console.log('nameFilter === ', nameFilter.value);
-        console.log('perPage === ', perPage.value);
-        console.log('perPageOptions === ', perPageOptions.value);
-        console.log('pages === ', pages.value);
-        console.log('itemsSorted === ', itemsSorted.value);
-        console.log('itemsShowed === ', itemsShowed.value);
         if (validatorStore.data.length < 1) {
           await validatorStore.load();
         }

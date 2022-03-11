@@ -74,8 +74,6 @@
       const { loading } = storeToRefs(useValidatorStore());
 
       const solStaked = computed(() => {
-        console.log('savedValidator === ', savedValidator);
-        console.log('totalStake === ', totalStake);
         return lamportsToSol(
           loading && savedValidator.value
             ? savedValidator.value.validatorStake
