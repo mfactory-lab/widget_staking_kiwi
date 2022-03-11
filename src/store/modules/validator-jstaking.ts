@@ -28,13 +28,7 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import {
-  ApyInfo,
-  loadApyInfo,
-  useConnectionStore,
-  useEpochStore,
-  useValidatorStore,
-} from '@/store';
+import { useApyStore, useConnectionStore, useEpochStore, useValidatorStore } from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { PublicKey } from '@solana/web3.js';
@@ -56,15 +50,6 @@ interface ValidatorInfo {
 }
 
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
-  const apyInfo = useLocalStorage<ApyInfo>('apy', {
-    beginTimestamp: 0,
-    collectionTimestamp: 0,
-    endTimestamp: 0,
-    firstEpoch: 0,
-    isEstimated: false,
-    lastEpoch: 0,
-    validators: [],
-  });
   const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
   const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
   const totalStake = ref(0);
@@ -80,10 +65,11 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const cluster = computed(() => connectionStore.cluster);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
-  const loading = ref(!apyInfo.value?.lastEpoch);
   const validatorStore = useValidatorStore();
   const voteAccounts = computed(() => validatorStore.voteAccounts);
   const validatorsInfos = computed(() => validatorStore.validatorsInfos);
+  const apyStore = useApyStore();
+  const apyInfoAll = computed(() => apyStore.apyInfoAll);
 
   const savedValidators = useLocalStorage<ValidatorInfo[]>('validators-cached', []);
   const savedValidator = ref<ValidatorInfo>();
@@ -130,7 +116,11 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
 
   watch(
     [cluster, router.currentRoute],
-    async ([cluster, route]) => {
+    async ([cluster, route], [clusterOld, routeOld]) => {
+      console.log('[watcher] cluster === ', cluster);
+      console.log('[watcher] clusterOld === ', clusterOld);
+      console.log('[watcher] route === ', route);
+      console.log('[watcher] routeOld === ', routeOld);
       const isValidatorPage = route.matched.find((item) => item.path === '/app/:validator');
       if (!isValidatorPage) return;
       const validator = route.params.validator;
@@ -139,7 +129,9 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       } else {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
       }
-      await validatorStore.load();
+      if (clusterOld !== cluster || validatorStore.data.length < 1) {
+        await validatorStore.load();
+      }
 
       let voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
 
@@ -174,33 +166,11 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     { immediate: true },
   );
 
-  watch(
-    [epochInfo],
-    async ([epochInfo]) => {
-      if (epochInfo?.epoch) {
-        if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
-          loading.value = false;
-          return;
-        }
-        loading.value = true;
-        try {
-          const res = await loadApyInfo('prev10');
-          apyInfo.value = {
-            ...res,
-            validators: res?.validators ?? [],
-          };
-        } finally {
-          loading.value = false;
-        }
-      }
-    },
-    { immediate: true },
-  );
   const apy = computed(() => {
     if (cluster.value !== 'mainnet-beta') {
       return DEFAULT_APY;
     }
-    const voteApy = apyInfo.value?.validators ?? [];
+    const voteApy = apyInfoAll.value?.validators ?? [];
     const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
     return validatorInfo?.apy ?? 0;
   });
@@ -211,7 +181,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     voterKey,
     totalStake,
     commission,
-    apyLoading: computed(() => loading.value),
+    apyLoading: computed(() => apyStore.apyLoading),
     apy,
     validatorName,
     validatorDetails,

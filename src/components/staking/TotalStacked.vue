@@ -73,13 +73,15 @@
       const { savedValidator, totalStake, commission } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorStore());
 
-      const solStaked = computed(() =>
-        lamportsToSol(
+      const solStaked = computed(() => {
+        console.log('savedValidator === ', savedValidator);
+        console.log('totalStake === ', totalStake);
+        return lamportsToSol(
           loading && savedValidator.value
             ? savedValidator.value.validatorStake
             : totalStake.value ?? 0,
-        ),
-      );
+        );
+      });
 
       return {
         loading,
