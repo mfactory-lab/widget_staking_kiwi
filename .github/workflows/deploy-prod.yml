@@ -1,13 +1,14 @@
-name: Development Build and Deploy
+name: Production Build and Deploy
 on:
   workflow_dispatch:
-  push:
-    branches: [ dev ]
-    paths-ignore:
-      - '.github/workflows/**'
-      - '**.md'
+#  push:
+#    branches: [ master ]
+#    paths-ignore:
+#      - '.github/workflows/**'
+#      - '**.md'
 env:
-  URL: dev.staking.kiwi
+  REPO: mfactory-lab/staking_kiwi_prod
+  URL: staking.kiwi
 
 jobs:
   build:
@@ -35,6 +36,21 @@ jobs:
           cd build
           yarn
           yarn build
-          cp dist/index.html dist/404.html
-          echo ${{ env.URL }} > dist/CNAME
-          yarn run deploy:gh-pages
+          cd ..
+
+      - name: Checkout Prod Target
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.REPO }}
+          path: 'deploy'
+          token: ${{ secrets.PAT }}
+
+      - name: Push files to target
+        run: |
+          cp -r build/dist/* deploy
+          cd deploy
+          echo ${{ env.URL }} > CNAME
+          cp index.html 404.html
+          git add .
+          git commit -m $GITHUB_SHA
+          git push
