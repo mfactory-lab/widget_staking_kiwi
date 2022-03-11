@@ -31,14 +31,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <cookie-modal />
   </q-layout>
 </template>
 
 <script lang="ts">
-  import CookieModal from '@/components/CookieModal.vue';
-
   export default {
-    components: { CookieModal },
+    components: {},
   };
 </script>
