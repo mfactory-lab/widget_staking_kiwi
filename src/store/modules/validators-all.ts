@@ -46,20 +46,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const apyInfos = ref<ApyInfo>();
   const nameFilter = ref('');
   const perPageOptions = ref([5, 10, 15, 25, 50]);
-  const sortParam = ref({
-    value: 'apyNum',
-    title: 'APY',
-  });
-  const sortOptions = ref([
-    {
-      value: 'apyNum',
-      title: 'APY',
-    },
-    {
-      value: 'totalStake',
-      title: 'Total staked',
-    },
-  ]);
+  const sortType = ref('desc');
+  const sortParam = ref('apyNum');
 
   watch(
     apyInfoAll,
@@ -147,7 +135,10 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const itemsSorted = computed(() => {
     console.log('[validators all] sort');
     return [...itemsFiltered.value].sort((a, b) => {
-      return b[sortParam.value.value] - a[sortParam.value.value];
+      if (sortType.value === 'asc') {
+        return a[sortParam.value] - b[sortParam.value];
+      }
+      return b[sortParam.value] - a[sortParam.value];
     });
   });
 
@@ -159,7 +150,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   return {
-    sortOptions,
+    sortType,
     sortParam,
     nameFilter,
     currentPage,

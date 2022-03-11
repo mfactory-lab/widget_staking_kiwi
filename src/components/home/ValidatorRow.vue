@@ -88,7 +88,7 @@
           text-color="primary"
           size="14px"
           padding="5px 32px 7px"
-          class="q-mr-md q-mt-md"
+          class="q-mr-md q-mt-md home-page__std-btn"
         />
       </router-link>
     </div>
@@ -101,7 +101,6 @@
   import { shortenAddress } from '@jpool/common/utils';
   import { storeToRefs } from 'pinia';
   import { useWalletStore } from '@/store';
-  import validatorsApps from '@/assets/img/validators-apps.png';
 
   export default defineComponent({
     components: {},
@@ -129,7 +128,6 @@
         shortAddress: computed(() =>
           props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
         ),
-        validatorsApps,
       };
     },
   });

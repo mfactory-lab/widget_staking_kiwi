@@ -34,6 +34,7 @@
           <div class="validators-list__title__text">Validators</div>
           <q-btn
             rounded
+            class="home-page__std-btn"
             color="primary"
             text-color="text-white"
             :disable="connectionLost"
@@ -45,35 +46,21 @@
         </div>
 
         <div class="q-pt-sm q-pb-lg row">
-          <q-input v-model="nameFilter" class="q-mr-md" label="Search by name" stack-label />
+          <q-input
+            v-model="nameFilter"
+            class="q-mr-md q-mb-xs q-mt-sm"
+            label="Search by name"
+            stack-label
+          />
 
-          <div class="column q-mr-auto">
-            <div class="validators-list__dropdown-label q-mt-sm">Sort by</div>
-            <q-btn-dropdown
-              class=""
-              :label="sortParam.title"
-              :model-value="false"
-              auto-close
-              color="text-white"
-              text-color="primary"
-            >
-              <q-list>
-                <q-item
-                  v-for="item in sortOptions"
-                  :key="item.value"
-                  clickable
-                  @click="sortParam = item"
-                >
-                  <q-item-section>
-                    {{ item.title }}
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
+          <div class="row q-mr-auto q-my-xs">
+            <sort-item title="Sort by APY" param="apyNum" @sort="sort" />
+            <sort-item title="Sort by Fee" param="feeNum" @sort="sort" />
+            <sort-item title="Sort by Stake" param="totalStake" @sort="sort" />
           </div>
 
-          <div class="column">
-            <div class="validators-list__dropdown-label q-mt-sm">Per page</div>
+          <div class="column q-my-xs items-center">
+            <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
             <q-btn-dropdown
               class=""
               :label="perPage"
@@ -81,6 +68,7 @@
               auto-close
               color="text-white"
               text-color="primary"
+              padding="8px 12px"
             >
               <q-list>
                 <q-item
@@ -161,9 +149,10 @@
     useValidatorsAllStore,
   } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
+  import SortItem from '@/components/home/SortItem.vue';
 
   export default defineComponent({
-    components: { ValidatorRow },
+    components: { ValidatorRow, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const stakeAccountStore = useStakeAccountStore();
@@ -172,7 +161,7 @@
 
       const { connectionLost } = storeToRefs(stakePoolStore);
       const {
-        sortOptions,
+        sortType,
         sortParam,
         nameFilter,
         currentPage,
@@ -198,7 +187,7 @@
       const cluster = computed(() => connectionStore.cluster);
 
       return {
-        sortOptions,
+        sortType,
         sortParam,
         nameFilter,
         currentPage,
@@ -211,6 +200,10 @@
         itemsSorted,
         itemsShowed,
         refresh,
+        sort: (param, type) => {
+          sortParam.value = param;
+          sortType.value = type;
+        },
       };
     },
   });
