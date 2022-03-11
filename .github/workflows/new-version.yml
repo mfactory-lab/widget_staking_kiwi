@@ -2,12 +2,12 @@ name: Development Build and Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths-ignore:
       - '.github/workflows/**'
       - '**.md'
 env:
-  URL: staking.kiwi
+  URL: dev.staking.kiwi
 
 jobs:
   build:
