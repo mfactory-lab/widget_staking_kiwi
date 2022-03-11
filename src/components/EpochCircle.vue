@@ -78,6 +78,7 @@
     left: calc(50% - 53px);
     bottom: 5px;
     @media (max-width: $breakpoint-sm) {
+      left: calc(60%);
       bottom: 50px;
     }
     @media (max-width: $breakpoint-xs) {
