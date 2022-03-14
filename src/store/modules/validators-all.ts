@@ -45,9 +45,28 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const perPage = ref(10);
   const apyInfos = ref<ApyInfo>();
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 25, 50]);
+  const perPageOptions = ref([5, 10, 15, 20, 30]);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
+  const additionalFilter = ref({ value: 'all', text: 'Show all' });
+  const additionalFilterOptions = ref([
+    {
+      value: 'all',
+      text: 'Show all',
+    },
+    {
+      value: 'nonPrivate',
+      text: 'Non-private',
+    },
+    {
+      value: 'except20',
+      text: 'Except top 20 by stake',
+    },
+    {
+      value: 'top20',
+      text: 'Top 20 by stake',
+    },
+  ]);
 
   watch(
     apyInfoAll,
@@ -124,16 +143,52 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const itemsFiltered = computed(() => {
     console.log('[validators all] filter');
-    if (nameFilter.value) {
-      return items.value.filter(
-        (item) => item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) > -1,
-      );
+    let array = [...items.value];
+    if (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') {
+      array.sort((a, b) => {
+        if (sortType.value === 'asc') {
+          return a.totalStake - b.totalStake;
+        }
+        return b.totalStake - a.totalStake;
+      });
+      if (additionalFilter.value.value === 'except20' && sortType.value === 'asc') {
+        array = array.slice(0, array.length - 20);
+      }
+      if (additionalFilter.value.value === 'top20' && sortType.value === 'asc') {
+        array = array.slice(-20);
+      }
+      if (additionalFilter.value.value === 'except20' && sortType.value === 'desc') {
+        array = array.slice(20);
+      }
+      if (additionalFilter.value.value === 'top20' && sortType.value === 'desc') {
+        array = array.slice(0, 20);
+      }
     }
-    return items.value;
+    if (nameFilter.value || additionalFilter.value.value === 'nonPrivate') {
+      return array.filter((item) => {
+        if (
+          nameFilter.value &&
+          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
+        ) {
+          return false;
+        }
+        if (additionalFilter.value.value === 'nonPrivate' && item.feeNum === 100) {
+          return false;
+        }
+        return true;
+      });
+    }
+    return array;
   });
 
   const itemsSorted = computed(() => {
     console.log('[validators all] sort');
+    if (
+      (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') &&
+      sortParam.value === 'totalStake'
+    ) {
+      return itemsFiltered.value;
+    }
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
         return a[sortParam.value] - b[sortParam.value];
@@ -157,6 +212,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     perPage,
     perPageOptions,
     pages,
+    additionalFilterOptions,
+    additionalFilter,
     itemsSorted,
     itemsShowed: computed(() =>
       itemsSorted.value.slice(

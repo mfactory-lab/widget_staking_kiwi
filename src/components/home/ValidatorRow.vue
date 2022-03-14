@@ -69,28 +69,35 @@
         APY: <b>{{ item.apy }}</b>
       </div>
     </div>
-    <div class="validator-row__stake column q-mr-sm q-mt-sm justify-start">
-      <q-skeleton v-if="loading" width="100%" />
-      <div class="column validator-row__stake__values q-mt-xs" v-else>
-        <div class="validator-row__stake__sol"
-          ><span>TOTAL:</span> <b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
-        >
-      </div>
-    </div>
     <div class="validator-row__btns column q-mt-sm justify-start">
-      <q-skeleton class="q-mt-md q-mr-md" v-if="loading" width="106px" />
-      <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
-        <q-btn
-          v-bind="buttonProps(props)"
-          rounded
-          label="Stake"
-          color="warning"
-          text-color="primary"
-          size="14px"
-          padding="5px 32px 7px"
-          class="q-mr-md q-mt-md home-page__std-btn"
-        />
-      </router-link>
+      <div class="row justify-between">
+        <div class="validator-row__stake column q-mr-sm justify-start">
+          <q-skeleton v-if="loading" width="100%" />
+          <div class="column validator-row__stake__values q-mt-xs" v-else>
+            <div class="validator-row__stake__sol"
+              ><span>TOTAL:</span> <b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
+            >
+          </div>
+        </div>
+        <q-skeleton class="" v-if="loading" width="106px" />
+        <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
+          <q-btn
+            v-bind="buttonProps(props)"
+            rounded
+            label="Stake"
+            color="warning"
+            text-color="primary"
+            size="14px"
+            padding="5px 32px 7px"
+            class="q-mt-xs home-page__std-btn"
+          />
+        </router-link>
+      </div>
+      <q-skeleton width="377px" style="max-width: 100%" class="q-mt-xs q-ml-sm" v-if="loading" />
+      <div class="text-right q-mt-xs" v-else>
+        <span class="validator-item__address__text">{{ item.voter }}</span>
+        <copy-to-clipboard :text="item.voter" />
+      </div>
     </div>
   </div>
 </template>
@@ -101,9 +108,10 @@
   import { shortenAddress } from '@jpool/common/utils';
   import { storeToRefs } from 'pinia';
   import { useWalletStore } from '@/store';
+  import CopyToClipboard from '@/components/CopyToClipboard.vue';
 
   export default defineComponent({
-    components: {},
+    components: { CopyToClipboard },
     props: {
       loading: {
         type: Boolean,

@@ -58,13 +58,14 @@
   }
   &__beta {
     font-weight: 7;
-    font-size: 19px;
-    line-height: 22px;
+    font-size: 12px;
+    line-height: 14px;
     text-transform: uppercase;
-    color: #E60000;
     margin-top: -115px;
     margin-left: -15px;
     margin-right: -125px;
+    font-weight: 500;
+    font-family: $font-secondary;
     @media (max-width: 340px) {
       font-size: 15px;
     }

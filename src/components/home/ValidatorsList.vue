@@ -30,59 +30,131 @@
   <section class="validators-list">
     <div class="validators-list__main">
       <div class="container">
-        <div class="validators-list__title container q-pt-md q-pb-sm">
-          <div class="validators-list__title__text">Validators</div>
-          <q-btn
-            rounded
-            class="home-page__std-btn"
-            color="primary"
-            text-color="text-white"
-            :disable="connectionLost"
-            padding="4px 17px"
-            @click="refresh"
+        <div class="validators-list__title q-pt-md q-pb-sm row">
+          <div class="col-12 col-md-4"></div>
+          <div
+            class="validators-list__title__text col-12 col-sm-4"
+            :class="{ 'text-center': $q.screen.lt.sm || $q.screen.gt.sm }"
+            >Validators</div
           >
-            Refresh
-          </q-btn>
+          <div
+            class="col-12 col-sm-8 col-md-4 row"
+            :class="{ 'justify-center': $q.screen.lt.sm, 'justify-end': $q.screen.gt.xs }"
+          >
+            <q-btn
+              rounded
+              class="home-page__std-btn"
+              color="gray-dark-theme"
+              text-color="text-white"
+              :disable="connectionLost"
+              padding="4px 17px"
+              @click="refresh"
+            >
+              Refresh
+            </q-btn>
+            <q-btn
+              rounded
+              class="home-page__std-btn q-ml-md"
+              color="warning"
+              text-color="primary"
+              :disable="connectionLost"
+              padding="4px 17px"
+              @click="top20Stake"
+            >
+              TOP 20 BY STAKE
+            </q-btn>
+          </div>
         </div>
 
         <div class="q-pt-sm q-pb-lg row">
           <q-input
             v-model="nameFilter"
             class="q-mr-md q-mb-xs q-mt-sm"
+            :class="{ 'full-width': $q.screen.lt.md }"
             label="Search by name"
             stack-label
           />
 
-          <div class="row q-mr-auto q-my-xs">
-            <sort-item title="Sort by APY" param="apyNum" @sort="sort" />
-            <sort-item title="Sort by Fee" param="feeNum" @sort="sort" />
-            <sort-item title="Sort by Stake" param="totalStake" @sort="sort" />
+          <div
+            class="row q-mr-auto q-my-xs col-12 col-sm-auto"
+            :class="{ 'justify-between': $q.screen.lt.sm }"
+          >
+            <sort-item
+              title="Sort by APY"
+              param="apyNum"
+              @sort="sort"
+              :current-param="sortParam"
+              :current-type="sortType"
+            />
+            <sort-item
+              title="Sort by Fee"
+              param="feeNum"
+              @sort="sort"
+              :current-param="sortParam"
+              :current-type="sortType"
+              add-class="q-ml-lg"
+            />
+            <sort-item
+              title="Sort by Stake"
+              param="totalStake"
+              @sort="sort"
+              :current-param="sortParam"
+              :current-type="sortType"
+              add-class="q-ml-lg"
+            />
           </div>
 
-          <div class="column q-my-xs items-center">
-            <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
-            <q-btn-dropdown
-              class=""
-              :label="perPage"
-              :model-value="false"
-              auto-close
-              color="text-white"
-              text-color="primary"
-              padding="8px 12px"
-            >
-              <q-list>
-                <q-item
-                  v-for="item in perPageOptions"
-                  :key="item"
-                  clickable
-                  @click="perPage = item"
-                >
-                  <q-item-section>
-                    {{ item }}
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
+          <div class="row justify-end" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
+            <div class="column q-my-xs">
+              <div class="validators-list__dropdown-label q-mb-xs">Filter</div>
+              <q-btn-dropdown
+                class=""
+                :label="additionalFilter.text"
+                :model-value="false"
+                auto-close
+                text-color="text-white"
+                color="primary"
+                padding="9px 12px 7px"
+              >
+                <q-list>
+                  <q-item
+                    v-for="item in additionalFilterOptions"
+                    :key="item.value"
+                    clickable
+                    @click="additionalFilter = item"
+                  >
+                    <q-item-section>
+                      {{ item.text }}
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
+              <q-btn-dropdown
+                class=""
+                :label="perPage"
+                :model-value="false"
+                auto-close
+                text-color="text-white"
+                color="primary"
+                padding="9px 12px 7px"
+              >
+                <q-list>
+                  <q-item
+                    v-for="item in perPageOptions"
+                    :key="item"
+                    clickable
+                    @click="perPage = item"
+                  >
+                    <q-item-section>
+                      {{ item }}
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </div>
           </div>
         </div>
 
@@ -90,7 +162,9 @@
           <q-card-section class="validators-list__list__head validator-row row justify-between">
             <div class="validator-row__name column q-mr-sm justify-start">VALIDATOR</div>
             <div class="validator-row__apy column q-mr-sm q-pl-sm justify-start">REWARDS</div>
-            <div class="validator-row__stake column q-mr-sm justify-start">TOTAL STAKE</div>
+            <div class="validator-row__stake column q-mr-sm justify-start"
+              >TOTAL STAKE & VOTE KEY</div
+            >
             <div class="validator-row__btns column justify-start"></div>
           </q-card-section>
 
@@ -122,7 +196,7 @@
           <q-pagination
             v-model="currentPage"
             :max="pages"
-            :max-pages="5"
+            :max-pages="$q.screen.gt.sm ? 14 : 5"
             direction-links
             boundary-links
             :color="$q.dark.isActive ? 'text-white' : 'primary'"
@@ -170,6 +244,8 @@
         pages,
         itemsSorted,
         itemsShowed,
+        additionalFilterOptions,
+        additionalFilter,
       } = storeToRefs(useValidatorsAllStore());
 
       const refresh = async () => {
@@ -194,6 +270,8 @@
         perPage,
         perPageOptions,
         pages,
+        additionalFilterOptions,
+        additionalFilter,
         cluster,
         connectionLost,
         loading: computed(() => validatorStore.loading),
@@ -203,6 +281,12 @@
         sort: (param, type) => {
           sortParam.value = param;
           sortType.value = type;
+        },
+        top20Stake: () => {
+          additionalFilter.value = {
+            value: 'top20',
+            text: 'Top 20 by stake',
+          };
         },
       };
     },

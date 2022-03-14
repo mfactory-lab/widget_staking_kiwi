@@ -27,20 +27,20 @@
   -->
 
 <template>
-  <div class="validators-list__sorter column q-px-sm items-center">
-    <div class="validators-list__dropdown-label q-mb-xs">{{ title }}</div>
+  <div class="validators-list__sorter column q-mb-sm items-center" :class="addClass">
+    <div class="validators-list__dropdown-label q-mb-xs full-width">{{ title }}</div>
     <div class="row">
       <q-btn
         padding="sm"
-        class="q-mx-sm"
-        color="primary"
+        class="q-mr-sm"
+        :color="currentParam === param && currentType === 'desc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('desc')"
         :icon="'img:' + sortUp"
       />
       <q-btn
         padding="sm"
-        class="q-mx-sm"
-        color="primary"
+        class="q-ml-sm"
+        :color="currentParam === param && currentType === 'asc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('asc')"
         :icon="'img:' + sortDown"
       />
@@ -61,7 +61,19 @@
       },
       param: {
         type: String,
-        default: '#FFCD29',
+        default: '',
+      },
+      addClass: {
+        type: String,
+        default: '',
+      },
+      currentParam: {
+        type: String,
+        default: '',
+      },
+      currentType: {
+        type: String,
+        default: '',
       },
     },
     emits: ['sort'],

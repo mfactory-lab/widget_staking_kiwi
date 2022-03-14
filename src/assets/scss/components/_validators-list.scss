@@ -51,6 +51,9 @@
   .q-field__native {
     font-size: 16px;
   }
+  .q-field__control {
+    height: 58px;
+  }
   .q-field--float .q-field__label {
     color: $text-black;
     top: 6px;
@@ -83,9 +86,6 @@
       line-height: 27px;
       text-transform: uppercase;
       color: $primary;
-      @media (min-width: $breakpoint-xs) {
-        margin-right: 24px;
-      }
       @media (max-width: $breakpoint-xs) {
         margin-bottom: 8px;
         width: 100%;
@@ -183,9 +183,9 @@
 
 .validator-row {
   flex-wrap: nowrap;
-  width: 944px;
+  width: 960px;
   @media (max-width: $breakpoint-sm) {
-    width: 820px;
+    width: 836px;
   }
 
   .q-avatar__content {
@@ -242,6 +242,7 @@
     &__val {
       font-size: 24px;
       color: #000000;
+      margin-top: 3px;
     }
   }
 
@@ -264,6 +265,7 @@
 
   &__btns {
     margin-left: auto;
+    flex-grow: 1;
 
     &__stake {
       font-size: 12px;
