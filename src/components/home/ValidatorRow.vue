@@ -93,7 +93,7 @@
           />
         </router-link>
       </div>
-      <q-skeleton width="377px" style="max-width: 100%" class="q-mt-xs q-ml-sm" v-if="loading" />
+      <q-skeleton width="377px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
       <div class="text-right q-mt-xs" v-else>
         <span class="validator-item__address__text">{{ item.voter }}</span>
         <copy-to-clipboard :text="item.voter" />
