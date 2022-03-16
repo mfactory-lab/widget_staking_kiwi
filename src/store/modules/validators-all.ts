@@ -27,23 +27,19 @@
  */
 
 import { defineStore } from 'pinia';
-import { computed, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
-import { ApyInfo, useApyStore, useConnectionStore, useValidatorStore } from '@/store';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useConnectionStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
-import { PublicKey } from '@solana/web3.js';
 import { shortenAddress } from '@jpool/common/utils';
+import { ValidatorStats, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
-  const validatorStore = useValidatorStore();
 
-  const { apyInfoAll } = storeToRefs(useApyStore());
-  const voteAccounts = computed(() => validatorStore.voteAccounts);
-  const validatorsInfos = computed(() => validatorStore.validatorsInfos);
   const currentPage = ref(1);
   const perPage = ref(10);
-  const apyInfos = ref<ApyInfo>();
+  const validatorsStats = ref<Array<ValidatorStats>>([]);
+  const loading = ref(false);
   const nameFilter = ref('');
   const perPageOptions = ref([5, 10, 15, 20, 30]);
   const sortType = ref('desc');
@@ -68,26 +64,22 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     },
   ]);
 
-  watch(
-    apyInfoAll,
-    (apyInfoAll) => {
-      if (!apyInfos.value || apyInfos.value.lastEpoch !== apyInfoAll.lastEpoch) {
-        apyInfos.value = {
-          ...apyInfoAll,
-          validators: apyInfoAll.validators.map((item) => {
-            return {
-              ...item,
-            };
-          }),
-        };
-      }
-    },
-    { immediate: true },
-  );
+  const load = async () => {
+    const network = connectionStore.cluster.replace('-beta', '');
+    loading.value = true;
+    validatorsStats.value = await getValidatorsStats(network);
+    loading.value = false;
+  };
+
+  onMounted(async () => {
+    if (validatorsStats.value.length < 1) {
+      await load();
+    }
+  });
 
   const cluster = computed(() => connectionStore.cluster);
 
-  watch(cluster, validatorStore.load);
+  watch(cluster, load);
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
@@ -96,47 +88,33 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const items = computed(() => {
     // skeleton preloader
     console.log('[validators all] start');
-    if (validatorStore.loading) {
+    if (loading.value) {
       console.log('[validators all] skeleton');
       return Array(10).fill({});
     }
 
-    console.log('[validators all] calc ', voteAccounts.value.length);
-    const voteApy = apyInfos.value?.validators ?? [];
-
-    return voteAccounts.value.map((voteAccount) => {
-      const validatorInfo = validatorsInfos.value.find((info) =>
-        info.key.equals(new PublicKey(voteAccount.nodePubkey)),
-      );
-
-      const pubKey = voteAccount.nodePubkey;
-      const network = connectionStore.cluster.replace('-beta', '');
-
-      const info = {
-        id: pubKey,
-        feeNum: voteAccount.commission,
-        voter: voteAccount.votePubkey,
-        totalStake: voteAccount?.activatedStake,
-        name: validatorInfo?.info?.name ?? shortenAddress(pubKey),
-        details: validatorInfo?.info?.details,
-        website: validatorInfo?.info?.website,
-        keybaseUsername: validatorInfo?.info?.keybaseUsername,
-        image: validatorInfo?.info?.keybaseUsername
-          ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
-          : undefined,
-        url: `https://www.validators.app/validators/${network}/${pubKey}`,
-        lamports: 0,
-      };
-
-      const apyInfo = voteApy.find((v) => v.id == info.id);
-      const solTotal = lamportsToSol(info.totalStake);
+    console.log('[validators all] calc ', validatorsStats.value.length);
+    return validatorsStats.value.map((voteAccount) => {
+      const pubKey = voteAccount.validator_id;
+      const keybaseUsername = voteAccount.keybase_username;
+      const solTotal = lamportsToSol(Number(voteAccount.total_stake));
 
       return {
-        ...info,
-        fee: formatPct.format(info.feeNum / 100),
-        apy: formatPct.format(apyInfo?.apy ?? 0),
-        apyNum: apyInfo?.apy ?? 0,
+        id: pubKey,
+        apy: formatPct.format(voteAccount.apy ?? 0),
+        fee: formatPct.format(voteAccount.fee / 100),
+        apyNum: voteAccount.apy,
+        feeNum: voteAccount.fee,
+        voter: voteAccount.vote_id,
+        totalStake: voteAccount.total_stake,
         totalSolStacked: formatAmountPrice(solTotal),
+        name: voteAccount.name ?? shortenAddress(pubKey),
+        details: voteAccount.details,
+        website: voteAccount.website,
+        keybaseUsername: keybaseUsername,
+        image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
+        url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
+        lamports: 0,
       };
     });
   });
@@ -205,6 +183,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   return {
+    validatorsStats,
     sortType,
     sortParam,
     nameFilter,
@@ -221,5 +200,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         perPage.value * currentPage.value,
       ),
     ),
+    load,
+    loading,
   };
 });

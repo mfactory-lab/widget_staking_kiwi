@@ -246,11 +246,12 @@
         itemsShowed,
         additionalFilterOptions,
         additionalFilter,
+        load,
+        loading,
       } = storeToRefs(useValidatorsAllStore());
 
       const refresh = async () => {
-        await validatorStore.load();
-        await stakeAccountStore.load();
+        await load();
       };
 
       onMounted(async () => {
@@ -274,7 +275,7 @@
         additionalFilter,
         cluster,
         connectionLost,
-        loading: computed(() => validatorStore.loading),
+        loading,
         itemsSorted,
         itemsShowed,
         refresh,
