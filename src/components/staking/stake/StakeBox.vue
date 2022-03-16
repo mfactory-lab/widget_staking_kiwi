@@ -126,7 +126,7 @@
       </div>
       <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
         <div class="col-xs-12">
-          <apy-chart />
+          <apy-chart :voter-key="voterKey" />
         </div>
       </div>
     </q-card-section>
@@ -165,7 +165,13 @@
 <script lang="ts">
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useBalanceStore, useConnectionStore, useStakePoolStore, useWalletStore } from '@/store';
+  import {
+    useBalanceStore,
+    useConnectionStore,
+    useStakePoolStore,
+    useValidatorJstakingStore,
+    useWalletStore,
+  } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import Apy from '@/components/staking/Apy.vue';
@@ -188,6 +194,7 @@
       clickOutside,
     },
     setup() {
+      const { voterKey } = storeToRefs(useValidatorJstakingStore());
       const connectionStore = useConnectionStore();
       const { connected } = storeToRefs(useWalletStore());
       const { solBalance } = storeToRefs(useBalanceStore());
@@ -259,6 +266,7 @@
       };
 
       return {
+        voterKey,
         stake,
         cluster: computed(() => connectionStore.cluster),
         evaClose,

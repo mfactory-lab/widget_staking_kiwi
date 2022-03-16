@@ -40,7 +40,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
-  import { useConnectionStore, useEpochStore, useValidatorJstakingStore } from '@/store';
+  import { useConnectionStore, useEpochStore } from '@/store';
   import { storeToRefs } from 'pinia';
   import { API_URL } from '@/config';
   import SolSvg from '@/components/icons/SolSvg.vue';
@@ -60,13 +60,18 @@
     components: {
       SolSvg,
     },
-    setup() {
+    props: {
+      voterKey: {
+        type: String,
+        required: true,
+      },
+    },
+    setup(props) {
       const data = ref<ChartData>({
         name: '',
         data: [],
       });
       const categories = ref<Array<number | string>>([]);
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
       const { epochNumber } = storeToRefs(useEpochStore());
@@ -74,7 +79,7 @@
 
       async function getApyHistory() {
         return new Promise<Array<ApyStats>>((resolve, _reject) => {
-          fetch(`${API_URL}apy/history?voter_id=${voterKey.value}`)
+          fetch(`${API_URL}apy/history?voter_id=${props.voterKey}`)
             .then((res) => res.json())
             .then(
               (res) => {
@@ -93,7 +98,7 @@
       }
 
       watch(
-        [voterKey, epochNumber],
+        [props.voterKey, epochNumber],
         async () => {
           if (cluster.value === 'mainnet-beta') {
             const apyData = await getApyHistory();
@@ -109,7 +114,6 @@
       );
 
       return {
-        voterKey,
         categories,
         data,
         cluster,
