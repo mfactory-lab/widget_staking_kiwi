@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-  import { useValidatorStore } from '@/store';
+  import { useValidatorsAllStore } from '@/store';
   import { computed, defineComponent } from 'vue';
   import SolSvg from '@/components/icons/SolSvg.vue';
 
@@ -48,9 +48,11 @@
       SolSvg,
     },
     setup() {
-      const validatorStore = useValidatorStore();
+      const validatorStore = useValidatorsAllStore();
       return {
-        validatorsCount: computed(() => validatorStore.voteAccounts.length),
+        validatorsCount: computed(() =>
+          validatorStore.loading ? 'loading...' : validatorStore.items.length,
+        ),
       };
     },
   });

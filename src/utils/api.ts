@@ -44,8 +44,8 @@ export interface ValidatorStats {
 
 export async function getValidatorsStats(netwotk) {
   return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
-    // fetch(`http://localhost:3000/validators/list?network=${netwotk}`)
-    fetch(`${API_URL}validators/list?netwotk=${netwotk}`)
+    fetch(`http://localhost:3000/validators/list?network=${netwotk}`)
+    // fetch(`${API_URL}validators/list?netwotk=${netwotk}`)
       .then((res) => res.json())
       .then(
         (res) => {

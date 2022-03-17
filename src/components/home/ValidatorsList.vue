@@ -52,17 +52,6 @@
             >
               Refresh
             </q-btn>
-            <q-btn
-              rounded
-              class="home-page__std-btn q-ml-md"
-              color="warning"
-              text-color="primary"
-              :disable="connectionLost"
-              padding="4px 17px"
-              @click="top20Stake"
-            >
-              TOP 20 BY STAKE
-            </q-btn>
           </div>
         </div>
 
@@ -71,7 +60,7 @@
             v-model="nameFilter"
             class="q-mr-md q-mb-xs q-mt-sm"
             :class="{ 'full-width': $q.screen.lt.md }"
-            label="Search by name"
+            label="Search"
             stack-label
           />
 
@@ -106,29 +95,28 @@
 
           <div class="row justify-end" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
             <div class="column q-my-xs">
-              <div class="validators-list__dropdown-label q-mb-xs">Filter</div>
-              <q-btn-dropdown
-                class=""
-                :label="additionalFilter.text"
-                :model-value="false"
-                auto-close
-                text-color="text-white"
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
+              <q-toggle
+                v-model="filterPrivate"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
                 color="primary"
-                padding="9px 12px 7px"
-              >
-                <q-list>
-                  <q-item
-                    v-for="item in additionalFilterOptions"
-                    :key="item.value"
-                    clickable
-                    @click="additionalFilter = item"
-                  >
-                    <q-item-section>
-                      {{ item.text }}
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
+              <q-toggle
+                v-model="filterTop33"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="primary"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
             </div>
             <div class="column q-my-xs q-ml-md">
               <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
@@ -244,8 +232,8 @@
         pages,
         itemsSorted,
         itemsShowed,
-        additionalFilterOptions,
-        additionalFilter,
+        filterPrivate,
+        filterTop33,
         load,
         loading,
       } = storeToRefs(useValidatorsAllStore());
@@ -271,8 +259,8 @@
         perPage,
         perPageOptions,
         pages,
-        additionalFilterOptions,
-        additionalFilter,
+        filterPrivate,
+        filterTop33,
         cluster,
         connectionLost,
         loading,
@@ -282,12 +270,6 @@
         sort: (param, type) => {
           sortParam.value = param;
           sortType.value = type;
-        },
-        top20Stake: () => {
-          additionalFilter.value = {
-            value: 'top20',
-            text: 'Top 20 by stake',
-          };
         },
       };
     },

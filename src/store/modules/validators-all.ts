@@ -44,25 +44,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const perPageOptions = ref([5, 10, 15, 20, 30]);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
-  const additionalFilter = ref({ value: 'all', text: 'Show all' });
-  const additionalFilterOptions = ref([
-    {
-      value: 'all',
-      text: 'Show all',
-    },
-    {
-      value: 'nonPrivate',
-      text: 'Non-private',
-    },
-    {
-      value: 'except20',
-      text: 'Except top 20 by stake',
-    },
-    {
-      value: 'top20',
-      text: 'Top 20 by stake',
-    },
-  ]);
+  const filterTop33 = ref(false);
+  const filterPrivate = ref(false);
 
   const load = async () => {
     const network = connectionStore.cluster.replace('-beta', '');
@@ -114,6 +97,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         keybaseUsername: keybaseUsername,
         image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
         url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
+        inTop33: voteAccount.in_top_33,
         lamports: 0,
       };
     });
@@ -121,38 +105,24 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const itemsFiltered = computed(() => {
     console.log('[validators all] filter');
-    let array = [...items.value];
-    if (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') {
-      array.sort((a, b) => {
-        if (sortType.value === 'asc') {
-          return a.totalStake - b.totalStake;
-        }
-        return b.totalStake - a.totalStake;
-      });
-      if (additionalFilter.value.value === 'except20' && sortType.value === 'asc') {
-        array = array.slice(0, array.length - 20);
-      }
-      if (additionalFilter.value.value === 'top20' && sortType.value === 'asc') {
-        array = array.slice(-20);
-      }
-      if (additionalFilter.value.value === 'except20' && sortType.value === 'desc') {
-        array = array.slice(20);
-      }
-      if (additionalFilter.value.value === 'top20' && sortType.value === 'desc') {
-        array = array.slice(0, 20);
-      }
-    }
-    if (nameFilter.value || additionalFilter.value.value === 'nonPrivate') {
+    const array = [...items.value];
+    if (nameFilter.value || filterPrivate.value || filterTop33.value) {
       return array.filter((item) => {
         if (
           nameFilter.value &&
-          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
+          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
+          item.voter.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
+          item.id.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
         ) {
           return false;
         }
-        if (additionalFilter.value.value === 'nonPrivate' && item.feeNum === 100) {
+        if (filterPrivate.value && item.feeNum === 100) {
           return false;
         }
+        if (filterTop33.value && item.inTop33) {
+          return false;
+        }
+
         return true;
       });
     }
@@ -161,12 +131,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const itemsSorted = computed(() => {
     console.log('[validators all] sort');
-    if (
-      (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') &&
-      sortParam.value === 'totalStake'
-    ) {
-      return itemsFiltered.value;
-    }
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
         return a[sortParam.value] - b[sortParam.value];
@@ -191,8 +155,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     perPage,
     perPageOptions,
     pages,
-    additionalFilterOptions,
-    additionalFilter,
+    filterPrivate,
+    filterTop33,
+    items,
     itemsSorted,
     itemsShowed: computed(() =>
       itemsSorted.value.slice(
