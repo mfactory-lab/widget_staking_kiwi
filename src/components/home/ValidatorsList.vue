@@ -150,10 +150,12 @@
           <q-card-section class="validators-list__list__head validator-row row justify-between">
             <div class="validator-row__name column q-mr-sm justify-start">VALIDATOR</div>
             <div class="validator-row__apy column q-mr-sm q-pl-sm justify-start">REWARDS</div>
-            <div class="validator-row__stake column q-mr-sm justify-start"
+            <div class="validator-row__apy-chart column q-mr-sm q-pl-sm justify-start"
+              >HISTORY APY</div
+            >
+            <div class="validator-row__btns column justify-start q-pl-sm"
               >TOTAL STAKE & VOTE KEY</div
             >
-            <div class="validator-row__btns column justify-start"></div>
           </q-card-section>
 
           <div class="validators-list__list">

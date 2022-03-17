@@ -28,9 +28,15 @@
 
 <template>
   <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">
-    <div class="apy-chart__title">HISTORIC APY</div>
+    <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
     <div>
-      <apexchart width="100%" height="84px" type="area" :options="chartOptions" :series="[data]" />
+      <apexchart
+        width="100%"
+        :height="height"
+        type="area"
+        :options="chartOptions"
+        :series="[data]"
+      />
     </div>
   </div>
   <div class="apy-chart" v-else>
@@ -64,6 +70,18 @@
       voterKey: {
         type: String,
         required: true,
+      },
+      showYAxis: {
+        type: Boolean,
+        default: true,
+      },
+      showTitle: {
+        type: Boolean,
+        default: true,
+      },
+      height: {
+        type: String,
+        default: '84px',
       },
     },
     setup(props) {
@@ -193,7 +211,7 @@
               show: false,
             },
             labels: {
-              show: true,
+              show: props.showYAxis,
               offsetX: -8,
               style: {
                 colors: [dark.isActive ? '#ffffff90' : '#707585'],

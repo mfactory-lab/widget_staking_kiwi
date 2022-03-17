@@ -104,9 +104,7 @@
 
   &__list {
     width: 990px !important;
-    @media (max-width: $breakpoint-sm) {
-      width: 866px !important;
-    }
+    overflow-y: hidden;
     
     &__head {
       background: $primary;
@@ -120,15 +118,9 @@
       justify-content: flex-end;
       align-items: center;
       width: 990px !important;
-      @media (max-width: $breakpoint-sm) {
-        width: 866px !important;
-      }
 
       .validator-row__name {
-        width: 408px;
-        @media (max-width: $breakpoint-sm) {
-          width: 308px;
-        }
+        width: 295px;
       }
       > div:not(:last-child) {
         align-items: flex-start;
@@ -184,9 +176,6 @@
 .validator-row {
   flex-wrap: nowrap;
   width: 960px;
-  @media (max-width: $breakpoint-sm) {
-    width: 836px;
-  }
 
   .q-avatar__content {
     text-align: center;
@@ -202,10 +191,8 @@
 
   &__name {
     font-weight: 500;
-    width: 332px;
-    @media (max-width: $breakpoint-sm) {
-      width: 232px;
-    }
+    width: 219px;
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -228,7 +215,7 @@
   }
 
   &__apy {
-    width: 150px;
+    width: 140px;
     font-weight: 500;
     align-items: flex-end;
     border-right: 1px solid $light-gray;
@@ -240,10 +227,15 @@
     }
 
     &__val {
-      font-size: 24px;
+      font-size: 22px;
       color: #000000;
       margin-top: 3px;
     }
+  }
+
+  &__apy-chart {
+    width: 170px;
+    border-right: 1px solid $light-gray;
   }
 
   &__stake {
@@ -263,12 +255,26 @@
     }
   }
 
+  &__address {
+    &__text {
+      font-size: 11px;
+      color: $dark;
+    }
+  }
+
   &__btns {
     margin-left: auto;
     flex-grow: 1;
 
     &__stake {
       font-size: 12px;
+    }
+  }
+
+  .apy-chart {
+    padding: 0;
+    .q-icon {
+      height: 50px;
     }
   }
 }
