@@ -28,13 +28,14 @@
 
 import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useConnectionStore } from '@/store';
+import { useConnectionStore, useEpochStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { shortenAddress } from '@jpool/common/utils';
 import { ValidatorStats, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
+  const epochStore = useEpochStore();
 
   const currentPage = ref(1);
   const perPage = ref(10);
@@ -47,22 +48,27 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const filterTop33 = ref(false);
   const filterPrivate = ref(false);
 
-  const load = async () => {
-    const network = connectionStore.cluster.replace('-beta', '');
-    loading.value = true;
-    validatorsStats.value = await getValidatorsStats(network);
-    loading.value = false;
+  const loadAllValidators = async () => {
+    console.log('[validators all] loadAllValidators');
+    if (!loading.value) {
+      const network = connectionStore.cluster.replace('-beta', '');
+      loading.value = true;
+      validatorsStats.value = await getValidatorsStats(network);
+      loading.value = false;
+    }
   };
 
   onMounted(async () => {
+    // console.log('[validators all] onMounted store all');
     if (validatorsStats.value.length < 1) {
-      await load();
+      await loadAllValidators();
     }
   });
 
   const cluster = computed(() => connectionStore.cluster);
+  const epoch = computed(() => epochStore.epochNumber);
 
-  watch(cluster, load);
+  watch([cluster, epoch], loadAllValidators);
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
@@ -70,17 +76,17 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const items = computed(() => {
     // skeleton preloader
-    console.log('[validators all] start');
+    // console.log('[validators all] start');
     if (loading.value) {
-      console.log('[validators all] skeleton');
+      // console.log('[validators all] skeleton');
       return Array(10).fill({});
     }
 
-    console.log('[validators all] calc ', validatorsStats.value.length);
+    // console.log('[validators all] calc ', validatorsStats.value.length);
     return validatorsStats.value.map((voteAccount) => {
-      const pubKey = voteAccount.validator_id;
-      const keybaseUsername = voteAccount.keybase_username;
-      const solTotal = lamportsToSol(Number(voteAccount.total_stake));
+      const pubKey = voteAccount.validatorId;
+      const keybaseUsername = voteAccount.keybaseUsername;
+      const solTotal = lamportsToSol(Number(voteAccount.totalStake));
 
       return {
         id: pubKey,
@@ -88,8 +94,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         fee: formatPct.format(voteAccount.fee / 100),
         apyNum: voteAccount.apy,
         feeNum: voteAccount.fee,
-        voter: voteAccount.vote_id,
-        totalStake: voteAccount.total_stake,
+        voter: voteAccount.voteId,
+        totalStake: voteAccount.totalStake,
         totalSolStacked: formatAmountPrice(solTotal),
         name: voteAccount.name ?? shortenAddress(pubKey),
         details: voteAccount.details,
@@ -97,14 +103,15 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         keybaseUsername: keybaseUsername,
         image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
         url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
-        inTop33: voteAccount.in_top_33,
+        inTop33: voteAccount.inTop33,
+        isDelinquent: voteAccount.isDelinquent,
         lamports: 0,
       };
     });
   });
 
   const itemsFiltered = computed(() => {
-    console.log('[validators all] filter');
+    // console.log('[validators all] filter');
     const array = [...items.value];
     if (nameFilter.value || filterPrivate.value || filterTop33.value) {
       return array.filter((item) => {
@@ -130,7 +137,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   const itemsSorted = computed(() => {
-    console.log('[validators all] sort');
+    // console.log('[validators all] sort');
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
         return a[sortParam.value] - b[sortParam.value];
@@ -165,7 +172,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         perPage.value * currentPage.value,
       ),
     ),
-    load,
+    loadAllValidators,
     loading,
   };
 });

@@ -148,10 +148,6 @@
       index: Number,
       loading: Boolean,
       jpoolPossible: Boolean,
-      onlyDeposit: {
-        type: Boolean,
-        default: false,
-      },
       stakeAccount: {
         type: Object as () => ProgramAccount,
         required: true,

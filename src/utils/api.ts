@@ -29,23 +29,23 @@
 import { API_URL } from '@/config';
 
 export interface ValidatorStats {
-  vote_id: string;
-  validator_id: string;
+  voteId: string;
+  validatorId: string;
   fee: number;
   apy: number;
-  total_stake: number;
+  totalStake: number;
   network: string;
   name: string | undefined;
   details: string | undefined;
   website: string | undefined;
-  keybase_username: string | undefined;
-  in_top_33: boolean;
+  keybaseUsername: string | undefined;
+  inTop33: boolean;
+  isDelinquent: boolean;
 }
 
-export async function getValidatorsStats(netwotk) {
+export async function getValidatorsStats(network) {
   return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
-    fetch(`http://localhost:3000/validators/list?network=${netwotk}`)
-    // fetch(`${API_URL}validators/list?netwotk=${netwotk}`)
+    fetch(`${API_URL}validators/list?network=${network}`)
       .then((res) => res.json())
       .then(
         (res) => {

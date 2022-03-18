@@ -271,6 +271,12 @@
     }
   }
 
+  &__status-badge {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
   .apy-chart {
     padding: 0;
     .q-icon {
@@ -307,6 +313,11 @@ body.body--dark {
     }
     &__stake__sol {
       color: $text-white;
+    }
+    &__address {
+      &__text {
+        color: $text-white;
+      }
     }
   }
   .stake-accounts-container {

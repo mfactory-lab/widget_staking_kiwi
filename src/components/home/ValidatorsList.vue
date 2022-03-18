@@ -207,7 +207,7 @@
   import { storeToRefs } from 'pinia';
   import {
     useConnectionStore,
-    useStakeAccountStore,
+    // useStakeAccountStore,
     useStakePoolStore,
     useValidatorStore,
     useValidatorsAllStore,
@@ -219,11 +219,12 @@
     components: { ValidatorRow, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
-      const stakeAccountStore = useStakeAccountStore();
+      // const stakeAccountStore = useStakeAccountStore();
       const stakePoolStore = useStakePoolStore();
       const validatorStore = useValidatorStore();
 
       const { connectionLost } = storeToRefs(stakePoolStore);
+      const validatorsAllStore = useValidatorsAllStore();
       const {
         sortType,
         sortParam,
@@ -236,19 +237,17 @@
         itemsShowed,
         filterPrivate,
         filterTop33,
-        load,
         loading,
-      } = storeToRefs(useValidatorsAllStore());
+      } = storeToRefs(validatorsAllStore);
 
       const refresh = async () => {
-        await load();
+        await validatorsAllStore.loadAllValidators();
       };
 
       onMounted(async () => {
         if (validatorStore.data.length < 1) {
           await validatorStore.load();
         }
-        await stakeAccountStore.load();
       });
 
       const cluster = computed(() => connectionStore.cluster);

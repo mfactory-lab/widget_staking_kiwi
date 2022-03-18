@@ -30,7 +30,7 @@
   <div class="validator-row row justify-between q-pb-md">
     <div class="validator-row__logo column q-mr-md q-mt-sm justify-center">
       <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-      <a v-else :href="item.url" target="_blank">
+      <a v-else :href="item.url" class="relative-position" target="_blank">
         <q-avatar class="shadow-1" size="60px">
           <q-img :src="item.image" spinner-color="white">
             <template #default v-if="!item.image">
@@ -41,6 +41,14 @@
             </template>
           </q-img>
         </q-avatar>
+        <q-badge
+          v-if="item.isDelinquent"
+          class="validator-row__status-badge"
+          color="warning"
+          text-color="text-white"
+        >
+          Delinquent
+        </q-badge>
       </a>
     </div>
     <div class="validator-row__name column q-mr-sm q-mt-sm justify-start">
@@ -103,7 +111,7 @@
           />
         </router-link>
       </div>
-      <q-skeleton width="335px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
+      <q-skeleton width="323px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
       <div class="text-right q-mt-xs" v-else>
         <span class="validator-row__address__text">{{ item.voter }}</span>
         <copy-to-clipboard :text="item.voter" />

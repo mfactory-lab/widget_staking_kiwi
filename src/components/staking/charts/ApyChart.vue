@@ -116,7 +116,7 @@
       }
 
       watch(
-        [props.voterKey, epochNumber],
+        [epochNumber],
         async () => {
           if (cluster.value === 'mainnet-beta') {
             const apyData = await getApyHistory();
