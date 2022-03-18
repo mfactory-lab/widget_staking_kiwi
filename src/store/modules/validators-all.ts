@@ -27,67 +27,48 @@
  */
 
 import { defineStore } from 'pinia';
-import { computed, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
-import { ApyInfo, useApyStore, useConnectionStore, useValidatorStore } from '@/store';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useConnectionStore, useEpochStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
-import { PublicKey } from '@solana/web3.js';
 import { shortenAddress } from '@jpool/common/utils';
+import { ValidatorStats, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
-  const validatorStore = useValidatorStore();
+  const epochStore = useEpochStore();
 
-  const { apyInfoAll } = storeToRefs(useApyStore());
-  const voteAccounts = computed(() => validatorStore.voteAccounts);
-  const validatorsInfos = computed(() => validatorStore.validatorsInfos);
   const currentPage = ref(1);
   const perPage = ref(10);
-  const apyInfos = ref<ApyInfo>();
+  const validatorsStats = ref<Array<ValidatorStats>>([]);
+  const loading = ref(false);
   const nameFilter = ref('');
   const perPageOptions = ref([5, 10, 15, 20, 30]);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
-  const additionalFilter = ref({ value: 'all', text: 'Show all' });
-  const additionalFilterOptions = ref([
-    {
-      value: 'all',
-      text: 'Show all',
-    },
-    {
-      value: 'nonPrivate',
-      text: 'Non-private',
-    },
-    {
-      value: 'except20',
-      text: 'Except top 20 by stake',
-    },
-    {
-      value: 'top20',
-      text: 'Top 20 by stake',
-    },
-  ]);
+  const filterTop33 = ref(false);
+  const filterPrivate = ref(false);
 
-  watch(
-    apyInfoAll,
-    (apyInfoAll) => {
-      if (!apyInfos.value || apyInfos.value.lastEpoch !== apyInfoAll.lastEpoch) {
-        apyInfos.value = {
-          ...apyInfoAll,
-          validators: apyInfoAll.validators.map((item) => {
-            return {
-              ...item,
-            };
-          }),
-        };
-      }
-    },
-    { immediate: true },
-  );
+  const loadAllValidators = async () => {
+    console.log('[validators all] loadAllValidators');
+    if (!loading.value) {
+      const network = connectionStore.cluster.replace('-beta', '');
+      loading.value = true;
+      validatorsStats.value = await getValidatorsStats(network);
+      loading.value = false;
+    }
+  };
+
+  onMounted(async () => {
+    // console.log('[validators all] onMounted store all');
+    if (validatorsStats.value.length < 1) {
+      await loadAllValidators();
+    }
+  });
 
   const cluster = computed(() => connectionStore.cluster);
+  const epoch = computed(() => epochStore.epochNumber);
 
-  watch(cluster, validatorStore.load);
+  watch([cluster, epoch], loadAllValidators);
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
@@ -95,86 +76,60 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const items = computed(() => {
     // skeleton preloader
-    console.log('[validators all] start');
-    if (validatorStore.loading) {
-      console.log('[validators all] skeleton');
+    // console.log('[validators all] start');
+    if (loading.value) {
+      // console.log('[validators all] skeleton');
       return Array(10).fill({});
     }
 
-    console.log('[validators all] calc ', voteAccounts.value.length);
-    const voteApy = apyInfos.value?.validators ?? [];
-
-    return voteAccounts.value.map((voteAccount) => {
-      const validatorInfo = validatorsInfos.value.find((info) =>
-        info.key.equals(new PublicKey(voteAccount.nodePubkey)),
-      );
-
-      const pubKey = voteAccount.nodePubkey;
-      const network = connectionStore.cluster.replace('-beta', '');
-
-      const info = {
-        id: pubKey,
-        feeNum: voteAccount.commission,
-        voter: voteAccount.votePubkey,
-        totalStake: voteAccount?.activatedStake,
-        name: validatorInfo?.info?.name ?? shortenAddress(pubKey),
-        details: validatorInfo?.info?.details,
-        website: validatorInfo?.info?.website,
-        keybaseUsername: validatorInfo?.info?.keybaseUsername,
-        image: validatorInfo?.info?.keybaseUsername
-          ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
-          : undefined,
-        url: `https://www.validators.app/validators/${network}/${pubKey}`,
-        lamports: 0,
-      };
-
-      const apyInfo = voteApy.find((v) => v.id == info.id);
-      const solTotal = lamportsToSol(info.totalStake);
+    // console.log('[validators all] calc ', validatorsStats.value.length);
+    return validatorsStats.value.map((voteAccount) => {
+      const pubKey = voteAccount.validatorId;
+      const keybaseUsername = voteAccount.keybaseUsername;
+      const solTotal = lamportsToSol(Number(voteAccount.totalStake));
 
       return {
-        ...info,
-        fee: formatPct.format(info.feeNum / 100),
-        apy: formatPct.format(apyInfo?.apy ?? 0),
-        apyNum: apyInfo?.apy ?? 0,
+        id: pubKey,
+        apy: formatPct.format(voteAccount.apy ?? 0),
+        fee: formatPct.format(voteAccount.fee / 100),
+        apyNum: voteAccount.apy,
+        feeNum: voteAccount.fee,
+        voter: voteAccount.voteId,
+        totalStake: voteAccount.totalStake,
         totalSolStacked: formatAmountPrice(solTotal),
+        name: voteAccount.name ?? shortenAddress(pubKey),
+        details: voteAccount.details,
+        website: voteAccount.website,
+        keybaseUsername: keybaseUsername,
+        image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
+        url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
+        inTop33: voteAccount.inTop33,
+        isDelinquent: voteAccount.isDelinquent,
+        lamports: 0,
       };
     });
   });
 
   const itemsFiltered = computed(() => {
-    console.log('[validators all] filter');
-    let array = [...items.value];
-    if (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') {
-      array.sort((a, b) => {
-        if (sortType.value === 'asc') {
-          return a.totalStake - b.totalStake;
-        }
-        return b.totalStake - a.totalStake;
-      });
-      if (additionalFilter.value.value === 'except20' && sortType.value === 'asc') {
-        array = array.slice(0, array.length - 20);
-      }
-      if (additionalFilter.value.value === 'top20' && sortType.value === 'asc') {
-        array = array.slice(-20);
-      }
-      if (additionalFilter.value.value === 'except20' && sortType.value === 'desc') {
-        array = array.slice(20);
-      }
-      if (additionalFilter.value.value === 'top20' && sortType.value === 'desc') {
-        array = array.slice(0, 20);
-      }
-    }
-    if (nameFilter.value || additionalFilter.value.value === 'nonPrivate') {
+    // console.log('[validators all] filter');
+    const array = [...items.value];
+    if (nameFilter.value || filterPrivate.value || filterTop33.value) {
       return array.filter((item) => {
         if (
           nameFilter.value &&
-          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
+          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
+          item.voter.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
+          item.id.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
         ) {
           return false;
         }
-        if (additionalFilter.value.value === 'nonPrivate' && item.feeNum === 100) {
+        if (filterPrivate.value && item.feeNum === 100) {
           return false;
         }
+        if (filterTop33.value && item.inTop33) {
+          return false;
+        }
+
         return true;
       });
     }
@@ -182,13 +137,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   const itemsSorted = computed(() => {
-    console.log('[validators all] sort');
-    if (
-      (additionalFilter.value.value === 'except20' || additionalFilter.value.value === 'top20') &&
-      sortParam.value === 'totalStake'
-    ) {
-      return itemsFiltered.value;
-    }
+    // console.log('[validators all] sort');
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
         return a[sortParam.value] - b[sortParam.value];
@@ -205,6 +154,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   return {
+    validatorsStats,
     sortType,
     sortParam,
     nameFilter,
@@ -212,8 +162,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     perPage,
     perPageOptions,
     pages,
-    additionalFilterOptions,
-    additionalFilter,
+    filterPrivate,
+    filterTop33,
+    items,
     itemsSorted,
     itemsShowed: computed(() =>
       itemsSorted.value.slice(
@@ -221,5 +172,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         perPage.value * currentPage.value,
       ),
     ),
+    loadAllValidators,
+    loading,
   };
 });

@@ -30,7 +30,7 @@
   <div class="validator-row row justify-between q-pb-md">
     <div class="validator-row__logo column q-mr-md q-mt-sm justify-center">
       <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-      <a v-else :href="item.url" target="_blank">
+      <a v-else :href="item.url" class="relative-position" target="_blank">
         <q-avatar class="shadow-1" size="60px">
           <q-img :src="item.image" spinner-color="white">
             <template #default v-if="!item.image">
@@ -41,6 +41,14 @@
             </template>
           </q-img>
         </q-avatar>
+        <q-badge
+          v-if="item.isDelinquent"
+          class="validator-row__status-badge"
+          color="warning"
+          text-color="text-white"
+        >
+          Delinquent
+        </q-badge>
       </a>
     </div>
     <div class="validator-row__name column q-mr-sm q-mt-sm justify-start">
@@ -69,9 +77,19 @@
         APY: <b>{{ item.apy }}</b>
       </div>
     </div>
+    <div class="validator-row__apy-chart column q-mr-sm q-mt-sm q-pr-sm justify-start">
+      <q-skeleton width="100%" height="58px" v-if="loading" />
+      <apy-chart
+        v-else
+        :voter-key="item.voter"
+        :show-y-axis="false"
+        :show-title="false"
+        height="66px"
+      />
+    </div>
     <div class="validator-row__btns column q-mt-sm justify-start">
       <div class="row justify-between">
-        <div class="validator-row__stake column q-mr-sm justify-start">
+        <div class="validator-row__stake column justify-start">
           <q-skeleton v-if="loading" width="100%" />
           <div class="column validator-row__stake__values q-mt-xs" v-else>
             <div class="validator-row__stake__sol"
@@ -93,9 +111,9 @@
           />
         </router-link>
       </div>
-      <q-skeleton width="377px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
+      <q-skeleton width="323px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
       <div class="text-right q-mt-xs" v-else>
-        <span class="validator-item__address__text">{{ item.voter }}</span>
+        <span class="validator-row__address__text">{{ item.voter }}</span>
         <copy-to-clipboard :text="item.voter" />
       </div>
     </div>
@@ -109,9 +127,10 @@
   import { storeToRefs } from 'pinia';
   import { useWalletStore } from '@/store';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
+  import ApyChart from '@/components/staking/charts/ApyChart.vue';
 
   export default defineComponent({
-    components: { CopyToClipboard },
+    components: { ApyChart, CopyToClipboard },
     props: {
       loading: {
         type: Boolean,
