@@ -117,7 +117,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       return array.filter((item) => {
         if (
           nameFilter.value &&
-          item.name.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
+          item.name?.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
           item.voter.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
           item.id.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
         ) {
