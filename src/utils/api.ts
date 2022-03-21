@@ -41,10 +41,12 @@ export interface ValidatorStats {
   keybaseUsername: string | undefined;
   inTop33: boolean;
   isDelinquent: boolean;
+  svName: string;
 }
 
 export async function getValidatorsStats(network) {
   return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
+    // fetch(`http://localhost:3000/validators/list?network=${network}`)
     fetch(`${API_URL}validators/list?network=${network}`)
       .then((res) => res.json())
       .then(

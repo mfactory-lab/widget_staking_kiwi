@@ -170,7 +170,7 @@
                     :key="item.name"
                     class="stake-accounts-container col-12 q-px-md q-pt-sm"
                   >
-                    <validator-row :item="item" :loading="loading" />
+                    <validator-row :item="item" :loading="loading" :cluster="cluster" />
                   </div>
                 </template>
                 <template v-else>

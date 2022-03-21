@@ -28,9 +28,9 @@
 
 <template>
   <div class="validator-row row justify-between q-pb-md">
-    <div class="validator-row__logo column q-mr-md q-mt-sm justify-center">
+    <div class="validator-row__logo column q-mr-md q-mt-sm justify-center relative-position">
       <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-      <a v-else :href="item.url" class="relative-position" target="_blank">
+      <a v-else :href="item.url" target="_blank">
         <q-avatar class="shadow-1" size="60px">
           <q-img :src="item.image" spinner-color="white">
             <template #default v-if="!item.image">
@@ -41,19 +41,32 @@
             </template>
           </q-img>
         </q-avatar>
+      </a>
+      <q-badge
+        v-if="!loading && item.isDelinquent"
+        class="validator-row__status-badge validator-row__status-badge--delinq"
+        color="warning"
+        text-color="text-white"
+      >
+        Delinquent
+      </q-badge>
+      <a
+        v-if="!loading && item.svName && cluster"
+        :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
+        target="_blank"
+      >
         <q-badge
-          v-if="item.isDelinquent"
-          class="validator-row__status-badge"
-          color="warning"
+          class="validator-row__status-badge validator-row__status-badge--sv"
+          color="red"
           text-color="text-white"
         >
-          Delinquent
+          SVM-MEMBER
         </q-badge>
       </a>
     </div>
     <div class="validator-row__name column q-mr-sm q-mt-sm justify-start">
       <q-skeleton width="100%" v-if="loading" />
-      <div v-else class="q-mt-xs">
+      <div v-else class="q-mt-sm">
         {{ item.name }}
         <q-tooltip class="text-body2">
           {{ item.name }}
@@ -139,6 +152,9 @@
       item: {
         type: Object,
         required: true,
+      },
+      cluster: {
+        type: String,
       },
     },
     setup(props) {

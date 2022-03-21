@@ -105,6 +105,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
         inTop33: voteAccount.inTop33,
         isDelinquent: voteAccount.isDelinquent,
+        svName: voteAccount.svName,
         lamports: 0,
       };
     });

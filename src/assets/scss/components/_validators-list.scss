@@ -273,8 +273,17 @@
 
   &__status-badge {
     position: absolute;
-    left: 0;
-    top: 0;
+    font-size: 8px;
+
+    &--delinq {
+      left: 5px;
+      top: 25px;
+    }
+
+    &--sv {
+      left: 15px;
+      top: -5px;
+    }
   }
 
   .apy-chart {
