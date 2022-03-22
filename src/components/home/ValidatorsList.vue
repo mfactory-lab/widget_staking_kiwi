@@ -58,7 +58,7 @@
         <div class="q-pt-sm q-pb-lg row">
           <q-input
             v-model="nameFilter"
-            class="q-mr-md q-mb-xs q-mt-sm"
+            class="q-mr-md q-mb-xs q-mt-sm validators-list__search"
             :class="{ 'full-width': $q.screen.lt.md }"
             label="Search"
             stack-label
@@ -148,29 +148,62 @@
 
         <q-card class="q-mb-md full-width validators-list__main">
           <q-card-section class="validators-list__list__head validator-row row justify-between">
-            <div class="validator-row__name column q-mr-sm justify-start">VALIDATOR</div>
-            <div class="validator-row__apy column q-mr-sm q-pl-sm justify-start">REWARDS</div>
-            <div class="validator-row__apy-chart column q-mr-sm q-pl-sm justify-start"
-              >HISTORY APY</div
-            >
-            <div class="validator-row__btns column justify-start q-pl-sm"
-              >TOTAL STAKE & VOTE KEY</div
-            >
+            <div class="validator-row__name row q-pr-md items-center justify-between">
+              <span>VALIDATOR</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="name"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+              />
+            </div>
+            <div class="validator-row__apy row q-pl-md q-pr-md items-center justify-between">
+              <span>REWARDS</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="apyNum"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+              />
+            </div>
+            <div class="validator-row__apy-chart row q-pl-md q-pr-md items-center justify-between">
+              <span>HISTORY APY</span>
+            </div>
+            <div class="validator-row__btns row q-pl-md items-center justify-between">
+              <span>TOTAL STAKE & VOTE KEY</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="totalStake"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+              />
+            </div>
           </q-card-section>
 
           <div class="validators-list__list">
             <div class="relative-position">
               <div
-                class="fit row wrap justify-start items-start content-start"
+                class="fit row wrap justify-start items-start q-px-md content-start"
                 style="min-height: 100px"
               >
                 <template v-if="itemsSorted.length">
                   <div
-                    v-for="item of itemsShowed"
-                    :key="item.name"
-                    class="stake-accounts-container col-12 q-px-md q-pt-sm"
+                    v-for="(item, index) of itemsShowed"
+                    :key="item.voter"
+                    class="stake-accounts-container col-12 q-px-none q-pt-sm"
                   >
-                    <validator-row :item="item" :loading="loading" :cluster="cluster" />
+                    <validator-row
+                      :item="item"
+                      :index="index + (currentPage - 1) * perPageNum + 1"
+                      :loading="loading"
+                      :cluster="cluster"
+                    />
                   </div>
                 </template>
                 <template v-else>
@@ -231,6 +264,7 @@
         nameFilter,
         currentPage,
         perPage,
+        perPageNum,
         perPageOptions,
         pages,
         itemsSorted,
@@ -258,6 +292,7 @@
         nameFilter,
         currentPage,
         perPage,
+        perPageNum,
         perPageOptions,
         pages,
         filterPrivate,

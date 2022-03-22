@@ -65,8 +65,7 @@
               <div class="faq-section__text__item">Done.</div>
               <div class="faq-section__text__item"
                 >Delegators can now stake to your validator directly on your website.
-              </div
-              >
+              </div>
             </div>
           </div>
           <div class="col-12 col-sm-5">

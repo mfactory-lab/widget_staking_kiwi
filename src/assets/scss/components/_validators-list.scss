@@ -49,7 +49,7 @@
 
 .validators-list {
   .q-field__native {
-    font-size: 16px;
+    font-size: 12px;
   }
   .q-field__control {
     height: 58px;
@@ -102,28 +102,45 @@
     font-size: 12px;
   }
 
+  &__search {
+    width: 320px;
+    max-width: 100%;
+  }
+
   &__list {
     width: 990px !important;
     overflow-y: hidden;
+    border-top: 1px solid $text-white;
     
     &__head {
       background: $primary;
       font-size: 14px;
-      line-height: 24px;
+      line-height: 20px;
       font-weight: 500;
-      height: 46px;
       padding-top: 16px;
       color: #fff;
       display: flex;
       justify-content: flex-end;
       align-items: center;
       width: 990px !important;
+      height: auto !important;
+
+      & > div {
+        height: 24px;
+      }
 
       .validator-row__name {
-        width: 295px;
+        width: 356px;
+        overflow: visible;
       }
-      > div:not(:last-child) {
-        align-items: flex-start;
+
+      .validators-list__sorter {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .q-btn {
+        font-size: 8px;
       }
     }
   }
@@ -175,7 +192,8 @@
 
 .validator-row {
   flex-wrap: nowrap;
-  width: 960px;
+  width: 958px;
+  height: 94px;
 
   .q-avatar__content {
     text-align: center;
@@ -183,6 +201,12 @@
     svg {
       fill: $grey-4;
     }
+  }
+
+  &__index {
+    width: 45px;
+    border-right: 1px solid $light-gray;
+    padding-right: 16px;
   }
 
   &__logo {
@@ -199,7 +223,7 @@
     border-right: 1px solid $light-gray;
     padding-right: 16px;
 
-    div {
+    &.column div {
       text-overflow: ellipsis;
       max-width: 100%;
       overflow: hidden;
@@ -215,7 +239,7 @@
   }
 
   &__apy {
-    width: 140px;
+    width: 159px;
     font-weight: 500;
     align-items: flex-end;
     border-right: 1px solid $light-gray;
@@ -223,28 +247,28 @@
 
     &__fee {
       font-size: 15px;
+      line-height: 16px;
       color: $primary;
     }
 
     &__val {
       font-size: 22px;
       color: #000000;
-      margin-top: 3px;
+      margin-top: 14px;
     }
   }
 
   &__apy-chart {
     width: 170px;
-    border-right: 1px solid $light-gray;
   }
 
   &__stake {
-    width: 220px;
-    padding-left: 8px;
+    width: 135px;
     padding-right: 16px;
 
     &__sol {
-      font-size: 16px;
+      font-size: 14px;
+      line-height: 17px;
       color: $almost-black;
     }
 
@@ -258,13 +282,22 @@
   &__address {
     &__text {
       font-size: 11px;
+      width: 230px;
+      display: inline-block;
+      font-family: 'Courier';
       color: $dark;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      height: 18px;
+      line-height: 28px;
     }
   }
 
   &__btns {
+    border-left: 1px solid $light-gray;
     margin-left: auto;
-    flex-grow: 1;
+    padding-left: 16px;
+    width: 278px;
 
     &__stake {
       font-size: 12px;
@@ -273,23 +306,18 @@
 
   &__status-badge {
     position: absolute;
-    font-size: 8px;
-
-    &--delinq {
-      left: 5px;
-      top: 25px;
-    }
-
-    &--sv {
-      left: 15px;
-      top: -5px;
-    }
+    left: -14px;
+    top: -10px;
+    width: 90px;
   }
 
   .apy-chart {
     padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
     .q-icon {
       height: 50px;
+      padding: 16px 0 8px;
     }
   }
 }
@@ -330,6 +358,6 @@ body.body--dark {
     }
   }
   .stake-accounts-container {
-    background: $primary;
+    background: $gray-dark-theme;
   }
 }

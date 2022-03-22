@@ -28,18 +28,18 @@
 
 <template>
   <div class="validators-list__sorter column q-mb-sm items-center" :class="addClass">
-    <div class="validators-list__dropdown-label q-mb-xs full-width">{{ title }}</div>
+    <div v-if="title" class="validators-list__dropdown-label q-mb-xs full-width">{{ title }}</div>
     <div class="row">
       <q-btn
-        padding="sm"
-        class="q-mr-sm"
+        :padding="size"
+        :class="`q-mr-${marginSize}`"
         :color="currentParam === param && currentType === 'desc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('desc')"
         :icon="'img:' + sortUp"
       />
       <q-btn
-        padding="sm"
-        class="q-ml-sm"
+        :padding="size"
+        :class="`q-ml-${marginSize}`"
         :color="currentParam === param && currentType === 'asc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('asc')"
         :icon="'img:' + sortDown"
@@ -57,7 +57,7 @@
     props: {
       title: {
         type: String,
-        required: true,
+        default: '',
       },
       param: {
         type: String,
@@ -74,6 +74,14 @@
       currentType: {
         type: String,
         default: '',
+      },
+      size: {
+        type: String,
+        default: 'sm',
+      },
+      marginSize: {
+        type: String,
+        default: 'sm',
       },
     },
     emits: ['sort'],

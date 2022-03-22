@@ -38,11 +38,11 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const epochStore = useEpochStore();
 
   const currentPage = ref(1);
-  const perPage = ref(10);
+  const perPage = ref<number | string>(10);
   const validatorsStats = ref<Array<ValidatorStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 20, 30]);
+  const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
   const filterTop33 = ref(false);
@@ -67,6 +67,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const cluster = computed(() => connectionStore.cluster);
   const epoch = computed(() => epochStore.epochNumber);
+  const perPageNum = computed(() =>
+    isNaN(Number(perPage.value)) ? itemsSorted.value.length : Number(perPage.value),
+  );
 
   watch([cluster, epoch], loadAllValidators);
 
@@ -141,13 +144,19 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     // console.log('[validators all] sort');
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
+        if (sortParam.value === 'name') {
+          return a.name.localeCompare(b.name);
+        }
         return a[sortParam.value] - b[sortParam.value];
+      }
+      if (sortParam.value === 'name') {
+        return b.name.localeCompare(a.name);
       }
       return b[sortParam.value] - a[sortParam.value];
     });
   });
 
-  const pages = computed(() => Math.ceil(itemsFiltered.value.length / perPage.value));
+  const pages = computed(() => Math.ceil(itemsFiltered.value.length / perPageNum.value));
   watch(pages, (pages) => {
     if (pages < currentPage.value) {
       currentPage.value = pages;
@@ -161,6 +170,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     nameFilter,
     currentPage,
     perPage,
+    perPageNum,
     perPageOptions,
     pages,
     filterPrivate,
@@ -169,8 +179,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     itemsSorted,
     itemsShowed: computed(() =>
       itemsSorted.value.slice(
-        perPage.value * (currentPage.value - 1),
-        perPage.value * currentPage.value,
+        perPageNum.value * (currentPage.value - 1),
+        perPageNum.value * currentPage.value,
       ),
     ),
     loadAllValidators,

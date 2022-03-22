@@ -28,6 +28,11 @@
 
 <template>
   <div class="validator-row row justify-between q-pb-md">
+    <div
+      class="validator-row__index column q-mr-md q-mt-sm justify-center relative-position items-center"
+    >
+      {{ index }}
+    </div>
     <div class="validator-row__logo column q-mr-md q-mt-sm justify-center relative-position">
       <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
       <a v-else :href="item.url" target="_blank">
@@ -42,75 +47,73 @@
           </q-img>
         </q-avatar>
       </a>
-      <q-badge
+      <img
         v-if="!loading && item.isDelinquent"
+        src="@/assets/img/badge-delinq.svg"
+        alt=""
         class="validator-row__status-badge validator-row__status-badge--delinq"
-        color="warning"
-        text-color="text-white"
-      >
-        Delinquent
-      </q-badge>
+      />
       <a
-        v-if="!loading && item.svName && cluster"
+        v-if="!loading && !item.isDelinquent && item.svName && cluster"
         :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
         target="_blank"
       >
-        <q-badge
+        <img
+          src="@/assets/img/badge-svm.svg"
+          alt=""
           class="validator-row__status-badge validator-row__status-badge--sv"
-          color="red"
-          text-color="text-white"
-        >
-          SVM-MEMBER
-        </q-badge>
+        />
       </a>
     </div>
-    <div class="validator-row__name column q-mr-sm q-mt-sm justify-start">
-      <q-skeleton width="100%" v-if="loading" />
-      <div v-else class="q-mt-sm">
+    <div class="validator-row__name column q-mt-sm justify-start">
+      <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
+      <div v-else class="">
         {{ item.name }}
         <q-tooltip class="text-body2">
           {{ item.name }}
         </q-tooltip>
       </div>
-      <q-skeleton width="100%" class="q-mt-sm" v-if="loading" />
-      <div v-else class="validator-row__name__details q-mt-xs">
+      <q-skeleton width="100%" height="32px" class="q-mt-sm" v-if="loading" />
+      <div v-else class="validator-row__name__details q-mt-sm">
         {{ item.details }}
         <q-tooltip class="text-body2">
           {{ item.details }}
         </q-tooltip>
       </div>
     </div>
-    <div class="validator-row__apy column q-mr-sm q-mt-sm justify-start">
-      <q-skeleton width="100%" v-if="loading" />
+    <div class="validator-row__apy column q-pl-md q-mt-sm justify-start">
+      <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
       <div class="validator-row__apy__fee q-mt-xs" v-else>
         Fee: <b>{{ item.fee }}</b>
       </div>
-      <q-skeleton class="q-mt-sm" v-if="loading" width="100%" />
+      <q-skeleton class="q-mt-sm" height="32px" v-if="loading" width="100%" />
       <div class="validator-row__apy__val" v-else>
         APY: <b>{{ item.apy }}</b>
       </div>
     </div>
-    <div class="validator-row__apy-chart column q-mr-sm q-mt-sm q-pr-sm justify-start">
-      <q-skeleton width="100%" height="58px" v-if="loading" />
+    <div class="validator-row__apy-chart column q-px-sm justify-start">
+      <div class="q-px-sm q-mt-xs" v-if="loading">
+        <q-skeleton width="100%" height="64px" class="q-mt-sm" />
+      </div>
       <apy-chart
         v-else
         :voter-key="item.voter"
         :show-y-axis="false"
         :show-title="false"
-        height="66px"
+        height="78px"
       />
     </div>
-    <div class="validator-row__btns column q-mt-sm justify-start">
+    <div class="validator-row__btns column q-pl-md q-mt-sm justify-start">
       <div class="row justify-between">
         <div class="validator-row__stake column justify-start">
-          <q-skeleton v-if="loading" width="100%" />
-          <div class="column validator-row__stake__values q-mt-xs" v-else>
-            <div class="validator-row__stake__sol"
-              ><span>TOTAL:</span> <b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
+          <q-skeleton v-if="loading" width="100%" height="32px" class="q-mt-xs" />
+          <div class="column validator-row__stake__values" v-else>
+            <div class="validator-row__stake__sol q-mt-xs"
+              ><span>TOTAL:</span><br /><b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
             >
           </div>
         </div>
-        <q-skeleton class="" v-if="loading" width="106px" />
+        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" />
         <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
           <q-btn
             v-bind="buttonProps(props)"
@@ -124,9 +127,14 @@
           />
         </router-link>
       </div>
-      <q-skeleton width="323px" style="max-width: 100%" class="q-mt-sm q-ml-sm" v-if="loading" />
+      <q-skeleton width="314px" style="max-width: 100%" class="q-mt-sm" v-if="loading" />
       <div class="text-right q-mt-xs" v-else>
-        <span class="validator-row__address__text">{{ item.voter }}</span>
+        <span class="validator-row__address__text">
+          {{ item.voter }}
+          <q-tooltip class="text-body2 break-words">
+            {{ item.voter }}
+          </q-tooltip>
+        </span>
         <copy-to-clipboard :text="item.voter" />
       </div>
     </div>
@@ -155,6 +163,9 @@
       },
       cluster: {
         type: String,
+      },
+      index: {
+        type: Number,
       },
     },
     setup(props) {

@@ -28,13 +28,19 @@
 
 <template>
   <q-header class="staking-header">
-    <div class="staking-header__top q-pt-md q-pb-xs text-right">
-      <div class="container row items-center justify-end q-mb-md">
+    <div class="staking-header__top q-pt-sm q-pb-xs text-right">
+      <div class="container row items-center justify-end q-mb-xs">
         <theme-mode-selector />
-        <div class="staking-header__faq-btn q-ml-sm" @click="scrollTo('faq-section')"
+        <div
+          v-if="showValidator"
+          class="staking-header__faq-btn q-ml-sm"
+          @click="scrollTo('faq-section')"
           >How to use staking.kiwi</div
         >
-        <div class="staking-header__faq-btn q-ml-md" @click="scrollTo('widget-section')"
+        <div
+          v-if="showValidator"
+          class="staking-header__faq-btn q-ml-md"
+          @click="scrollTo('widget-section')"
           >widget</div
         >
       </div>

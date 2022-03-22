@@ -136,18 +136,18 @@
         data,
         cluster,
         chartOptions: computed(() => ({
-          colors: [dark.isActive ? '#1DE3B0' : '#455A64'],
+          colors: ['#1DE3B0'],
           legend: {
             showForSingleSeries: false,
           },
           fill: {
-            opacity: 0.9,
+            opacity: 1,
             gradient: {
               shade: 'light',
               type: 'vertical',
               shadeIntensity: 0.1,
               opacityFrom: 1,
-              opacityTo: 0.9,
+              opacityTo: 1,
             },
             pattern: {
               style: 'verticalLines',
@@ -183,12 +183,12 @@
             position: 'back',
             xaxis: {
               lines: {
-                show: true,
+                show: false,
               },
             },
             yaxis: {
               lines: {
-                show: true,
+                show: false,
               },
             },
             row: {

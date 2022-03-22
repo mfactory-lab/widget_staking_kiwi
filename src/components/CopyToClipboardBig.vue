@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <q-btn padding="7px 12px" @click="copy" rounded :color="btnColor" :text-color="textColor">
+  <q-btn padding="7px 24px" @click="copy" rounded :color="btnColor" :text-color="textColor">
     <span class="q-mr-sm">{{ btnText }}</span>
     <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
