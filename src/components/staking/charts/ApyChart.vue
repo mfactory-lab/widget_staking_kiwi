@@ -86,10 +86,10 @@
     },
     setup(props) {
       const data = ref<ChartData>({
-        name: '',
-        data: [],
+        name: 'APY',
+        data: [0, 0],
       });
-      const categories = ref<Array<number | string>>([]);
+      const categories = ref<Array<number | string>>([0, 1]);
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
       const { epochNumber } = storeToRefs(useEpochStore());
@@ -104,7 +104,7 @@
                 if (res.data?.length > 0) {
                   resolve(res.data);
                 } else {
-                  resolve([]);
+                  // resolve([]);
                   // reject(Error('Promise rejected'));
                 }
               },
