@@ -42,6 +42,7 @@ export interface ValidatorStats {
   inTop33: boolean;
   isDelinquent: boolean;
   svName: string;
+  apyComparedMax: Number;
 }
 
 export async function getValidatorsStats(network) {

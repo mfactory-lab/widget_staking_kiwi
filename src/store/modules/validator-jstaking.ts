@@ -116,11 +116,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
 
   watch(
     [cluster, router.currentRoute],
-    async ([cluster, route], [clusterOld, routeOld]) => {
-      console.log('[watcher] cluster === ', cluster);
-      console.log('[watcher] clusterOld === ', clusterOld);
-      console.log('[watcher] route === ', route);
-      console.log('[watcher] routeOld === ', routeOld);
+    async ([cluster, route], [clusterOld, _routeOld]) => {
       const isValidatorPage = route.matched.find((item) => item.path === '/app/:validator');
       if (!isValidatorPage) return;
       const validator = route.params.validator;
@@ -170,6 +166,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     if (cluster.value !== 'mainnet-beta') {
       return DEFAULT_APY;
     }
+    console.log('apy === ', apyInfoAll.value?.validators);
     const voteApy = apyInfoAll.value?.validators ?? [];
     const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
     return validatorInfo?.apy ?? 0;

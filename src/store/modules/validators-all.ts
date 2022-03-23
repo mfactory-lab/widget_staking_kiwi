@@ -109,6 +109,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         inTop33: voteAccount.inTop33,
         isDelinquent: voteAccount.isDelinquent,
         svName: voteAccount.svName,
+        apyComparedMax: voteAccount.apyComparedMax,
         lamports: 0,
       };
     });

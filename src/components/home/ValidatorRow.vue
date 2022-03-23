@@ -53,6 +53,12 @@
         alt=""
         class="validator-row__status-badge validator-row__status-badge--delinq"
       />
+      <img
+        v-if="!loading && !item.isDelinquent && jpoolPossible"
+        src="@/assets/img/badge-jpool.svg"
+        alt=""
+        class="validator-row__status-badge validator-row__status-badge--jpool"
+      />
       <a
         v-if="!loading && !item.isDelinquent && item.svName && cluster"
         :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
@@ -65,16 +71,16 @@
         />
       </a>
     </div>
-    <div class="validator-row__name column q-mt-sm justify-start">
+    <div class="validator-row__name column q-mt-sm q-pt-xs justify-start">
       <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
-      <div v-else class="">
+      <div v-else class="q-mt-sm">
         {{ item.name }}
         <q-tooltip class="text-body2">
           {{ item.name }}
         </q-tooltip>
       </div>
-      <q-skeleton width="100%" height="32px" class="q-mt-sm" v-if="loading" />
-      <div v-else class="validator-row__name__details q-mt-sm">
+      <q-skeleton width="100%" height="28px" class="q-mt-sm" v-if="loading" />
+      <div v-else class="validator-row__name__details">
         {{ item.details }}
         <q-tooltip class="text-body2">
           {{ item.details }}
@@ -82,14 +88,16 @@
       </div>
     </div>
     <div class="validator-row__apy column q-pl-md q-mt-sm justify-start">
-      <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
+      <q-skeleton width="100%" height="16px" class="q-mt-xs" v-if="loading" />
       <div class="validator-row__apy__fee q-mt-xs" v-else>
         Fee: <b>{{ item.fee }}</b>
       </div>
-      <q-skeleton class="q-mt-sm" height="32px" v-if="loading" width="100%" />
-      <div class="validator-row__apy__val" v-else>
+      <q-skeleton class="q-mt-sm" height="22px" v-if="loading" width="100%" />
+      <div class="validator-row__apy__val q-mb-xs" v-else>
         APY: <b>{{ item.apy }}</b>
       </div>
+      <q-skeleton class="q-mt-sm" height="10px" v-if="loading" width="100%" />
+      <linear-progress v-else :val="item.apyComparedMax" />
     </div>
     <div class="validator-row__apy-chart column q-px-sm justify-start">
       <div class="q-px-sm q-mt-xs" v-if="loading">
@@ -100,11 +108,11 @@
         :voter-key="item.voter"
         :show-y-axis="false"
         :show-title="false"
-        height="78px"
+        height="82px"
       />
     </div>
-    <div class="validator-row__btns column q-pl-md q-mt-sm justify-start">
-      <div class="row justify-between">
+    <div class="validator-row__btns no-wrap column q-pl-md q-mt-sm justify-start">
+      <div class="row q-mb-xs justify-between">
         <div class="validator-row__stake column justify-start">
           <q-skeleton v-if="loading" width="100%" height="32px" class="q-mt-xs" />
           <div class="column validator-row__stake__values" v-else>
@@ -146,12 +154,13 @@
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { shortenAddress } from '@jpool/common/utils';
   import { storeToRefs } from 'pinia';
-  import { useWalletStore } from '@/store';
+  import { useValidatorJstakingStore, useWalletStore } from '@/store';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
+  import LinearProgress from '@/components/home/LinearProgress.vue';
 
   export default defineComponent({
-    components: { ApyChart, CopyToClipboard },
+    components: { ApyChart, CopyToClipboard, LinearProgress },
     props: {
       loading: {
         type: Boolean,
@@ -170,7 +179,9 @@
     },
     setup(props) {
       const { connected } = storeToRefs(useWalletStore());
+      const { jpoolVoters } = storeToRefs(useValidatorJstakingStore());
       return {
+        jpoolPossible: computed(() => jpoolVoters.value.indexOf(props.item.voter) !== -1),
         connected,
         evaPerson,
         buttonProps({ href }) {
