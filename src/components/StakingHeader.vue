@@ -99,6 +99,7 @@
       return {
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
+          console.log('validator === ', validator);
           if (!!validator && typeof validator === 'string') {
             return true;
           }

@@ -31,7 +31,6 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
-    z-index: 1;
     @media (max-width: $breakpoint-xs) {
       margin-bottom: 40px;
     }

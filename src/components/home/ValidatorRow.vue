@@ -35,7 +35,7 @@
     </div>
     <div class="validator-row__logo column q-mr-md q-mt-sm justify-center relative-position">
       <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-      <a v-else :href="item.url" target="_blank">
+      <router-link v-else :to="`/app/${item.voter}`">
         <q-avatar class="shadow-1" size="60px">
           <q-img :src="item.image" spinner-color="white">
             <template #default v-if="!item.image">
@@ -46,19 +46,19 @@
             </template>
           </q-img>
         </q-avatar>
-      </a>
+      </router-link>
       <img
         v-if="!loading && item.isDelinquent"
         src="@/assets/img/badge-delinq.svg"
         alt=""
         class="validator-row__status-badge validator-row__status-badge--delinq"
       />
-      <img
+      <!-- <img
         v-if="!loading && !item.isDelinquent && jpoolPossible"
         src="@/assets/img/badge-jpool.svg"
         alt=""
         class="validator-row__status-badge validator-row__status-badge--jpool"
-      />
+      /> -->
       <a
         v-if="!loading && !item.isDelinquent && item.svName && cluster"
         :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"

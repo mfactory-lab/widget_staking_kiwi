@@ -42,7 +42,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const validatorsStats = ref<Array<ValidatorStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
+  const perPageOptions = ref([5, 10, 15, 20, 30 /*, 50, 70, 100, 150, 200, 'all'*/]);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
   const filterTop33 = ref(false);
@@ -105,7 +105,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         website: voteAccount.website,
         keybaseUsername: keybaseUsername,
         image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
-        url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
+        //url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
         inTop33: voteAccount.inTop33,
         isDelinquent: voteAccount.isDelinquent,
         svName: voteAccount.svName,
