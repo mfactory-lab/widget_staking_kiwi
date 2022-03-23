@@ -165,9 +165,11 @@
       const coinRateStore = useCoinRateStore();
       const { epochProgress } = storeToRefs(useEpochStore());
 
-      const amount = computed(() => {
-        return formatAmount(lamportsToSol(props.stakeAccount?.account?.lamports ?? 0));
-      });
+      const solAmount = computed(() => lamportsToSol(props.stakeAccount?.account?.lamports ?? 0));
+
+      const amount = computed(() =>
+        solAmount.value < 100 ? formatAmount(solAmount.value) : solAmount.value.toFixed(2),
+      );
 
       return {
         amount,
