@@ -166,7 +166,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     if (cluster.value !== 'mainnet-beta') {
       return DEFAULT_APY;
     }
-    console.log('apy === ', apyInfoAll.value?.validators);
     const voteApy = apyInfoAll.value?.validators ?? [];
     const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
     return validatorInfo?.apy ?? 0;
