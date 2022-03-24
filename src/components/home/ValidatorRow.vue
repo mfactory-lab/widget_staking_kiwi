@@ -53,12 +53,17 @@
         alt=""
         class="validator-row__status-badge validator-row__status-badge--delinq"
       />
-      <!-- <img
+      <a
         v-if="!loading && !item.isDelinquent && jpoolPossible"
-        src="@/assets/img/badge-jpool.svg"
-        alt=""
-        class="validator-row__status-badge validator-row__status-badge--jpool"
-      /> -->
+        href="https://jpool.one"
+        target="_blank"
+      >
+        <img
+          src="@/assets/img/badge-jpool.svg"
+          alt=""
+          class="validator-row__status-badge validator-row__status-badge--jpool"
+        />
+      </a>
       <a
         v-if="!loading && !item.isDelinquent && item.svName && cluster"
         :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
