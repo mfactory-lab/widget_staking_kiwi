@@ -59,7 +59,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   };
 
   onMounted(async () => {
-    // console.log('[validators all] onMounted store all');
+    console.log('[validators all] onMounted store all');
     if (validatorsStats.value.length < 1) {
       await loadAllValidators();
     }
@@ -110,6 +110,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         isDelinquent: voteAccount.isDelinquent,
         svName: voteAccount.svName,
         apyComparedMax: voteAccount.apyComparedMax,
+        network: voteAccount.network,
         lamports: 0,
       };
     });
