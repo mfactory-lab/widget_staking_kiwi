@@ -43,7 +43,9 @@ import { WalletAdapter } from '@jpool/common/utils';
 export type ExtendedCluster = Cluster | 'localnet';
 
 export interface Endpoint {
-  name: ExtendedCluster;
+  id: string;
+  name: string;
+  cluster: ExtendedCluster;
   url: string;
   stakePoolAddress: string;
   stakeLimit?: number;
@@ -53,11 +55,11 @@ export const useConnectionStore = defineStore({
   id: 'connection',
   state: () => ({
     commitment: DEFAULT_COMMITMENT,
-    cluster: useStorage<ExtendedCluster>('cluster', DEFAULT_ENDPOINT.name),
+    rpc: useStorage<string>('rpc', ''),
   }),
   getters: {
     endpoint(state) {
-      return ENDPOINTS.find((e) => e.name === state.cluster)!;
+      return ENDPOINTS.find((e) => e.id === state.rpc) ?? DEFAULT_ENDPOINT;
     },
     connection(state): Connection {
       return new Connection(this.endpoint.url, state.commitment);
@@ -68,10 +70,13 @@ export const useConnectionStore = defineStore({
     stakeLimit(): number {
       return this.endpoint.stakeLimit ?? 0;
     },
+    cluster(): string {
+      return this.endpoint.cluster;
+    },
   },
   actions: {
-    setCluster(cluster: ExtendedCluster) {
-      this.cluster = cluster;
+    setRpc(rpc: string) {
+      this.rpc = rpc;
     },
     setCommitment(commitment: Commitment) {
       this.commitment = commitment;

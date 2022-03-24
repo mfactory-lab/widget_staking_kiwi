@@ -26,7 +26,7 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { Commitment, StakeProgram } from '@solana/web3.js';
+import { Commitment, StakeProgram, clusterApiUrl } from '@solana/web3.js';
 import { Endpoint } from '@/store';
 import ethIcon from '@/assets/img/eth.svg';
 import dotIcon from '@/assets/img/dot.svg';
@@ -63,31 +63,60 @@ export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
 export const STAKE_PROGRAM_ID = StakeProgram.programId;
 
 // Connection
+const MAIN_STAKE_POOL_ADDRESS = 'CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1';
+const TEST_STAKE_POOL_ADDRESS = 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy';
+// const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
+
 export const ENDPOINTS: Endpoint[] = [
   {
-    name: 'mainnet-beta',
-    // url: 'https://mainnet.rpcpool.com/', // clusterApiUrl('mainnet-beta'),
+    id: 'genesys-mainnet',
+    name: 'Genesys RPC',
+    cluster: 'mainnet-beta',
     url: 'https://ssc-dao.genesysgo.net/',
-    stakePoolAddress: 'CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1',
-    stakeLimit: 1500000,
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
   },
   {
-    name: 'testnet',
-    url: 'https://testnet.rpcpool.com/', // clusterApiUrl('testnet'),
-    stakePoolAddress: 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy',
-    stakeLimit: 100000,
+    id: 'mainnet',
+    name: 'Solana RPC',
+    cluster: 'mainnet-beta',
+    url: clusterApiUrl('mainnet-beta'),
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  },
+  {
+    id: 'serum-mainnet',
+    name: 'Serum RPC',
+    cluster: 'mainnet-beta',
+    url: 'https://solana-api.projectserum.com/',
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  },
+  {
+    id: 'rpcpool-mainnet',
+    name: 'RPCPool RPC',
+    cluster: 'mainnet-beta',
+    url: 'https://mainnet.rpcpool.com/',
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  },
+  {
+    id: 'testnet',
+    name: 'TestNet',
+    cluster: 'testnet',
+    url: 'https://testnet.rpcpool.com/',
+    stakePoolAddress: TEST_STAKE_POOL_ADDRESS,
   },
   // {
-  //   name: 'devnet',
-  //   url: 'https://devnet.rpcpool.com/', // clusterApiUrl('devnet'),
-  //   stakePoolAddress: 'tppks4WDGssiMr14fmAoi1K8hS7YPxEiXVGdbAThyPB',
-  //   stakeLimit: 100000,
+  //   id: 'devnet',
+  //   name: 'DevNet',
+  //   cluster: 'devnet',
+  //   url: 'https://devnet.rpcpool.com/',
+  //   stakePoolAddress: DEV_STAKE_POOL_ADDRESS,
   // },
 ];
 
 if (isDev) {
   ENDPOINTS.push({
+    id: 'localnet',
     name: 'localnet',
+    cluster: 'localnet',
     url: 'http://127.0.0.1:8899',
     stakePoolAddress: 'HYgufSTxQ8Ma6qgzQ8n2vD5gPTB7YgP5JjurYCgQqFPR',
   });
