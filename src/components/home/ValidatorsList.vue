@@ -55,7 +55,89 @@
           </div>
         </div>
 
-        <div class="q-pt-sm q-pb-lg row">
+        <div class="row justify-end q-mt-md" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
+          <div class="column q-my-xs">
+            <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
+            <q-toggle
+              v-model="filterPrivate"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              size="40px"
+              toggle-order="tf"
+              color="primary"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
+            <q-toggle
+              v-model="filterTop33"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="primary"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">Hide with Commission</div>
+            <q-toggle
+              v-model="filterFee"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="primary"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">Hide Untitled</div>
+            <q-toggle
+              v-model="filterNoname"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="primary"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">Hide Delinquent</div>
+            <q-toggle
+              v-model="filterDelinq"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="red-dark"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">SVM-Members only</div>
+            <q-toggle
+              v-model="filterNotSvm"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="accent"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+        </div>
+
+        <div class="q-pt-sm q-pb-sm row">
           <q-input
             v-model="nameFilter"
             class="q-mr-md q-mb-xs q-mt-sm validators-list__search"
@@ -65,7 +147,7 @@
           />
 
           <div
-            class="row q-mr-auto q-my-xs col-12 col-sm-auto"
+            class="row q-ml-auto q-my-xs col-12 col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
             <sort-item
@@ -93,31 +175,7 @@
             />
           </div>
 
-          <div class="row justify-end" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
-            <div class="column q-my-xs">
-              <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
-              <q-toggle
-                v-model="filterPrivate"
-                checked-icon="eva-checkmark-outline"
-                toggle-order="tf"
-                color="primary"
-                keep-color
-                label=""
-                unchecked-icon="eva-close-outline"
-              />
-            </div>
-            <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
-              <q-toggle
-                v-model="filterTop33"
-                checked-icon="eva-checkmark-outline"
-                toggle-order="tf"
-                color="primary"
-                keep-color
-                label=""
-                unchecked-icon="eva-close-outline"
-              />
-            </div>
+          <div class="row justify-end q-ml-lg" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
             <div class="column q-my-xs q-ml-md">
               <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
               <q-btn-dropdown
@@ -146,6 +204,21 @@
           </div>
         </div>
 
+        <div class="q-pt-sm q-pb-lg flex flex-center">
+          <q-pagination
+            v-model="currentPage"
+            :max="pages"
+            :max-pages="$q.screen.gt.sm ? 14 : 5"
+            direction-links
+            boundary-links
+            :color="$q.dark.isActive ? 'text-white' : 'primary'"
+            :text-color="$q.dark.isActive ? 'primary' : 'text-white'"
+            icon-first="eva-arrowhead-left-outline"
+            icon-last="eva-arrowhead-right-outline"
+            icon-prev="eva-arrow-ios-back-outline"
+            icon-next="eva-arrow-ios-forward-outline"
+          />
+        </div>
         <q-card class="q-mb-md full-width validators-list__main">
           <q-card-section class="validators-list__list__head validator-row row justify-between">
             <div class="validator-row__name row q-pr-md items-center justify-between">
@@ -271,6 +344,12 @@
         itemsShowed,
         filterPrivate,
         filterTop33,
+        filterFee,
+        filterNoname,
+        filterDelinq,
+        filterNotSvm,
+        filterNotJpool,
+        filterHasStake,
         loading,
       } = storeToRefs(validatorsAllStore);
 
@@ -297,6 +376,12 @@
         pages,
         filterPrivate,
         filterTop33,
+        filterFee,
+        filterNoname,
+        filterDelinq,
+        filterNotSvm,
+        filterNotJpool,
+        filterHasStake,
         cluster,
         connectionLost,
         loading,

@@ -79,15 +79,15 @@
     <div class="validator-row__name column q-mt-sm q-pt-xs justify-start">
       <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
       <div v-else class="q-mt-sm">
-        {{ item.name }}
-        <q-tooltip class="text-body2">
-          {{ item.name }}
+        {{ name }}
+        <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
+          {{ name }}
         </q-tooltip>
       </div>
       <q-skeleton width="100%" height="28px" class="q-mt-sm" v-if="loading" />
       <div v-else class="validator-row__name__details">
         {{ item.details }}
-        <q-tooltip class="text-body2">
+        <q-tooltip v-if="item.details" class="text-body2">
           {{ item.details }}
         </q-tooltip>
       </div>
@@ -189,6 +189,7 @@
         jpoolPossible: computed(() => jpoolVoters.value.indexOf(props.item.voter) !== -1),
         connected,
         evaPerson,
+        name: props.item.name ?? props.item.id,
         buttonProps({ href }) {
           const props = {
             to: href,

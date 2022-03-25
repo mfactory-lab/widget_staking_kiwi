@@ -29,6 +29,7 @@
 <template>
   <q-toggle
     v-model="isDark"
+    class="styled-toggle"
     :checked-icon="evaMoon"
     toggle-order="tf"
     color="gray-secondary"

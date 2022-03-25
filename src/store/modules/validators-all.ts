@@ -30,7 +30,6 @@ import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useConnectionStore, useEpochStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
-import { shortenAddress } from '@jpool/common/utils';
 import { ValidatorStats, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
@@ -47,6 +46,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const sortParam = ref('apyNum');
   const filterTop33 = ref(false);
   const filterPrivate = ref(false);
+  const filterFee = ref(false);
+  const filterNoname = ref(false);
+  const filterDelinq = ref(false);
+  const filterNotJpool = ref(false);
+  const filterNotSvm = ref(false);
+  const filterHasStake = ref(false);
 
   const loadAllValidators = async () => {
     console.log('[validators all] loadAllValidators');
@@ -100,7 +105,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         voter: voteAccount.voteId,
         totalStake: voteAccount.totalStake,
         totalSolStacked: formatAmountPrice(solTotal),
-        name: voteAccount.name ?? shortenAddress(pubKey),
+        name: voteAccount.name,
         details: voteAccount.details,
         website: voteAccount.website,
         keybaseUsername: keybaseUsername,
@@ -119,7 +124,15 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const itemsFiltered = computed(() => {
     // console.log('[validators all] filter');
     const array = [...items.value];
-    if (nameFilter.value || filterPrivate.value || filterTop33.value) {
+    if (
+      nameFilter.value ||
+      filterPrivate.value ||
+      filterTop33.value ||
+      filterFee.value ||
+      filterNoname.value ||
+      filterDelinq.value ||
+      filterNotSvm.value
+    ) {
       return array.filter((item) => {
         if (
           nameFilter.value &&
@@ -129,11 +142,29 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         ) {
           return false;
         }
+        if (filterFee.value && item.feeNum > 0) {
+          return false;
+        }
+        if (filterNoname.value && !item.name) {
+          return false;
+        }
+        if (filterDelinq.value && item.isDelinquent) {
+          return false;
+        }
+        if (filterNotSvm.value && !item.svName) {
+          return false;
+        }
         if (filterPrivate.value && item.feeNum === 100) {
           return false;
         }
         if (filterTop33.value && item.inTop33) {
           return false;
+          // if (filterNotJpool.value && !item.jpool) {
+          //   return false;
+          // }
+          // if (filterHasStake.value && !item.stake) {
+          //   return false;
+          // }
         }
 
         return true;
@@ -177,6 +208,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     pages,
     filterPrivate,
     filterTop33,
+    filterFee,
+    filterNoname,
+    filterDelinq,
+    filterNotSvm,
+    filterNotJpool,
+    filterHasStake,
     items,
     itemsSorted,
     itemsShowed: computed(() =>
