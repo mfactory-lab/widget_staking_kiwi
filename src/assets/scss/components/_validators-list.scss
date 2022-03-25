@@ -358,6 +358,9 @@ body.body--dark {
     &__list__head {
       background: $gray-dark-theme;
     }
+    &__dropdown-label {
+      color: $text-white;
+    }
     .q-field--float .q-field__label {
       color: $text-white;
     }
