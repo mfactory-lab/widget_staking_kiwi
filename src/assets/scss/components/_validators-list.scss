@@ -99,6 +99,7 @@
   }
 
   &__dropdown-label {
+    color: $primary;
     font-size: 12px;
   }
 
@@ -143,6 +144,20 @@
         font-size: 8px;
       }
     }
+  }
+
+  .q-toggle__inner {
+    padding: 0.21em 0.2em 0.21em 0;
+  }
+  .q-toggle__thumb {
+    left: 0.05em;
+  }
+  .q-toggle__inner--truthy .q-toggle__thumb {
+    left: 0.65em;
+  }
+  .q-toggle__track {
+    height: 0.60em;
+    border-radius: 0.35em;
   }
 }
 
@@ -247,9 +262,13 @@
     padding-right: 16px;
 
     &__fee {
-      font-size: 15px;
+      font-size: 14px;
       line-height: 16px;
       color: $primary;
+
+      span {
+        font-size: 11px;
+      }
     }
 
     &__val {

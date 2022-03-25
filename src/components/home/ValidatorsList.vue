@@ -76,7 +76,7 @@
               :current-type="sortType"
             />
             <sort-item
-              title="Sort by Fee"
+              title="Sort by Commission"
               param="feeNum"
               @sort="sort"
               :current-param="sortParam"
