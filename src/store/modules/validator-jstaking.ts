@@ -28,28 +28,21 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { loadApyInfo, useConnectionStore, useEpochStore, useValidatorStore } from '@/store';
+import {
+  useApyStore,
+  useConnectionStore,
+  useEpochStore,
+  useValidatorStore,
+  useValidatorsAllStore,
+} from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
-import { PublicKey } from '@solana/web3.js';
 import { shortenAddress } from '@jpool/common/utils';
-interface ApyValidatorInfo {
-  id: string;
-  vote: string;
-  apy: number;
-}
-interface ApyInfo {
-  beginTimestamp: number;
-  collectionTimestamp: number;
-  endTimestamp: number;
-  firstEpoch: number;
-  isEstimated: boolean;
-  lastEpoch: number;
-  validators: ApyValidatorInfo[];
-}
+import router from '@/router';
 
 interface ValidatorInfo {
   voterKey: string;
+  network: string;
   validatorId: string;
   validatorName: string;
   validatorFee: number;
@@ -63,15 +56,6 @@ interface ValidatorInfo {
 }
 
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
-  const apyInfo = useLocalStorage<ApyInfo>('apy', {
-    beginTimestamp: 0,
-    collectionTimestamp: 0,
-    endTimestamp: 0,
-    firstEpoch: 0,
-    isEstimated: false,
-    lastEpoch: 0,
-    validators: [],
-  });
   const validatorId = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].idPubkey);
   const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
   const totalStake = ref(0);
@@ -87,19 +71,52 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const cluster = computed(() => connectionStore.cluster);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
-  const loading = ref(!apyInfo.value?.lastEpoch);
   const validatorStore = useValidatorStore();
-  const voteAccounts = computed(() => validatorStore.voteAccounts);
-  const validatorsInfos = computed(() => validatorStore.validatorsInfos);
+  const apyStore = useApyStore();
+  const apyInfoAll = computed(() => apyStore.apyInfoAll);
+  const validatorsAllStore = useValidatorsAllStore();
+  const validatorsAllItems = computed(() => validatorsAllStore.validatorsStats);
 
   const savedValidators = useLocalStorage<ValidatorInfo[]>('validators-cached', []);
   const savedValidator = ref<ValidatorInfo>();
 
+  const networkSolanaBeach = computed(() => {
+    const clusterSolanaBeach = connectionStore.cluster.replace('mainnet-beta', '');
+    return clusterSolanaBeach ? `?cluster=${clusterSolanaBeach}` : '';
+  });
+  const network = computed(() => connectionStore.cluster.replace('-beta', ''));
+
   watch(
     [voterKey, epochInfo],
     () => {
-      if (savedValidators.value.length > 0) {
-        const savedVal = savedValidators.value.find((val) => val.voterKey === voterKey.value);
+      savedValidator.value = undefined;
+      if (validatorsAllItems.value.length > 0) {
+        const voterData = validatorsAllItems.value.find(
+          (val) => val.voteId === voterKey.value && val.network === network.value,
+        );
+        if (voterData) {
+          const pubKey = voterData.validatorId;
+          savedValidator.value = {
+            voterKey: voterData.voteId,
+            validatorId: pubKey,
+            network: voterData.network,
+            validatorName: voterData?.name ?? shortenAddress(pubKey),
+            validatorFee: voterData.fee,
+            validatorStake: Number(voterData.totalStake),
+            validatorDetails: voterData.details,
+            validatorImage: voterData?.keybaseUsername
+              ? `https://keybase.io/${voterData.keybaseUsername}/picture`
+              : undefined,
+            validatorUrl: `https://www.validators.app/validators/${voterData.network}/${pubKey}`,
+            validatorWebsite: voterData.website,
+            validatorSolanaBeach: `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach.value}`,
+            epoch: epochInfo.value?.epoch,
+          };
+        }
+      } else if (savedValidators.value.length > 0) {
+        const savedVal = savedValidators.value.find(
+          (val) => val.voterKey === voterKey.value && val.network === network.value,
+        );
         if (savedVal && savedVal.epoch === epochInfo.value?.epoch) {
           savedValidator.value = savedVal;
         }
@@ -112,6 +129,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     const savedValIndex = savedValidators.value.findIndex((val) => val.voterKey === voterKey.value);
     const saveVal = {
       voterKey: voterKey.value,
+      network: network.value,
       validatorId: validatorId.value,
       validatorName: validatorName.value,
       validatorFee: commission.value,
@@ -135,78 +153,56 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   });
 
   watch(
-    cluster,
-    async (cluster) => {
-      const queryString = location.search;
-      const params = new URLSearchParams(queryString);
-      const validator = params.get('validator');
-      if (!!validator) {
+    [cluster, router.currentRoute],
+    async ([cluster, route], [clusterOld, _routeOld]) => {
+      const isValidatorPage = route.matched.find((item) => item.path === '/app/:validator');
+      if (!isValidatorPage) return;
+      const validator = route.params.validator;
+      if (!!validator && typeof validator === 'string') {
         voterKey.value = validator;
       } else {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
       }
-      await validatorStore.load();
 
-      let voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
+      if (validatorsAllItems.value.length < 1) {
+        console.log('[validators all] onMounted validator page');
+        await validatorsAllStore.loadAllValidators();
+      }
+      if (clusterOld !== cluster || validatorStore.data.length < 1) {
+        validatorStore.load();
+      }
+
+      let voterData = validatorsAllItems.value.find((item) => item.voteId === voterKey.value);
 
       if (!voterData) {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
-        voterData = voteAccounts.value.find((item) => item.votePubkey === voterKey.value);
+        voterData = validatorsAllItems.value.find((item) => item.voteId === voterKey.value);
       }
 
       if (voterData) {
-        const network = connectionStore.cluster.replace('-beta', '');
-        const clusterSolanaBeach = connectionStore.cluster.replace('mainnet-beta', '');
-        const networkSolanaBeach = clusterSolanaBeach ? `?cluster=${clusterSolanaBeach}` : '';
-        const pubKey = voterData.nodePubkey;
+        const pubKey = voterData.validatorId;
 
-        totalStake.value = voterData.activatedStake;
-        commission.value = voterData.commission;
+        totalStake.value = Number(voterData.totalStake);
+        commission.value = voterData.fee;
         validatorId.value = pubKey;
-
-        const validatorInfo = validatorsInfos.value.find((info) =>
-          info.key.equals(new PublicKey(pubKey)),
-        );
-        validatorDetails.value = validatorInfo?.info?.details;
-        validatorImage.value = validatorInfo?.info?.keybaseUsername
-          ? `https://keybase.io/${validatorInfo.info.keybaseUsername}/picture`
+        validatorDetails.value = voterData.details;
+        validatorImage.value = voterData.keybaseUsername
+          ? `https://keybase.io/${voterData.keybaseUsername}/picture`
           : undefined;
-        validatorUrl.value = `https://www.validators.app/validators/${network}/${pubKey}`;
-        validatorSolanaBeach.value = `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach}`;
-        validatorWebsite.value = validatorInfo?.info?.website;
-        validatorName.value = validatorInfo?.info?.name ?? shortenAddress(pubKey);
+        validatorUrl.value = `https://www.validators.app/validators/${network.value}/${pubKey}`;
+        validatorSolanaBeach.value = `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach.value}`;
+        validatorWebsite.value = voterData.website;
+        validatorName.value = voterData.name ?? shortenAddress(pubKey);
       }
     },
     { immediate: true },
   );
 
-  watch(
-    [epochInfo],
-    async ([epochInfo]) => {
-      if (epochInfo?.epoch) {
-        if (apyInfo.value?.lastEpoch == epochInfo.epoch) {
-          loading.value = false;
-          return;
-        }
-        loading.value = true;
-        try {
-          const res = await loadApyInfo('prev10');
-          apyInfo.value = {
-            ...res,
-            validators: res?.validators ?? [],
-          };
-        } finally {
-          loading.value = false;
-        }
-      }
-    },
-    { immediate: true },
-  );
   const apy = computed(() => {
     if (cluster.value !== 'mainnet-beta') {
       return DEFAULT_APY;
     }
-    const voteApy = apyInfo.value?.validators ?? [];
+    const voteApy = apyInfoAll.value?.validators ?? [];
     const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
     return validatorInfo?.apy ?? 0;
   });
@@ -217,7 +213,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     voterKey,
     totalStake,
     commission,
-    apyLoading: computed(() => loading.value),
+    apyLoading: computed(() => apyStore.apyLoading),
     apy,
     validatorName,
     validatorDetails,

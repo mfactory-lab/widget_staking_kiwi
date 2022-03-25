@@ -1,4 +1,4 @@
-/*!
+/*
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,43 +26,4 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
-
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
-
-$almost-black: #1d1d1d;
-$text-white: #FFFFFF;
-$text-black: #000000;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
-$gray-dark-theme: #374850;
-$light-gray: #9EB3BD;
-$dark-gray: #383838;
-
-$generic-border-radius: 12px;
-
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
-
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+export * from './api';

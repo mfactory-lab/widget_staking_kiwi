@@ -50,7 +50,14 @@ export default [
   {
     path: '',
     component: () => import('@/layouts/default.vue'),
-    children: createRoutes(),
+    children: [
+      ...createRoutes(),
+      {
+        path: '/app/:validator',
+        component: () => import('@/pages/staking.vue'),
+        props: true,
+      },
+    ],
   },
   {
     path: '/:catchAll(.*)*',

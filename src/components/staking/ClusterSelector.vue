@@ -29,7 +29,7 @@
 <template>
   <q-btn-dropdown
     class="app-header__cluster-btn"
-    :label="filter(cluster)"
+    :label="endpoint.name"
     :model-value="false"
     auto-close
     color="text-white"
@@ -40,7 +40,7 @@
       <q-item v-for="item in items" :key="item.name" clickable @click="select(item)">
         <q-item-section>
           <q-item-label>
-            <b>{{ filter(item.name) }}</b>
+            <b>{{ item.name }}</b>
           </q-item-label>
           {{ item.url }}
         </q-item-section>
@@ -61,14 +61,13 @@
       const walletStore = useWalletStore();
       return {
         items: ENDPOINTS,
-        cluster: computed(() => connectionStore.cluster),
+        endpoint: computed(() => connectionStore.endpoint),
         select: (e: Endpoint) => {
           if (!!walletStore.wallet?.publicKey && connectionStore.cluster !== e.name) {
             walletStore.disconnect();
           }
-          connectionStore.setCluster(e.name);
+          connectionStore.setRpc(e.id);
         },
-        filter: (name: string) => name.replace('-beta', ''),
       };
     },
   });

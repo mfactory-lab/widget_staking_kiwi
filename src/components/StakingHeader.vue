@@ -28,28 +28,38 @@
 
 <template>
   <q-header class="staking-header">
-    <div class="staking-header__top q-pt-md q-pb-xs text-right">
-      <div class="container row items-center justify-end q-mb-sm">
+    <div class="staking-header__top q-pt-sm q-pb-xs text-right">
+      <div class="container row items-center justify-end q-mb-xs">
         <theme-mode-selector />
-        <div class="staking-header__faq-btn q-ml-sm" @click="scrollTo('faq-section')"
+        <div
+          v-if="showValidator"
+          class="staking-header__faq-btn q-ml-sm"
+          @click="scrollTo('faq-section')"
           >How to use staking.kiwi</div
         >
-        <div class="staking-header__faq-btn q-ml-md" @click="scrollTo('widget-section')"
+        <div
+          v-if="showValidator"
+          class="staking-header__faq-btn q-ml-md"
+          @click="scrollTo('widget-section')"
           >widget</div
         >
       </div>
     </div>
     <div class="staking-header__main q-py-md">
-      <div class="container">
+      <div class="container relative-position">
         <div class="row items-center">
           <router-link class="row items-center q-mr-lg" to="/">
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
-            <div class="staking-header__beta">BETA VERSION</div>
+            <q-badge class="staking-header__beta" color="negative" text-color="text-white">
+              BETA
+            </q-badge>
           </router-link>
           <div class="row items-center col-grow">
             <div class="q-mr-auto staking-header__btn">
-              <validator-name />
+              <validator-name v-if="showValidator" />
+              <validators-total v-if="!showValidator" />
             </div>
+            <epoch-circle v-if="!showValidator" />
             <div class="row">
               <div class="q-mr-md staking-header__btn">
                 <cluster-selector />
@@ -66,12 +76,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
   import ValidatorName from '@/components/staking/ValidatorName.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
   import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
+  import router from '@/router';
+  import EpochCircle from '@/components/EpochCircle.vue';
+  import ValidatorsTotal from '@/components/home/ValidatorsTotal.vue';
 
   export default defineComponent({
     components: {
@@ -79,9 +92,19 @@
       ValidatorName,
       ConnectWallet,
       ThemeModeSelector,
+      EpochCircle,
+      ValidatorsTotal,
     },
     setup() {
       return {
+        showValidator: computed(() => {
+          const validator = router.currentRoute.value.params.validator;
+          console.log('validator === ', validator);
+          if (!!validator && typeof validator === 'string') {
+            return true;
+          }
+          return false;
+        }),
         scrollTo(id) {
           const header = document.querySelector('.q-header');
           handleScroll(id, header?.offsetHeight - 10 ?? 0);

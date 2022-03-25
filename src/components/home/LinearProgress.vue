@@ -27,17 +27,47 @@
   -->
 
 <template>
-  <q-page class="home-page">
-    <validators-list />
-  </q-page>
+  <div class="linear-progress">
+    <div class="linear-progress__value" :style="progressStyle"></div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import ValidatorsList from '@/components/home/ValidatorsList.vue';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
-    components: { ValidatorsList },
-    setup() {},
+    props: {
+      val: {
+        type: Number,
+        required: true,
+      },
+    },
+    setup(props) {
+      const progressStyle = computed(() => {
+        return {
+          width: `calc(100% * ${props.val})`,
+        };
+      });
+
+      return {
+        progressStyle,
+      };
+    },
   });
 </script>
+
+<style lang="scss" scoped>
+  .linear-progress {
+    width: 100%;
+    height: 10px;
+    display: flex;
+    border-radius: 12px;
+    background: $blue-grey-8;
+
+    &__value {
+      border-radius: 12px;
+      margin-left: -1px;
+      background: $secondary;
+    }
+  }
+</style>

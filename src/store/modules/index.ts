@@ -27,3 +27,4 @@
  */
 
 export * from './validator-jstaking';
+export * from './validators-all';

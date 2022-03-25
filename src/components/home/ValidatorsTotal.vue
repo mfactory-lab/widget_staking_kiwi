@@ -27,17 +27,51 @@
   -->
 
 <template>
-  <q-page class="home-page">
-    <validators-list />
-  </q-page>
+  <div class="total-validators row">
+    <div>
+      <sol-svg class="total-validators__logo q-icon" fill="#1CE4B0" />
+    </div>
+    <div class="column total-validators__text">
+      <div>VALIDATORS</div>
+      <div class="column total-validators__text__total">TOTAL: {{ validatorsCount }}</div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import ValidatorsList from '@/components/home/ValidatorsList.vue';
+  import { useValidatorsAllStore } from '@/store';
+  import { computed, defineComponent } from 'vue';
+  import SolSvg from '@/components/icons/SolSvg.vue';
 
   export default defineComponent({
-    components: { ValidatorsList },
-    setup() {},
+    components: {
+      SolSvg,
+    },
+    setup() {
+      const validatorStore = useValidatorsAllStore();
+      return {
+        validatorsCount: computed(() =>
+          validatorStore.loading ? 'loading...' : validatorStore.items.length,
+        ),
+      };
+    },
   });
 </script>
+
+<style scoped lang="scss">
+  .total-validators {
+    &__logo {
+      width: 47px;
+      height: 37px;
+      margin-top: 4px;
+      margin-right: 12px;
+    }
+    &__text {
+      font-size: 19px;
+      line-height: 23px;
+      &__total {
+        font-weight: 500;
+      }
+    }
+  }
+</style>

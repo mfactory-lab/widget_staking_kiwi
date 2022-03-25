@@ -110,9 +110,10 @@
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorStore } from '@/store';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
+  import CopyToClipboard from '@/components/CopyToClipboard.vue';
 
   export default defineComponent({
-    components: { TotalStacked },
+    components: { CopyToClipboard, TotalStacked },
     setup() {
       const {
         validatorId,

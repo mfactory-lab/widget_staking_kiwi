@@ -1,4 +1,4 @@
-/*!
+/*
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,43 +26,41 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import '~quasar/src/css/variables.sass';
+import { API_URL } from '@/config';
 
-$primary: #455A64;
-$secondary: #1DE3B0;
-$accent: #00A5B9;
-$dark: #404246;
-$warning: #FFCD29;
+export interface ValidatorStats {
+  voteId: string;
+  validatorId: string;
+  fee: number;
+  apy: number;
+  totalStake: number;
+  network: string;
+  name: string | undefined;
+  details: string | undefined;
+  website: string | undefined;
+  keybaseUsername: string | undefined;
+  inTop33: boolean;
+  isDelinquent: boolean;
+  svName: string;
+  apyComparedMax: Number;
+}
 
-$almost-black: #1d1d1d;
-$text-white: #FFFFFF;
-$text-black: #000000;
-$light-gray-natural: #E9E9E9;
-$gray-inactive: #CFCFCF;
-$red: #FF6B48;
-$red-dark: #E33B3B;
-$gray: #647E82;
-$solana-dark: #313131;
-$gray-secondary: #5A7683;
-$gray-dark-theme: #374850;
-$light-gray: #9EB3BD;
-$dark-gray: #383838;
-
-$generic-border-radius: 12px;
-
-// Assumes the browser default, typically `16px`
-$body-font-size: 1rem;
-
-$button-padding: 9px 17px;
-
-$font-secondary: 'Montserrat';
-
-$tooltip-background: $blue-grey-8;
-
-$primary-gradient: linear-gradient(
-  180deg,
-  transparentize($primary, 0.05) 0%,
-  transparentize($primary, 0.05) 50%,
-  $primary 50%,
-  $primary 100%
-);
+export async function getValidatorsStats(network) {
+  return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
+    // fetch(`http://localhost:3000/validators/list?network=${network}`)
+    fetch(`${API_URL}validators/list?network=${network}`)
+      .then((res) => res.json())
+      .then(
+        (res) => {
+          if (res.data?.length > 0) {
+            resolve(res.data);
+          } else {
+            resolve([]);
+          }
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+  });
+}

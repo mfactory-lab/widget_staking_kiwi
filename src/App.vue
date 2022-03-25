@@ -33,9 +33,21 @@
 <script lang="ts">
   import '@/assets/scss/app.scss';
 
-  import { defineComponent } from 'vue';
+  import { defineComponent, watch } from 'vue';
+  import router from '@/router';
 
   export default defineComponent({
-    setup() {},
+    setup() {
+      watch(
+        [router.currentRoute],
+        async ([route]) => {
+          const validator = route.query?.validator;
+          if (validator) {
+            router.push({ path: `/app/${validator}` });
+          }
+        },
+        { immediate: true },
+      );
+    },
   });
 </script>

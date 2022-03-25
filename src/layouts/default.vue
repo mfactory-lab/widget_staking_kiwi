@@ -28,17 +28,25 @@
 
 <template>
   <q-layout view="lfh Lpr lff">
+    <staking-header />
     <q-page-container>
       <router-view />
     </q-page-container>
+    <app-footer />
     <cookie-modal />
   </q-layout>
 </template>
 
 <script lang="ts">
   import CookieModal from '@/components/CookieModal.vue';
+  import StakingHeader from '@/components/StakingHeader.vue';
+  import AppFooter from '@/components/AppFooter.vue';
 
   export default {
-    components: { CookieModal },
+    components: {
+      StakingHeader,
+      AppFooter,
+      CookieModal,
+    },
   };
 </script>

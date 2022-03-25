@@ -67,6 +67,7 @@ export const useValidatorStore = defineStore('validators', () => {
 
   const load = async () => {
     loading.value = true;
+    console.log('[validators all] voteAccounts load ');
 
     console.log('[Validators] Loading stake accounts...');
     const stakeAccounts = await getStakeAccounts(
@@ -100,6 +101,7 @@ export const useValidatorStore = defineStore('validators', () => {
 
     voteAccounts.value = voteAccountStatus.current;
     validatorsInfos.value = validatorInfos;
+    console.log('[validators all] voteAccounts length ', voteAccounts.value.length);
 
     // const voteAccountStatus = await connection.value.getVoteAccounts();
     const delinquent = voteAccountStatus.delinquent.filter((acc) =>

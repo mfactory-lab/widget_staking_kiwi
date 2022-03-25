@@ -41,7 +41,7 @@ interface ApyValidatorInfo {
   apy: number;
 }
 
-interface ApyInfo {
+export interface ApyInfo {
   beginTimestamp: number;
   collectionTimestamp: number;
   endTimestamp: number;
@@ -55,6 +55,15 @@ export const useApyStore = defineStore('apy', () => {
   const { voteIds } = storeToRefs(useValidatorStore());
   const { epochInfo } = storeToRefs(useEpochStore());
   const apyInfo = useLocalStorage<ApyInfo>('apy', {
+    beginTimestamp: 0,
+    collectionTimestamp: 0,
+    endTimestamp: 0,
+    firstEpoch: 0,
+    isEstimated: false,
+    lastEpoch: 0,
+    validators: [],
+  });
+  const apyInfoAll = ref<ApyInfo>({
     beginTimestamp: 0,
     collectionTimestamp: 0,
     endTimestamp: 0,
@@ -81,6 +90,9 @@ export const useApyStore = defineStore('apy', () => {
           ...res,
           validators: res?.validators.filter((v) => ids.includes(v.vote)) ?? [],
         };
+        apyInfoAll.value = {
+          ...res,
+        };
         // use APY from selected validator
         if (APY_VALIDATOR_ID) {
           const apyValidator = res?.validators.find((v) => v.id == APY_VALIDATOR_ID);
@@ -96,6 +108,7 @@ export const useApyStore = defineStore('apy', () => {
 
   return {
     apyInfo,
+    apyInfoAll,
     apyLoading: computed(() => loading.value),
     apy: computed(() => {
       const validators = apyInfo.value?.validators ?? [];
