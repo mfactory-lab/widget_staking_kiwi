@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
   const plugins: (PluginOption | PluginOption[])[] = [
     injectHtml({
       data: {
-        title: 'JStaking',
+        title: 'staking.kiwi',
         description: 'Solana staking.',
         keywords: 'Solana, SOL',
       },
