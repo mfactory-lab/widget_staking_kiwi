@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="validators-list__sorter column q-mb-sm items-center" :class="addClass">
+  <div class="validators-list__sorter column q-mb-sm items-start" :class="addClass">
     <div v-if="title" class="validators-list__dropdown-label q-mb-xs full-width">{{ title }}</div>
     <div class="row">
       <q-btn

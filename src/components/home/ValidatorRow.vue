@@ -95,7 +95,7 @@
     <div class="validator-row__apy column q-pl-md q-mt-sm justify-start">
       <q-skeleton width="100%" height="16px" class="q-mt-xs" v-if="loading" />
       <div class="validator-row__apy__fee q-mt-xs" v-else>
-        Fee: <b>{{ item.fee }}</b>
+        <span>Commission:</span> <b>{{ item.fee }}</b>
       </div>
       <q-skeleton class="q-mt-sm" height="22px" v-if="loading" width="100%" />
       <div class="validator-row__apy__val q-mb-xs" v-else>
