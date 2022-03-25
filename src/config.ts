@@ -49,8 +49,7 @@ export const SOL_USD_RELOAD_DURATION = 300000;
 export const DEFI_RELOAD_DURATION = 30000;
 export const POOL_CONNECTION_DELAY = 30000;
 
-// export const GTAG_ID = isProd ? 'G-FXXRMT54JE' : null;
-export const GTAG_ID = isProd ? null : null;
+export const GTAG_ID = isProd ? 'G-H60CS7J10W' : null;
 
 export const JSOL_LOGO =
   'https://raw.githubusercontent.com/mfactory-lab/jpool-pub/main/assets/images/jsol.png';
