@@ -68,6 +68,13 @@ const TEST_STAKE_POOL_ADDRESS = 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy';
 
 export const ENDPOINTS: Endpoint[] = [
   {
+    id: 'jpoolone-genesys-mainnet',
+    name: 'Jpool.one RPC',
+    cluster: 'mainnet-beta',
+    url: 'https://jpoolone.genesysgo.net/',
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  },
+  {
     id: 'genesys-mainnet',
     name: 'Genesys RPC',
     cluster: 'mainnet-beta',
