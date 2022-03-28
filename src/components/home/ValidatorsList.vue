@@ -123,6 +123,19 @@
             />
           </div>
           <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">JPool-Members only</div>
+            <q-toggle
+              v-model="filterNotJpool"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="warning"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
+          <div class="column q-my-xs q-ml-md">
             <div class="validators-list__dropdown-label q-mb-xs">SVM-Members only</div>
             <q-toggle
               v-model="filterNotSvm"

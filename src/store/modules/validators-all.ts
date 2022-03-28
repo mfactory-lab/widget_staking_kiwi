@@ -132,6 +132,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       filterFee.value ||
       filterNoname.value ||
       filterDelinq.value ||
+      filterNotJpool.value ||
       filterNotSvm.value
     ) {
       return array.filter((item) => {
@@ -160,13 +161,13 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         }
         if (filterTop33.value && item.inTop33) {
           return false;
-          // if (filterNotJpool.value && !item.jpool) {
-          //   return false;
-          // }
-          // if (filterHasStake.value && !item.stake) {
-          //   return false;
-          // }
         }
+        if (filterNotJpool.value && !item.inJpool) {
+          return false;
+        }
+        // if (filterHasStake.value && !item.stake) {
+        //   return false;
+        // }
 
         return true;
       });
