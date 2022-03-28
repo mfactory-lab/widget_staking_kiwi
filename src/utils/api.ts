@@ -40,6 +40,7 @@ export interface ValidatorStats {
   website: string | undefined;
   keybaseUsername: string | undefined;
   inTop33: boolean;
+  inJpool: boolean;
   isDelinquent: boolean;
   svName: string;
   apyComparedMax: Number;

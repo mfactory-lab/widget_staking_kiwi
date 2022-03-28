@@ -28,13 +28,7 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import {
-  useApyStore,
-  useConnectionStore,
-  useEpochStore,
-  useValidatorStore,
-  useValidatorsAllStore,
-} from '@/store';
+import { useApyStore, useConnectionStore, useEpochStore, useValidatorsAllStore } from '@/store';
 import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { shortenAddress } from '@jpool/common/utils';
@@ -53,6 +47,7 @@ interface ValidatorInfo {
   validatorSolanaBeach: string | undefined;
   validatorWebsite: string | undefined;
   epoch: number | undefined;
+  validatorInJpool: boolean;
 }
 
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
@@ -66,12 +61,12 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const validatorUrl = ref(<string | undefined>'');
   const validatorSolanaBeach = ref(<string | undefined>'');
   const validatorWebsite = ref(<string | undefined>'');
+  const validatorInJpool = ref(false);
 
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
-  const validatorStore = useValidatorStore();
   const apyStore = useApyStore();
   const apyInfoAll = computed(() => apyStore.apyInfoAll);
   const validatorsAllStore = useValidatorsAllStore();
@@ -111,6 +106,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
             validatorWebsite: voterData.website,
             validatorSolanaBeach: `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach.value}`,
             epoch: epochInfo.value?.epoch,
+            validatorInJpool: voterData.inJpool,
           };
         }
       } else if (savedValidators.value.length > 0) {
@@ -140,6 +136,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       validatorSolanaBeach: validatorSolanaBeach.value,
       validatorWebsite: validatorWebsite.value,
       epoch: epochInfo.value?.epoch,
+      validatorInJpool: validatorInJpool.value,
     };
     if (savedValIndex > -1) {
       savedValidators.value = [
@@ -164,12 +161,9 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;
       }
 
-      if (validatorsAllItems.value.length < 1) {
+      if (clusterOld !== cluster || validatorsAllItems.value.length < 1) {
         console.log('[validators all] onMounted validator page');
         await validatorsAllStore.loadAllValidators();
-      }
-      if (clusterOld !== cluster || validatorStore.data.length < 1) {
-        validatorStore.load();
       }
 
       let voterData = validatorsAllItems.value.find((item) => item.voteId === voterKey.value);
@@ -193,6 +187,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         validatorSolanaBeach.value = `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach.value}`;
         validatorWebsite.value = voterData.website;
         validatorName.value = voterData.name ?? shortenAddress(pubKey);
+        validatorInJpool.value = voterData.inJpool;
       }
     },
     { immediate: true },
@@ -208,7 +203,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   });
 
   return {
-    jpoolVoters: computed(() => validatorStore.voteIds),
     validatorId,
     voterKey,
     totalStake,
@@ -221,6 +215,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     validatorUrl,
     validatorSolanaBeach,
     validatorWebsite,
+    validatorInJpool,
     savedValidator,
   };
 });

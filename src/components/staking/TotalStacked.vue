@@ -59,7 +59,7 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/SolSvg.vue';
   import { formatMoney } from '@jpool/common/utils/check-number';
@@ -71,7 +71,7 @@
     },
     setup(_props) {
       const { savedValidator, totalStake, commission } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorStore());
+      const { loading } = storeToRefs(useValidatorsAllStore());
 
       const solStaked = computed(() => {
         return lamportsToSol(

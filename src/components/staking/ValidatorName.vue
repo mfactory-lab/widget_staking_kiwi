@@ -70,7 +70,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
 
   export default defineComponent({
@@ -78,7 +78,7 @@
     setup() {
       const { savedValidator, validatorName, validatorDetails, validatorImage, validatorUrl } =
         storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorStore());
+      const { loading } = storeToRefs(useValidatorsAllStore());
 
       return {
         savedValidator,
