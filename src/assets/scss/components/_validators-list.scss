@@ -309,15 +309,13 @@
     }
   }
 
+  &__badges {
+    top: -3px;
+    left: 0
+  }
   &__status-badge {
-    position: absolute;
-    left: 33px;
-    top: -10px;
     height: 22px;
-
-    &--jpool {
-      left: -37px;
-    }
+    padding-right: 4px;
   }
 
   .apy-chart {

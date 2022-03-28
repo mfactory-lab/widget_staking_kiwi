@@ -27,10 +27,8 @@
   -->
 
 <template>
-  <div class="validator-row row justify-between q-pb-md">
-    <div
-      class="validator-row__index column q-mr-md q-mt-sm justify-center relative-position items-center"
-    >
+  <div class="validator-row row justify-between q-pb-md relative-position">
+    <div class="validator-row__index column q-mr-md q-mt-sm justify-center items-center">
       {{ index }}
     </div>
     <div class="validator-row__logo column q-mr-md q-mt-sm justify-center relative-position">
@@ -47,34 +45,24 @@
           </q-img>
         </q-avatar>
       </router-link>
+    </div>
+    <div class="validator-row__badges q-pl-lg row no-wrap absolute">
+      <a v-if="!loading && jpoolPossible" href="https://jpool.one" target="_blank">
+        <img src="@/assets/img/badge-jpool.svg" alt="" class="validator-row__status-badge" />
+      </a>
+      <a
+        v-if="!loading && item.svName && cluster"
+        :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
+        target="_blank"
+      >
+        <img src="@/assets/img/badge-svm.svg" alt="" class="validator-row__status-badge" />
+      </a>
       <img
         v-if="!loading && item.isDelinquent"
         src="@/assets/img/badge-delinq.svg"
         alt=""
-        class="validator-row__status-badge validator-row__status-badge--delinq"
+        class="validator-row__status-badge"
       />
-      <a
-        v-if="!loading && !item.isDelinquent && jpoolPossible"
-        href="https://jpool.one"
-        target="_blank"
-      >
-        <img
-          src="@/assets/img/badge-jpool.svg"
-          alt=""
-          class="validator-row__status-badge validator-row__status-badge--jpool"
-        />
-      </a>
-      <a
-        v-if="!loading && !item.isDelinquent && item.svName && cluster"
-        :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
-        target="_blank"
-      >
-        <img
-          src="@/assets/img/badge-svm.svg"
-          alt=""
-          class="validator-row__status-badge validator-row__status-badge--sv"
-        />
-      </a>
     </div>
     <div class="validator-row__name column q-mt-sm q-pt-xs justify-start">
       <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
