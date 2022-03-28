@@ -66,7 +66,6 @@
 
     &__value {
       border-radius: 12px;
-      margin-left: -1px;
       background: $secondary;
     }
   }
