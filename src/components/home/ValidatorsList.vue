@@ -236,13 +236,12 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, onMounted } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
   import {
     useConnectionStore,
     // useStakeAccountStore,
     useStakePoolStore,
-    useValidatorStore,
     useValidatorsAllStore,
   } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
@@ -254,7 +253,6 @@
       const connectionStore = useConnectionStore();
       // const stakeAccountStore = useStakeAccountStore();
       const stakePoolStore = useStakePoolStore();
-      const validatorStore = useValidatorStore();
 
       const { connectionLost } = storeToRefs(stakePoolStore);
       const validatorsAllStore = useValidatorsAllStore();
@@ -277,12 +275,6 @@
       const refresh = async () => {
         await validatorsAllStore.loadAllValidators();
       };
-
-      onMounted(async () => {
-        if (validatorStore.data.length < 1) {
-          await validatorStore.load();
-        }
-      });
 
       const cluster = computed(() => connectionStore.cluster);
 

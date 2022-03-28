@@ -107,6 +107,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
         //url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
         inTop33: voteAccount.inTop33,
+        inJpool: voteAccount.inJpool,
         isDelinquent: voteAccount.isDelinquent,
         svName: voteAccount.svName,
         apyComparedMax: voteAccount.apyComparedMax,

@@ -108,7 +108,7 @@
   import { storeToRefs } from 'pinia';
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
-  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
+  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
 
@@ -126,7 +126,7 @@
         validatorWebsite,
         savedValidator,
       } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorStore());
+      const { loading } = storeToRefs(useValidatorsAllStore());
 
       return {
         savedValidator,

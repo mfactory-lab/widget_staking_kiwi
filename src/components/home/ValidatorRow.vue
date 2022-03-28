@@ -54,7 +54,7 @@
         class="validator-row__status-badge validator-row__status-badge--delinq"
       />
       <a
-        v-if="!loading && !item.isDelinquent && jpoolPossible"
+        v-if="!loading && !item.isDelinquent && item.inJpool"
         href="https://jpool.one"
         target="_blank"
       >
@@ -159,7 +159,7 @@
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { shortenAddress } from '@jpool/common/utils';
   import { storeToRefs } from 'pinia';
-  import { useValidatorJstakingStore, useWalletStore } from '@/store';
+  import { useWalletStore } from '@/store';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
   import LinearProgress from '@/components/home/LinearProgress.vue';
@@ -184,9 +184,7 @@
     },
     setup(props) {
       const { connected } = storeToRefs(useWalletStore());
-      const { jpoolVoters } = storeToRefs(useValidatorJstakingStore());
       return {
-        jpoolPossible: computed(() => jpoolVoters.value.indexOf(props.item.voter) !== -1),
         connected,
         evaPerson,
         buttonProps({ href }) {

@@ -69,7 +69,7 @@
               :stake-account="acc.stakeAccount"
               :status="acc.state"
               :loading="acc.stakeAccount.pubkey.toBase58() === loadingPubkey"
-              :jpool-possible="jpoolPossible"
+              :jpool-possible="validatorInJpool"
               @deactivate="deactivate"
               @withdraw="withdraw"
               @activate="activate"
@@ -126,7 +126,7 @@
       const { wallet, connected } = storeToRefs(useWalletStore());
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
-      const { voterKey, jpoolVoters } = storeToRefs(useValidatorJstakingStore());
+      const { voterKey, validatorInJpool } = storeToRefs(useValidatorJstakingStore());
       const { delegateAccount } = useStakeAccounts();
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositStake } = useDeposit();
@@ -223,8 +223,7 @@
         accountsSorted,
         totalStats,
         connectionLost,
-
-        jpoolPossible: computed(() => jpoolVoters.value.indexOf(voterKey.value) !== -1),
+        validatorInJpool,
 
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
