@@ -110,7 +110,12 @@
           <q-skeleton v-if="loading" width="100%" height="32px" class="q-mt-xs" />
           <div class="column validator-row__stake__values" v-else>
             <div class="validator-row__stake__sol q-mt-xs"
-              ><span>TOTAL:</span><br /><b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
+              ><span>TOTAL STAKE:</span><br /><b>{{ item.totalSolStacked }}&nbsp;SOL</b></div
+            >
+          </div>
+          <div class="column validator-row__stake__values" v-if="!loading && connected">
+            <div class="validator-row__stake__sol q-mt-xs"
+              ><span>MY STAKE:</span><br /><b>{{ item.myStake }}&nbsp;SOL</b></div
             >
           </div>
         </div>

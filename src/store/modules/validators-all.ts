@@ -28,12 +28,14 @@
 
 import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useConnectionStore, useEpochStore } from '@/store';
+import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { ValidatorStats, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
+  const stakeAccountStore = useStakeAccountStore();
+  const stakeAccounts = computed(() => stakeAccountStore.data);
   const epochStore = useEpochStore();
 
   const currentPage = ref(1);
@@ -44,8 +46,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const perPageOptions = ref([5, 10, 15, 20, 30 /*, 50, 70, 100, 150, 200, 'all'*/]);
   const sortType = ref('desc');
   const sortParam = ref('apyNum');
-  const filterTop33 = ref(false);
-  const filterPrivate = ref(false);
+  const filterTop33 = ref(true);
+  const filterPrivate = ref(true);
   const filterFee = ref(false);
   const filterNoname = ref(false);
   const filterDelinq = ref(false);
@@ -96,6 +98,16 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       const keybaseUsername = voteAccount.keybaseUsername;
       const solTotal = lamportsToSol(Number(voteAccount.totalStake));
 
+      let myStake = 0;
+      if (stakeAccounts.value.length > 0) {
+        myStake = stakeAccounts.value
+          .filter(
+            (item) =>
+              item.account.data?.parsed?.info?.stake?.delegation?.voter == voteAccount.voteId,
+          )
+          .reduce((prev, curr) => prev + curr.account.lamports, 0);
+      }
+
       return {
         id: pubKey,
         apy: formatPct.format(voteAccount.apy ?? 0),
@@ -118,6 +130,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         apyComparedMax: voteAccount.apyComparedMax,
         network: voteAccount.network,
         lamports: 0,
+        myStake,
       };
     });
   });
@@ -133,6 +146,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       filterNoname.value ||
       filterDelinq.value ||
       filterNotJpool.value ||
+      filterHasStake.value ||
       filterNotSvm.value
     ) {
       return array.filter((item) => {
@@ -165,9 +179,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         if (filterNotJpool.value && !item.inJpool) {
           return false;
         }
-        // if (filterHasStake.value && !item.stake) {
-        //   return false;
-        // }
+        if (filterHasStake.value && !item.myStake) {
+          return false;
+        }
 
         return true;
       });

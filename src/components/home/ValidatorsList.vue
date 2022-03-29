@@ -148,9 +148,27 @@
               unchecked-icon="eva-close-outline"
             />
           </div>
+          <div class="column q-my-xs q-ml-md">
+            <div class="validators-list__dropdown-label q-mb-xs">Show my Stake only</div>
+            <q-toggle
+              v-model="filterHasStake"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="secondary"
+              keep-color
+              label=""
+              :disable="!connected"
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
         </div>
 
         <div class="q-pt-sm q-pb-sm row">
+          <!-- <div class="col q-mb-md main-section__block" :class="{ 'col-12': $q.screen.lt.sm }"
+            ><price-stats
+          /></div> -->
+
           <q-input
             v-model="nameFilter"
             class="q-mr-md q-mb-xs q-mt-sm validators-list__search"
@@ -326,19 +344,20 @@
   import { storeToRefs } from 'pinia';
   import {
     useConnectionStore,
-    // useStakeAccountStore,
     useStakePoolStore,
     useValidatorsAllStore,
+    useWalletStore,
   } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import SortItem from '@/components/home/SortItem.vue';
+  // import PriceStats from '@/components/staking/PriceStats.vue';
 
   export default defineComponent({
     components: { ValidatorRow, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
-      // const stakeAccountStore = useStakeAccountStore();
       const stakePoolStore = useStakePoolStore();
+      const { connected } = storeToRefs(useWalletStore());
 
       const { connectionLost } = storeToRefs(stakePoolStore);
       const validatorsAllStore = useValidatorsAllStore();
@@ -371,6 +390,7 @@
       const cluster = computed(() => connectionStore.cluster);
 
       return {
+        connected,
         sortType,
         sortParam,
         nameFilter,

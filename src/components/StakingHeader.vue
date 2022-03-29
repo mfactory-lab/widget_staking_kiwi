@@ -50,8 +50,8 @@
         <div class="row items-center">
           <router-link class="row items-center q-mr-lg" to="/">
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
-            <q-badge class="staking-header__beta" color="negative" text-color="text-white">
-              BETA
+            <q-badge class="staking-header__beta" color="accent" text-color="text-white">
+              v.1.0
             </q-badge>
           </router-link>
           <div class="row items-center col-grow">
