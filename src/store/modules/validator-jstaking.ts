@@ -48,6 +48,8 @@ interface ValidatorInfo {
   validatorWebsite: string | undefined;
   epoch: number | undefined;
   validatorInJpool: boolean;
+  validatorDelinquent: boolean;
+  validatorSVM: string | undefined;
 }
 
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
@@ -62,6 +64,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const validatorSolanaBeach = ref(<string | undefined>'');
   const validatorWebsite = ref(<string | undefined>'');
   const validatorInJpool = ref(false);
+  const validatorDelinquent = ref(false);
+  const validatorSVM = ref(<string | undefined>'');
 
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
@@ -107,6 +111,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
             validatorSolanaBeach: `https://solanabeach.io/validator/${voterKey.value}${networkSolanaBeach.value}`,
             epoch: epochInfo.value?.epoch,
             validatorInJpool: voterData.inJpool,
+            validatorDelinquent: voterData.isDelinquent,
+            validatorSVM: voterData.svName,
           };
         }
       } else if (savedValidators.value.length > 0) {
@@ -137,6 +143,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       validatorWebsite: validatorWebsite.value,
       epoch: epochInfo.value?.epoch,
       validatorInJpool: validatorInJpool.value,
+      validatorDelinquent: validatorDelinquent.value,
+      validatorSVM: validatorSVM.value,
     };
     if (savedValIndex > -1) {
       savedValidators.value = [
@@ -188,6 +196,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         validatorWebsite.value = voterData.website;
         validatorName.value = voterData.name ?? shortenAddress(pubKey);
         validatorInJpool.value = voterData.inJpool;
+        validatorDelinquent.value = voterData.isDelinquent;
+        validatorSVM.value = voterData.svName;
       }
     },
     { immediate: true },
@@ -216,6 +226,8 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     validatorSolanaBeach,
     validatorWebsite,
     validatorInJpool,
+    validatorDelinquent,
+    validatorSVM,
     savedValidator,
   };
 });

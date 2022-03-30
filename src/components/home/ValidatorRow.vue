@@ -83,7 +83,8 @@
     <div class="validator-row__apy column q-pl-md q-mt-sm justify-start">
       <q-skeleton width="100%" height="16px" class="q-mt-xs" v-if="loading" />
       <div class="validator-row__apy__fee q-mt-xs" v-else>
-        <span>Commission:</span> <b>{{ item.fee }}</b>
+        <!-- <span>Commission:</span> <b>{{ item.fee }}</b> -->
+        <span>Current apy:</span> <b>{{ item.apyEst }}</b>
       </div>
       <q-skeleton class="q-mt-sm" height="22px" v-if="loading" width="100%" />
       <div class="validator-row__apy__val q-mb-xs" v-else>
@@ -137,9 +138,7 @@
       <div class="text-right q-mt-xs" v-else>
         <span class="validator-row__address__text">
           {{ item.voter }}
-          <q-tooltip class="text-body2 break-words">
-            {{ item.voter }}
-          </q-tooltip>
+          <q-tooltip class="text-body2 break-words"> Vote Account: {{ item.voter }} </q-tooltip>
         </span>
         <copy-to-clipboard :text="item.voter" />
       </div>

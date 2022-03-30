@@ -82,9 +82,12 @@
       <div class="validator-item__address column items-end justify-start">
         <q-skeleton width="350px" style="max-width: 100%" v-if="loading && !savedValidator" />
         <div class="text-right" v-else>
-          <span class="validator-item__address__text">{{
-            loading ? savedValidator.validatorId : validatorId
-          }}</span>
+          <span class="validator-item__address__text">
+            {{ loading ? savedValidator.validatorId : validatorId }}
+            <q-tooltip class="text-body2 break-words">
+              Identity: {{ loading ? savedValidator.validatorId : validatorId }}
+            </q-tooltip>
+          </span>
           <copy-to-clipboard :text="loading ? savedValidator.validatorId : validatorId" />
         </div>
         <q-skeleton
@@ -94,7 +97,10 @@
           v-if="loading && !savedValidator"
         />
         <div class="text-right" v-else>
-          <span class="validator-item__address__text">{{ voterKey }}</span>
+          <span class="validator-item__address__text">
+            {{ voterKey }}
+            <q-tooltip class="text-body2 break-words"> Vote Account: {{ voterKey }} </q-tooltip>
+          </span>
           <copy-to-clipboard :text="voterKey" />
         </div>
       </div>

@@ -110,10 +110,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
       return {
         id: pubKey,
-        apy: formatPct.format(voteAccount.apy ?? 0),
-        fee: formatPct.format(voteAccount.fee / 100),
         apyNum: voteAccount.apy,
+        apyEstNum: voteAccount.apyEst,
         feeNum: voteAccount.fee,
+        apy: formatPct.format(voteAccount.apy ?? 0),
+        apyEst: formatPct.format(voteAccount.apyEst ?? 0),
+        fee: formatPct.format(voteAccount.fee / 100),
         voter: voteAccount.voteId,
         totalStake: voteAccount.totalStake,
         totalSolStacked: formatAmountPrice(solTotal),

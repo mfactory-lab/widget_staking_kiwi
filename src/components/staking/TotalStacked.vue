@@ -49,7 +49,7 @@
       <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
     </div>
     <div class="total-staked__value" v-else>
-      <div class="total-staked__label">Validator Commission</div>
+      <div class="total-staked__label">Commission</div>
       <div class="row justify-between">
         <div class="total-staked__sol">{{ commission }}</div>
       </div>

@@ -33,6 +33,7 @@ export interface ValidatorStats {
   validatorId: string;
   fee: number;
   apy: number;
+  apyEst: number;
   totalStake: number;
   network: string;
   name: string | undefined;

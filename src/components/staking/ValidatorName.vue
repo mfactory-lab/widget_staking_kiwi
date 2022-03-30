@@ -49,16 +49,52 @@
         </q-avatar>
       </a>
     </div>
-    <div class="validator-name__text column justify-start">
+    <div class="validator-name__text column justify-start relative-position">
+      <div v-if="!loading || savedValidator" class="validator-name__badges row no-wrap absolute">
+        <q-badge
+          v-if="loading ? savedValidator.validatorDelinquent : validatorDelinquent"
+          class="validator-name__badges__item q-mr-sm"
+          color="negative"
+          text-color="text-white"
+        >
+          DELINQUENT
+        </q-badge>
+        <a
+          v-if="loading ? savedValidator.validatorInJpool : validatorInJpool"
+          class="row"
+          href="https://jpool.one"
+          target="_blank"
+        >
+          <q-badge
+            class="validator-name__badges__item q-mr-sm"
+            color="warning"
+            text-color="primary"
+          >
+            JPOOL
+          </q-badge>
+        </a>
+        <a
+          v-if="(loading ? savedValidator.validatorSVM : validatorSVM) && cluster"
+          class="row"
+          :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${
+            loading ? savedValidator.validatorSVM : validatorSVM
+          }`"
+          target="_blank"
+        >
+          <q-badge class="validator-name__badges__item" color="accent" text-color="text-white">
+            SVM-MEMBER
+          </q-badge>
+        </a>
+      </div>
       <q-skeleton width="250px" v-if="loading && !savedValidator" />
-      <div v-else class="">
+      <div v-else class="q-mt-sm">
         {{ loading ? savedValidator.validatorName : validatorName }}
         <q-tooltip class="text-body2">
           {{ loading ? savedValidator.validatorName : validatorName }}
         </q-tooltip>
       </div>
       <q-skeleton width="250px" class="q-mt-sm" v-if="loading && !savedValidator" />
-      <div v-else class="validator-name__details q-mt-xs">
+      <div v-else class="validator-name__details">
         {{ loading ? savedValidator.validatorDetails : validatorDetails }}
         <q-tooltip class="text-body2">
           {{ loading ? savedValidator.validatorDetails : validatorDetails }}
@@ -69,16 +105,26 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
+  import { computed, defineComponent } from 'vue';
+  import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {},
     setup() {
-      const { savedValidator, validatorName, validatorDetails, validatorImage, validatorUrl } =
-        storeToRefs(useValidatorJstakingStore());
+      const {
+        savedValidator,
+        validatorName,
+        validatorDetails,
+        validatorImage,
+        validatorUrl,
+        validatorInJpool,
+        validatorDelinquent,
+        validatorSVM,
+      } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorsAllStore());
+      const connectionStore = useConnectionStore();
+      const cluster = computed(() => connectionStore.cluster);
 
       return {
         savedValidator,
@@ -86,6 +132,10 @@
         validatorDetails,
         validatorImage,
         validatorUrl,
+        validatorInJpool,
+        validatorDelinquent,
+        validatorSVM,
+        cluster,
         loading,
       };
     },

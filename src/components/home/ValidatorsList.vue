@@ -35,7 +35,7 @@
           <div
             class="validators-list__title__text col-12 col-sm-4"
             :class="{ 'text-center': $q.screen.lt.sm || $q.screen.gt.sm }"
-            >Validators</div
+            >Solana Validators</div
           >
           <div
             class="col-12 col-sm-8 col-md-4 row"
@@ -165,20 +165,23 @@
         </div>
 
         <div class="q-pt-sm q-pb-sm row">
-          <!-- <div class="col q-mb-md main-section__block" :class="{ 'col-12': $q.screen.lt.sm }"
-            ><price-stats
-          /></div> -->
+          <div
+            class="col q-mt-xs q-mb-sm q-mr-lg main-section__block"
+            :class="{ 'col-12': $q.screen.lt.sm }"
+          >
+            <price-stats />
+          </div>
 
           <q-input
             v-model="nameFilter"
             class="q-mr-md q-mb-xs q-mt-sm validators-list__search"
-            :class="{ 'full-width': $q.screen.lt.md }"
+            :class="{ 'full-width': $q.screen.lt.sm }"
             label="Search"
             stack-label
           />
 
           <div
-            class="row q-ml-auto q-my-xs col-12 col-sm-auto"
+            class="row q-ml-auto q-my-xs col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
             <sort-item
@@ -188,14 +191,14 @@
               :current-param="sortParam"
               :current-type="sortType"
             />
-            <sort-item
+            <!-- <sort-item
               title="Sort by Commission"
               param="feeNum"
               @sort="sort"
               :current-param="sortParam"
               :current-type="sortType"
               add-class="q-ml-lg"
-            />
+            /> -->
             <sort-item
               title="Sort by Stake"
               param="totalStake"
@@ -350,10 +353,10 @@
   } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import SortItem from '@/components/home/SortItem.vue';
-  // import PriceStats from '@/components/staking/PriceStats.vue';
+  import PriceStats from '@/components/staking/PriceStats.vue';
 
   export default defineComponent({
-    components: { ValidatorRow, SortItem },
+    components: { ValidatorRow, PriceStats, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
