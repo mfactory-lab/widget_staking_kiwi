@@ -303,7 +303,7 @@
                   <div
                     v-for="(item, index) of itemsShowed"
                     :key="item.voter"
-                    class="stake-accounts-container col-12 q-px-none q-pt-sm"
+                    class="stake-accounts-container col-12 q-px-none q-pt-md"
                   >
                     <validator-row
                       :item="item"

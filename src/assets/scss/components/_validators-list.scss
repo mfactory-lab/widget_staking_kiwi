@@ -131,7 +131,7 @@
       }
 
       .validator-row__name {
-        width: 356px;
+        width: 366px;
         overflow: visible;
       }
 
@@ -199,7 +199,7 @@
 .validator-row {
   flex-wrap: nowrap;
   width: 958px;
-  height: 94px;
+  height: 106px;
 
   .q-avatar__content {
     text-align: center;
@@ -215,13 +215,18 @@
     padding-right: 16px;
   }
 
+  &__main-block {
+    width: 634px;
+  }
+
   &__logo {
     width: 60px;
+    margin-top: 8px;
   }
 
   &__name {
     font-weight: 500;
-    width: 219px;
+    width: 229px;
 
     overflow: hidden;
     white-space: nowrap;
@@ -277,24 +282,32 @@
     padding-right: 16px;
 
     &__sol {
-      font-size: 14px;
+      font-size: 15px;
       line-height: 17px;
       color: $almost-black;
+      margin-bottom: 2px;
+
+      &--my {
+        border-top: 1px solid $gray-secondary;
+        color: $gray-secondary;
+      }
     }
 
-    &__usd {
-      font-family: $secondary;
-      font-size: 14px;
-      color: $primary;
+    &__label {
+      font-size: 10px;
     }
   }
 
+  &__addresses {
+    margin-top: -8px;
+    margin-bottom: -9px;
+  }
   &__address {
     &__text {
       font-size: 11px;
-      width: 230px;
+      width: 265px;
       display: inline-block;
-      font-family: 'Courier';
+      font-family: $font-monoscape;
       color: $dark;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -307,7 +320,7 @@
     border-left: 1px solid $light-gray;
     margin-left: auto;
     padding-left: 16px;
-    width: 278px;
+    width: 263px;
 
     &__stake {
       font-size: 12px;
@@ -315,8 +328,8 @@
   }
 
   &__badges {
-    top: -3px;
-    left: 0
+    top: -10px;
+    left: -35px;
   }
   &__status-badge {
     height: 22px;
@@ -325,8 +338,8 @@
 
   .apy-chart {
     padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: -8px;
+    margin-bottom: -8px;
     .q-icon {
       height: 50px;
       padding: 16px 0 8px;

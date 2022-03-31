@@ -217,7 +217,7 @@
                 fontSize: '10px',
               },
               formatter: (value) => {
-                return `${value.toFixed(2)}%`;
+                return `${value?.toFixed(2) ?? 0}%`;
               },
             },
             min: (_value) => {
