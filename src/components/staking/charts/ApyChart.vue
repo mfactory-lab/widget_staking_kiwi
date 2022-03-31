@@ -33,9 +33,8 @@
       <apexchart
         width="100%"
         :height="height"
-        type="area"
         :options="chartOptions"
-        :series="[data]"
+        :series="[data, averageData]"
       />
     </div>
   </div>
@@ -46,19 +45,15 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
-  import { useConnectionStore, useEpochStore } from '@/store';
+  import { useConnectionStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
-  import { API_URL } from '@/config';
   import SolSvg from '@/components/icons/SolSvg.vue';
   import { useQuasar } from 'quasar';
-
-  interface ApyStats {
-    apy: number;
-    epoch: number;
-  }
+  import { getApyHistory } from '@/utils';
 
   interface ChartData {
     data: number[];
+    type: String;
     name: String;
   }
 
@@ -87,45 +82,47 @@
     setup(props) {
       const data = ref<ChartData>({
         name: 'APY',
+        type: 'area',
         data: [0, 0],
       });
-      const categories = ref<Array<number | string>>([0, 1]);
+      // const categories = ref<Array<number | string>>([0, 1]);
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
-      const { epochNumber } = storeToRefs(useEpochStore());
+      const { averageApy } = storeToRefs(useValidatorsAllStore());
       const { dark } = useQuasar();
 
-      async function getApyHistory() {
-        return new Promise<Array<ApyStats>>((resolve, _reject) => {
-          fetch(`${API_URL}apy/history?voter_id=${props.voterKey}`)
-            .then((res) => res.json())
-            .then(
-              (res) => {
-                if (res.data?.length > 0) {
-                  resolve(res.data);
-                } else {
-                  // resolve([]);
-                  // reject(Error('Promise rejected'));
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-            );
-        });
-      }
+      const averageData = computed(() => {
+        return {
+          name: 'APY',
+          type: 'line',
+          data: averageApy.value.map((item) => item.apy * 100),
+          // data: categories.value.map((item) => {
+          //   const average = averageApy.value.find((aa) => aa.epoch == item);
+          //   return average ? average.apy * 100 : 0;
+          // }),
+        };
+      });
+
+      const categories = computed(() => averageApy.value.map((item) => item.epoch));
 
       watch(
-        [epochNumber],
+        [categories],
         async () => {
           if (cluster.value === 'mainnet-beta') {
-            const apyData = await getApyHistory();
+            const apyData = await getApyHistory(props.voterKey);
+
+            const arrayLength = averageApy.value.length - apyData.length;
+            const array: number[] = [];
+            for (let i = 0; i < arrayLength; i++) {
+              array.push(0);
+            }
 
             data.value = {
               name: 'APY',
-              data: apyData.map((item) => item.apy * 100),
+              type: 'area',
+              data: [...array, ...apyData.map((item) => item.apy * 100)],
             };
-            categories.value = apyData.map((item) => item.epoch);
+            console.log('data == ', data.value);
           }
         },
         { immediate: true },
@@ -135,10 +132,12 @@
         categories,
         data,
         cluster,
+        averageData,
         chartOptions: computed(() => ({
-          colors: ['#1DE3B0'],
+          colors: ['#1DE3B0', '#5A7683'],
           legend: {
             showForSingleSeries: false,
+            show: false,
           },
           fill: {
             opacity: 1,
@@ -174,7 +173,7 @@
             curve: 'smooth',
             lineCap: 'butt',
             width: 1,
-            dashArray: 0,
+            dashArray: [0, 2],
           },
           grid: {
             show: true,
@@ -221,8 +220,8 @@
                 return `${value.toFixed(2)}%`;
               },
             },
-            min: (value) => {
-              return value - 0.5;
+            min: (_value) => {
+              return 0;
             },
             max: (value) => {
               return value + 0.5;

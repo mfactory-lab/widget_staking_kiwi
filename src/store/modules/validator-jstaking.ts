@@ -28,8 +28,8 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useApyStore, useConnectionStore, useEpochStore, useValidatorsAllStore } from '@/store';
-import { DEFAULT_APY, DEFAULT_VALIDATOR } from '@/config';
+import { useConnectionStore, useEpochStore, useValidatorsAllStore } from '@/store';
+import { DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { shortenAddress } from '@jpool/common/utils';
 import router from '@/router';
@@ -40,6 +40,7 @@ interface ValidatorInfo {
   validatorId: string;
   validatorName: string;
   validatorFee: number;
+  validatorApy: number;
   validatorStake: number;
   validatorDetails: string | undefined;
   validatorImage: string | undefined;
@@ -57,6 +58,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const voterKey = ref<string>(DEFAULT_VALIDATOR['mainnet-beta'].voterKey);
   const totalStake = ref(0);
   const commission = ref(0);
+  const apy = ref(0);
   const validatorName = ref('');
   const validatorDetails = ref(<string | undefined>'');
   const validatorImage = ref(<string | undefined>'');
@@ -71,8 +73,6 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const cluster = computed(() => connectionStore.cluster);
   const epochStore = useEpochStore();
   const epochInfo = computed(() => epochStore.epochInfo);
-  const apyStore = useApyStore();
-  const apyInfoAll = computed(() => apyStore.apyInfoAll);
   const validatorsAllStore = useValidatorsAllStore();
   const validatorsAllItems = computed(() => validatorsAllStore.validatorsStats);
 
@@ -101,6 +101,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
             network: voterData.network,
             validatorName: voterData?.name ?? shortenAddress(pubKey),
             validatorFee: voterData.fee,
+            validatorApy: voterData.apy,
             validatorStake: Number(voterData.totalStake),
             validatorDetails: voterData.details,
             validatorImage: voterData?.keybaseUsername
@@ -135,6 +136,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       validatorId: validatorId.value,
       validatorName: validatorName.value,
       validatorFee: commission.value,
+      validatorApy: apy.value,
       validatorStake: totalStake.value,
       validatorDetails: validatorDetails.value,
       validatorImage: validatorImage.value,
@@ -186,6 +188,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
 
         totalStake.value = Number(voterData.totalStake);
         commission.value = voterData.fee;
+        apy.value = voterData.apy;
         validatorId.value = pubKey;
         validatorDetails.value = voterData.details;
         validatorImage.value = voterData.keybaseUsername
@@ -203,21 +206,12 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     { immediate: true },
   );
 
-  const apy = computed(() => {
-    if (cluster.value !== 'mainnet-beta') {
-      return DEFAULT_APY;
-    }
-    const voteApy = apyInfoAll.value?.validators ?? [];
-    const validatorInfo = voteApy.find((v) => v.vote == voterKey.value);
-    return validatorInfo?.apy ?? 0;
-  });
-
   return {
     validatorId,
     voterKey,
     totalStake,
     commission,
-    apyLoading: computed(() => apyStore.apyLoading),
+    apyLoading: computed(() => validatorsAllStore.loading),
     apy,
     validatorName,
     validatorDetails,

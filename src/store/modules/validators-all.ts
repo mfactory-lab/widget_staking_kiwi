@@ -30,17 +30,20 @@ import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
-import { ValidatorStats, getValidatorsStats } from '@/utils';
+import { ApyStats, ValidatorStats, getAverageApy, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
   const epochStore = useEpochStore();
+  const cluster = computed(() => connectionStore.cluster);
+  const epoch = computed(() => epochStore.epochNumber);
 
   const currentPage = ref(1);
   const perPage = ref<number | string>(10);
   const validatorsStats = ref<Array<ValidatorStats>>([]);
+  const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
   const perPageOptions = ref([5, 10, 15, 20, 30 /*, 50, 70, 100, 150, 200, 'all'*/]);
@@ -65,20 +68,29 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   };
 
+  const loadAverageApy = async () => {
+    if (cluster.value === 'mainnet-beta') {
+      averageApy.value = await getAverageApy();
+    } else {
+      averageApy.value = [];
+    }
+    console.log('[validators all] getAverageApy === ', averageApy.value);
+  };
+
   onMounted(async () => {
     console.log('[validators all] onMounted store all');
+    loadAverageApy();
     if (validatorsStats.value.length < 1) {
       await loadAllValidators();
     }
   });
 
-  const cluster = computed(() => connectionStore.cluster);
-  const epoch = computed(() => epochStore.epochNumber);
   const perPageNum = computed(() =>
     isNaN(Number(perPage.value)) ? itemsSorted.value.length : Number(perPage.value),
   );
 
   watch([cluster, epoch], loadAllValidators);
+  watch([cluster, epoch], loadAverageApy);
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
@@ -241,6 +253,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       ),
     ),
     loadAllValidators,
+    averageApy,
     loading,
   };
 });
