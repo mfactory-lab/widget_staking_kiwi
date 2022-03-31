@@ -67,7 +67,7 @@
           />
         </div>
         <div class="validator-row__name column q-pt-xs justify-start">
-          <q-skeleton width="100%" class="q-mt-xs" v-if="loading" />
+          <q-skeleton width="100%" v-if="loading" />
           <div v-else class="q-mt-sm">
             {{ name }}
             <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
@@ -88,7 +88,7 @@
             <!-- <span>Commission:</span> <b>{{ item.fee }}</b> -->
             <span>Current apy:</span> <b>{{ item.apyEst }}</b>
           </div>
-          <q-skeleton class="q-mt-sm" height="22px" v-if="loading" width="100%" />
+          <q-skeleton class="q-mt-sm" height="18px" v-if="loading" width="100%" />
           <div class="validator-row__apy__val q-mb-xs" v-else>
             APY: <b>{{ item.apy }}</b>
           </div>
@@ -97,7 +97,7 @@
         </div>
         <div class="validator-row__apy-chart column q-px-sm justify-start">
           <div class="q-px-sm q-mt-xs" v-if="loading">
-            <q-skeleton width="100%" height="64px" class="q-mt-sm" />
+            <q-skeleton width="100%" height="60px" class="" />
           </div>
           <apy-chart
             v-else
@@ -111,7 +111,13 @@
       <div
         class="validator-row__addresses q-pt-sm row justify-between q-pb-xs q-pr-md relative-position"
       >
-        <q-skeleton width="314px" style="max-width: 100%" class="q-mt-sm" v-if="loading" />
+        <q-skeleton
+          width="288px"
+          height="16px"
+          style="max-width: 48%"
+          class="q-mt-xs"
+          v-if="loading"
+        />
         <div class="text-right" v-else>
           <span class="validator-row__address__text">
             {{ item.id }}
@@ -119,7 +125,13 @@
           </span>
           <copy-to-clipboard :text="item.voter" />
         </div>
-        <q-skeleton width="314px" style="max-width: 100%" class="q-mt-sm" v-if="loading" />
+        <q-skeleton
+          width="296px"
+          height="16px"
+          style="max-width: 48%"
+          class="q-mt-xs"
+          v-if="loading"
+        />
         <div class="text-right" v-else>
           <span class="validator-row__address__text">
             {{ item.voter }}
@@ -132,7 +144,7 @@
     <div class="validator-row__btns no-wrap column q-pl-md justify-start">
       <div class="row q-mb-xs justify-between">
         <div class="validator-row__stake column justify-start">
-          <q-skeleton v-if="loading" width="100%" height="32px" class="q-mt-xs" />
+          <q-skeleton v-if="loading" width="100%" height="35px" class="q-mt-xs" />
           <div class="column validator-row__stake__values" v-else>
             <div class="validator-row__stake__sol">
               <span class="validator-row__stake__label">TOTAL STAKE:</span>
@@ -140,7 +152,8 @@
               <b>{{ item.totalSolStacked }}&nbsp;SOL</b>
             </div>
           </div>
-          <div class="column validator-row__stake__values">
+          <q-skeleton v-if="loading" width="100%" height="35px" class="q-mt-md" />
+          <div class="column validator-row__stake__values" v-else>
             <div class="validator-row__stake__sol validator-row__stake__sol--my q-mt-sm q-pt-sm">
               <span class="validator-row__stake__label">MY STAKE:</span>
               <br />
@@ -149,7 +162,7 @@
             </div>
           </div>
         </div>
-        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" />
+        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" height="35px" />
         <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
           <q-btn
             v-bind="buttonProps(props)"
