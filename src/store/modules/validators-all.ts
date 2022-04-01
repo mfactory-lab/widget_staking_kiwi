@@ -28,17 +28,19 @@
 
 import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
+import { useConnectionStore, useEpochStore, useStakeAccountStore, useWalletStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { ApyStats, ValidatorStats, getAverageApy, getValidatorsStats } from '@/utils';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
+  const walletStore = useWalletStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
   const epochStore = useEpochStore();
   const cluster = computed(() => connectionStore.cluster);
   const epoch = computed(() => epochStore.epochNumber);
+  const connected = computed(() => walletStore.connected);
 
   const currentPage = ref(1);
   const perPage = ref<number | string>(10);
@@ -89,6 +91,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     isNaN(Number(perPage.value)) ? itemsSorted.value.length : Number(perPage.value),
   );
 
+  watch(connected, (connected) => {
+    if (!connected) filterHasStake.value = false;
+  });
   watch([cluster, epoch], loadAllValidators);
   watch([cluster, epoch], loadAverageApy);
 
@@ -112,12 +117,16 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
       let myStake = 0;
       if (stakeAccounts.value.length > 0) {
-        myStake = stakeAccounts.value
-          .filter(
-            (item) =>
-              item.account.data?.parsed?.info?.stake?.delegation?.voter == voteAccount.voteId,
-          )
-          .reduce((prev, curr) => prev + curr.account.lamports, 0);
+        myStake = lamportsToSol(
+          Number(
+            stakeAccounts.value
+              .filter(
+                (item) =>
+                  item.account.data?.parsed?.info?.stake?.delegation?.voter == voteAccount.voteId,
+              )
+              .reduce((prev, curr) => prev + curr.account.lamports, 0),
+          ),
+        );
       }
 
       return {
@@ -144,7 +153,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         apyComparedMax: voteAccount.apyComparedMax,
         network: voteAccount.network,
         lamports: 0,
-        myStake,
+        myStake: myStake,
+        myStakeSol: myStake > 1 ? formatAmountPrice(myStake) : myStake,
       };
     });
   });

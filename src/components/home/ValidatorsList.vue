@@ -55,112 +55,124 @@
           </div>
         </div>
 
-        <div class="row justify-end q-mt-md" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
-          <div class="column q-my-xs">
-            <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
-            <q-toggle
-              v-model="filterPrivate"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              size="40px"
-              toggle-order="tf"
-              color="primary"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
+        <div
+          class="row q-mt-md"
+          :class="{ 'justify-start': $q.screen.lt.md, 'justify-between': $q.screen.gt.sm }"
+        >
+          <div class="row validators-list__filters q-mb-md q-mr-md">
+            <div class="column q-ml-md q-my-xs">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
+              <q-toggle
+                v-model="filterPrivate"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                size="40px"
+                toggle-order="tf"
+                color="primary"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
+              <q-toggle
+                v-model="filterTop33"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="primary"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide with Commission</div>
+              <q-toggle
+                v-model="filterFee"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="primary"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Untitled</div>
+              <q-toggle
+                v-model="filterNoname"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="primary"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Delinquent</div>
+              <q-toggle
+                v-model="filterDelinq"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="red-dark"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
           </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
-            <q-toggle
-              v-model="filterTop33"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="primary"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
+          <div class="row validators-list__filters q-mb-md q-mr-md">
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">JPool-Members only</div>
+              <q-toggle
+                v-model="filterNotJpool"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="warning"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">SVM-Members only</div>
+              <q-toggle
+                v-model="filterNotSvm"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="accent"
+                keep-color
+                label=""
+                unchecked-icon="eva-close-outline"
+              />
+            </div>
           </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">Hide with Commission</div>
-            <q-toggle
-              v-model="filterFee"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="primary"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
-          </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">Hide Untitled</div>
-            <q-toggle
-              v-model="filterNoname"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="primary"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
-          </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">Hide Delinquent</div>
-            <q-toggle
-              v-model="filterDelinq"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="red-dark"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
-          </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">JPool-Members only</div>
-            <q-toggle
-              v-model="filterNotJpool"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="warning"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
-          </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">SVM-Members only</div>
-            <q-toggle
-              v-model="filterNotSvm"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="accent"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
-          </div>
-          <div class="column q-my-xs q-ml-md">
-            <div class="validators-list__dropdown-label q-mb-xs">Show my Stake only</div>
-            <q-toggle
-              v-model="filterHasStake"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="secondary"
-              keep-color
-              label=""
-              :disable="!connected"
-              unchecked-icon="eva-close-outline"
-            />
+          <div class="row validators-list__filters q-mb-md">
+            <div class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Show my Stake only</div>
+              <q-toggle
+                v-model="filterHasStake"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="secondary"
+                keep-color
+                label=""
+                :disable="!connected"
+                unchecked-icon="eva-close-outline"
+              />
+              <q-tooltip v-if="!connected" class="text-body2"
+                >Available with connected wallet</q-tooltip
+              >
+            </div>
           </div>
         </div>
 

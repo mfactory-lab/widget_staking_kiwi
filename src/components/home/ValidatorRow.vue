@@ -90,7 +90,9 @@
           </div>
           <q-skeleton class="q-mt-sm" height="18px" v-if="loading" width="100%" />
           <div class="validator-row__apy__val q-mb-xs" v-else>
+            <average-svg :fill="$q.dark.isActive ? '#fff' : '#252B42'" />
             APY: <b>{{ item.apy }}</b>
+            <q-tooltip class="text-body2"> Average APY for the previous 3 epochs </q-tooltip>
           </div>
           <q-skeleton class="q-mt-sm" height="10px" v-if="loading" width="100%" />
           <linear-progress v-else :val="item.apyComparedMax" />
@@ -157,7 +159,7 @@
             <div class="validator-row__stake__sol validator-row__stake__sol--my q-mt-sm q-pt-sm">
               <span class="validator-row__stake__label">MY STAKE:</span>
               <br />
-              <b v-if="!loading && connected">{{ item.myStake }}&nbsp;SOL</b>
+              <b v-if="!loading && connected">{{ item.myStakeSol }}&nbsp;SOL</b>
               <span v-else>Connect a wallet</span>
             </div>
           </div>
@@ -189,9 +191,10 @@
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
   import LinearProgress from '@/components/home/LinearProgress.vue';
+  import AverageSvg from '@/components/icons/AverageSvg.vue';
 
   export default defineComponent({
-    components: { ApyChart, CopyToClipboard, LinearProgress },
+    components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
     props: {
       loading: {
         type: Boolean,
