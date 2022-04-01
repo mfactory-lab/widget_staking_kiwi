@@ -215,6 +215,13 @@
       fill: $grey-4;
     }
   }
+  
+  &__stake-btn {
+    height: 80px;
+    width: 100px;
+    line-height: 20px;
+    border-radius: 12px;
+  }
 
   &__index {
     width: 45px;

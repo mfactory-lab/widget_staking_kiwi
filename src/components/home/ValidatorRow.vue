@@ -168,13 +168,12 @@
         <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
           <q-btn
             v-bind="buttonProps(props)"
-            rounded
-            label="Stake"
+            label="Stake now"
             color="warning"
             text-color="primary"
             size="14px"
-            padding="5px 32px 7px"
-            class="q-mt-xs home-page__std-btn"
+            padding="11px 32px 7px"
+            class="q-mt-xs validator-row__stake-btn"
           />
         </router-link>
       </div>
