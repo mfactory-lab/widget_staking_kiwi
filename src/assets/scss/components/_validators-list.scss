@@ -385,6 +385,9 @@ body.body--dark {
     .q-field--float .q-field__label {
       color: $text-white;
     }
+    &__filters {
+      background: $gray-dark-theme;
+    }
   }
   .validator-row {
     &__apy {
