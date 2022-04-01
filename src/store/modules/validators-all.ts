@@ -173,12 +173,13 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       filterHasStake.value ||
       filterNotSvm.value
     ) {
+      const search = nameFilter.value.toLowerCase();
       return array.filter((item) => {
         if (
-          nameFilter.value &&
-          item.name?.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
-          item.voter.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1 &&
-          item.id.toLowerCase().indexOf(nameFilter.value.toLowerCase()) === -1
+          search &&
+          (!item.name || item.name?.toLowerCase().indexOf(search) === -1) &&
+          item.voter.toLowerCase().indexOf(search) === -1 &&
+          item.id.toLowerCase().indexOf(search) === -1
         ) {
           return false;
         }
@@ -214,7 +215,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   const itemsSorted = computed(() => {
-    // console.log('[validators all] sort');
+    console.log('[validators all] sort ===', itemsFiltered.value.length);
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortType.value === 'asc') {
         if (sortParam.value === 'name') {

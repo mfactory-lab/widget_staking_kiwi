@@ -122,7 +122,6 @@
               type: 'area',
               data: [...array, ...apyData.map((item) => item.apy * 100)],
             };
-            console.log('data == ', data.value);
           }
         },
         { immediate: true },
