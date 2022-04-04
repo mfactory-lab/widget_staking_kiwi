@@ -95,7 +95,7 @@
 
       const averageData = computed(() => {
         return {
-          name: 'Avg. APY',
+          name: 'Avr. APY',
           type: 'line',
           data: averageApy.value.map((item) => item.apy * 100),
           // data: categories.value.map((item) => {
