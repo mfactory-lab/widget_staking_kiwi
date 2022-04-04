@@ -217,6 +217,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const itemsSorted = computed(() => {
     console.log('[validators all] sort ===', itemsFiltered.value.length);
+    if (loading.value) {
+      return itemsFiltered.value;
+    }
     return [...itemsFiltered.value].sort((a, b) => {
       if (sortParam.value === 'name') {
         const aName = a.name ?? a.id;
