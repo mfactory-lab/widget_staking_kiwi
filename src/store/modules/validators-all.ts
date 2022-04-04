@@ -31,6 +31,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useConnectionStore, useEpochStore, useStakeAccountStore, useWalletStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { ApyStats, ValidatorStats, getAverageApy, getValidatorsStats } from '@/utils';
+import { useLocalStorage } from '@vueuse/core';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
@@ -43,21 +44,21 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connected = computed(() => walletStore.connected);
 
   const currentPage = ref(1);
-  const perPage = ref<number | string>(10);
+  const perPage = useLocalStorage<number | string>('per-page', 10);
   const validatorsStats = ref<Array<ValidatorStats>>([]);
   const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
   const perPageOptions = ref([5, 10, 15, 20, 30 /*, 50, 70, 100, 150, 200, 'all'*/]);
-  const sortType = ref('desc');
-  const sortParam = ref('apyNum');
-  const filterTop33 = ref(true);
-  const filterPrivate = ref(true);
-  const filterFee = ref(false);
-  const filterNoname = ref(false);
-  const filterDelinq = ref(false);
-  const filterNotJpool = ref(false);
-  const filterNotSvm = ref(false);
+  const sortType = useLocalStorage<string>('sort-type', 'desc');
+  const sortParam = useLocalStorage<string>('sort-param', 'apyNum');
+  const filterTop33 = useLocalStorage<boolean>('filter-top-staked', true);
+  const filterPrivate = useLocalStorage<boolean>('filter-private', true);
+  const filterFee = useLocalStorage<boolean>('filter-fee', false);
+  const filterNoname = useLocalStorage<boolean>('filter-noname', false);
+  const filterDelinq = useLocalStorage<boolean>('filter-delinq', false);
+  const filterNotJpool = useLocalStorage<boolean>('filter-not-jpool', false);
+  const filterNotSvm = useLocalStorage<boolean>('filter-not-svm', false);
   const filterHasStake = ref(false);
 
   const loadAllValidators = async () => {
