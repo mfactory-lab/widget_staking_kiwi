@@ -83,7 +83,9 @@
       const data = ref<ChartData>({
         name: 'APY',
         type: 'area',
-        data: [0, 0],
+        data: [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
       });
       // const categories = ref<Array<number | string>>([0, 1]);
       const connectionStore = useConnectionStore();
