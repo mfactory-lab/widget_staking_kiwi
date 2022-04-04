@@ -47,7 +47,7 @@ export const useCoinRateStore = defineStore({
   }),
   actions: {
     init() {
-      setInterval(() => this.load, SOL_USD_RELOAD_DURATION);
+      setInterval(this.load, SOL_USD_RELOAD_DURATION);
       this.load();
     },
     async load() {
