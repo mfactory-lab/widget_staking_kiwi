@@ -218,14 +218,16 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const itemsSorted = computed(() => {
     console.log('[validators all] sort ===', itemsFiltered.value.length);
     return [...itemsFiltered.value].sort((a, b) => {
-      if (sortType.value === 'asc') {
-        if (sortParam.value === 'name') {
-          return a.name.localeCompare(b.name);
-        }
-        return a[sortParam.value] - b[sortParam.value];
-      }
       if (sortParam.value === 'name') {
-        return b.name.localeCompare(a.name);
+        const aName = a.name ?? a.id;
+        const bName = b.name ?? b.id;
+        if (sortType.value === 'asc') {
+          return aName.localeCompare(bName);
+        }
+        return bName.localeCompare(aName);
+      }
+      if (sortType.value === 'asc') {
+        return a[sortParam.value] - b[sortParam.value];
       }
       return b[sortParam.value] - a[sortParam.value];
     });
