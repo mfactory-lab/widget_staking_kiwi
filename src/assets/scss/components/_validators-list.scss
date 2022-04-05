@@ -119,6 +119,9 @@
     width: 990px !important;
     overflow-y: hidden;
     border-top: 1px solid $text-white;
+    &--fix-height {
+      height: 616px;
+    }
     
     &__head {
       background: $primary;
@@ -159,11 +162,18 @@
   }
 }
 
-.stake-accounts-container {
-  &:not(:last-child) {
-    border-bottom: 1px solid $blue-grey-5;
+.vue-recycle-scroller__item-wrapper {
+  &:not(:nth-child(4)) {
+    .stake-accounts-container {
+      border-bottom: 1px solid $blue-grey-5;
+    }
   }
 }
+// .stake-accounts-container {
+//   &:not(:last-child) {
+//     border-bottom: 1px solid $blue-grey-5;
+//   }
+// }
 
 .stake-stats {
   &:not(:first-child) {
