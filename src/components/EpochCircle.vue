@@ -82,7 +82,10 @@
       bottom: 50px;
     }
     @media (max-width: $breakpoint-xs) {
-      left: calc(100% - 106px);
+      left: 235px;
+    }
+    @media (max-width: 350px) {
+      left: 215px;
     }
     &__progress {
       @media (max-width: $breakpoint-sm) {
