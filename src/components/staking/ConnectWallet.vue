@@ -130,7 +130,7 @@
       const { connected } = storeToRefs(walletStore);
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const walletAddress = computed(() => walletStore.wallet?.publicKey?.toBase58() ?? '');
-      const walletShortAddress = computed(() => shortenAddress(walletAddress.value));
+      const walletShortAddress = computed(() => shortenAddress(walletAddress.value, 6));
 
       const dialog = ref(false);
 
