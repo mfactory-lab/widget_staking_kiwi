@@ -44,7 +44,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connected = computed(() => walletStore.connected);
 
   const currentPage = ref(1);
-  const perPage = useLocalStorage<number | string>('per-page', 10);
+  const perPage = useLocalStorage<number | string>('per-page', '10');
   const validatorsStats = ref<Array<ValidatorStats>>([]);
   const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
@@ -66,8 +66,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     if (!loading.value) {
       const network = connectionStore.cluster.replace('-beta', '');
       loading.value = true;
-      validatorsStats.value = await getValidatorsStats(network);
-      loading.value = false;
+      try {
+        validatorsStats.value = await getValidatorsStats(network);
+      } catch {
+      } finally {
+        loading.value = false;
+      }
     }
   };
 
@@ -88,9 +92,14 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   });
 
-  const perPageNum = computed(() =>
-    isNaN(Number(perPage.value)) ? itemsSorted.value.length : Number(perPage.value),
-  );
+  const perPageNum = computed(() => {
+    const itemsLength = itemsSorted.value.length;
+    return isNaN(Number(perPage.value))
+      ? itemsLength > 0
+        ? itemsLength
+        : 5
+      : Number(perPage.value);
+  });
 
   watch(connected, (connected) => {
     if (!connected) filterHasStake.value = false;
@@ -107,7 +116,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     // console.log('[validators all] start');
     if (loading.value) {
       // console.log('[validators all] skeleton');
-      return Array(10).fill({});
+      return Array(5).fill({});
     }
 
     // console.log('[validators all] calc ', validatorsStats.value.length);
@@ -162,6 +171,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const itemsFiltered = computed(() => {
     // console.log('[validators all] filter');
+    if (loading.value) {
+      return items.value;
+    }
     const array = [...items.value];
     if (
       nameFilter.value ||
@@ -236,7 +248,11 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     });
   });
 
-  const pages = computed(() => Math.ceil(itemsFiltered.value.length / perPageNum.value));
+  const pages = computed(() => {
+    const pageCount = Math.ceil(itemsFiltered.value.length / perPageNum.value);
+    return pageCount > 0 ? pageCount : 1;
+  });
+
   watch(pages, (pages) => {
     if (pages < currentPage.value) {
       currentPage.value = pages;

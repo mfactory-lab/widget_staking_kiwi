@@ -165,7 +165,7 @@
             </div>
           </div>
         </div>
-        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" height="35px" />
+        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" height="86px" />
         <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
           <q-btn
             v-bind="buttonProps(props)"

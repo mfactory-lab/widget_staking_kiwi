@@ -53,7 +53,7 @@ export interface ApyStats {
 }
 
 export async function getValidatorsStats(network) {
-  return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
+  return new Promise<Array<ValidatorStats>>((resolve, reject) => {
     // fetch(`http://localhost:3000/validators/list?network=${network}`)
     fetch(`${API_URL}validators/list?network=${network}`)
       .then((res) => res.json())
@@ -66,6 +66,7 @@ export async function getValidatorsStats(network) {
           }
         },
         (error) => {
+          reject(error);
           console.error(error);
         },
       );
