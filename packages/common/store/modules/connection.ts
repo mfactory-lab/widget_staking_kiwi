@@ -38,7 +38,7 @@ import {
 } from '@solana/web3.js';
 import { DEFAULT_COMMITMENT, DEFAULT_ENDPOINT, ENDPOINTS } from '@/config';
 import { useStorage } from '@vueuse/core';
-import { WalletAdapter } from '@jpool/common/utils';
+import { AnchorWallet } from 'solana-wallets-vue';
 
 export type ExtendedCluster = Cluster | 'localnet';
 
@@ -89,7 +89,7 @@ export const useConnectionStore = defineStore({
  */
 export async function sendTransaction(
   connection: Connection,
-  wallet: WalletAdapter,
+  wallet: AnchorWallet,
   instructions: TransactionInstruction[],
   signers: Signer[],
 ) {

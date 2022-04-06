@@ -36,22 +36,22 @@ import { ValidatorAccount } from '@solana/spl-stake-pool/src/utils/stake';
 import { formatAmount, lamportsToSol, solToLamports } from '@jpool/common/utils';
 import { WITHDRAW_SOL_ACTIVE } from '@/config';
 import {
+  ProgramAccount,
+  loadApyInfo,
   sendTransaction,
   useBalanceStore,
-  useWalletStore,
   useConnectionStore,
   useEpochStore,
   useStakePoolStore,
-  loadApyInfo,
-  ProgramAccount
 } from '../store';
 import { useMonitorTransaction } from './monitor';
+import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 
 export function useDeposit() {
   const connectionStore = useConnectionStore();
   const { lamportsPerSignature, stakePool, minRentBalance } = storeToRefs(useStakePoolStore());
-  const walletStore = useWalletStore();
-  const { wallet, connected } = storeToRefs(walletStore);
+  const { connected } = useWallet();
+  const wallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
   const { nativeBalance, hasTokenAccount } = storeToRefs(useBalanceStore());
   const { notify } = useQuasar();
@@ -90,9 +90,7 @@ export function useDeposit() {
         if (nativeBalance.value < rentFee) {
           // noinspection ExceptionCaughtLocallyJS
           throw new Error(
-            `Insufficient balance, at least ${lamportsToSol(
-              rentFee,
-            )} SOL are required.`,
+            `Insufficient balance, at least ${lamportsToSol(rentFee)} SOL are required.`,
           );
         }
 
@@ -138,9 +136,7 @@ export function useDeposit() {
         if (nativeBalance.value < rentFee) {
           // noinspection ExceptionCaughtLocallyJS
           throw new Error(
-            `Insufficient balance, at least ${lamportsToSol(
-              rentFee,
-            )} SOL are required.`,
+            `Insufficient balance, at least ${lamportsToSol(rentFee)} SOL are required.`,
           );
         }
 
@@ -166,7 +162,8 @@ export function useWithdraw() {
 
   const connectionStore = useConnectionStore();
   const { lamportsPerSignature, stakePool, reserveStakeBalance } = storeToRefs(useStakePoolStore());
-  const { wallet, connected } = storeToRefs(useWalletStore());
+  const { wallet, connected } = useWallet();
+  const anchorWallet = useAnchorWallet();
   const { epochInfo } = storeToRefs(useEpochStore());
 
   const useReserve = ref(false);
@@ -220,7 +217,7 @@ export function useWithdraw() {
           );
 
           await monitorTransaction(
-            sendTransaction(connectionStore.connection, wallet.value!, instructions, signers),
+            sendTransaction(connectionStore.connection, anchorWallet.value!, instructions, signers),
           );
 
           return true;
@@ -239,7 +236,7 @@ export function useWithdraw() {
         );
 
         await monitorTransaction(
-          sendTransaction(connectionStore.connection, wallet.value!, instructions, signers),
+          sendTransaction(connectionStore.connection, anchorWallet.value!, instructions, signers),
         );
 
         return true;

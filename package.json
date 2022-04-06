@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.12.3",
+    "@solana/wallet-adapter-wallets": "^0.15.5",
     "@vue/server-renderer": "^3.2.26",
     "@vueuse/core": "^7.5.3",
     "@vueuse/head": "^0.7.4",
@@ -35,6 +36,7 @@
     "axios": "^0.24.0",
     "bn.js": "^5.2.0",
     "quasar": "^2.4.3",
+    "solana-wallets-vue": "^0.3.2",
     "vue": "^3.2.26",
     "vue-gtag": "^2.0.1",
     "vue-router": "^4.0.12",

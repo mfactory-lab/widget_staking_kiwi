@@ -186,12 +186,11 @@
   import { computed, defineComponent } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { shortenAddress } from '@jpool/common/utils';
-  import { storeToRefs } from 'pinia';
-  import { useWalletStore } from '@/store';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
   import LinearProgress from '@/components/home/LinearProgress.vue';
   import AverageSvg from '@/components/icons/AverageSvg.vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
@@ -212,7 +211,7 @@
       },
     },
     setup(props) {
-      const { connected } = storeToRefs(useWalletStore());
+      const { connected } = useWallet();
       return {
         connected,
         evaPerson,

@@ -26,12 +26,12 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { defineStore, storeToRefs } from 'pinia';
+import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useConnectionStore, useWalletStore } from '@jpool/common/store';
+import { AccountInfo, ParsedAccountData, PublicKey, StakeProgram } from '@solana/web3.js';
+import { useConnectionStore } from '@/store';
 import { getFilteredProgramAccounts, lamportsToSol } from '@jpool/common/utils';
-import { STAKE_PROGRAM_ID } from '@/config';
-import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js';
+import { useWallet } from 'solana-wallets-vue';
 
 export interface ProgramAccount {
   pubkey: PublicKey;
@@ -40,7 +40,7 @@ export interface ProgramAccount {
 
 export const useStakeAccountStore = defineStore('stake-accounts', () => {
   const connectionStore = useConnectionStore();
-  const { walletPubKey } = storeToRefs(useWalletStore());
+  const { publicKey } = useWallet();
   const data = ref<ProgramAccount[]>([]);
   const loading = ref<boolean>(false);
   const dialog = ref<boolean>(false);
@@ -49,12 +49,12 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
   const voter = ref<string | null>();
 
   async function load() {
-    if (loading.value || !walletPubKey.value) {
+    if (loading.value || !publicKey.value) {
       console.log('[Stake accounts] Skip loading...');
       return;
     }
 
-    console.log('[Stake accounts] Loading...');
+    // console.log('[Stake accounts] Loading...');
 
     // stake user info account
     const filters = [
@@ -62,7 +62,7 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
         // 12 is Staker authority offset in stake account stake
         memcmp: {
           offset: 12,
-          bytes: walletPubKey.value.toBase58(),
+          bytes: publicKey.value.toBase58(),
         },
       },
       { dataSize: 200 },
@@ -83,21 +83,20 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
       // @ts-ignore
       data.value = await getFilteredProgramAccounts(
         connectionStore.connection,
-        STAKE_PROGRAM_ID,
+        StakeProgram.programId,
         filters,
       );
 
-      console.log('[Stake accounts] Data:', data.value);
-      console.log(data.value.map((acc) => acc.pubkey.toBase58()).join('\n'));
-    } catch (e) {
-      console.error('[Stake accounts] Error:', e);
+      // console.log('[Stake accounts] Data:', data.value);
+      // console.log(data.value.map((acc) => acc.pubkey.toBase58()).join('\n'));
+    } catch {
     } finally {
       loading.value = false;
     }
   }
 
   watch(
-    walletPubKey,
+    publicKey,
     () => {
       loading.value = false;
       load();
@@ -105,6 +104,7 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
     { immediate: true },
   );
 
+  // TODO: refactory
   watch(dialog, () => {
     if (dialog.value == false) {
       voter.value = null;

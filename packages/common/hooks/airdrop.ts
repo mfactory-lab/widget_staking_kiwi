@@ -27,20 +27,20 @@
  */
 
 import { PublicKey } from '@solana/web3.js';
-import { storeToRefs } from 'pinia';
-import { useConnectionStore, useWalletStore } from '../store';
-import { solToLamports } from '../utils';
+import { useConnectionStore } from '@/store';
+import { solToLamports } from '@jpool/common/utils';
 import { useMonitorTransaction } from './monitor';
+import { useWallet } from 'solana-wallets-vue';
 
 export function useAirdrop() {
-  const connectionStore = useConnectionStore();
-  const { wallet, connected } = storeToRefs(useWalletStore());
+  const { connection } = useConnectionStore();
+  const { wallet, connected } = useWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
   return {
     airdropping: sending,
     airdrop: async (amount = 10) => {
       if (connected.value) {
-        const sign = await connectionStore.connection.requestAirdrop(
+        const sign = await connection.requestAirdrop(
           wallet.value?.publicKey as PublicKey,
           solToLamports(amount),
         );
