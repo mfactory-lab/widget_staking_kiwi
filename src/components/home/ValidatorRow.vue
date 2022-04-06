@@ -86,7 +86,7 @@
           <q-skeleton width="100%" height="16px" class="q-mt-xs" v-if="loading" />
           <div class="validator-row__apy__fee q-mt-xs" v-else>
             <!-- <span>Commission:</span> <b>{{ item.fee }}</b> -->
-            <span>Current apy:</span> <b>{{ item.apyEst }}</b>
+            <span>Current APY:</span> <b>{{ item.apyEst }}</b>
           </div>
           <q-skeleton class="q-mt-sm" height="18px" v-if="loading" width="100%" />
           <div class="validator-row__apy__val q-mb-xs" v-else>

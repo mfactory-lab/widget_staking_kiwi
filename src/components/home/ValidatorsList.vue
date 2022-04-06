@@ -294,7 +294,7 @@
               <span>HISTORY APY</span>
             </div>
             <div class="validator-row__btns row q-pl-md items-center justify-between">
-              <span>TOTAL STAKE & VOTE KEY</span>
+              <span>TOTAL STAKE</span>
               <sort-item
                 size="xs"
                 margin-size="xs"
