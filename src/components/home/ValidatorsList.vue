@@ -306,25 +306,7 @@
             </div>
           </q-card-section>
 
-          <recycle-scroller
-            v-if="!loading"
-            class="validators-list__list validators-list__list--fix-height"
-            :items="itemsShowed"
-            :item-size="123"
-            key-field="voter"
-            v-slot="{ item, index }"
-          >
-            <div class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md">
-              <validator-row
-                :item="item"
-                :index="(currentPage - 1) * perPageNum + index + 1"
-                :loading="loading"
-                :cluster="cluster"
-              />
-            </div>
-          </recycle-scroller>
-
-          <div class="validators-list__list" v-else>
+          <div class="validators-list__list">
             <div class="relative-position">
               <div
                 class="fit row wrap justify-start items-start q-px-md content-start"
@@ -385,11 +367,9 @@
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import SortItem from '@/components/home/SortItem.vue';
   import PriceStats from '@/components/staking/PriceStats.vue';
-  import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-  import { RecycleScroller } from 'vue-virtual-scroller';
 
   export default defineComponent({
-    components: { ValidatorRow, PriceStats, SortItem, RecycleScroller },
+    components: { ValidatorRow, PriceStats, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();

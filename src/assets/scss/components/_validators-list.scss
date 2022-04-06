@@ -115,26 +115,6 @@
     max-width: 100%;
   }
 
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: $blue-grey-1 $warning;
-  }
-
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    position: absolute;
-  }
-  ::-webkit-scrollbar-track {
-    background: $blue-grey-1;
-  }
-  ::-webkit-scrollbar-thumb {
-    width: 6px;
-    background-color: $warning;
-    border-radius: 20px;
-    border: 3px solid $warning;
-  }
-
   &__list {
     width: 990px !important;
     overflow-y: hidden;
@@ -403,12 +383,6 @@ body.body--dark {
     background: $gray-secondary;
   }
   .validators-list {
-    * {
-      scrollbar-color: $blue-grey-14 $warning;
-    }
-    ::-webkit-scrollbar-track {
-      background: $blue-grey-14;
-    }
     &__title__text {
       color: $text-white;
     }
