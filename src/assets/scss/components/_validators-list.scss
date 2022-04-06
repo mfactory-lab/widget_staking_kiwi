@@ -115,6 +115,11 @@
     max-width: 100%;
   }
 
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: $blue-grey-1 $warning;
+  }
+
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -398,6 +403,9 @@ body.body--dark {
     background: $gray-secondary;
   }
   .validators-list {
+    * {
+      scrollbar-color: $blue-grey-14 $warning;
+    }
     ::-webkit-scrollbar-track {
       background: $blue-grey-14;
     }
