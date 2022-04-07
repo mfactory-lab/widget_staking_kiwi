@@ -298,6 +298,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       ),
     ),
     loadAllValidators,
+    loadAverageApy,
     averageApy,
     loading,
   };

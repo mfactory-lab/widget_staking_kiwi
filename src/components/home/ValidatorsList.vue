@@ -101,7 +101,7 @@
               />
             </div>
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">Hide Untitled</div>
+              <div class="validators-list__dropdown-label q-mb-xs">Hide anonymous</div>
               <q-toggle
                 v-model="filterNoname"
                 class="styled-toggle"
@@ -401,6 +401,7 @@
 
       const refresh = async () => {
         await validatorsAllStore.loadAllValidators();
+        validatorsAllStore.loadAverageApy();
       };
 
       const cluster = computed(() => connectionStore.cluster);
