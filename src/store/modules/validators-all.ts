@@ -92,13 +92,25 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   });
 
+  const perPageMax = computed(() => perPageOptions.value[perPageOptions.value.length - 1] ?? 10);
+  watch(
+    perPage,
+    () => {
+      if (perPage.value > perPageMax.value) {
+        perPage.value = perPageMax.value;
+      }
+    },
+    { immediate: true },
+  );
+
   const perPageNum = computed(() => {
     const itemsLength = itemsSorted.value.length;
-    return isNaN(Number(perPage.value))
+    const count = isNaN(Number(perPage.value))
       ? itemsLength > 0
         ? itemsLength
         : 5
       : Number(perPage.value);
+    return count <= perPageMax.value ? count : perPageMax.value;
   });
 
   watch(connected, (connected) => {

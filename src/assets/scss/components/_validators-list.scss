@@ -162,18 +162,11 @@
   }
 }
 
-.vue-recycle-scroller__item-wrapper {
-  &:not(:nth-child(4)) {
-    .stake-accounts-container {
-      border-bottom: 1px solid $blue-grey-5;
-    }
+.stake-accounts-container {
+  &:not(:last-child) {
+    border-bottom: 1px solid $blue-grey-5;
   }
 }
-// .stake-accounts-container {
-//   &:not(:last-child) {
-//     border-bottom: 1px solid $blue-grey-5;
-//   }
-// }
 
 .stake-stats {
   &:not(:first-child) {
