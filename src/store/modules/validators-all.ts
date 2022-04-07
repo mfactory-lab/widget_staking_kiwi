@@ -96,7 +96,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   watch(
     perPage,
     () => {
-      if (perPage.value > perPageMax.value) {
+      if (isNaN(Number(perPage.value)) || perPage.value > perPageMax.value) {
         perPage.value = perPageMax.value;
       }
     },
