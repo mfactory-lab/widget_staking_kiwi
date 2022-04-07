@@ -67,6 +67,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       const network = connectionStore.cluster.replace('-beta', '');
       loading.value = true;
       try {
+        loadAverageApy();
         validatorsStats.value = await getValidatorsStats(network);
       } catch {
       } finally {

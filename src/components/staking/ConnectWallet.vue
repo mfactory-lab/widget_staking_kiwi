@@ -30,8 +30,9 @@
   <template v-if="connected">
     <q-btn
       class="app-header__wallet-btn"
-      color="primary-gray"
-      text-color="white"
+      :class="$style.btn"
+      color="warning"
+      text-color="primary"
       rounded
       unelevated
       @click="dialog = true"
@@ -41,7 +42,14 @@
   </template>
 
   <template v-else>
-    <q-btn class="app-header__wallet-btn" color="primary-gray" rounded @click="connect">
+    <q-btn
+      class="app-header__wallet-btn"
+      :class="$style.btn"
+      color="warning"
+      text-color="primary"
+      rounded
+      @click="connect"
+    >
       <div class="row items-center no-wrap">
         <!-- <img
               alt=""
@@ -133,7 +141,7 @@
     setup() {
       const { wallets, select: selectWallet, publicKey, connected, disconnect } = useWallet();
       const walletAddress = computed(() => publicKey.value?.toBase58() ?? '');
-      const walletShortAddress = computed(() => shortenAddress(walletAddress.value));
+      const walletShortAddress = computed(() => shortenAddress(walletAddress.value, 6));
 
       const dialog = ref(false);
 
