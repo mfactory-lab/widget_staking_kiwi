@@ -186,7 +186,7 @@
 
           <q-input
             v-model="nameFilter"
-            class="q-mr-md q-mb-xs q-mt-sm validators-list__search"
+            class="q-mb-xs q-mt-sm col-grow validators-list__search"
             :class="{ 'full-width': $q.screen.lt.sm }"
             label="Search"
             placeholder="enter a validator name, identity or vote key"
@@ -197,6 +197,7 @@
             class="row q-ml-auto q-my-xs col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
+            <div class="q-ml-lg"></div>
             <sort-item
               title="Sort by APY"
               param="apyNum"
