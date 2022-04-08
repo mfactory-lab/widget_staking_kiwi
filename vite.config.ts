@@ -156,6 +156,15 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
+      dedupe: [
+        'bn.js',
+        'buffer',
+        'eventemitter3',
+        'buffer-layout',
+        'solana-wallets-vue',
+        '@solana/web3.js',
+        '@solana/buffer-layout',
+      ],
       alias: [
         {
           find: /~(.+)/,

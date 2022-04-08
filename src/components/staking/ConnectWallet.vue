@@ -166,18 +166,21 @@
         ),
         isActiveWallet,
         select(wallet: Wallet) {
-          console.log('Connect Wallet', wallet.name);
+          console.log('Connect Wallet select', wallet.name);
           selectWallet(wallet.name);
           dialog.value = false;
         },
         connect() {
+          console.log('Connect Wallet connect');
           dialog.value = true;
         },
         disconnect() {
+          console.log('Connect Wallet disconnect');
           disconnect();
           dialog.value = false;
         },
         ok() {
+          console.log('Connect Wallet ok');
           dialog.value = false;
         },
       };

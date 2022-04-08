@@ -41,7 +41,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const epochStore = useEpochStore();
   const cluster = computed(() => connectionStore.cluster);
   const epoch = computed(() => epochStore.epochNumber);
-  const { connected } = useWallet();
+  const walletStore = useWallet();
+  const connected = walletStore.connected;
+  // const { connected } = useWallet();
 
   const currentPage = ref(1);
   const perPage = useLocalStorage<number | string>('per-page', '10');
@@ -67,7 +69,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       const network = connectionStore.cluster.replace('-beta', '');
       loading.value = true;
       try {
-        loadAverageApy();
         validatorsStats.value = await getValidatorsStats(network);
       } catch {
       } finally {

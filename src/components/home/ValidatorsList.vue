@@ -35,7 +35,7 @@
           <div
             class="validators-list__title__text col-12 col-sm-4"
             :class="{ 'text-center': $q.screen.lt.sm || $q.screen.gt.sm }"
-            >Solana Validators</div
+            >Solana Validators {{ connected }}</div
           >
           <div
             class="col-12 col-sm-8 col-md-4 row"
@@ -369,6 +369,8 @@
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
+      // const walletStore = useWallet();
+      // const connected = walletStore.connected;
       const { connected } = useWallet();
 
       const { connectionLost } = storeToRefs(stakePoolStore);

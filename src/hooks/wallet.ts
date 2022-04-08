@@ -44,15 +44,15 @@ export function initWallet() {
   const { emit } = useEmitter();
   const { notify } = useQuasar();
   const { wallet } = useWallet();
-  console.log('onConnect initWallet = ', emit);
-  console.log('onConnect wallet = ', wallet.value);
-  console.log('onConnect wallet.once = ', wallet.value?.once);
+  // const walletStore = useWallet();
+  // const wallet = walletStore.wallet;
+  console.log('onConnect initWallet = ');
 
   watch(
     wallet,
     (w) => {
-      if (!w) return;
       console.log('onConnect w = ', w);
+      if (!w) return;
       console.log('onConnect w.once = ', w.once);
       console.log('onConnect w.on = ', w.on);
 

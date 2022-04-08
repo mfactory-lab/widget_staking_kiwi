@@ -35,7 +35,7 @@
 
   import { defineComponent, watch } from 'vue';
   import router from '@/router';
-  import { initWallet } from '@jpool/common/hooks';
+  import { initWallet } from '@/hooks';
 
   export default defineComponent({
     setup() {
