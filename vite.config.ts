@@ -32,6 +32,7 @@ import { injectHtml, minifyHtml } from 'vite-plugin-html';
 import Vue from '@vitejs/plugin-vue';
 // import ViteLegacy from '@vitejs/plugin-legacy';
 import ViteVisualizer from 'rollup-plugin-visualizer';
+import inject from '@rollup/plugin-inject';
 
 import Components from 'unplugin-vue-components/vite';
 import { QuasarResolver } from 'unplugin-vue-components/resolvers';
@@ -94,6 +95,9 @@ export default defineConfig(({ mode }) => {
         drop_debugger: true,
       },
     },
+    rollupOptions: {
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+    },
   };
 
   if (isProd) {
@@ -126,7 +130,33 @@ export default defineConfig(({ mode }) => {
     );
   }
 
-  let optimizeDeps: DepOptimizationOptions = {};
+  let optimizeDeps: DepOptimizationOptions = {
+    include: [
+      'vue',
+      'vue-router',
+      '@vueuse/core',
+      '@vueuse/head',
+      'pinia',
+      'quasar',
+      '@solana/spl-stake-pool',
+      '@solana/web3.js',
+      '@solana/spl-token',
+      '@project-serum/anchor',
+      // '@blocto/sdk',
+      // 'solana-wallets-vue',
+      // 'eventemitter3',
+      // 'vue3-apexcharts',
+      // 'buffer',
+      // 'bs58',
+      // 'base64url',
+      // 'eventemitter3',
+      // 'lodash-es',
+    ],
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      minify: true,
+    },
+  };
 
   if (isDev) {
     /**
@@ -151,11 +181,37 @@ export default defineConfig(({ mode }) => {
           additionalData: '@import "@/assets/scss/_variables.scss";\n',
         },
       },
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove();
+                }
+              },
+            },
+          },
+        ],
+      },
       // TODO https://github.com/vitejs/vite/issues/5833
       charset: false,
     },
 
     resolve: {
+      browser: true,
+      preferBuiltins: false,
+      dedupe: [
+        'bn.js',
+        'bs58',
+        'lodash',
+        'buffer',
+        'eventemitter3',
+        'buffer-layout',
+        '@solana/web3.js',
+        '@solana/buffer-layout',
+      ],
       alias: [
         {
           find: /~(.+)/,

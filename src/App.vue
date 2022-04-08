@@ -36,10 +36,12 @@
   import { defineComponent, watch } from 'vue';
   import router from '@/router';
   import { initWallet } from '@jpool/common/hooks';
+  import { useCoinRateStore } from '@jpool/common/store/modules';
 
   export default defineComponent({
     setup() {
       initWallet();
+      useCoinRateStore().init();
 
       watch(
         [router.currentRoute],

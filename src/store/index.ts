@@ -28,13 +28,11 @@
 
 import type { App } from 'vue';
 import { createPinia } from 'pinia';
-import { useCoinRateStore } from '@jpool/common/store/modules';
 
 const store = createPinia();
 
 export function setupStore(app: App<Element>) {
   app.use(store);
-  useCoinRateStore().init();
 }
 
 export { store };
