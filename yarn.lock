@@ -2132,7 +2132,7 @@
     "@vue/compiler-dom" "3.2.31"
     "@vue/shared" "3.2.31"
 
-"@vue/devtools-api@^6.0.0-beta.18", "@vue/devtools-api@^6.0.0-beta.21":
+"@vue/devtools-api@^6.0.0-beta.18":
   version "6.0.0-beta.21.1"
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.21.1.tgz#f1410f53c42aa67fa3b01ca7bdba891f69d7bc97"
   integrity sha512-FqC4s3pm35qGVeXRGOjTsRzlkJjrBLriDS9YXbflHLsfA9FrcKzIyWnLXoNm+/7930E8rRakXuAc2QkC50swAw==
@@ -5734,14 +5734,6 @@ pinia@^2.0.13:
     "@vue/devtools-api" "^6.1.4"
     vue-demi "*"
 
-pinia@^2.0.9:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.0.9.tgz#7d7767c46e3810fff046c289453242a68fc23492"
-  integrity sha512-iuYdxLJKQ07YPyOHYH05wNG9eKWqkP/4y4GE8+RqEYtz5fwHgPA5kr6zQbg/DoEJGnR2XCm1w1vdt6ppzL9ATg==
-  dependencies:
-    "@vue/devtools-api" "^6.0.0-beta.21"
-    vue-demi "*"
-
 pirates@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.4.tgz#07df81e61028e402735cdd49db701e4885b4e6e6"
@@ -5868,11 +5860,6 @@ push-dir@^0.4.1:
   integrity sha1-KUgerNnCEGu7eUHbbTfRIqBx7LQ=
   dependencies:
     minimist "^1.2.0"
-
-quasar@^2.4.3:
-  version "2.4.10"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.4.10.tgz#d04ea753b0100ad2932a2dbaeb4d893154c717b8"
-  integrity sha512-fYd3VwUqtAyRBAbL+4CnadjFjyFJtMIeIOjeQzvycSdPqsv30WtVjz6SYIN53mZ7lFY0xfvnvHCfeVRPEl1FYw==
 
 quasar@^2.6.6:
   version "2.6.6"

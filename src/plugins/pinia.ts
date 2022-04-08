@@ -26,5 +26,12 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-export * from './modules';
-export * from '@jpool/common/store/modules';
+import { createPinia } from 'pinia';
+import { App } from 'vue';
+
+export default {
+  install: (app: App<Element>) => {
+    const store = createPinia();
+    app.use(store);
+  },
+};
