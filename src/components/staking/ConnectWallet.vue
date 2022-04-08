@@ -1,5 +1,5 @@
 <!--
-  - This file is part of Solana Reference Stake Pool code.
+  - This file is part of the Web3 Library developed by mFactory GmbH.
   -
   - Copyright © 2021, mFactory GmbH
   -
@@ -166,21 +166,17 @@
         ),
         isActiveWallet,
         select(wallet: Wallet) {
-          console.log('Connect Wallet select', wallet.name);
           selectWallet(wallet.name);
           dialog.value = false;
         },
         connect() {
-          console.log('Connect Wallet connect');
           dialog.value = true;
         },
         disconnect() {
-          console.log('Connect Wallet disconnect');
           disconnect();
           dialog.value = false;
         },
         ok() {
-          console.log('Connect Wallet ok');
           dialog.value = false;
         },
       };

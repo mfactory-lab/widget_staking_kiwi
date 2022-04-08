@@ -44,24 +44,15 @@ export function initWallet() {
   const { emit } = useEmitter();
   const { notify } = useQuasar();
   const { wallet } = useWallet();
-  console.log('onConnect initWallet = ', emit);
-  console.log('onConnect wallet = ', wallet.value);
-  console.log('onConnect wallet.once = ', wallet.value?.once);
 
   watch(
     wallet,
     (w) => {
       if (!w) return;
-      console.log('onConnect w = ', w);
-      console.log('onConnect w.once = ', w.once);
-      console.log('onConnect w.on = ', w.on);
 
       const onConnect = () => {
         const publicKey = w.publicKey!;
-        console.log('onConnect = ', w.publicKey);
-        console.log('onConnect publicKey = ', publicKey);
         connection.onAccountChange(publicKey, (acc) => {
-          console.log('onConnect ACCOUNT_CHANGE_EVENT = ');
           emit(ACCOUNT_CHANGE_EVENT, acc);
         });
         connection.onLogs(publicKey, (logs) => {
@@ -73,11 +64,9 @@ export function initWallet() {
           timeout: noticeTimeout,
         });
         emit(WALLET_CONNECT_EVENT, w);
-        console.log('onConnect WALLET_CONNECT_EVENT = ');
       };
 
       const onDisconnect = () => {
-        console.log('onConnect onDisconnect = ');
         notify({
           message: 'Wallet update',
           caption: 'Disconnected from wallet',

@@ -35,11 +35,10 @@
 
   import { defineComponent, watch } from 'vue';
   import router from '@/router';
-  import { initWallet } from '@/hooks';
+  import { initWallet } from '@jpool/common/hooks';
 
   export default defineComponent({
     setup() {
-      console.log('onBeforeMount app');
       initWallet();
 
       watch(

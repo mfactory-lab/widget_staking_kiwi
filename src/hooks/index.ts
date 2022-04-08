@@ -28,4 +28,3 @@
 
 export * from './theme';
 export * from './stake-accounts';
-export * from './wallet';
