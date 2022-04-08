@@ -178,7 +178,8 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           charset: false,
-          additionalData: '@import "@/assets/scss/_variables.scss";\n',
+          additionalData:
+            '@import "@/assets/scss/_fonts.scss";\n @import "@/assets/scss/_variables.scss";\n',
         },
       },
       postcss: {
