@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watch } from 'vue';
+  import { computed, defineComponent, onMounted, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
@@ -158,6 +158,16 @@
         },
       ]);
 
+      const refresh = () => {
+        stakeAccountStore.load();
+      };
+
+      onMounted(() => {
+        if (stakeAccountStore.data.length < 1) {
+          refresh();
+        }
+      });
+
       const accounts = computed(() => {
         if (voterKey.value) {
           return stakeAccountStore.data.filter(
@@ -182,38 +192,45 @@
         return statusWeights[status];
       };
 
-      watch(accounts, async () => {
-        const newStats = [0, 0, 0, 0];
-        const accountsSorts = await Promise.all(
-          accounts.value.map(async (acc) => {
-            const stakeActivation = await connectionStore.connection!.getStakeActivation(
-              acc.pubkey,
-            );
-            if (acc.account.data?.parsed?.type == 'delegated') {
-              if (stakeActivation.state === 'active' || stakeActivation.state === 'deactivating') {
-                newStats[2] += lamportsToSol(acc.account.lamports);
+      watch(
+        accounts,
+        async () => {
+          const newStats = [0, 0, 0, 0];
+          const accountsSorts = await Promise.all(
+            accounts.value.map(async (acc) => {
+              const stakeActivation = await connectionStore.connection!.getStakeActivation(
+                acc.pubkey,
+              );
+              if (acc.account.data?.parsed?.type == 'delegated') {
+                if (
+                  stakeActivation.state === 'active' ||
+                  stakeActivation.state === 'deactivating'
+                ) {
+                  newStats[2] += lamportsToSol(acc.account.lamports);
+                } else {
+                  newStats[1] += lamportsToSol(acc.account.lamports);
+                }
               } else {
-                newStats[1] += lamportsToSol(acc.account.lamports);
+                newStats[0] += lamportsToSol(acc.account.lamports);
               }
-            } else {
-              newStats[0] += lamportsToSol(acc.account.lamports);
-            }
-            newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
-            totalStats.value.forEach((item, index) => {
-              item.value = newStats[index] ?? 0;
-            });
-            return {
-              stakeAccount: acc,
-              state: stakeActivation.state,
-            };
-          }),
-        );
-        accountsSorted.value = accountsSorts.sort((a, b) => {
-          return (
-            getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
+              newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
+              totalStats.value.forEach((item, index) => {
+                item.value = newStats[index] ?? 0;
+              });
+              return {
+                stakeAccount: acc,
+                state: stakeActivation.state,
+              };
+            }),
           );
-        });
-      });
+          accountsSorted.value = accountsSorts.sort((a, b) => {
+            return (
+              getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
+            );
+          });
+        },
+        { immediate: true },
+      );
 
       return {
         connected,
@@ -225,12 +242,8 @@
         totalStats,
         connectionLost,
         validatorInJpool,
-
+        refresh,
         updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
-
-        refresh: () => {
-          stakeAccountStore.load();
-        },
 
         activate: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
