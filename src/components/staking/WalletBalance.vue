@@ -64,9 +64,10 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { useBalanceStore, useCoinRateStore, useStakePoolStore, useWalletStore } from '@/store';
+  import { useBalanceStore, useCoinRateStore, useStakePoolStore } from '@/store';
   import { formatMoney } from '@jpool/common/utils/check-number';
   import JsolSvg from '@/components/icons/JsolSvg.vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     components: { JsolSvg },
@@ -74,7 +75,7 @@
       const stakePoolStore = useStakePoolStore();
       const balanceStore = useBalanceStore();
       const coinRateStore = useCoinRateStore();
-      const { connected } = storeToRefs(useWalletStore());
+      const { connected } = useWallet();
 
       const { solBalance, tokenBalance } = storeToRefs(balanceStore);
 

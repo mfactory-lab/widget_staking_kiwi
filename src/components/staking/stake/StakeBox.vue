@@ -170,7 +170,6 @@
     useConnectionStore,
     useStakePoolStore,
     useValidatorJstakingStore,
-    useWalletStore,
   } from '@/store';
   import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
@@ -181,6 +180,7 @@
   import { clickOutside } from '@jpool/common/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     components: {
@@ -196,7 +196,7 @@
     setup() {
       const { voterKey } = storeToRefs(useValidatorJstakingStore());
       const connectionStore = useConnectionStore();
-      const { connected } = storeToRefs(useWalletStore());
+      const { connected } = useWallet();
       const { solBalance } = storeToRefs(useBalanceStore());
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositFee, creating, createAccount } = useStakeAccounts();

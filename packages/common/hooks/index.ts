@@ -32,3 +32,4 @@ export * from './monitor';
 export * from './airdrop';
 export * from './stake';
 export * from './roi-calculator';
+export * from './wallet';

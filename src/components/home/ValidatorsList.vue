@@ -358,22 +358,18 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { storeToRefs } from 'pinia';
-  import {
-    useConnectionStore,
-    useStakePoolStore,
-    useValidatorsAllStore,
-    useWalletStore,
-  } from '@/store';
+  import { useConnectionStore, useStakePoolStore, useValidatorsAllStore } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import SortItem from '@/components/home/SortItem.vue';
   import PriceStats from '@/components/staking/PriceStats.vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     components: { ValidatorRow, PriceStats, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
-      const { connected } = storeToRefs(useWalletStore());
+      const { connected } = useWallet();
 
       const { connectionLost } = storeToRefs(stakePoolStore);
       const validatorsAllStore = useValidatorsAllStore();

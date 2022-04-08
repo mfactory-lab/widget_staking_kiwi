@@ -28,20 +28,22 @@
 
 import { defineStore } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useConnectionStore, useEpochStore, useStakeAccountStore, useWalletStore } from '@/store';
+import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
 import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { ApyStats, ValidatorStats, getAverageApy, getValidatorsStats } from '@/utils';
 import { useLocalStorage } from '@vueuse/core';
+import { useWallet } from 'solana-wallets-vue';
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
-  const walletStore = useWalletStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
   const epochStore = useEpochStore();
   const cluster = computed(() => connectionStore.cluster);
   const epoch = computed(() => epochStore.epochNumber);
-  const connected = computed(() => walletStore.connected);
+  const walletStore = useWallet();
+  const connected = walletStore.connected;
+  // const { connected } = useWallet();
 
   const currentPage = ref(1);
   const perPage = useLocalStorage<number | string>('per-page', '10');

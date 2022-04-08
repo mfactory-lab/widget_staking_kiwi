@@ -97,7 +97,6 @@
     useConnectionStore,
     useStakeAccountStore,
     useStakePoolStore,
-    useWalletStore,
   } from '@/store';
   import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
   import StakeAccountItem from './StakeAccountItem.vue';
@@ -106,6 +105,7 @@
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import { lamportsToSol } from '@jpool/common/utils';
   import SolSvg from '@/components/icons/TelegramSvg.vue';
+  import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 
   interface StakeAccount {
     stakeAccount: ProgramAccount;
@@ -123,7 +123,8 @@
     ],
     setup(_props, { emit }) {
       const connectionStore = useConnectionStore();
-      const { wallet, connected } = storeToRefs(useWalletStore());
+      const { wallet, connected } = useWallet();
+      const anchorWallet = useAnchorWallet();
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
       const { voterKey, validatorInJpool } = storeToRefs(useValidatorJstakingStore());
@@ -254,7 +255,7 @@
           await monitorTransaction(
             sendTransaction(
               connectionStore.connection,
-              wallet.value!,
+              anchorWallet.value!,
               StakeProgram.deactivate({
                 stakePubkey: new PublicKey(address),
                 authorizedPubkey: wallet.value!.publicKey!,
@@ -273,7 +274,7 @@
           await monitorTransaction(
             sendTransaction(
               connectionStore.connection,
-              wallet.value!,
+              anchorWallet.value!,
               StakeProgram.withdraw({
                 stakePubkey: new PublicKey(address),
                 authorizedPubkey: wallet.value!.publicKey!,

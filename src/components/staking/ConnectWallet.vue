@@ -34,11 +34,13 @@
       color="warning"
       text-color="primary"
       rounded
+      unelevated
       @click="dialog = true"
     >
       {{ walletShortAddress }}
     </q-btn>
   </template>
+
   <template v-else>
     <q-btn
       class="app-header__wallet-btn"
@@ -46,10 +48,14 @@
       color="warning"
       text-color="primary"
       rounded
-      :disable="connectionLost"
       @click="connect"
     >
       <div class="row items-center no-wrap">
+        <!-- <img
+              alt=""
+              class="q-icon"
+              src="@/assets/img/wallet.svg"
+            /> -->
         <span>CONNECT WALLET</span>
       </div>
     </q-btn>
@@ -78,14 +84,14 @@
       <q-separator />
       <q-card-section>
         <div class="q-gutter-md row justify-between">
-          <q-btn outline rounded @click="disconnect"> Disconnect </q-btn>
-          <q-btn outline rounded @click="ok"> Ok </q-btn>
+          <q-btn outline rounded @click="disconnect"> Disconnect</q-btn>
+          <q-btn outline rounded @click="ok"> Ok</q-btn>
         </div>
       </q-card-section>
     </q-card>
 
-    <q-card v-else style="width: 300px">
-      <q-card-section class="relative-position">
+    <q-card v-else class="wallet-connect-card">
+      <q-card-section>
         <div class="text-h6">Connect to a wallet</div>
         <q-btn
           padding="md"
@@ -99,17 +105,19 @@
         />
       </q-card-section>
       <q-separator />
-      <q-card-section class="scroll" style="max-height: 55vh">
-        <q-list bordered separator>
-          <q-item v-for="p in providers" :key="p.name" v-ripple clickable @click="select(p)">
-            <q-item-section>{{ p.name }}</q-item-section>
-            <q-item-section avatar>
-              <q-avatar>
-                <img :src="p.icon" alt="" />
-              </q-avatar>
-            </q-item-section>
-          </q-item>
-        </q-list>
+      <q-card-section class="scroll" style="max-height: 70vh">
+        <div class="row q-col-gutter-sm">
+          <div class="col-12 col-md-6" v-for="wallet in wallets" :key="wallet.name">
+            <q-item clickable @click="select(wallet)" :disable="!isActiveWallet(wallet)">
+              <q-item-section>{{ wallet.name }}</q-item-section>
+              <q-item-section avatar>
+                <q-avatar square>
+                  <img :src="wallet.icon" alt="" />
+                </q-avatar>
+              </q-item-section>
+            </q-item>
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -117,40 +125,55 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
-  import { storeToRefs } from 'pinia';
-  import { WALLET_PROVIDERS, shortenAddress } from '@jpool/common/utils';
-  import { useStakePoolStore, useWalletStore } from '@/store';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
+  import { Wallet, useWallet } from 'solana-wallets-vue';
   import { evaClose } from '@quasar/extras/eva-icons';
+  import { WalletReadyState } from '@solana/wallet-adapter-base';
+  import { shortenAddress } from '@jpool/common/utils';
+
+  const walletPriority = {
+    solflare: 10,
+    phantom: 20,
+    sollet: 5,
+    blocto: 4,
+  };
 
   export default defineComponent({
-    components: { CopyToClipboard },
     setup() {
-      const walletStore = useWalletStore();
-      const { connected } = storeToRefs(walletStore);
-      const { connectionLost } = storeToRefs(useStakePoolStore());
-      const walletAddress = computed(() => walletStore.wallet?.publicKey?.toBase58() ?? '');
+      const { wallets, select: selectWallet, publicKey, connected, disconnect } = useWallet();
+      const walletAddress = computed(() => publicKey.value?.toBase58() ?? '');
       const walletShortAddress = computed(() => shortenAddress(walletAddress.value, 6));
 
       const dialog = ref(false);
 
+      function isActiveWallet(wallet: Wallet) {
+        return [WalletReadyState.Installed, WalletReadyState.Loadable].includes(wallet.readyState);
+      }
+
       return {
         evaClose,
-        connectionLost,
         walletAddress,
         walletShortAddress,
         dialog,
         connected,
-        providers: WALLET_PROVIDERS,
-        select(provider) {
-          walletStore.select(provider);
+        wallets: computed(() =>
+          [...wallets.value].sort((a, b) => {
+            const aPriority = walletPriority[a.name.toLowerCase()] ?? 1;
+            const bPriority = walletPriority[b.name.toLowerCase()] ?? 1;
+            return (
+              bPriority - aPriority + ((isActiveWallet(b) ? 1 : 0) - (isActiveWallet(a) ? 1 : 0))
+            );
+          }),
+        ),
+        isActiveWallet,
+        select(wallet: Wallet) {
+          selectWallet(wallet.name);
           dialog.value = false;
         },
         connect() {
           dialog.value = true;
         },
         disconnect() {
-          walletStore.disconnect();
+          disconnect();
           dialog.value = false;
         },
         ok() {
@@ -160,6 +183,14 @@
     },
   });
 </script>
+
+<style scoped lang="scss">
+  .wallet-connect-card {
+    .q-item {
+      border: 1px solid #e8e8e8;
+    }
+  }
+</style>
 
 <style lang="scss" module>
   .btn {

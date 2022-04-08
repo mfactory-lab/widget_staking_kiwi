@@ -52,19 +52,23 @@
 <script lang="ts">
   import { computed } from 'vue';
   import { ENDPOINTS } from '@/config';
-  import { Endpoint, useConnectionStore, useWalletStore } from '@/store';
+  import { Endpoint, useConnectionStore } from '@/store';
   import { defineComponent } from 'vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     setup() {
       const connectionStore = useConnectionStore();
-      const walletStore = useWalletStore();
+      const { connected, connect, disconnect, autoConnect } = useWallet();
       return {
         items: ENDPOINTS,
         endpoint: computed(() => connectionStore.endpoint),
         select: (e: Endpoint) => {
-          if (!!walletStore.wallet?.publicKey && connectionStore.cluster !== e.name) {
-            walletStore.disconnect();
+          if (connected && connectionStore.cluster !== e.cluster) {
+            disconnect();
+            if (autoConnect.value) {
+              connect();
+            }
           }
           connectionStore.setRpc(e.id);
         },

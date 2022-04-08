@@ -35,9 +35,12 @@
 
   import { defineComponent, watch } from 'vue';
   import router from '@/router';
+  import { initWallet } from '@jpool/common/hooks';
 
   export default defineComponent({
     setup() {
+      initWallet();
+
       watch(
         [router.currentRoute],
         async ([route]) => {

@@ -35,5 +35,4 @@ export * from './epoch';
 export * from './coin-rate';
 export * from './stake-accounts';
 export * from './stake-pool';
-export * from './wallet';
 export * from './validators';

@@ -28,8 +28,8 @@
 
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { ACCOUNT_CHANGE_EVENT, useConnectionStore } from '@jpool/common/store';
-import { useEmitter } from '@jpool/common/hooks';
+import { useConnectionStore } from '@jpool/common/store';
+import { ACCOUNT_CHANGE_EVENT, useEmitter } from '@jpool/common/hooks';
 
 import { getStakePoolAccount, StakePool } from "@solana/spl-stake-pool/src";
 import { STAKE_STATE_LEN } from "@solana/spl-stake-pool/src/constants";
