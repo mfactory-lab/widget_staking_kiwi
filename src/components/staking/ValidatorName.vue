@@ -58,6 +58,10 @@
           text-color="text-white"
         >
           DELINQUENT
+          <q-tooltip class="text-body2">
+            Last Vote date:
+            {{ isoTimeToReadable(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
+          </q-tooltip>
         </q-badge>
         <a
           v-if="loading ? savedValidator.validatorInJpool : validatorInJpool"
@@ -108,6 +112,7 @@
   import { computed, defineComponent } from 'vue';
   import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
+  import { isoTimeToReadable } from '@/utils';
 
   export default defineComponent({
     components: {},
@@ -121,6 +126,7 @@
         validatorInJpool,
         validatorDelinquent,
         validatorSVM,
+        validatorLastVote,
       } = storeToRefs(useValidatorJstakingStore());
       const { loading } = storeToRefs(useValidatorsAllStore());
       const connectionStore = useConnectionStore();
@@ -135,8 +141,10 @@
         validatorInJpool,
         validatorDelinquent,
         validatorSVM,
+        validatorLastVote,
         cluster,
         loading,
+        isoTimeToReadable,
       };
     },
   });

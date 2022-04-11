@@ -59,12 +59,12 @@
           >
             <img src="@/assets/img/badge-svm.svg" alt="" class="validator-row__status-badge" />
           </a>
-          <img
-            v-if="!loading && item.isDelinquent"
-            src="@/assets/img/badge-delinq.svg"
-            alt=""
-            class="validator-row__status-badge"
-          />
+          <span v-if="!loading && item.isDelinquent">
+            <img src="@/assets/img/badge-delinq.svg" alt="" class="validator-row__status-badge" />
+            <q-tooltip class="text-body2">
+              Last Vote date: {{ isoTimeToReadable(item.lastVote) }}
+            </q-tooltip>
+          </span>
         </div>
         <div class="validator-row__name column q-pt-xs justify-start">
           <q-skeleton width="100%" v-if="loading" />
@@ -191,6 +191,7 @@
   import LinearProgress from '@/components/home/LinearProgress.vue';
   import AverageSvg from '@/components/icons/AverageSvg.vue';
   import { useWallet } from 'solana-wallets-vue';
+  import { isoTimeToReadable } from '@/utils';
 
   export default defineComponent({
     components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
@@ -225,6 +226,7 @@
         shortAddress: computed(() =>
           props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
         ),
+        isoTimeToReadable,
       };
     },
   });

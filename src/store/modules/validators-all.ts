@@ -179,6 +179,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         lamports: 0,
         myStake: myStake,
         myStakeSol: myStake > 1 ? formatAmountPrice(myStake) : myStake,
+        lastVote: voteAccount.lastVote,
       };
     });
   });

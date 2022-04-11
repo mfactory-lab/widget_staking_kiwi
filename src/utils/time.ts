@@ -26,5 +26,34 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-export * from './api';
-export * from './time';
+export const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+function withZero(n: number): string {
+  return n > 9 ? `${n}` : `0${n}`;
+}
+
+export function isoTimeToReadable(isoTime: string): string {
+  const date = new Date(isoTime);
+  const m = months[date.getMonth()];
+  const d = date.getDate();
+  const y = date.getFullYear();
+
+  const hh = date.getHours();
+  const mm = date.getMinutes();
+  const ss = date.getSeconds();
+
+  return `${m} ${withZero(d)} ${y} ${withZero(hh)}:${withZero(mm)}:${withZero(ss)}`;
+}

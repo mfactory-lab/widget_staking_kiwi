@@ -43,6 +43,7 @@ export interface ValidatorStats {
   inTop33: boolean;
   inJpool: boolean;
   isDelinquent: boolean;
+  lastVote: string;
   svName: string;
   apyComparedMax: Number;
 }
