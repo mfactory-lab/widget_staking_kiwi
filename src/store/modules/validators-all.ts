@@ -51,7 +51,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 20, 30 /*, 50, 70, 100, 150, 200, 'all'*/]);
+  const perPageOptions = ref([5, 10, 15, 20, 30, 300, 1000 /*, 50, 70, 100, 150, 200, 'all'*/]);
   const sortType = useLocalStorage<string>('sort-type', 'desc');
   const sortParam = useLocalStorage<string>('sort-param', 'apyNum');
   const filterTop33 = useLocalStorage<boolean>('filter-top-staked', true);

@@ -307,7 +307,49 @@
             </div>
           </q-card-section>
 
-          <div class="validators-list__list">
+          <!-- <recycle-scroller
+            v-if="!loading"
+            class="validators-list__list validators-list__list--fix-height"
+            :items="itemsShowed"
+            :item-size="123"
+            key-field="voter"
+            v-slot="{ item, index }"
+          >
+            <div class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md">
+              <validator-row
+                :item="item"
+                :index="(currentPage - 1) * perPageNum + index + 1"
+                :loading="loading"
+                :cluster="cluster"
+              />
+            </div>
+          </recycle-scroller> -->
+
+          <q-virtual-scroll
+            v-if="!loading"
+            scroll-target="#html"
+            :items="itemsShowed"
+            virtual-scroll-item-size="123"
+            virtual-scroll-slice-size="20"
+            virtual-scroll-slice-ratio-after="0.5"
+            virtual-scroll-slice-ratio-before="0.5"
+          >
+            <template #default="{ item, index }">
+              <div
+                :key="(currentPage - 1) * perPageNum + index + 1"
+                class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md"
+              >
+                <validator-row
+                  :item="item"
+                  :index="(currentPage - 1) * perPageNum + index + 1"
+                  :loading="loading"
+                  :cluster="cluster"
+                />
+              </div>
+            </template>
+          </q-virtual-scroll>
+
+          <div class="validators-list__list" v-else>
             <div class="relative-position">
               <div
                 class="fit row wrap justify-start items-start q-px-md content-start"
