@@ -26,6 +26,7 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
+$row-width: 990px;
 .home-page {
   &__std-btn {
     font-weight: 400;
@@ -61,7 +62,7 @@
   &__no-validators {
     position: sticky;
     left: 0px;
-    width: 990px;
+    width: $row-width;
     height: 100px;
     display: flex;
     justify-content: center;
@@ -116,7 +117,7 @@
   }
 
   &__list {
-    width: 990px !important;
+    width: $row-width !important;
     overflow-y: hidden;
     border-top: 1px solid $text-white;
     &--fix-height {
@@ -133,7 +134,7 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      width: 990px !important;
+      width: $row-width !important;
       height: auto !important;
 
       & > div {
@@ -159,6 +160,10 @@
   .main-section__block {
     width: 228px;
     max-width: 228px;
+  }
+
+  .q-virtual-scroll__content {
+    width: $row-width;
   }
 }
 
@@ -208,7 +213,7 @@
 
 .validator-row {
   flex-wrap: nowrap;
-  width: 958px;
+  width: calc($row-width - 32px);
   height: 106px;
 
   .q-avatar__content {

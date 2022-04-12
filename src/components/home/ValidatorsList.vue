@@ -33,17 +33,17 @@
         <div class="validators-list__title q-pt-md q-pb-sm row">
           <div class="col-12 col-md-4"></div>
           <div
-            class="validators-list__title__text col-12 col-sm-4"
+            class="validators-list__title__text col-12 col-sm-6 col-md-4"
             :class="{ 'text-center': $q.screen.lt.sm || $q.screen.gt.sm }"
             >Solana Validators</div
           >
           <div
-            class="col-12 col-sm-8 col-md-4 row"
+            class="col-5 col-sm-auto col-md-4 row"
             :class="{ 'justify-center': $q.screen.lt.sm, 'justify-end': $q.screen.gt.xs }"
           >
             <q-btn
               rounded
-              class="home-page__std-btn"
+              class="home-page__std-btn q-pl-sm"
               color="gray-dark-theme"
               text-color="text-white"
               :disable="connectionLost"
@@ -53,9 +53,26 @@
               Refresh
             </q-btn>
           </div>
+          <div
+            v-if="$q.screen.lt.md"
+            class="col-6 col-sm-auto row q-pl-md items-center justify-end"
+          >
+            <div class="validators-list__dropdown-label q-mr-sm">Show controls</div>
+            <q-toggle
+              v-model="showControls"
+              class="styled-toggle"
+              checked-icon="eva-checkmark-outline"
+              toggle-order="tf"
+              color="primary"
+              keep-color
+              label=""
+              unchecked-icon="eva-close-outline"
+            />
+          </div>
         </div>
 
         <div
+          v-show="$q.screen.gt.sm || showControls"
           class="row q-mt-md"
           :class="{ 'justify-start': $q.screen.lt.md, 'justify-between': $q.screen.gt.sm }"
         >
@@ -178,6 +195,7 @@
 
         <div class="q-pt-sm q-pb-sm row">
           <div
+            v-show="$q.screen.gt.sm || showControls"
             class="col q-mt-xs q-mb-sm q-mr-lg main-section__block"
             :class="{ 'col-12': $q.screen.lt.sm }"
           >
@@ -185,6 +203,7 @@
           </div>
 
           <q-input
+            v-show="$q.screen.gt.sm || showControls"
             v-model="nameFilter"
             class="q-mb-xs q-mt-sm col-grow validators-list__search"
             :class="{ 'full-width': $q.screen.lt.sm }"
@@ -194,6 +213,7 @@
           />
 
           <div
+            v-show="$q.screen.gt.sm || showControls"
             class="row q-ml-auto q-my-xs col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
@@ -205,14 +225,6 @@
               :current-param="sortParam"
               :current-type="sortType"
             />
-            <!-- <sort-item
-              title="Sort by Commission"
-              param="feeNum"
-              @sort="sort"
-              :current-param="sortParam"
-              :current-type="sortType"
-              add-class="q-ml-lg"
-            /> -->
             <sort-item
               title="Sort by Stake"
               param="totalStake"
@@ -223,7 +235,10 @@
             />
           </div>
 
-          <div class="row justify-end q-ml-lg" :class="{ 'q-ml-auto': $q.screen.lt.sm }">
+          <div
+            class="row justify-end q-ml-lg"
+            :class="{ 'q-ml-auto': $q.screen.lt.sm || ($q.screen.lt.md && !showControls) }"
+          >
             <div class="column q-my-xs q-ml-md">
               <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
               <q-btn-dropdown
@@ -306,24 +321,6 @@
               />
             </div>
           </q-card-section>
-
-          <!-- <recycle-scroller
-            v-if="!loading"
-            class="validators-list__list validators-list__list--fix-height"
-            :items="itemsShowed"
-            :item-size="123"
-            key-field="voter"
-            v-slot="{ item, index }"
-          >
-            <div class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md">
-              <validator-row
-                :item="item"
-                :index="(currentPage - 1) * perPageNum + index + 1"
-                :loading="loading"
-                :cluster="cluster"
-              />
-            </div>
-          </recycle-scroller> -->
 
           <q-virtual-scroll
             v-if="!loading"
@@ -436,6 +433,7 @@
         filterNotJpool,
         filterHasStake,
         loading,
+        showControls,
       } = storeToRefs(validatorsAllStore);
 
       const refresh = async () => {
@@ -468,6 +466,7 @@
         loading,
         itemsSorted,
         itemsShowed,
+        showControls,
         refresh,
         sort: (param, type) => {
           sortParam.value = param;

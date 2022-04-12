@@ -62,6 +62,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const filterNotJpool = useLocalStorage<boolean>('filter-not-jpool', false);
   const filterNotSvm = useLocalStorage<boolean>('filter-not-svm', false);
   const filterHasStake = ref(false);
+  const showControls = useLocalStorage<boolean>('show-controls', true);
 
   const loadAllValidators = async () => {
     console.log('[validators all] loadAllValidators');
@@ -304,5 +305,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     loadAverageApy,
     averageApy,
     loading,
+    showControls,
   };
 });
