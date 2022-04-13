@@ -49,6 +49,9 @@ $row-width: 990px;
 }
 
 .validators-list {
+  .q-virtual-scroll {
+    border-top: 1px solid $text-white;
+  }
   .q-field__native {
     font-size: 12px;
   }
