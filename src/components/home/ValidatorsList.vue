@@ -333,7 +333,7 @@
           >
             <template #default="{ item, index }">
               <div
-                :key="(currentPage - 1) * perPageNum + index + 1"
+                :key="item.voter"
                 class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md"
               >
                 <validator-row
