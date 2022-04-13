@@ -62,7 +62,7 @@
           <span v-if="!loading && item.isDelinquent">
             <img src="@/assets/img/badge-delinq.svg" alt="" class="validator-row__status-badge" />
             <q-tooltip class="text-body2">
-              Last Vote date: {{ isoTimeToReadable(item.lastVote) }}
+              Delinquent for {{ isoTimeDifference(item.lastVote) }}
             </q-tooltip>
           </span>
         </div>
@@ -191,7 +191,7 @@
   import LinearProgress from '@/components/home/LinearProgress.vue';
   import AverageSvg from '@/components/icons/AverageSvg.vue';
   import { useWallet } from 'solana-wallets-vue';
-  import { isoTimeToReadable } from '@/utils';
+  import { isoTimeDifference } from '@/utils';
 
   export default defineComponent({
     components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
@@ -226,7 +226,7 @@
         shortAddress: computed(() =>
           props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
         ),
-        isoTimeToReadable,
+        isoTimeDifference,
       };
     },
   });

@@ -57,3 +57,16 @@ export function isoTimeToReadable(isoTime: string): string {
 
   return `${m} ${withZero(d)} ${y} ${withZero(hh)}:${withZero(mm)}:${withZero(ss)}`;
 }
+
+export function isoTimeDifference(isoTime: string): string {
+  const date = new Date(isoTime);
+  const diff = Date.now() - date.getTime();
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff - d * 86400000) / 3600000);
+  const m = Math.floor((diff - d * 86400000 - h * 3600000) / 60000);
+  const days = d ? `${d}d ` : '';
+  const hh = h ? `${h}h ` : '';
+  const mm = m ? `${m}m ` : '';
+
+  return `${days}${hh}${mm}`;
+}

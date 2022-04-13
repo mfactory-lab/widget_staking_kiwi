@@ -59,8 +59,8 @@
         >
           DELINQUENT
           <q-tooltip class="text-body2">
-            Last Vote date:
-            {{ isoTimeToReadable(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
+            Delinquent for
+            {{ isoTimeDifference(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
           </q-tooltip>
         </q-badge>
         <a
@@ -112,7 +112,7 @@
   import { computed, defineComponent } from 'vue';
   import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
-  import { isoTimeToReadable } from '@/utils';
+  import { isoTimeDifference } from '@/utils';
 
   export default defineComponent({
     components: {},
@@ -144,7 +144,7 @@
         validatorLastVote,
         cluster,
         loading,
-        isoTimeToReadable,
+        isoTimeDifference,
       };
     },
   });
