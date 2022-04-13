@@ -323,7 +323,7 @@
           </q-card-section>
 
           <q-virtual-scroll
-            v-if="!loading"
+            v-if="!loading && itemsSorted.length > 0"
             scroll-target="#html"
             :items="itemsShowed"
             virtual-scroll-item-size="123"
