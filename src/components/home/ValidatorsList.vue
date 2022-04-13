@@ -328,8 +328,8 @@
             :items="itemsShowed"
             virtual-scroll-item-size="123"
             virtual-scroll-slice-size="20"
-            virtual-scroll-slice-ratio-after="0.5"
-            virtual-scroll-slice-ratio-before="0.5"
+            virtual-scroll-slice-ratio-after="0.75"
+            virtual-scroll-slice-ratio-before="1"
           >
             <template #default="{ item, index }">
               <div
