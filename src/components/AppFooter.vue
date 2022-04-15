@@ -29,18 +29,17 @@
 <template>
   <q-footer :class="$style.footer">
     <div class="container">
-      <div class="row justify-between">
-        <div class="col-12 col-sm-8 justify-center q-mr-auto d-flex column">
+      <div class="row justify-between q-mb-md">
+        <div class="justify-center q-mr-auto d-flex column">
           <a href="https://jpool.one" target="_blank" class="app-footer__jpool-link">
             stake on
             <img src="@/assets/img/jpool-logo.svg" alt="" />
           </a>
-          <div class="">© Copyright 2021 jstaking.one. All rights reserved.</div>
-          <div class=""
-            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
-          >
         </div>
-        <div class="col-12 col-sm-auto justify-between d-flex column">
+        <div class="justify-between d-flex column">
+          <div v-if="$q.screen.lt.sm" class="row items-center justify-end q-mb-xs">
+            <theme-mode-selector />
+          </div>
           <div class="row" :class="{ 'q-mx-auto': $q.screen.lt.sm }">
             <div :class="$style.buttons" class="">
               <q-btn :href="TELEGRAM_URL" color="white" round target="_blank" type="a" unelevated>
@@ -68,6 +67,14 @@
           </div> -->
         </div>
       </div>
+      <div class="row justify-start">
+        <div class="col-12 justify-start q-mr-auto d-flex column">
+          <div class="text-left">© Copyright 2021 jstaking.one. All rights reserved.</div>
+          <div class="text-left"
+            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
+          >
+        </div>
+      </div>
     </div>
   </q-footer>
 </template>
@@ -77,11 +84,13 @@
   import TelegramSvg from '@/components/icons/TelegramSvg.vue';
   import TwitterSvg from '@/components/icons/TwitterSvg.vue';
   import { defineComponent } from 'vue';
+  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
 
   export default defineComponent({
     components: {
       TelegramSvg,
       TwitterSvg,
+      ThemeModeSelector,
     },
     setup() {
       return {
@@ -132,6 +141,9 @@
     a {
       color: $blue-grey-8 !important;
       font-size: 28px;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 18px;
+      }
     }
 
     @media (max-width: $breakpoint-sm) {
@@ -143,7 +155,6 @@
 <style lang="scss" scoped>
   .app-footer {
     &__jpool-link {
-      margin-bottom: 16px;
       width: 100px;
       height: 100px;
       display: flex;
@@ -164,9 +175,6 @@
 
       img {
         width: 66px;
-      }
-      @media (max-width: $breakpoint-sm) {
-        margin: 0 auto 16px;
       }
     }
   }

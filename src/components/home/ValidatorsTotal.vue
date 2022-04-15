@@ -27,7 +27,8 @@
   -->
 
 <template>
-  <div class="total-validators row">
+  <div v-if="$q.screen.lt.md && !alt" class="total-validators row">EPOCH {{ epochNumber }}</div>
+  <div v-if="!alt" class="total-validators row">
     <div>
       <sol-svg class="total-validators__logo q-icon" fill="#1CE4B0" />
     </div>
@@ -36,23 +37,44 @@
       <div class="column total-validators__text__total">TOTAL: {{ validatorsCount }}</div>
     </div>
   </div>
+  <div v-if="alt" class="total-validators row">
+    <div>
+      <sol-svg class="total-validators__logo q-icon" fill="#1CE4B0" />
+    </div>
+    <div class="column total-validators__text">
+      <div>EPOCH {{ epochNumber }}</div>
+      <div
+        >VALIDATORS TOTAL:
+        <span class="total-validators__text__total">{{ validatorsCount }}</span></div
+      >
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-  import { useValidatorsAllStore } from '@/store';
+  import { useEpochStore, useValidatorsAllStore } from '@/store';
   import { computed, defineComponent } from 'vue';
   import SolSvg from '@/components/icons/SolSvg.vue';
+  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {
       SolSvg,
     },
+    props: {
+      alt: {
+        type: Boolean,
+        default: false,
+      },
+    },
     setup() {
+      const { epochNumber } = storeToRefs(useEpochStore());
       const validatorStore = useValidatorsAllStore();
       return {
         validatorsCount: computed(() =>
-          validatorStore.loading ? 'loading...' : validatorStore.items.length,
+          validatorStore.loading ? '...' : `${validatorStore.items.length}`,
         ),
+        epochNumber,
       };
     },
   });
@@ -60,17 +82,34 @@
 
 <style scoped lang="scss">
   .total-validators {
+    @media (max-width: $breakpoint-xs) {
+      font-size: 12px;
+      line-height: 15px;
+    }
     &__logo {
       width: 47px;
       height: 37px;
       margin-top: 4px;
       margin-right: 12px;
+      @media (max-width: $breakpoint-xs) {
+        width: 32px;
+        height: 24px;
+        margin-right: 4px;
+      }
     }
     &__text {
       font-size: 19px;
       line-height: 23px;
+      @media (max-width: $breakpoint-xs) {
+        font-size: 12px;
+        line-height: 15px;
+      }
       &__total {
         font-weight: 500;
+        @media (max-width: $breakpoint-xs) {
+          font-size: 14px;
+          line-height: 16px;
+        }
       }
     }
   }

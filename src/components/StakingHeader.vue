@@ -28,7 +28,10 @@
 
 <template>
   <q-header class="staking-header">
-    <div class="staking-header__top q-pt-sm q-pb-xs text-right">
+    <div
+      v-if="showValidator || $q.screen.gt.sm"
+      class="staking-header__top q-pt-sm q-pb-xs text-right"
+    >
       <div class="container row items-center justify-end q-mb-xs">
         <theme-mode-selector />
         <div
@@ -47,20 +50,41 @@
     </div>
     <div class="staking-header__main q-py-md">
       <div class="container relative-position">
-        <div class="row items-center">
-          <router-link class="row items-center q-mr-lg" to="/">
+        <div class="row items-end justify-between full-width">
+          <router-link
+            class="row items-center"
+            :class="{ 'q-mr-md': $q.screen.lt.sm, 'q-mr-lg': $q.screen.gt.xs }"
+            to="/"
+          >
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
             <q-badge class="staking-header__beta" color="accent" text-color="text-white">
               v.1.0
             </q-badge>
           </router-link>
-          <div class="row items-center col-grow">
-            <div class="q-mr-auto staking-header__btn">
-              <validator-name v-if="showValidator" />
-              <validators-total v-if="!showValidator" />
+          <div v-if="!showValidator && $q.screen.lt.md" class="total-validators-nxs q-mr-auto">
+            <validators-total />
+          </div>
+          <div v-if="$q.screen.lt.md" class="column q-ml-auto">
+            <div class="staking-header__btn q-mb-sm">
+              <cluster-selector />
+            </div>
+            <div class="staking-header__btn">
+              <connect-wallet />
+            </div>
+          </div>
+          <div
+            v-if="showValidator"
+            class="col-12 col-md-auto q-mr-auto col-grow"
+            :class="{ 'q-mt-md': $q.screen.lt.md }"
+          >
+            <validator-name />
+          </div>
+          <div v-if="$q.screen.gt.sm" class="row items-center col-grow">
+            <div v-if="!showValidator" class="q-mr-auto">
+              <validators-total />
             </div>
             <epoch-circle v-if="!showValidator" />
-            <div class="row">
+            <div class="row q-ml-auto">
               <div class="q-mr-md staking-header__btn">
                 <cluster-selector />
               </div>
@@ -68,6 +92,11 @@
                 <connect-wallet />
               </div>
             </div>
+          </div>
+        </div>
+        <div class="row items-center full-width total-validators-xs">
+          <div v-if="!showValidator && $q.screen.lt.sm" class="q-mt-sm">
+            <validators-total :alt="true" />
           </div>
         </div>
       </div>

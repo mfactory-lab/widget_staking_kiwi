@@ -51,7 +51,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 20, 30, 300, 1000 /*, 50, 70, 100, 150, 200, 'all'*/]);
+  const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
   const sortType = useLocalStorage<string>('sort-type', 'desc');
   const sortParam = useLocalStorage<string>('sort-param', 'apyNum');
   const filterTop33 = useLocalStorage<boolean>('filter-top-staked', true);
@@ -95,12 +95,11 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   });
 
-  const perPageMax = computed(() => perPageOptions.value[perPageOptions.value.length - 1] ?? 10);
   watch(
     perPage,
     () => {
-      if (isNaN(Number(perPage.value)) || perPage.value > perPageMax.value) {
-        perPage.value = perPageMax.value;
+      if (isNaN(Number(perPage.value)) && perPage.value != 'all') {
+        perPage.value = 5;
       }
     },
     { immediate: true },
@@ -108,12 +107,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const perPageNum = computed(() => {
     const itemsLength = itemsSorted.value.length;
-    const count = isNaN(Number(perPage.value))
-      ? itemsLength > 0
-        ? itemsLength
-        : 5
-      : Number(perPage.value);
-    return count <= perPageMax.value ? count : perPageMax.value;
+    return perPage.value == 'all' ? (itemsLength > 0 ? itemsLength : 5) : Number(perPage.value);
   });
 
   watch(connected, (connected) => {

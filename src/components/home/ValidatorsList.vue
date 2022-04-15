@@ -33,13 +33,14 @@
         <div class="validators-list__title q-pt-md q-pb-sm row">
           <div class="col-12 col-md-4"></div>
           <div
-            class="validators-list__title__text col-12 col-sm-6 col-md-4"
-            :class="{ 'text-center': $q.screen.lt.sm || $q.screen.gt.sm }"
+            v-if="$q.screen.gt.sm"
+            class="validators-list__title__text col-4"
+            :class="{ 'text-center': $q.screen.gt.sm }"
             >Solana Validators</div
           >
           <div
-            class="col-5 col-sm-auto col-md-4 row"
-            :class="{ 'justify-center': $q.screen.lt.sm, 'justify-end': $q.screen.gt.xs }"
+            class="col-4 row"
+            :class="{ 'justify-end': $q.screen.gt.sm, 'justify-start': $q.screen.lt.md }"
           >
             <q-btn
               rounded
@@ -50,24 +51,26 @@
               padding="4px 17px"
               @click="refresh"
             >
-              Refresh
+              REFRESH <br v-if="$q.screen.lt.sm" />
+              LIST
             </q-btn>
           </div>
-          <div
-            v-if="$q.screen.lt.md"
-            class="col-6 col-sm-auto row q-pl-md items-center justify-end"
+          <div v-if="$q.screen.lt.md" class="validators-list__title__text col-4 text-center"
+            >Validators</div
           >
-            <div class="validators-list__dropdown-label q-mr-sm">Show controls</div>
-            <q-toggle
-              v-model="showControls"
-              class="styled-toggle"
-              checked-icon="eva-checkmark-outline"
-              toggle-order="tf"
-              color="primary"
-              keep-color
-              label=""
-              unchecked-icon="eva-close-outline"
-            />
+          <div v-if="$q.screen.lt.md" class="col-4 row q-pl-md items-center justify-end">
+            <q-btn
+              rounded
+              class="home-page__std-btn q-pl-sm"
+              color="gray-dark-theme"
+              text-color="text-white"
+              :disable="connectionLost"
+              padding="4px 17px"
+              @click="() => (showControls = !showControls)"
+            >
+              {{ showControls ? 'HIDE' : 'SHOW' }} <br v-if="$q.screen.lt.sm" />
+              FILTERS
+            </q-btn>
           </div>
         </div>
 
@@ -118,7 +121,7 @@
               />
             </div>
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">Hide anonymous</div>
+              <div class="validators-list__dropdown-label q-mb-xs">Hide Anonymous</div>
               <q-toggle
                 v-model="filterNoname"
                 class="styled-toggle"
@@ -146,7 +149,7 @@
           </div>
           <div class="row validators-list__filters q-mb-md q-mr-md">
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">JPool-Members only</div>
+              <div class="validators-list__dropdown-label q-mb-xs">JPool-Members</div>
               <q-toggle
                 v-model="filterNotJpool"
                 class="styled-toggle"
@@ -159,7 +162,7 @@
               />
             </div>
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">SVM-Members only</div>
+              <div class="validators-list__dropdown-label q-mb-xs">SVM-Members</div>
               <q-toggle
                 v-model="filterNotSvm"
                 class="styled-toggle"
@@ -171,10 +174,27 @@
                 unchecked-icon="eva-close-outline"
               />
             </div>
+            <div v-if="$q.screen.lt.md" class="column q-my-xs q-ml-md">
+              <div class="validators-list__dropdown-label q-mb-xs">Show my Stake</div>
+              <q-toggle
+                v-model="filterHasStake"
+                class="styled-toggle"
+                checked-icon="eva-checkmark-outline"
+                toggle-order="tf"
+                color="secondary"
+                keep-color
+                label=""
+                :disable="!connected"
+                unchecked-icon="eva-close-outline"
+              />
+              <q-tooltip v-if="!connected" class="text-body2"
+                >Available with connected wallet</q-tooltip
+              >
+            </div>
           </div>
-          <div class="row validators-list__filters q-mb-md">
+          <div v-if="$q.screen.gt.sm" class="row validators-list__filters q-mb-md">
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">Show my Stake only</div>
+              <div class="validators-list__dropdown-label q-mb-xs">Show my Stake</div>
               <q-toggle
                 v-model="filterHasStake"
                 class="styled-toggle"
@@ -195,7 +215,7 @@
 
         <div class="q-pt-sm q-pb-sm row">
           <div
-            v-show="$q.screen.gt.sm || showControls"
+            v-show="$q.screen.gt.sm"
             class="col q-mt-xs q-mb-sm q-mr-lg main-section__block"
             :class="{ 'col-12': $q.screen.lt.sm }"
           >
@@ -213,7 +233,7 @@
           />
 
           <div
-            v-show="$q.screen.gt.sm || showControls"
+            v-show="$q.screen.gt.sm"
             class="row q-ml-auto q-my-xs col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
@@ -235,10 +255,7 @@
             />
           </div>
 
-          <div
-            class="row justify-end q-ml-lg"
-            :class="{ 'q-ml-auto': $q.screen.lt.sm || ($q.screen.lt.md && !showControls) }"
-          >
+          <div v-if="$q.screen.gt.sm" class="row justify-end q-ml-lg">
             <div class="column q-my-xs q-ml-md">
               <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
               <q-btn-dropdown
@@ -267,7 +284,7 @@
           </div>
         </div>
 
-        <div class="q-pt-sm q-pb-lg flex flex-center">
+        <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
           <q-pagination
             v-model="currentPage"
             :max="pages"
@@ -325,11 +342,11 @@
           <q-virtual-scroll
             v-if="!loading && itemsSorted.length > 0"
             scroll-target="#html"
-            :items="itemsShowed"
+            :items="$q.screen.gt.sm ? itemsShowed : itemsSorted"
             virtual-scroll-item-size="123"
-            virtual-scroll-slice-size="20"
-            virtual-scroll-slice-ratio-after="1"
-            virtual-scroll-slice-ratio-before="1"
+            virtual-scroll-slice-size="30"
+            virtual-scroll-slice-ratio-after="0.7"
+            virtual-scroll-slice-ratio-before="2"
           >
             <template #default="{ item, index }">
               <div
@@ -375,7 +392,7 @@
             </div>
           </div>
         </q-card>
-        <div class="q-pt-sm q-pb-lg flex flex-center">
+        <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
           <q-pagination
             v-model="currentPage"
             :max="pages"

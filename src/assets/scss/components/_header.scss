@@ -31,8 +31,11 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
+    @media (max-width: $breakpoint-sm) and (min-width: $breakpoint-xs) {
+      margin-bottom: -16px;
+    }
     @media (max-width: $breakpoint-xs) {
-      margin-bottom: 40px;
+      margin-bottom: -10px;
     }
   }
   &__faq-btn {
@@ -49,10 +52,13 @@
   }
   &__logo {
     margin-top: -55px;
-  }
-  &__btn {
     @media (max-width: $breakpoint-sm) {
-      margin-top: 16px;
+      margin-top: -3px;
+      height: 95px;
+    }
+    @media (max-width: $breakpoint-xs) {
+      margin-top: 0;
+      height: 70px;
     }
   }
   &__beta {
@@ -66,8 +72,29 @@
     margin-right: -125px;
     font-weight: 500;
     font-family: $font-secondary;
-    @media (max-width: 340px) {
-      font-size: 15px;
+    @media (max-width: $breakpoint-sm) {
+      margin-top: -75px;
+      margin-left: -18px;
+      font-size: 8px;
+      padding: 1px 8px;
+    }
+  }
+  &__btn {
+    button {
+      @media (max-width: $breakpoint-xs) {
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+    }
+  }
+  .total-validators-nxs .total-validators {
+    @media (max-width: 409px) {
+      display: none;
+    }
+  }
+  .total-validators-xs .total-validators {
+    @media (min-width: 410px) {
+      display: none;
     }
   }
 }
