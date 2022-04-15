@@ -109,6 +109,7 @@
               size="14px"
               padding="9px xl"
               text-color="text-white"
+              :disabled="connectionLost || validatorDelinquent"
               @click="stakeHandler"
             >
               STAKE NOW
@@ -194,7 +195,7 @@
       clickOutside,
     },
     setup() {
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const { voterKey, validatorDelinquent } = storeToRefs(useValidatorJstakingStore());
       const connectionStore = useConnectionStore();
       const { connected } = useWallet();
       const { solBalance } = storeToRefs(useBalanceStore());
@@ -267,6 +268,7 @@
 
       return {
         voterKey,
+        validatorDelinquent,
         stake,
         cluster: computed(() => connectionStore.cluster),
         evaClose,

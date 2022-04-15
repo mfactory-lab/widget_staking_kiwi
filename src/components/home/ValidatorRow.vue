@@ -49,22 +49,39 @@
           </router-link>
         </div>
         <div class="validator-row__badges row no-wrap absolute">
-          <a v-if="!loading && item.inJpool" href="https://jpool.one" target="_blank">
-            <img src="@/assets/img/badge-jpool.svg" alt="" class="validator-row__status-badge" />
+          <a
+            v-if="!loading && item.inJpool"
+            href="https://jpool.one"
+            class="row q-mr-sm"
+            target="_blank"
+          >
+            <q-badge class="validator-row__status-badge" color="warning" text-color="primary">
+              JPOOL
+            </q-badge>
           </a>
           <a
             v-if="!loading && item.svName && cluster"
+            class="row q-mr-sm"
             :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
             target="_blank"
           >
-            <img src="@/assets/img/badge-svm.svg" alt="" class="validator-row__status-badge" />
+            <q-badge class="validator-row__status-badge" color="accent" text-color="text-white">
+              SVM-MEMBER
+            </q-badge>
           </a>
-          <span v-if="!loading && item.isDelinquent">
-            <img src="@/assets/img/badge-delinq.svg" alt="" class="validator-row__status-badge" />
+          <q-badge
+            v-if="!loading && item.isDelinquent"
+            class="validator-row__status-badge"
+            color="negative"
+            text-color="text-white"
+          >
+            DELINQUENT FOR
+            {{ isoTimeDifference(item.lastVote, true) }}
             <q-tooltip class="text-body2">
-              Delinquent for {{ isoTimeDifference(item.lastVote) }}
+              Delinquent for
+              {{ isoTimeDifference(item.lastVote) }}
             </q-tooltip>
-          </span>
+          </q-badge>
         </div>
         <div class="validator-row__name column q-pt-xs justify-start">
           <q-skeleton width="100%" v-if="loading" />

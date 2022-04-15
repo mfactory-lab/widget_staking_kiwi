@@ -57,7 +57,8 @@
           color="negative"
           text-color="text-white"
         >
-          DELINQUENT
+          DELINQUENT FOR
+          {{ isoTimeDifference(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
           <q-tooltip class="text-body2">
             Delinquent for
             {{ isoTimeDifference(loading ? savedValidator.validatorLastVote : validatorLastVote) }}

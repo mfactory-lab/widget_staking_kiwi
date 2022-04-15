@@ -49,9 +49,6 @@ $row-width: 990px;
 }
 
 .validators-list {
-  .q-virtual-scroll {
-    border-top: 1px solid $text-white;
-  }
   .q-field__native {
     font-size: 12px;
   }
@@ -122,7 +119,6 @@ $row-width: 990px;
   &__list {
     width: $row-width !important;
     overflow-y: hidden;
-    border-top: 1px solid $text-white;
     &--fix-height {
       height: 616px;
     }
@@ -139,6 +135,7 @@ $row-width: 990px;
       align-items: center;
       width: $row-width !important;
       height: auto !important;
+      border-bottom: 1px solid #FFFFFF;
 
       & > div {
         height: 24px;
@@ -353,12 +350,14 @@ $row-width: 990px;
   }
 
   &__badges {
-    top: -10px;
+    top: -6px;
     left: -35px;
   }
   &__status-badge {
-    height: 22px;
+    font-size: 8px;
     padding-right: 4px;
+    height: 16px;
+    padding: 0 8px;
   }
   .average-icon {
     height: 20px;
