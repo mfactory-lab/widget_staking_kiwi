@@ -87,7 +87,7 @@
           target="_blank"
         >
           <q-badge class="validator-name__badges__item" color="accent" text-color="text-white">
-            SVM-MEMBER
+            SVT MEMBER
           </q-badge>
         </a>
       </div>

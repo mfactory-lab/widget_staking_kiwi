@@ -38,6 +38,7 @@
         :icon="'img:' + sortUp"
       />
       <q-btn
+        v-if="!onlyDesc"
         :padding="size"
         :class="`q-ml-${marginSize}`"
         :color="currentParam === param && currentType === 'asc' ? 'gray-dark-theme' : 'primary'"
@@ -82,6 +83,10 @@
       marginSize: {
         type: String,
         default: 'sm',
+      },
+      onlyDesc: {
+        type: Boolean,
+        default: false,
       },
     },
     emits: ['sort'],

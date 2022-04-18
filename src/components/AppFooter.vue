@@ -37,7 +37,7 @@
           </a>
         </div>
         <div class="justify-between d-flex column">
-          <div v-if="$q.screen.lt.sm" class="row items-center justify-end q-mb-xs">
+          <div v-if="$q.screen.lt.md" class="row items-center justify-end q-mb-xs">
             <theme-mode-selector />
           </div>
           <div class="row" :class="{ 'q-mx-auto': $q.screen.lt.sm }">
@@ -141,6 +141,9 @@
     a {
       color: $blue-grey-8 !important;
       font-size: 28px;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 21px;
+      }
       @media (max-width: $breakpoint-xs) {
         font-size: 18px;
       }

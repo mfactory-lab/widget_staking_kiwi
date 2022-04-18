@@ -27,21 +27,11 @@
   -->
 
 <template>
-  <section class="validators-list">
-    <div class="validators-list__main">
+  <section class="validators-list q-pb-lg">
+    <div class="">
       <div class="container">
         <div class="validators-list__title q-pt-md q-pb-sm row">
-          <div class="col-12 col-md-4"></div>
-          <div
-            v-if="$q.screen.gt.sm"
-            class="validators-list__title__text col-4"
-            :class="{ 'text-center': $q.screen.gt.sm }"
-            >Solana Validators</div
-          >
-          <div
-            class="col-4 row"
-            :class="{ 'justify-end': $q.screen.gt.sm, 'justify-start': $q.screen.lt.md }"
-          >
+          <div class="col-4 row justify-start">
             <q-btn
               rounded
               class="home-page__std-btn q-pl-sm"
@@ -55,11 +45,12 @@
               LIST
             </q-btn>
           </div>
-          <div v-if="$q.screen.lt.md" class="validators-list__title__text col-4 text-center"
-            >Validators</div
+          <div class="validators-list__title__text col-4 text-center"
+            >{{ $q.screen.gt.sm ? 'Solana' : '' }} Validators</div
           >
-          <div v-if="$q.screen.lt.md" class="col-4 row q-pl-md items-center justify-end">
+          <div class="col-4 row q-pl-md items-center justify-end">
             <q-btn
+              v-if="$q.screen.gt.sm"
               rounded
               class="home-page__std-btn q-pl-sm"
               color="gray-dark-theme"
@@ -68,18 +59,30 @@
               padding="4px 17px"
               @click="() => (showControls = !showControls)"
             >
-              {{ showControls ? 'HIDE' : 'SHOW' }} <br v-if="$q.screen.lt.sm" />
+              {{ showControls ? 'HIDE' : 'SHOW' }} FILTERS
+            </q-btn>
+            <q-btn
+              v-if="$q.screen.lt.md"
+              rounded
+              class="home-page__std-btn q-pl-sm"
+              color="gray-dark-theme"
+              text-color="text-white"
+              :disable="connectionLost"
+              padding="4px 17px"
+              @click="() => (showControlsMob = !showControlsMob)"
+            >
+              {{ showControlsMob ? 'HIDE' : 'SHOW' }} <br v-if="$q.screen.lt.sm" />
               FILTERS
             </q-btn>
           </div>
         </div>
 
         <div
-          v-show="$q.screen.gt.sm || showControls"
+          v-show="($q.screen.gt.sm && showControls) || ($q.screen.lt.md && showControlsMob)"
           class="row q-mt-md"
           :class="{ 'justify-start': $q.screen.lt.md, 'justify-between': $q.screen.gt.sm }"
         >
-          <div class="row validators-list__filters q-mb-md q-mr-md">
+          <div class="row validators-list__filters q-mb-md" :class="{ 'q-mr-md': $q.screen.gt.sm }">
             <div class="column q-ml-md q-my-xs">
               <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
               <q-toggle
@@ -147,9 +150,9 @@
               />
             </div>
           </div>
-          <div class="row validators-list__filters q-mb-md q-mr-md">
+          <div class="row validators-list__filters q-mb-md" :class="{ 'q-mr-md': $q.screen.gt.sm }">
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">JPool-Members</div>
+              <div class="validators-list__dropdown-label q-mb-xs">JPool members</div>
               <q-toggle
                 v-model="filterNotJpool"
                 class="styled-toggle"
@@ -162,7 +165,7 @@
               />
             </div>
             <div class="column q-my-xs q-ml-md">
-              <div class="validators-list__dropdown-label q-mb-xs">SVM-Members</div>
+              <div class="validators-list__dropdown-label q-mb-xs">SVT members</div>
               <q-toggle
                 v-model="filterNotSvm"
                 class="styled-toggle"
@@ -215,7 +218,7 @@
 
         <div class="q-pt-sm q-pb-sm row">
           <div
-            v-show="$q.screen.gt.sm"
+            v-show="$q.screen.gt.sm && showControls"
             class="col q-mt-xs q-mb-sm q-mr-lg main-section__block"
             :class="{ 'col-12': $q.screen.lt.sm }"
           >
@@ -223,7 +226,7 @@
           </div>
 
           <q-input
-            v-show="$q.screen.gt.sm || showControls"
+            v-show="($q.screen.gt.sm && showControls) || ($q.screen.lt.md && showControlsMob)"
             v-model="nameFilter"
             class="q-mb-xs q-mt-sm col-grow validators-list__search"
             :class="{ 'full-width': $q.screen.lt.sm }"
@@ -233,7 +236,7 @@
           />
 
           <div
-            v-show="$q.screen.gt.sm"
+            v-show="$q.screen.gt.sm && showControls"
             class="row q-ml-auto q-my-xs col-sm-auto"
             :class="{ 'justify-between': $q.screen.lt.sm }"
           >
@@ -255,7 +258,7 @@
             />
           </div>
 
-          <div v-if="$q.screen.gt.sm" class="row justify-end q-ml-lg">
+          <!-- <div v-if="$q.screen.gt.sm" class="row justify-end q-ml-lg">
             <div class="column q-my-xs q-ml-md">
               <div class="validators-list__dropdown-label q-mb-xs">Per page</div>
               <q-btn-dropdown
@@ -281,10 +284,10 @@
                 </q-list>
               </q-btn-dropdown>
             </div>
-          </div>
+          </div> -->
         </div>
 
-        <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
+        <!-- <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
           <q-pagination
             v-model="currentPage"
             :max="pages"
@@ -298,9 +301,14 @@
             icon-prev="eva-arrow-ios-back-outline"
             icon-next="eva-arrow-ios-forward-outline"
           />
-        </div>
-        <q-card class="q-mb-md full-width validators-list__main">
-          <q-card-section class="validators-list__list__head validator-row row justify-between">
+        </div> -->
+        <div> Shown validators: {{ loading ? 'loading...' : itemsSorted.length }} </div>
+        <q-card class="q-mb-md q-mt-md validators-list__main">
+          <q-card-section
+            v-if="$q.screen.gt.sm"
+            class="validators-list__list__head validators-list__list-desk__head validator-row row justify-between"
+          >
+            <div class="validator-row__index column q-mr-md items-center"> # </div>
             <div class="validator-row__name row q-pr-md items-center justify-between">
               <span>VALIDATOR</span>
               <sort-item
@@ -324,7 +332,7 @@
               />
             </div>
             <div class="validator-row__apy-chart row q-pl-md q-pr-md items-center justify-between">
-              <span>HISTORY APY</span>
+              <span>APY HISTORY</span>
             </div>
             <div class="validator-row__btns row q-pl-md items-center justify-between">
               <span>TOTAL STAKE</span>
@@ -338,10 +346,53 @@
               />
             </div>
           </q-card-section>
+          <q-card-section
+            v-else
+            class="validators-list__list__head validators-list__list-mob__head validator-row-mob row justify-between"
+          >
+            <div class="validator-row-mob__index column q-mr-sm items-center"> # </div>
+            <div class="validator-row-mob__name row q-pr-sm items-center justify-between">
+              <span>NAME</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="name"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+                :only-desc="$q.screen.lt.sm"
+              />
+            </div>
+            <div class="validator-row-mob__apy row q-pl-sm q-pr-sm items-center justify-between">
+              <span>APY</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="apyNum"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+                :only-desc="$q.screen.lt.sm"
+              />
+            </div>
+            <div class="validator-row-mob__stake row q-pl-sm items-center justify-between">
+              <span>STAKE</span>
+              <sort-item
+                size="xs"
+                margin-size="xs"
+                param="totalStake"
+                @sort="sort"
+                :current-param="sortParam"
+                :current-type="sortType"
+                :only-desc="$q.screen.lt.sm"
+              />
+            </div>
+          </q-card-section>
 
           <q-virtual-scroll
             v-if="!loading && itemsSorted.length > 0"
             scroll-target="#html"
+            :class="{ 'v-scroll-desk': $q.screen.gt.sm }"
             :items="$q.screen.gt.sm ? itemsShowed : itemsSorted"
             virtual-scroll-item-size="123"
             virtual-scroll-slice-size="30"
@@ -351,9 +402,18 @@
             <template #default="{ item, index }">
               <div
                 :key="item.voter"
-                class="stake-accounts-container col-12 q-px-none q-mx-md q-pt-md"
+                class="stake-accounts-container col-12 q-px-none q-pt-md"
+                :class="{ 'q-mx-md': $q.screen.gt.sm }"
               >
                 <validator-row
+                  v-if="$q.screen.gt.sm"
+                  :item="item"
+                  :index="(currentPage - 1) * perPageNum + index + 1"
+                  :loading="loading"
+                  :cluster="cluster"
+                />
+                <validator-row-mob
+                  v-else
                   :item="item"
                   :index="(currentPage - 1) * perPageNum + index + 1"
                   :loading="loading"
@@ -363,10 +423,14 @@
             </template>
           </q-virtual-scroll>
 
-          <div class="validators-list__list" v-else>
+          <div
+            v-else
+            class="validators-list__list"
+            :class="{ 'validators-list__list-desk': $q.screen.gt.sm }"
+          >
             <div class="relative-position">
               <div
-                class="fit row wrap justify-start items-start q-px-md content-start"
+                class="fit row wrap justify-start items-start content-start"
                 style="min-height: 100px"
               >
                 <template v-if="itemsSorted.length">
@@ -374,10 +438,19 @@
                     v-for="(item, index) of itemsShowed"
                     :key="item.voter"
                     class="stake-accounts-container col-12 q-px-none q-pt-md"
+                    :class="{ 'q-mx-md': $q.screen.gt.sm }"
                   >
                     <validator-row
+                      v-if="$q.screen.gt.sm"
                       :item="item"
                       :index="index + (currentPage - 1) * perPageNum + 1"
+                      :loading="loading"
+                      :cluster="cluster"
+                    />
+                    <validator-row-mob
+                      v-else
+                      :item="item"
+                      :index="(currentPage - 1) * perPageNum + index + 1"
                       :loading="loading"
                       :cluster="cluster"
                     />
@@ -392,7 +465,7 @@
             </div>
           </div>
         </q-card>
-        <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
+        <!-- <div v-if="$q.screen.gt.sm" class="q-pt-sm q-pb-lg flex flex-center">
           <q-pagination
             v-model="currentPage"
             :max="pages"
@@ -406,7 +479,7 @@
             icon-prev="eva-arrow-ios-back-outline"
             icon-next="eva-arrow-ios-forward-outline"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -417,12 +490,13 @@
   import { storeToRefs } from 'pinia';
   import { useConnectionStore, useStakePoolStore, useValidatorsAllStore } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
+  import ValidatorRowMob from '@/components/home/ValidatorRowMob.vue';
   import SortItem from '@/components/home/SortItem.vue';
   import PriceStats from '@/components/staking/PriceStats.vue';
   import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
-    components: { ValidatorRow, PriceStats, SortItem },
+    components: { ValidatorRow, ValidatorRowMob, PriceStats, SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
@@ -451,6 +525,7 @@
         filterHasStake,
         loading,
         showControls,
+        showControlsMob,
       } = storeToRefs(validatorsAllStore);
 
       const refresh = async () => {
@@ -484,6 +559,7 @@
         itemsSorted,
         itemsShowed,
         showControls,
+        showControlsMob,
         refresh,
         sort: (param, type) => {
           sortParam.value = param;

@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <q-header class="staking-header">
+  <q-header id="app-header" class="staking-header">
     <div
       v-if="showValidator || $q.screen.gt.sm"
       class="staking-header__top q-pt-sm q-pb-xs text-right"
@@ -57,8 +57,13 @@
             to="/"
           >
             <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
-            <q-badge class="staking-header__beta" color="accent" text-color="text-white">
-              v.1.0
+            <q-badge
+              v-if="$q.screen.gt.sm"
+              class="staking-header__beta"
+              color="accent"
+              text-color="text-white"
+            >
+              v.1.2
             </q-badge>
           </router-link>
           <div v-if="!showValidator && $q.screen.lt.md" class="total-validators-nxs q-mr-auto">

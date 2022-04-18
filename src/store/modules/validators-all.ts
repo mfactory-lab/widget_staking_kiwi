@@ -63,6 +63,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const filterNotSvm = useLocalStorage<boolean>('filter-not-svm', false);
   const filterHasStake = ref(false);
   const showControls = useLocalStorage<boolean>('show-controls', true);
+  const showControlsMob = useLocalStorage<boolean>('show-controls-mob', false);
 
   const loadAllValidators = async () => {
     console.log('[validators all] loadAllValidators');
@@ -98,8 +99,12 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   watch(
     perPage,
     () => {
-      if (isNaN(Number(perPage.value)) && perPage.value != 'all') {
-        perPage.value = 5;
+      // if (isNaN(Number(perPage.value)) && perPage.value != 'all') {
+      //   perPage.value = 5;
+      // }
+      // TODO: before decide to return or delete pagination
+      if (perPage.value != 'all') {
+        perPage.value = 'all';
       }
     },
     { immediate: true },
@@ -107,7 +112,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   const perPageNum = computed(() => {
     const itemsLength = itemsSorted.value.length;
-    return perPage.value == 'all' ? (itemsLength > 0 ? itemsLength : 5) : Number(perPage.value);
+    // return perPage.value == 'all' ? (itemsLength > 0 ? itemsLength : 5) : Number(perPage.value);
+    return itemsLength > 0 ? itemsLength : 10;
   });
 
   watch(connected, (connected) => {
@@ -125,7 +131,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     // console.log('[validators all] start');
     if (loading.value) {
       // console.log('[validators all] skeleton');
-      return Array(5).fill({});
+      return Array(10).fill({});
     }
 
     // console.log('[validators all] calc ', validatorsStats.value.length);
@@ -300,5 +306,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     averageApy,
     loading,
     showControls,
+    showControlsMob,
   };
 });

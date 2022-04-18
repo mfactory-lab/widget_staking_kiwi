@@ -66,7 +66,7 @@
 
     &__value {
       border-radius: 12px;
-      background: $secondary;
+      background: $warning;
     }
   }
 </style>

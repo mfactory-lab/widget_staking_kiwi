@@ -66,7 +66,7 @@
             target="_blank"
           >
             <q-badge class="validator-row__status-badge" color="accent" text-color="text-white">
-              SVM-MEMBER
+              SVT MEMBER
             </q-badge>
           </a>
           <q-badge
@@ -186,7 +186,7 @@
         <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
           <q-btn
             v-bind="buttonProps(props)"
-            label="Stake now"
+            label="Stake"
             color="warning"
             text-color="primary"
             size="14px"
