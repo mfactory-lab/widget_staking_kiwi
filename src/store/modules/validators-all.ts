@@ -169,7 +169,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
         details: voteAccount.details,
         website: voteAccount.website,
         keybaseUsername: keybaseUsername,
-        image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture` : undefined,
+        image: keybaseUsername ? `https://keybase.io/${keybaseUsername}/picture?format=square_200` : undefined,
         //url: `https://www.validators.app/validators/${voteAccount.network}/${pubKey}`,
         inTop33: voteAccount.inTop33,
         inJpool: voteAccount.inJpool,
