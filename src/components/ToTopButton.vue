@@ -39,6 +39,7 @@
 <style lang="scss">
   .up {
     position: fixed;
+    z-index: 10000;
     bottom: 55px;
     right: 55px;
     cursor: pointer;
