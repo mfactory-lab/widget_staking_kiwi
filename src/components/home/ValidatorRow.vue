@@ -37,7 +37,7 @@
           <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
           <router-link v-else :to="`/app/${item.voter}`">
             <q-avatar class="shadow-1" size="60px">
-              <q-img :key="item.voter" :src="item.image" spinner-color="white">
+              <q-img :key="item.voter" :src="item.image" spinner-size="34px" spinner-color="white">
                 <template #default v-if="!item.image">
                   <q-icon :name="evaPerson" />
                 </template>

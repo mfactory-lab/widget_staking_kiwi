@@ -34,6 +34,7 @@
         <q-avatar class="shadow-1" size="56px">
           <q-img
             :src="loading ? savedValidator.validatorImage : validatorImage"
+            spinner-size="30px"
             spinner-color="white"
           >
             <template
