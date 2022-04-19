@@ -52,16 +52,16 @@
     <div class="validator-name__text column justify-start relative-position">
       <div v-if="!loading || savedValidator" class="validator-name__badges row no-wrap absolute">
         <q-badge
-          v-if="loading ? savedValidator.validatorDelinquent : validatorDelinquent"
+          v-if="isDelinquent"
           class="validator-name__badges__item q-mr-sm"
           color="negative"
           text-color="text-white"
         >
           DELINQUENT FOR
-          {{ isoTimeDifference(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
+          {{ delinquentTime }}
           <q-tooltip class="text-body2">
             Delinquent for
-            {{ isoTimeDifference(loading ? savedValidator.validatorLastVote : validatorLastVote) }}
+            {{ delinquentTime }}
           </q-tooltip>
         </q-badge>
         <a
@@ -110,11 +110,13 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
   import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
   import { isoTimeDifference } from '@/utils';
   import { evaPerson } from '@quasar/extras/eva-icons';
+  import { DELINQ_UPDATE_EVENT } from '@/store';
+  import { useEmitter } from '@jpool/common/hooks';
 
   export default defineComponent({
     components: {},
@@ -133,6 +135,29 @@
       const { loading } = storeToRefs(useValidatorsAllStore());
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
+      const isDelinquent = computed(() =>
+        loading.value ? savedValidator.value?.validatorDelinquent : validatorDelinquent.value,
+      );
+      const lastVote = computed(() =>
+        loading.value ? savedValidator.value?.validatorLastVote : validatorLastVote.value,
+      );
+      const delinquentTime = ref('');
+      watch(
+        [isDelinquent, lastVote],
+        () => {
+          if (isDelinquent.value && lastVote.value) {
+            delinquentTime.value = isoTimeDifference(lastVote.value);
+          }
+        },
+        { immediate: true },
+      );
+
+      const emitter = useEmitter();
+      emitter.on(DELINQ_UPDATE_EVENT, () => {
+        if (isDelinquent.value && lastVote.value) {
+          delinquentTime.value = isoTimeDifference(lastVote.value);
+        }
+      });
 
       return {
         evaPerson,
@@ -142,12 +167,12 @@
         validatorImage,
         validatorUrl,
         validatorInJpool,
-        validatorDelinquent,
+        isDelinquent,
         validatorSVM,
         validatorLastVote,
         cluster,
         loading,
-        isoTimeDifference,
+        delinquentTime,
       };
     },
   });

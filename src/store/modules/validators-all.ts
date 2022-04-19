@@ -33,8 +33,12 @@ import { formatPct, lamportsToSol, priceFormatter } from '@jpool/common/utils';
 import { ApyStats, ValidatorStats, getAverageApy, getValidatorsStats } from '@/utils';
 import { useLocalStorage } from '@vueuse/core';
 import { useWallet } from 'solana-wallets-vue';
+import { useEmitter } from '@jpool/common/hooks';
+
+export const DELINQ_UPDATE_EVENT = Symbol();
 
 export const useValidatorsAllStore = defineStore('validators-all', () => {
+  const emitter = useEmitter();
   const connectionStore = useConnectionStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
@@ -125,6 +129,11 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
   }
+
+  setInterval(async () => {
+    console.log('Reload delinqs');
+    emitter.emit(DELINQ_UPDATE_EVENT);
+  }, 60000);
 
   const items = computed(() => {
     // skeleton preloader

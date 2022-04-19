@@ -76,10 +76,10 @@
             text-color="text-white"
           >
             DELINQUENT FOR
-            {{ isoTimeDifference(item.lastVote, true) }}
+            {{ delinquentTime.split(' ')[0] }}
             <q-tooltip class="text-body2">
               Delinquent for
-              {{ isoTimeDifference(item.lastVote) }}
+              {{ delinquentTime }}
             </q-tooltip>
           </q-badge>
         </div>
@@ -200,7 +200,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
@@ -209,6 +209,8 @@
   import AverageSvg from '@/components/icons/AverageSvg.vue';
   import { useWallet } from 'solana-wallets-vue';
   import { isoTimeDifference } from '@/utils';
+  import { DELINQ_UPDATE_EVENT } from '@/store';
+  import { useEmitter } from '@jpool/common/hooks';
 
   export default defineComponent({
     components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
@@ -229,7 +231,16 @@
       },
     },
     setup(props) {
+      const delinquentTime = ref(
+        props.item.isDelinquent ? isoTimeDifference(props.item.lastVote) : '',
+      );
+      const emitter = useEmitter();
       const { connected } = useWallet();
+      if (props.item.isDelinquent) {
+        emitter.on(DELINQ_UPDATE_EVENT, () => {
+          delinquentTime.value = isoTimeDifference(props.item.lastVote);
+        });
+      }
       return {
         connected,
         evaPerson,
@@ -240,10 +251,8 @@
           };
           return props;
         },
-        shortAddress: computed(() =>
-          props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
-        ),
-        isoTimeDifference,
+        shortAddress: props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
+        delinquentTime,
       };
     },
   });
