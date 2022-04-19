@@ -31,10 +31,7 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
-    @media (max-width: $breakpoint-sm) and (min-width: $breakpoint-xs) {
-      margin-bottom: -16px;
-    }
-    @media (max-width: $breakpoint-xs) {
+    @media (max-width: $breakpoint-sm) {
       margin-bottom: -10px;
     }
   }

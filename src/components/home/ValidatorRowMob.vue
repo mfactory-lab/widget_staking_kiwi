@@ -47,6 +47,43 @@
           </q-avatar>
         </router-link>
       </div>
+      <div class="validator-row-mob__name column justify-start">
+        <q-skeleton width="100%" class="q-mt-xs" height="16px" v-if="loading" />
+        <div v-else class="q-mt-xs q-mr-sm">
+          {{ name }}
+          <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
+            {{ name }}
+          </q-tooltip>
+        </div>
+      </div>
+      <div class="validator-row-mob column no-wrap relative-position">
+        <div class="row justify-between relative-position">
+          <div class="validator-row-mob__apy column q-pl-sm justify-start">
+            <q-skeleton class="q-mt-xs" height="16px" v-if="loading" width="100%" />
+            <div class="validator-row-mob__apy__val q-mr-auto q-mt-xs" v-else>
+              <b>{{ item.apy }}</b>
+              <q-tooltip class="text-body2"> Average APY for the previous 3 epochs </q-tooltip>
+            </div>
+          </div>
+          <div class="validator-row-mob__stake no-wrap column q-pl-sm q-mr-sm justify-start">
+            <div class="row justify-between">
+              <div class="validator-row-mob__stake column justify-start">
+                <q-skeleton v-if="loading" width="100%" height="16px" class="q-mt-xs" />
+                <div class="column validator-row-mob__stake__values q-mt-xs" v-else>
+                  <div class="validator-row-mob__stake__sol">
+                    <b class="sol-xs">{{ item.totalSolStacked }}&nbsp;SOL</b>
+                    <b class="sol-xxs">{{ item.totalSolStacked.split('.')[0] }}</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <q-skeleton v-if="loading" width="140px" height="16px" class="q-ml-sm q-mt-xs" />
+        <div class="validator-row-mob__fee column q-mt-xs justify-start" v-else>
+          Commission: {{ item.fee }}
+        </div>
+      </div>
       <div class="validator-row-mob__badges row no-wrap absolute">
         <a
           v-if="!loading && item.inJpool"
@@ -81,42 +118,6 @@
             {{ isoTimeDifference(item.lastVote) }}
           </q-tooltip>
         </q-badge>
-      </div>
-      <div class="validator-row-mob__name column justify-start">
-        <q-skeleton width="100%" class="q-mt-xs" height="16px" v-if="loading" />
-        <div v-else class="q-mt-xs q-mr-sm">
-          {{ name }}
-          <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
-            {{ name }}
-          </q-tooltip>
-        </div>
-      </div>
-      <div class="validator-row-mob column no-wrap relative-position">
-        <div class="row justify-between relative-position">
-          <div class="validator-row-mob__apy column q-pl-sm justify-start">
-            <q-skeleton class="q-mt-xs" height="16px" v-if="loading" width="100%" />
-            <div class="validator-row-mob__apy__val q-mr-auto q-mt-xs" v-else>
-              <b>{{ item.apy }}</b>
-              <q-tooltip class="text-body2"> Average APY for the previous 3 epochs </q-tooltip>
-            </div>
-          </div>
-          <div class="validator-row-mob__stake no-wrap column q-pl-sm q-mr-sm justify-start">
-            <div class="row justify-between">
-              <div class="validator-row-mob__stake column justify-start">
-                <q-skeleton v-if="loading" width="100%" height="16px" class="q-mt-xs" />
-                <div class="column validator-row-mob__stake__values q-mt-xs" v-else>
-                  <div class="validator-row-mob__stake__sol">
-                    <b>{{ item.totalSolStacked }}&nbsp;SOL</b>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <q-skeleton v-if="loading" width="140px" height="16px" class="q-ml-sm q-mt-xs" />
-        <div class="validator-row-mob__fee column q-pl-sm q-mt-xs justify-start" v-else>
-          Commission: {{ item.fee }}
-        </div>
       </div>
     </div>
   </router-link>

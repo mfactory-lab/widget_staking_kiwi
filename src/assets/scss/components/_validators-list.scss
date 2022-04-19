@@ -143,7 +143,7 @@
       line-height: 20px;
       font-weight: 500;
       padding-top: 16px;
-      color: #fff;
+      color: $text-white;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -176,6 +176,7 @@
     }
     &-mob {
       &__head {
+        color: $text-white !important;
         padding-left: 0;
         padding-right: 8px;
         .validator-row-mob__name {
@@ -183,6 +184,9 @@
           overflow: visible;
           @media (max-width: $breakpoint-xs) {
             max-width: calc(100% - 230px);
+          }
+          @media (max-width: 399px) {
+            max-width: calc(100% - 195px);
           }
         }
       }

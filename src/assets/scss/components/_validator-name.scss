@@ -32,6 +32,10 @@
     width: 56px;
     flex-basis: 56px;
     flex-grow: 0;
+    .q-avatar__content {
+      text-align: center;
+      color: $text-white;
+    }
   }
   &__text {
     font-weight: 500;
@@ -46,7 +50,7 @@
       max-width: 380px;
     }
 
-    div {
+    div:not(:first-child) {
       text-overflow: ellipsis;
       max-width: 100%;
       overflow: hidden;
