@@ -205,7 +205,7 @@
   import { shortenAddress } from '@jpool/common/utils';
   import CopyToClipboard from '@/components/CopyToClipboard.vue';
   import ApyChart from '@/components/staking/charts/ApyChart.vue';
-  import LinearProgress from '@/components/home/LinearProgress.vue';
+  import LinearProgress from '@/components/Home/LinearProgress.vue';
   import AverageSvg from '@/components/icons/AverageSvg.vue';
   import { useWallet } from 'solana-wallets-vue';
   import { isoTimeDifference } from '@/utils';

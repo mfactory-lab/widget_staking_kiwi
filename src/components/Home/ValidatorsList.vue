@@ -485,87 +485,49 @@
   </section>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent } from 'vue';
-  import { storeToRefs } from 'pinia';
+<script lang="ts" setup>
+  import { computed, toRef } from 'vue';
   import { useConnectionStore, useStakePoolStore, useValidatorsAllStore } from '@/store';
-  import ValidatorRow from '@/components/home/ValidatorRow.vue';
-  import ValidatorRowMob from '@/components/home/ValidatorRowMob.vue';
-  import SortItem from '@/components/home/SortItem.vue';
-  import PriceStats from '@/components/staking/PriceStats.vue';
   import { useWallet } from 'solana-wallets-vue';
 
-  export default defineComponent({
-    components: { ValidatorRow, ValidatorRowMob, PriceStats, SortItem },
-    setup() {
-      const connectionStore = useConnectionStore();
-      const stakePoolStore = useStakePoolStore();
-      const { connected } = useWallet();
+  const connectionStore = useConnectionStore();
+  const stakePoolStore = useStakePoolStore();
+  const validatorsAllStore = useValidatorsAllStore();
+  const { connected } = useWallet();
 
-      const { connectionLost } = storeToRefs(stakePoolStore);
-      const validatorsAllStore = useValidatorsAllStore();
-      const {
-        sortType,
-        sortParam,
-        nameFilter,
-        currentPage,
-        perPage,
-        perPageNum,
-        perPageOptions,
-        pages,
-        itemsSorted,
-        itemsShowed,
-        filterPrivate,
-        filterTop33,
-        filterFee,
-        filterNoname,
-        filterDelinq,
-        filterNotSvm,
-        filterNotJpool,
-        filterHasStake,
-        loading,
-        showControls,
-        showControlsMob,
-      } = storeToRefs(validatorsAllStore);
+  const sortType = toRef(validatorsAllStore, 'sortType');
+  const sortParam = toRef(validatorsAllStore, 'sortParam');
+  const nameFilter = toRef(validatorsAllStore, 'nameFilter');
+  const filterPrivate = toRef(validatorsAllStore, 'filterPrivate');
+  const filterTop33 = toRef(validatorsAllStore, 'filterTop33');
+  const filterFee = toRef(validatorsAllStore, 'filterFee');
+  const filterNoname = toRef(validatorsAllStore, 'filterNoname');
+  const filterDelinq = toRef(validatorsAllStore, 'filterDelinq');
+  const filterNotSvm = toRef(validatorsAllStore, 'filterNotSvm');
+  const filterNotJpool = toRef(validatorsAllStore, 'filterNotJpool');
+  const filterHasStake = toRef(validatorsAllStore, 'filterHasStake');
+  const showControls = toRef(validatorsAllStore, 'showControls');
+  const showControlsMob = toRef(validatorsAllStore, 'showControlsMob');
 
-      const refresh = async () => {
-        await validatorsAllStore.loadAllValidators();
-        validatorsAllStore.loadAverageApy();
-      };
+  // const perPageOptions = computed(() => validatorsAllStore.perPageOptions);
+  // const pages = computed(() => validatorsAllStore.pages);
+  // const perPage = computed(() => validatorsAllStore.perPage);
+  const currentPage = computed(() => validatorsAllStore.currentPage);
+  const perPageNum = computed(() => validatorsAllStore.perPageNum);
+  const itemsSorted = computed(() => validatorsAllStore.itemsSorted);
+  const itemsShowed = computed(() => validatorsAllStore.itemsShowed);
+  const loading = computed(() => validatorsAllStore.loading);
 
-      const cluster = computed(() => connectionStore.cluster);
+  function refresh() {
+    validatorsAllStore.loadAllValidators();
+    validatorsAllStore.loadAverageApy();
+  }
 
-      return {
-        connected,
-        sortType,
-        sortParam,
-        nameFilter,
-        currentPage,
-        perPage,
-        perPageNum,
-        perPageOptions,
-        pages,
-        filterPrivate,
-        filterTop33,
-        filterFee,
-        filterNoname,
-        filterDelinq,
-        filterNotSvm,
-        filterNotJpool,
-        filterHasStake,
-        cluster,
-        connectionLost,
-        loading,
-        itemsSorted,
-        itemsShowed,
-        showControls,
-        showControlsMob,
-        refresh,
-        sort: (param, type) => {
-          sortParam.value = param;
-          sortType.value = type;
-        },
-      };
-    },
-  });
+  function sort(param, type) {
+    sortParam.value = param;
+    sortType.value = type;
+  }
+
+  const connectionLost = computed(() => stakePoolStore.connectionLost);
+  const cluster = computed(() => connectionStore.cluster);
 </script>

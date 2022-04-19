@@ -111,33 +111,16 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import ClusterSelector from '@/components/staking/ClusterSelector.vue';
-  import ValidatorName from '@/components/staking/ValidatorName.vue';
-  import ConnectWallet from '@/components/staking/ConnectWallet.vue';
-  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
   import handleScroll from '@jpool/common/utils/scroller';
   import router from '@/router';
-  import EpochCircle from '@/components/EpochCircle.vue';
-  import ValidatorsTotal from '@/components/home/ValidatorsTotal.vue';
 
   export default defineComponent({
-    components: {
-      ClusterSelector,
-      ValidatorName,
-      ConnectWallet,
-      ThemeModeSelector,
-      EpochCircle,
-      ValidatorsTotal,
-    },
     setup() {
       return {
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
           console.log('validator === ', validator);
-          if (!!validator && typeof validator === 'string') {
-            return true;
-          }
-          return false;
+          return !!validator && typeof validator === 'string';
         }),
         scrollTo(id) {
           const header = document.querySelector('.q-header');

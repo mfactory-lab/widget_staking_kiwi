@@ -121,7 +121,7 @@ if (isDev) {
   });
 }
 
-export const API_URL = 'https://api.thevalidators.io/';
+export const API_URL = 'https://api.thevalidators.io';
 
 export const DEFAULT_VALIDATOR = {
   'mainnet-beta': {

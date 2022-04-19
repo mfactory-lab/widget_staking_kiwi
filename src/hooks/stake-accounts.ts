@@ -28,7 +28,6 @@
 
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
-import { storeToRefs } from 'pinia';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
   sendTransaction,
@@ -42,25 +41,30 @@ import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature } = storeToRefs(useStakePoolStore());
+  const stakeAccountStore = useStakeAccountStore();
+  const validatorJstakingStore = useValidatorJstakingStore();
+  const stakePoolStore = useStakePoolStore();
   const { publicKey } = useWallet();
   const anchorWallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
   const { notify } = useQuasar();
+
   const loading = ref(false);
   const seed = ref('0');
-  const stakeAccountStore = useStakeAccountStore();
-  const { voterKey } = storeToRefs(useValidatorJstakingStore());
+
+  const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
+  const voterKey = computed(() => validatorJstakingStore.voterKey);
+
+  console.log(stakeAccountStore);
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;
     if (!publicKey.value) return;
-    const STAKE_PROGRAM_ID = new PublicKey('Stake11111111111111111111111111111111111111');
     while (1) {
       const newStakeAccountPubkey = await PublicKey.createWithSeed(
         publicKey.value,
         seedIndex.toString(),
-        STAKE_PROGRAM_ID,
+        StakeProgram.programId,
       );
       const matching = stakeAccountStore.data.find((meta) =>
         newStakeAccountPubkey.equals(meta.pubkey),

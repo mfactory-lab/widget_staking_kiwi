@@ -165,10 +165,9 @@
         evaPerson,
         name: props.item.name ?? props.item.id,
         buttonProps({ href }) {
-          const props = {
+          return {
             to: href,
           };
-          return props;
         },
         shortAddress: props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
         delinquentTime,

@@ -55,7 +55,6 @@
   import { useEpochStore, useValidatorsAllStore } from '@/store';
   import { computed, defineComponent } from 'vue';
   import SolSvg from '@/components/icons/SolSvg.vue';
-  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {
@@ -68,12 +67,14 @@
       },
     },
     setup() {
-      const { epochNumber } = storeToRefs(useEpochStore());
+      const epochStore = useEpochStore();
       const validatorStore = useValidatorsAllStore();
+      const epochNumber = computed(() => epochStore.epochNumber);
+      const validatorsCount = computed(() =>
+        validatorStore.loading ? '...' : `${validatorStore.items.length}`,
+      );
       return {
-        validatorsCount: computed(() =>
-          validatorStore.loading ? '...' : `${validatorStore.items.length}`,
-        ),
+        validatorsCount,
         epochNumber,
       };
     },

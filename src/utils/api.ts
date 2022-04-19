@@ -56,7 +56,7 @@ export interface ApyStats {
 export async function getValidatorsStats(network) {
   return new Promise<Array<ValidatorStats>>((resolve, reject) => {
     // fetch(`http://localhost:3000/validators/list?network=${network}`)
-    fetch(`${API_URL}validators/list?network=${network}`)
+    fetch(`${API_URL}/validators/list?network=${network}`)
       .then((res) => res.json())
       .then(
         (res) => {
@@ -76,7 +76,7 @@ export async function getValidatorsStats(network) {
 
 export async function getApyHistory(voterKey) {
   return new Promise<Array<ApyStats>>((resolve, _reject) => {
-    fetch(`${API_URL}apy/history?voter_id=${voterKey}`)
+    fetch(`${API_URL}/apy/history?voter_id=${voterKey}`)
       .then((res) => res.json())
       .then(
         (res) => {
@@ -96,7 +96,7 @@ export async function getApyHistory(voterKey) {
 
 export async function getAverageApy() {
   return new Promise<Array<ApyStats>>((resolve, _reject) => {
-    fetch(`${API_URL}apy-average/history`)
+    fetch(`${API_URL}/apy-average/history`)
       .then((res) => res.json())
       .then(
         (res) => {

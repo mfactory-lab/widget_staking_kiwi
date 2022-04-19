@@ -84,13 +84,11 @@
   import TelegramSvg from '@/components/icons/TelegramSvg.vue';
   import TwitterSvg from '@/components/icons/TwitterSvg.vue';
   import { defineComponent } from 'vue';
-  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
 
   export default defineComponent({
     components: {
       TelegramSvg,
       TwitterSvg,
-      ThemeModeSelector,
     },
     setup() {
       return {
