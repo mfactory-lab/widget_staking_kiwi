@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-  import { isInvalidTime } from '@/utils/check-number';
-  import { useRoiCalculator } from '@jfactory/roi-calculator';
+  import { isInvalidTime } from '@/utils';
+  import { useRoiCalculator } from '@/packages/roi-calculator';
   import { computed, defineComponent, watch } from 'vue';
 
   export default defineComponent({

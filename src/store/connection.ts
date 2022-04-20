@@ -28,8 +28,8 @@
 
 import { defineStore } from 'pinia';
 import { Cluster, Commitment, Connection, PublicKey } from '@solana/web3.js';
-import { DEFAULT_COMMITMENT, DEFAULT_CONFIRM_TIMEOUT, DEFAULT_ENDPOINT, ENDPOINTS } from '@/config';
 import { useStorage } from '@vueuse/core';
+import { DEFAULT_COMMITMENT, DEFAULT_CONFIRM_TIMEOUT, DEFAULT_ENDPOINT, ENDPOINTS } from '@/config';
 
 export type ExtendedCluster = Cluster | 'localnet';
 

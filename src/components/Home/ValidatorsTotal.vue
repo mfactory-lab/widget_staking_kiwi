@@ -54,7 +54,7 @@
 <script lang="ts">
   import { useEpochStore, useValidatorsAllStore } from '@/store';
   import { computed, defineComponent } from 'vue';
-  import SolSvg from '@/components/icons/SolSvg.vue';
+  import SolSvg from '@/components/Icons/SolSvg.vue';
 
   export default defineComponent({
     components: {

@@ -26,11 +26,12 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
+import { watch } from 'vue';
 import { useQuasar } from 'quasar';
+import { PublicKey } from '@solana/web3.js';
+import { useWallet } from 'solana-wallets-vue';
 import { useEmitter } from '@/hooks/emitter';
 import { useConnectionStore } from '@/store';
-import { useWallet } from 'solana-wallets-vue';
-import { watch } from 'vue';
 import { shortenAddress } from '@/utils';
 
 export const WALLET_CONNECT_EVENT = Symbol();
@@ -46,26 +47,29 @@ export function initWallet() {
   const { wallet } = useWallet();
 
   watch(
-    wallet,
+    () => wallet,
     (w) => {
-      if (!w) return;
+      if (!w.value) return;
 
-      console.log(w);
+      console.log(w.value);
 
       const onConnect = () => {
-        const publicKey = w.publicKey!;
+        const publicKey = w.value?.publicKey as PublicKey;
+
         connection.onAccountChange(publicKey, (acc) => {
           emit(ACCOUNT_CHANGE_EVENT, acc);
         });
+
         connection.onLogs(publicKey, (logs) => {
           console.log(logs);
         });
+
         notify({
           message: 'Wallet update',
           caption: `Connected to wallet ${shortenAddress(publicKey.toBase58(), 7)}`,
           timeout: noticeTimeout,
         });
-        emit(WALLET_CONNECT_EVENT, w);
+        emit(WALLET_CONNECT_EVENT, w.value);
       };
 
       const onDisconnect = () => {
@@ -74,7 +78,7 @@ export function initWallet() {
           caption: 'Disconnected from wallet',
           timeout: noticeTimeout,
         });
-        emit(WALLET_DISCONNECT_EVENT, w);
+        emit(WALLET_DISCONNECT_EVENT, w.value);
       };
 
       const onError = (e) => {
@@ -89,11 +93,10 @@ export function initWallet() {
         });
       };
 
-      w.once('connect', onConnect);
-      w.once('disconnect', onDisconnect);
-
-      w.removeAllListeners('error');
-      w.on('error', onError);
+      w.value.once('connect', onConnect);
+      w.value.once('disconnect', onDisconnect);
+      w.value.removeAllListeners('error');
+      w.value.on('error', onError);
     },
     { immediate: true },
   );

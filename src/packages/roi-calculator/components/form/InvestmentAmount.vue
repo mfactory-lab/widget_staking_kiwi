@@ -39,9 +39,9 @@
 </template>
 
 <script lang="ts">
-  import { isInvalidFloat } from '@/utils/check-number';
-  import { useRoiCalculator } from '@jfactory/roi-calculator';
   import { computed, defineComponent, watch } from 'vue';
+  import { isInvalidFloat } from '@/utils';
+  import { useRoiCalculator } from '../../hooks';
 
   export default defineComponent({
     setup() {

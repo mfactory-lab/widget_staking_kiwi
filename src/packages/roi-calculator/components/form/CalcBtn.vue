@@ -40,8 +40,8 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useRoiCalculator } from '@jfactory/roi-calculator';
-  import { isInvalidFloat, isInvalidTime } from '@/utils/check-number';
+  import { isInvalidFloat, isInvalidTime } from '@/utils';
+  import { useRoiCalculator } from '../../hooks';
 
   export default defineComponent({
     setup() {

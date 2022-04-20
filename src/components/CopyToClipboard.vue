@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <q-btn flat padding="7px" dense>
+  <q-btn flat round padding="7px" dense>
     <svg
       width="15"
       height="14"

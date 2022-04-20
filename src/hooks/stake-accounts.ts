@@ -55,7 +55,7 @@ export function useStakeAccounts() {
   const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
   const voterKey = computed(() => validatorJstakingStore.voterKey);
 
-  console.log(stakeAccountStore);
+  // console.log(stakeAccountStore);
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;

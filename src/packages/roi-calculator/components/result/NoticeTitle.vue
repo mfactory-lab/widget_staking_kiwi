@@ -40,7 +40,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { useCoinRateStore } from '@/store';
-  import { formatMoney } from '@/utils/check-number';
+  import { formatMoney } from '@/utils';
   const coinRateStore = useCoinRateStore();
   // noinspection TypeScriptUnresolvedVariable
   const solPriceShow = computed(() => formatMoney(coinRateStore.solPrice));

@@ -47,7 +47,7 @@
   import { computed, defineComponent, ref, watch } from 'vue';
   import { useConnectionStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
-  import SolSvg from '@/components/icons/SolSvg.vue';
+  import SolSvg from '@/components/Icons/SolSvg.vue';
   import { useQuasar } from 'quasar';
   import { getApyHistory } from '@/utils';
 

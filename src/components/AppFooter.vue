@@ -81,15 +81,9 @@
 
 <script lang="ts">
   import { TELEGRAM_URL } from '@/config';
-  import TelegramSvg from '@/components/icons/TelegramSvg.vue';
-  import TwitterSvg from '@/components/icons/TwitterSvg.vue';
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    components: {
-      TelegramSvg,
-      TwitterSvg,
-    },
     setup() {
       return {
         TELEGRAM_URL,

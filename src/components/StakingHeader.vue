@@ -38,14 +38,16 @@
           v-if="showValidator"
           class="staking-header__faq-btn q-ml-sm"
           @click="scrollTo('faq-section')"
-          >How to use staking.kiwi</div
         >
+          How to use staking.kiwi
+        </div>
         <div
           v-if="showValidator"
           class="staking-header__faq-btn q-ml-md"
           @click="scrollTo('widget-section')"
-          >widget</div
         >
+          widget
+        </div>
       </div>
     </div>
     <div class="staking-header__main q-py-md">
@@ -63,7 +65,7 @@
               color="accent"
               text-color="text-white"
             >
-              v.1.2
+              v{{ version }}
             </q-badge>
           </router-link>
           <div v-if="!showValidator && $q.screen.lt.md" class="total-validators-nxs q-mr-auto">
@@ -117,6 +119,8 @@
   export default defineComponent({
     setup() {
       return {
+        // TODO: package.json
+        version: '1.2',
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
           console.log('validator === ', validator);

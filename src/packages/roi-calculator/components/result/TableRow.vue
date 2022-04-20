@@ -44,8 +44,7 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { useCoinRateStore } from '@/store';
-  import { formatAmount } from '@/utils';
-  import { formatMoney } from '@/utils/check-number';
+  import { formatAmount, formatMoney } from '@/utils';
 
   export default defineComponent({
     props: {
