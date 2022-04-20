@@ -43,23 +43,19 @@
     </div>
     <div class="column total-validators__text">
       <div>EPOCH {{ epochNumber }}</div>
-      <div
-        >VALIDATORS TOTAL:
-        <span class="total-validators__text__total">{{ validatorsCount }}</span></div
-      >
+      <div>
+        VALIDATORS TOTAL:
+        <span class="total-validators__text__total">{{ validatorsCount }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { useEpochStore, useValidatorsAllStore } from '@/store';
   import { computed, defineComponent } from 'vue';
-  import SolSvg from '@/components/Icons/SolSvg.vue';
+  import { useEpochStore, useValidatorsAllStore } from '@/store';
 
   export default defineComponent({
-    components: {
-      SolSvg,
-    },
     props: {
       alt: {
         type: Boolean,

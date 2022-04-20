@@ -42,9 +42,9 @@
         LIST
       </q-btn>
     </div>
-    <div class="validators-list__title__text col-4 text-center"
-      >{{ $q.screen.gt.sm ? 'Solana' : '' }} Validators {{ loading ? '' : itemsSorted.length }}</div
-    >
+    <div class="validators-list__title__text col-4 text-center">
+      {{ $q.screen.gt.sm ? 'Solana' : '' }} Validators {{ loading ? '' : items.length }}
+    </div>
     <div class="col-4 row q-pl-md items-center justify-end">
       <q-btn
         v-if="$q.screen.gt.sm"
@@ -77,23 +77,23 @@
 
 <script lang="ts">
   import { defineComponent, toRef } from 'vue';
-  import { useStakePoolStore, useValidatorsAllStore } from '@/store';
   import { useWallet } from 'solana-wallets-vue';
+  import { useStakePoolStore, useValidatorsAllStore } from '@/store';
 
   export default defineComponent({
     setup() {
-      const stakePoolStore = useStakePoolStore();
-      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const { connected } = useWallet();
-
+      const stakePoolStore = useStakePoolStore();
       const validatorsAllStore = useValidatorsAllStore();
-      const itemsSorted = toRef(validatorsAllStore, 'itemsSorted');
+
+      const connectionLost = toRef(stakePoolStore, 'connectionLost');
+      const items = toRef(validatorsAllStore, 'items');
       const loading = toRef(validatorsAllStore, 'loading');
       const showControls = toRef(validatorsAllStore, 'showControls');
       const showControlsMob = toRef(validatorsAllStore, 'showControlsMob');
 
       const refresh = async () => {
-        await validatorsAllStore.loadAllValidators();
+        validatorsAllStore.loadAllValidators();
         validatorsAllStore.loadAverageApy();
       };
 
@@ -101,7 +101,7 @@
         connected,
         connectionLost,
         loading,
-        itemsSorted,
+        items,
         showControls,
         showControlsMob,
         refresh,

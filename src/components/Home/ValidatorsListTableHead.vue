@@ -116,12 +116,8 @@
 <script lang="ts">
   import { defineComponent, toRef } from 'vue';
   import { useValidatorsAllStore } from '@/store';
-  import SortItem from '@/components/home/SortItem.vue';
 
   export default defineComponent({
-    components: {
-      SortItem,
-    },
     setup() {
       const validatorsAllStore = useValidatorsAllStore();
       const sortType = toRef(validatorsAllStore, 'sortType');

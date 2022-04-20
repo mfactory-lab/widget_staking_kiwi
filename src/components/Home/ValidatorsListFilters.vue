@@ -230,11 +230,9 @@
 <script lang="ts">
   import { computed, defineComponent, toRef } from 'vue';
   import { useConnectionStore, useValidatorsAllStore } from '@/store';
-  import SortItem from '@/components/home/SortItem.vue';
   import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
-    components: { SortItem },
     setup() {
       const connectionStore = useConnectionStore();
       const { connected } = useWallet();
@@ -243,8 +241,6 @@
       const sortType = toRef(validatorsAllStore, 'sortType');
       const sortParam = toRef(validatorsAllStore, 'sortParam');
       const nameFilter = toRef(validatorsAllStore, 'nameFilter');
-      const perPage = toRef(validatorsAllStore, 'perPage');
-      const perPageOptions = toRef(validatorsAllStore, 'perPageOptions');
       const filterPrivate = toRef(validatorsAllStore, 'filterPrivate');
       const filterTop33 = toRef(validatorsAllStore, 'filterTop33');
       const filterFee = toRef(validatorsAllStore, 'filterFee');
@@ -263,8 +259,6 @@
         sortType,
         sortParam,
         nameFilter,
-        perPage,
-        perPageOptions,
         filterPrivate,
         filterTop33,
         filterFee,

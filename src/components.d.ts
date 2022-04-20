@@ -51,6 +51,7 @@ declare module '@vue/runtime-core' {
     ValidatorRow: typeof import('./components/Home/ValidatorRow.vue')['default']
     ValidatorRowMob: typeof import('./components/Home/ValidatorRowMob.vue')['default']
     ValidatorsList: typeof import('./components/Home/ValidatorsList.vue')['default']
+    ValidatorsList2: typeof import('./components/Home/ValidatorsList2.vue')['default']
     ValidatorsListFilters: typeof import('./components/Home/ValidatorsListFilters.vue')['default']
     ValidatorsListTableHead: typeof import('./components/Home/ValidatorsListTableHead.vue')['default']
     ValidatorsListTitle: typeof import('./components/Home/ValidatorsListTitle.vue')['default']
