@@ -207,7 +207,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { useWallet } from 'solana-wallets-vue';
   import { isoTimeDifference } from '@/utils';
@@ -232,6 +232,13 @@
   });
 
   const delinquentTime = ref(props.item.isDelinquent ? isoTimeDifference(props.item.lastVote) : '');
+
+  watch(props, () => {
+    if (props.item.isDelinquent) {
+      delinquentTime.value = isoTimeDifference(props.item.lastVote);
+    }
+  });
+
   const emitter = useEmitter();
   const { connected } = useWallet();
 
