@@ -33,6 +33,7 @@
       class="staking-header__top q-pt-sm q-pb-xs text-right"
     >
       <div class="container row items-center justify-end q-mb-xs">
+        <price-stats-for-header v-if="!showValidator" />
         <theme-mode-selector />
         <div
           v-if="showValidator"
