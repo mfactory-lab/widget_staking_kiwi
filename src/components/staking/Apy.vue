@@ -35,10 +35,10 @@
 </template>
 
 <script lang="ts">
-  import { useValidatorJstakingStore } from '@/store';
   import { computed, defineComponent } from 'vue';
-  import { formatPct } from '@jpool/common/utils';
   import { storeToRefs } from 'pinia';
+  import { useValidatorJstakingStore } from '@/store';
+  import { formatPct } from '@/utils';
 
   export default defineComponent({
     props: {

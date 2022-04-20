@@ -89,30 +89,24 @@
 <script lang="ts">
   import { computed, defineComponent, onMounted, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
   import {
     ProgramAccount,
-    sendTransaction,
     useConnectionStore,
     useStakeAccountStore,
     useStakePoolStore,
   } from '@/store';
-  import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
-  import StakeAccountItem from './StakeAccountItem.vue';
-  import StakeStats from './StakeStats.vue';
+  import { useDeposit, useMonitorTransaction, useStakeAccounts } from '@/hooks';
   import { useValidatorJstakingStore } from '@/store';
-  import { useStakeAccounts } from '@/hooks/stake-accounts';
-  import { lamportsToSol } from '@jpool/common/utils';
-  import SolSvg from '@/components/icons/TelegramSvg.vue';
-  import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
+  import { lamportsToSol, sendTransaction } from '@/utils';
 
   interface StakeAccount {
     stakeAccount: ProgramAccount;
     state: String;
   }
   export default defineComponent({
-    components: { StakeAccountItem, StakeStats, SolSvg },
     emits: [
       'beforeDeposit',
       'afterDeposit',

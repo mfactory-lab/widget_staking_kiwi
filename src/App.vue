@@ -30,29 +30,25 @@
   <router-view />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+  import { onBeforeMount, watch } from 'vue';
+  import { initWallet } from '@/hooks';
+  import router from '@/router';
+
   import '@/assets/scss/app.scss';
 
-  import { defineComponent, watch } from 'vue';
-  import router from '@/router';
-  import { initWallet } from '@jpool/common/hooks';
-  import { useCoinRateStore } from '@jpool/common/store/modules';
-
-  export default defineComponent({
-    setup() {
-      initWallet();
-      useCoinRateStore().init();
-
-      watch(
-        [router.currentRoute],
-        async ([route]) => {
-          const validator = route.query?.validator;
-          if (validator) {
-            router.push({ path: `/app/${validator}` });
-          }
-        },
-        { immediate: true },
-      );
-    },
+  onBeforeMount(() => {
+    initWallet();
   });
+
+  watch(
+    [router.currentRoute],
+    async ([route]) => {
+      const validator = route.query?.validator;
+      if (validator) {
+        await router.push({ path: `/app/${validator}` });
+      }
+    },
+    { immediate: true },
+  );
 </script>

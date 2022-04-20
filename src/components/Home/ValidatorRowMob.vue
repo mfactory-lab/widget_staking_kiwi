@@ -126,11 +126,10 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
-  import { shortenAddress } from '@jpool/common/utils';
   import { useWallet } from 'solana-wallets-vue';
-  import { isoTimeDifference } from '@/utils';
+  import { isoTimeDifference, shortenAddress } from '@/utils';
   import { DELINQ_UPDATE_EVENT } from '@/store';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { useEmitter } from '@/hooks';
 
   export default defineComponent({
     props: {

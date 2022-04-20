@@ -43,41 +43,40 @@ import { SafePalWalletAdapter } from '@solana/wallet-adapter-safepal';
 import { SolongWalletAdapter } from '@solana/wallet-adapter-solong';
 import { SolletWalletAdapter } from '@solana/wallet-adapter-sollet';
 import { TokenPocketWalletAdapter } from '@solana/wallet-adapter-tokenpocket';
-// import { TorusWalletAdapter } from '@solana/wallet-adapter-torus';
 import { LedgerWalletAdapter } from '@solana/wallet-adapter-ledger';
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow';
 
+// import { TorusWalletAdapter } from '@solana/wallet-adapter-torus';
 // import { BloctoWalletAdapter } from '@solana/wallet-adapter-blocto';
-
 // import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 // import { getWalletAdapters } from '@solana/wallet-adapter-wallets';
 
-export const walletOptions = {
-  // wallets: getWalletAdapters(),
-  wallets: [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
-    new SolletWalletAdapter(),
-    new SolletExtensionWalletAdapter(),
-    new SlopeWalletAdapter(),
-    new SolongWalletAdapter(),
-    new CloverWalletAdapter(),
-    new BitKeepWalletAdapter(),
-    new BitpieWalletAdapter(),
-    new Coin98WalletAdapter(),
-    new CoinhubWalletAdapter(),
-    new SafePalWalletAdapter(),
-    new TokenPocketWalletAdapter(),
-    new GlowWalletAdapter(),
-    new MathWalletAdapter(),
-    new LedgerWalletAdapter(),
-    // new BloctoWalletAdapter(),
-  ],
-  autoConnect: true,
-};
+export const install = ({ app }: { app: App<Element> }) => {
+  // const network = WalletAdapterNetwork.Mainnet;
+  const walletOptions = {
+    // wallets: getWalletAdapters(),
+    wallets: [
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
+      new SolletWalletAdapter(),
+      new SolletExtensionWalletAdapter(),
+      new SlopeWalletAdapter(),
+      new SolongWalletAdapter(),
+      new CloverWalletAdapter(),
+      new BitKeepWalletAdapter(),
+      new BitpieWalletAdapter(),
+      new Coin98WalletAdapter(),
+      new CoinhubWalletAdapter(),
+      new SafePalWalletAdapter(),
+      new TokenPocketWalletAdapter(),
+      new GlowWalletAdapter(),
+      new MathWalletAdapter(),
+      new LedgerWalletAdapter(),
+      // new BloctoWalletAdapter(),
+    ],
+    autoConnect: true,
+  };
 
-export default {
-  install: (app: App<Element>) => {
-    app.use(SolanaWallets, walletOptions);
-  },
+  // @ts-ignore
+  app.use(SolanaWallets, walletOptions);
 };

@@ -12,7 +12,7 @@
 <script lang="ts">
   import { defineComponent, onMounted, reactive } from 'vue';
   import { evaArrowCircleUpOutline } from '@quasar/extras/eva-icons';
-  import handleScroll from '@jpool/common/utils/scroller';
+  import { handleScroll } from '@/utils';
 
   interface Data {
     showButton: boolean;

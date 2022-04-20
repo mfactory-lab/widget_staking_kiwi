@@ -1,0 +1,76 @@
+<!--
+  - This file is part of Solana Reference Stake Pool code.
+  -
+  - Copyright © 2021, mFactory GmbH
+  -
+  - Solana Reference Stake Pool is free software: you can redistribute it
+  - and/or modify it under the terms of the GNU Affero General Public License
+  - as published by the Free Software Foundation, either version 3
+  - of the License, or (at your option) any later version.
+  -
+  - Solana Reference Stake Pool is distributed in the hope that it
+  - will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  - warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  - See the GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+  -
+  - You can be released from the requirements of the Affero GNU General Public License
+  - by purchasing a commercial license. The purchase of such a license is
+  - mandatory as soon as you develop commercial activities using the
+  - Solana Reference Stake Pool code without disclosing the source code of
+  - your own applications.
+  -
+  - The developer of this program can be contacted at <info@mfactory.ch>.
+  -->
+
+<template>
+  <div
+    class="sol-calculator__results__table__row"
+    :class="{ 'sol-calculator__results__table__row--bold': isTitle }"
+  >
+    <div class="sol-calculator__results__table__text">{{ name }}</div>
+    <div class="sol-calculator__results__table__text">
+      {{ solShow }}
+    </div>
+    <div class="sol-calculator__results__table__text">
+      {{ solShow ? `$ ${moneyShow}` : '' }}
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+  import { computed, defineComponent } from 'vue';
+  import { useCoinRateStore } from '@/store';
+  import { formatAmount } from '@/utils';
+  import { formatMoney } from '@/utils/check-number';
+
+  export default defineComponent({
+    props: {
+      name: {
+        type: String,
+      },
+      sol: {
+        type: Number,
+        default: () => -1,
+      },
+      isTitle: {
+        type: Boolean,
+        required: false,
+        default: false,
+      },
+    },
+    setup(props) {
+      const coinRateStore = useCoinRateStore();
+      // noinspection TypeScriptUnresolvedVariable
+      return {
+        solShow: computed(() => (props.sol >= 0 ? formatAmount(Number(props.sol), 3) : '')),
+        moneyShow: computed(() =>
+          props.sol >= 0 ? formatMoney(props.sol * coinRateStore.solPrice) : '',
+        ),
+      };
+    },
+  });
+</script>

@@ -111,8 +111,8 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import handleScroll from '@jpool/common/utils/scroller';
   import router from '@/router';
+  import { handleScroll } from '@/utils';
 
   export default defineComponent({
     setup() {
@@ -124,6 +124,7 @@
         }),
         scrollTo(id) {
           const header = document.querySelector('.q-header');
+          // @ts-ignore
           handleScroll(id, header?.offsetHeight - 10 ?? 0);
         },
       };

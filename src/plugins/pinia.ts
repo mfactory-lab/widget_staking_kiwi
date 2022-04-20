@@ -1,5 +1,5 @@
 /*
- * This file is part of the Web3 Library developed by mFactory GmbH.
+ * This file is part of Solana Reference Stake Pool code.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -29,9 +29,7 @@
 import { createPinia } from 'pinia';
 import { App } from 'vue';
 
-export default {
-  install: (app: App<Element>) => {
-    const store = createPinia();
-    app.use(store);
-  },
+export const install = ({ app }: { app: App<Element> }) => {
+  const store = createPinia();
+  app.use(store);
 };

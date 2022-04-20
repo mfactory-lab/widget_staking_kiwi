@@ -128,7 +128,7 @@
   import { Wallet, useWallet } from 'solana-wallets-vue';
   import { evaClose } from '@quasar/extras/eva-icons';
   import { WalletReadyState } from '@solana/wallet-adapter-base';
-  import { shortenAddress } from '@jpool/common/utils';
+  import { shortenAddress } from '@/utils';
 
   const walletPriority = {
     solflare: 10,

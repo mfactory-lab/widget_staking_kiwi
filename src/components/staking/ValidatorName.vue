@@ -112,15 +112,18 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
-  import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
   import { storeToRefs } from 'pinia';
-  import { isoTimeDifference } from '@/utils';
   import { evaPerson } from '@quasar/extras/eva-icons';
-  import { DELINQ_UPDATE_EVENT } from '@/store';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { isoTimeDifference } from '@/utils';
+  import { useEmitter } from '@/hooks';
+  import {
+    DELINQ_UPDATE_EVENT,
+    useConnectionStore,
+    useValidatorJstakingStore,
+    useValidatorsAllStore,
+  } from '@/store';
 
   export default defineComponent({
-    components: {},
     setup() {
       const {
         savedValidator,

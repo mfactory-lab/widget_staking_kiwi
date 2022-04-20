@@ -28,16 +28,13 @@
 
 import { createApp } from 'vue';
 import { setupRouter } from '@/router';
-import { setupPlugins } from '@/plugins';
 
 import App from './App.vue';
 
 async function bootstrap() {
   const app = createApp(App);
-
+  Object.values(import.meta.globEager('./plugins/*.ts')).forEach((i) => i.install?.({ app }));
   setupRouter(app);
-  setupPlugins(app);
-
   app.mount('#app');
 }
 

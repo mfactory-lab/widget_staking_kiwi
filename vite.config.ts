@@ -33,6 +33,8 @@ import Vue from '@vitejs/plugin-vue';
 import ViteVisualizer from 'rollup-plugin-visualizer';
 import Components from 'unplugin-vue-components/vite';
 import inject from '@rollup/plugin-inject';
+// noinspection ES6PreferShortImport
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
 export default defineConfig(({ mode }) => {
   // const isDev = mode === 'development';
@@ -43,9 +45,9 @@ export default defineConfig(({ mode }) => {
     createHtmlPlugin({
       inject: {
         data: {
-          title: 'staking.kiwi',
-          description: 'Solana staking.',
-          keywords: 'Solana, SOL',
+          title: SITE_TITLE,
+          description: SITE_DESCRIPTION,
+          keywords: SITE_KEYWORDS,
         },
       },
     }),

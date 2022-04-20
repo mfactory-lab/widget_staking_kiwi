@@ -202,18 +202,12 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
-  import { shortenAddress } from '@jpool/common/utils';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
-  import ApyChart from '@/components/staking/charts/ApyChart.vue';
-  import LinearProgress from '@/components/Home/LinearProgress.vue';
-  import AverageSvg from '@/components/icons/AverageSvg.vue';
   import { useWallet } from 'solana-wallets-vue';
-  import { isoTimeDifference } from '@/utils';
+  import { isoTimeDifference, shortenAddress } from '@/utils';
   import { DELINQ_UPDATE_EVENT } from '@/store';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { useEmitter } from '@/hooks';
 
   export default defineComponent({
-    components: { ApyChart, AverageSvg, CopyToClipboard, LinearProgress },
     props: {
       loading: {
         type: Boolean,

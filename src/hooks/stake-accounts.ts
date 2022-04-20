@@ -28,16 +28,16 @@
 
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
+import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
-  sendTransaction,
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
   useValidatorJstakingStore,
 } from '@/store';
-import { useMonitorTransaction } from '@jpool/common/hooks/monitor';
-import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
+import { useMonitorTransaction } from '@/hooks';
+import { sendTransaction } from '@/utils';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
