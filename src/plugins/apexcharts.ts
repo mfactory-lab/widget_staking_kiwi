@@ -32,6 +32,7 @@ import { App } from 'vue';
 import { Chart, registerables } from 'chart.js';
 
 export const install = ({ app }: { app: App<Element> }) => {
+  // TODO: remove
   app.use(VueApexCharts);
   Chart.register(...registerables);
 };

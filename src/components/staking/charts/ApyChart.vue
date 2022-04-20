@@ -27,26 +27,12 @@
   -->
 
 <template>
-  <!--  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">-->
-  <!--  <div v-if="true">-->
   <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
-
-  <!--    <apexchart-->
-  <!--      width="100%"-->
-  <!--      :height="height"-->
-  <!--      :options="chartOptions"-->
-  <!--      :series="[data, averageData]"-->
-  <!--    />-->
 
   <div class="item-chart">
     <line-chart v-if="!loading" v-bind="lineChartProps" />
     <q-inner-loading :showing="loading" />
   </div>
-  <!--      <q-inner-loading :showing="loading" />-->
-  <!--  </div>-->
-  <!--  <div class="apy-chart" v-else>-->
-  <!--    <sol-svg class="q-icon" />-->
-  <!--  </div>-->
 </template>
 
 <script lang="ts">
