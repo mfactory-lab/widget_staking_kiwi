@@ -73,27 +73,3 @@
     </div>
   </section>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import ValidatorItem from './ValidatorItem.vue';
-  import WalletBalance from './WalletBalance.vue';
-  import PriceStats from './PriceStats.vue';
-  import StakeBox from './stake/StakeBox.vue';
-  import Charts from './charts/Charts.vue';
-  import Epoch from './Epoch.vue';
-
-  export default defineComponent({
-    components: {
-      ValidatorItem,
-      WalletBalance,
-      PriceStats,
-      StakeBox,
-      Charts,
-      Epoch,
-    },
-    setup() {
-      return {};
-    },
-  });
-</script>

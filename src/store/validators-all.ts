@@ -38,7 +38,7 @@ import {
   lamportsToSol,
   priceFormatter,
 } from '@/utils';
-import { useLocalStorage } from '@vueuse/core';
+import { useDebounce, useLocalStorage } from '@vueuse/core';
 import { useWallet } from 'solana-wallets-vue';
 import { useEmitter } from '@/hooks';
 
@@ -52,19 +52,22 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const epochStore = useEpochStore();
   const cluster = computed(() => connectionStore.cluster);
   const epoch = computed(() => epochStore.epochNumber);
-  const walletStore = useWallet();
-  const connected = walletStore.connected;
-  // const { connected } = useWallet();
+  const { connected } = useWallet();
 
-  const currentPage = ref(1);
-  const perPage = useLocalStorage<number | string>('per-page', '10');
+  // const currentPage = ref(1);
+  // const perPage = useLocalStorage<number | string>('per-page', '10');
+  // const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
+
   const validatorsStats = ref<Array<ValidatorStats>>([]);
   const averageApy = ref<Array<ApyStats>>([]);
   const loading = ref(false);
+
   const nameFilter = ref('');
-  const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
+  const nameFilterDebounce = useDebounce(nameFilter, 500);
+
   const sortType = useLocalStorage<string>('sort-type', 'desc');
   const sortParam = useLocalStorage<string>('sort-param', 'apyNum');
+
   const filterTop33 = useLocalStorage<boolean>('filter-top-staked', true);
   const filterPrivate = useLocalStorage<boolean>('filter-private', true);
   const filterFee = useLocalStorage<boolean>('filter-fee', false);
@@ -73,6 +76,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const filterNotJpool = useLocalStorage<boolean>('filter-not-jpool', false);
   const filterNotSvm = useLocalStorage<boolean>('filter-not-svm', false);
   const filterHasStake = ref(false);
+
   const showControls = useLocalStorage<boolean>('show-controls', true);
   const showControlsMob = useLocalStorage<boolean>('show-controls-mob', false);
 
@@ -107,31 +111,34 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   });
 
-  watch(
-    perPage,
-    () => {
-      // if (isNaN(Number(perPage.value)) && perPage.value != 'all') {
-      //   perPage.value = 5;
-      // }
-      // TODO: before decide to return or delete pagination
-      if (perPage.value != 'all') {
-        perPage.value = 'all';
-      }
-    },
-    { immediate: true },
-  );
+  // watch(
+  //   perPage,
+  //   () => {
+  //     // if (isNaN(Number(perPage.value)) && perPage.value != 'all') {
+  //     //   perPage.value = 5;
+  //     // }
+  //     // TODO: before decide to return or delete pagination
+  //     if (perPage.value != 'all') {
+  //       perPage.value = 'all';
+  //     }
+  //   },
+  //   { immediate: true },
+  // );
 
-  const perPageNum = computed(() => {
-    const itemsLength = itemsSorted.value.length;
-    // return perPage.value == 'all' ? (itemsLength > 0 ? itemsLength : 5) : Number(perPage.value);
-    return itemsLength > 0 ? itemsLength : 10;
-  });
+  // const perPageNum = computed(() => {
+  //   const itemsLength = itemsSorted.value.length;
+  //   // return perPage.value == 'all' ? (itemsLength > 0 ? itemsLength : 5) : Number(perPage.value);
+  //   return itemsLength > 0 ? itemsLength : 10;
+  // });
 
   watch(connected, (connected) => {
     if (!connected) filterHasStake.value = false;
   });
-  watch([cluster, epoch], loadAllValidators);
-  watch([cluster, epoch], loadAverageApy);
+
+  watch([cluster, epoch], () => {
+    loadAllValidators();
+    loadAllValidators();
+  });
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
@@ -203,106 +210,116 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     });
   });
 
-  const itemsFiltered = computed(() => {
-    // console.log('[validators all] filter');
+  // filters & sort
+  const itemsComputed = computed(() => {
+    console.log('[validators all] filter');
+
     if (loading.value) {
       return items.value;
     }
-    const array = [...items.value];
-    if (
-      nameFilter.value ||
-      filterPrivate.value ||
-      filterTop33.value ||
-      filterFee.value ||
-      filterNoname.value ||
-      filterDelinq.value ||
-      filterNotJpool.value ||
-      filterHasStake.value ||
-      filterNotSvm.value
-    ) {
-      const search = nameFilter.value.toLowerCase();
-      return array.filter((item) => {
-        if (
-          search &&
-          (!item.name || item.name?.toLowerCase().indexOf(search) === -1) &&
-          item.voter.toLowerCase().indexOf(search) === -1 &&
-          item.id.toLowerCase().indexOf(search) === -1
-        ) {
-          return false;
-        }
-        if (filterFee.value && item.feeNum > 0) {
-          return false;
-        }
-        if (filterNoname.value && !item.name) {
-          return false;
-        }
-        if (filterDelinq.value && item.isDelinquent) {
-          return false;
-        }
-        if (filterNotSvm.value && !item.svName) {
-          return false;
-        }
-        if (filterPrivate.value && item.feeNum === 100) {
-          return false;
-        }
-        if (filterTop33.value && item.inTop33) {
-          return false;
-        }
-        if (filterNotJpool.value && !item.inJpool) {
-          return false;
-        }
-        if (filterHasStake.value && !item.myStake) {
-          return false;
-        }
 
-        return true;
-      });
-    }
-    return array;
+    const search = nameFilterDebounce.value.toLowerCase();
+
+    return (
+      [...items.value]
+        .filter((item) => {
+          if (
+            search &&
+            (!item.name || item.name?.toLowerCase().indexOf(search) === -1) &&
+            item.voter.toLowerCase().indexOf(search) === -1 &&
+            item.id.toLowerCase().indexOf(search) === -1
+          ) {
+            return false;
+          }
+          if (filterFee.value && item.feeNum > 0) {
+            return false;
+          }
+          if (filterNoname.value && !item.name) {
+            return false;
+          }
+          if (filterDelinq.value && item.isDelinquent) {
+            return false;
+          }
+          if (filterNotSvm.value && !item.svName) {
+            return false;
+          }
+          if (filterPrivate.value && item.feeNum === 100) {
+            return false;
+          }
+          if (filterTop33.value && item.inTop33) {
+            return false;
+          }
+          if (filterNotJpool.value && !item.inJpool) {
+            return false;
+          }
+          if (filterHasStake.value && !item.myStake) {
+            return false;
+          }
+
+          return true;
+        })
+
+        // sort items
+
+        .sort((a, b) => {
+          if (sortParam.value === 'name') {
+            const aName = a.name ?? a.id;
+            const bName = b.name ?? b.id;
+            if (sortType.value === 'asc') {
+              return aName.localeCompare(bName);
+            }
+            return bName.localeCompare(aName);
+          }
+          if (sortType.value === 'asc') {
+            return a[sortParam.value] - b[sortParam.value];
+          }
+          return b[sortParam.value] - a[sortParam.value];
+        })
+    );
   });
 
-  const itemsSorted = computed(() => {
-    console.log('[validators all] sort ===', itemsFiltered.value.length);
-    if (loading.value) {
-      return itemsFiltered.value;
-    }
-    return [...itemsFiltered.value].sort((a, b) => {
-      if (sortParam.value === 'name') {
-        const aName = a.name ?? a.id;
-        const bName = b.name ?? b.id;
-        if (sortType.value === 'asc') {
-          return aName.localeCompare(bName);
-        }
-        return bName.localeCompare(aName);
-      }
-      if (sortType.value === 'asc') {
-        return a[sortParam.value] - b[sortParam.value];
-      }
-      return b[sortParam.value] - a[sortParam.value];
-    });
-  });
+  // const itemsSorted = computed(() => {
+  //   console.log('[validators all] sort ===', itemsFiltered.value.length);
+  //   if (loading.value) {
+  //     return itemsFiltered.value;
+  //   }
+  //   return [...itemsFiltered.value].sort((a, b) => {
+  //     if (sortParam.value === 'name') {
+  //       const aName = a.name ?? a.id;
+  //       const bName = b.name ?? b.id;
+  //       if (sortType.value === 'asc') {
+  //         return aName.localeCompare(bName);
+  //       }
+  //       return bName.localeCompare(aName);
+  //     }
+  //     if (sortType.value === 'asc') {
+  //       return a[sortParam.value] - b[sortParam.value];
+  //     }
+  //     return b[sortParam.value] - a[sortParam.value];
+  //   });
+  // });
 
-  const pages = computed(() => {
-    const pageCount = Math.ceil(itemsFiltered.value.length / perPageNum.value);
-    return pageCount > 0 ? pageCount : 1;
-  });
+  // const pages = computed(() => {
+  //   const pageCount = Math.ceil(itemsFiltered.value.length / perPageNum.value);
+  //   return pageCount > 0 ? pageCount : 1;
+  // });
 
-  watch(pages, (pages) => {
-    if (pages < currentPage.value) {
-      currentPage.value = pages;
-    }
-  });
+  // watch(pages, (pages) => {
+  //   if (pages < currentPage.value) {
+  //     currentPage.value = pages;
+  //   }
+  // });
 
   return {
     validatorsStats,
     sortType,
     sortParam,
     nameFilter,
-    currentPage,
-    perPage,
-    perPageNum,
-    perPageOptions,
-    pages,
+    // currentPage,
+    // perPage,
+    // perPageNum,
+    // perPageOptions,
+    // pages,
     filterPrivate,
     filterTop33,
     filterFee,
@@ -311,19 +328,21 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     filterNotSvm,
     filterNotJpool,
     filterHasStake,
+
     items,
-    itemsSorted,
-    itemsShowed: computed(() =>
-      itemsSorted.value.slice(
-        perPageNum.value * (currentPage.value - 1),
-        perPageNum.value * currentPage.value,
-      ),
-    ),
-    loadAllValidators,
-    loadAverageApy,
+    itemsComputed,
+    // itemsShowed: computed(() =>
+    //   itemsSorted.value.slice(
+    //     perPageNum.value * (currentPage.value - 1),
+    //     perPageNum.value * currentPage.value,
+    //   ),
+    // ),
     averageApy,
     loading,
     showControls,
     showControlsMob,
+
+    loadAllValidators,
+    loadAverageApy,
   };
 });

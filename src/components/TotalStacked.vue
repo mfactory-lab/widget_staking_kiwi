@@ -63,7 +63,7 @@
   import { formatAmount, formatMoney, formatPct, lamportsToSol } from '@/utils';
 
   export default defineComponent({
-    setup(_props) {
+    setup() {
       const validatorJstakingStore = useValidatorJstakingStore();
       const validatorsAllStore = useValidatorsAllStore();
 

@@ -127,8 +127,7 @@
           return !!validator && typeof validator === 'string';
         }),
         scrollTo(id) {
-          const header = document.querySelector('.q-header');
-          // @ts-ignore
+          const header = document.querySelector('.q-header') as HTMLElement;
           handleScroll(id, header?.offsetHeight - 10 ?? 0);
         },
       };

@@ -50,11 +50,10 @@
 </template>
 
 <script lang="ts">
-  import { computed } from 'vue';
+  import { computed, defineComponent } from 'vue';
+  import { useWallet } from 'solana-wallets-vue';
   import { ENDPOINTS } from '@/config';
   import { Endpoint, useConnectionStore } from '@/store';
-  import { defineComponent } from 'vue';
-  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     setup() {

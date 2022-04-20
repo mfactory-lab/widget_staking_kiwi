@@ -77,6 +77,5 @@ export const install = ({ app }: { app: App<Element> }) => {
     autoConnect: true,
   };
 
-  // @ts-ignore
   app.use(SolanaWallets, walletOptions);
 };

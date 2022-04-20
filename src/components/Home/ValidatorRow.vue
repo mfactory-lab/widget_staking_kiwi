@@ -37,7 +37,13 @@
           <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
           <router-link v-else :to="`/app/${item.voter}`">
             <q-avatar class="shadow-1" size="60px">
-              <q-img :key="item.voter" :src="item.image" spinner-size="34px" spinner-color="white">
+              <q-img
+                :src="item.image"
+                spinner-size="34px"
+                spinner-color="white"
+                loading="lazy"
+                no-transition
+              >
                 <template #default v-if="!item.image">
                   <q-icon :name="evaPerson" />
                 </template>
@@ -86,9 +92,9 @@
         <div class="validator-row__name column q-pt-xs justify-start">
           <q-skeleton width="100%" v-if="loading" />
           <div v-else class="q-mt-sm">
-            {{ name }}
+            {{ item.name ?? item.id }}
             <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
-              {{ name }}
+              {{ item.name ?? item.id }}
             </q-tooltip>
           </div>
           <q-skeleton width="100%" height="28px" class="q-mt-sm" v-if="loading" />
@@ -120,7 +126,6 @@
           </div>
           <apy-chart
             v-else
-            :key="item.voter"
             :voter-key="item.voter"
             :show-y-axis="false"
             :show-title="false"
@@ -161,6 +166,7 @@
         </div>
       </div>
     </div>
+
     <div class="validator-row__btns no-wrap column q-pl-md justify-start">
       <div class="row q-mb-xs justify-between">
         <div class="validator-row__stake column justify-start">
@@ -172,6 +178,7 @@
               <b>{{ item.totalSolStacked }}&nbsp;SOL</b>
             </div>
           </div>
+
           <q-skeleton v-if="loading" width="100%" height="35px" class="q-mt-md" />
           <div class="column validator-row__stake__values" v-else>
             <div class="validator-row__stake__sol validator-row__stake__sol--my q-mt-sm q-pt-sm">
@@ -182,72 +189,55 @@
             </div>
           </div>
         </div>
+
         <q-skeleton class="q-mt-xs" v-if="loading" width="106px" height="86px" />
-        <router-link v-else :to="`/app/${item.voter}`" custom v-slot="props">
-          <q-btn
-            v-bind="buttonProps(props)"
-            label="Stake"
-            color="warning"
-            text-color="primary"
-            size="14px"
-            padding="11px 32px 7px"
-            class="q-mt-xs validator-row__stake-btn"
-          />
-        </router-link>
+        <q-btn
+          v-else
+          :to="`/app/${item.voter}`"
+          label="Stake"
+          color="warning"
+          text-color="primary"
+          size="14px"
+          padding="11px 32px 7px"
+          class="q-mt-xs validator-row__stake-btn"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
   import { useWallet } from 'solana-wallets-vue';
-  import { isoTimeDifference, shortenAddress } from '@/utils';
+  import { isoTimeDifference } from '@/utils';
   import { DELINQ_UPDATE_EVENT } from '@/store';
   import { useEmitter } from '@/hooks';
 
-  export default defineComponent({
-    props: {
-      loading: {
-        type: Boolean,
-        default: false,
-      },
-      item: {
-        type: Object,
-        required: true,
-      },
-      cluster: {
-        type: String,
-      },
-      index: {
-        type: Number,
-      },
+  const props = defineProps({
+    loading: {
+      type: Boolean,
+      default: false,
     },
-    setup(props) {
-      const delinquentTime = ref(
-        props.item.isDelinquent ? isoTimeDifference(props.item.lastVote) : '',
-      );
-      const emitter = useEmitter();
-      const { connected } = useWallet();
-      if (props.item.isDelinquent) {
-        emitter.on(DELINQ_UPDATE_EVENT, () => {
-          delinquentTime.value = isoTimeDifference(props.item.lastVote);
-        });
-      }
-      return {
-        connected,
-        evaPerson,
-        name: props.item.name ?? props.item.id,
-        buttonProps({ href }) {
-          const props = {
-            to: href,
-          };
-          return props;
-        },
-        shortAddress: props.item?.voter ? shortenAddress(props.item.voter, 7) : '',
-        delinquentTime,
-      };
+    item: {
+      type: Object,
+      required: true,
+    },
+    cluster: {
+      type: String,
+    },
+    index: {
+      type: Number,
     },
   });
+
+  const delinquentTime = ref(props.item.isDelinquent ? isoTimeDifference(props.item.lastVote) : '');
+  const emitter = useEmitter();
+  const { connected } = useWallet();
+
+  if (props.item.isDelinquent) {
+    emitter.on(DELINQ_UPDATE_EVENT, () => {
+      delinquentTime.value = isoTimeDifference(props.item.lastVote);
+    });
+  }
 </script>

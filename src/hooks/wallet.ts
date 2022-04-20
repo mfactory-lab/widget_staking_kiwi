@@ -47,14 +47,12 @@ export function initWallet() {
   const { wallet } = useWallet();
 
   watch(
-    () => wallet,
+    wallet,
     (w) => {
-      if (!w.value) return;
-
-      console.log(w.value);
+      if (!w) return;
 
       const onConnect = () => {
-        const publicKey = w.value?.publicKey as PublicKey;
+        const publicKey = w.publicKey as PublicKey;
 
         connection.onAccountChange(publicKey, (acc) => {
           emit(ACCOUNT_CHANGE_EVENT, acc);
@@ -69,7 +67,7 @@ export function initWallet() {
           caption: `Connected to wallet ${shortenAddress(publicKey.toBase58(), 7)}`,
           timeout: noticeTimeout,
         });
-        emit(WALLET_CONNECT_EVENT, w.value);
+        emit(WALLET_CONNECT_EVENT, w);
       };
 
       const onDisconnect = () => {
@@ -78,7 +76,7 @@ export function initWallet() {
           caption: 'Disconnected from wallet',
           timeout: noticeTimeout,
         });
-        emit(WALLET_DISCONNECT_EVENT, w.value);
+        emit(WALLET_DISCONNECT_EVENT, w);
       };
 
       const onError = (e) => {
@@ -93,10 +91,10 @@ export function initWallet() {
         });
       };
 
-      w.value.once('connect', onConnect);
-      w.value.once('disconnect', onDisconnect);
-      w.value.removeAllListeners('error');
-      w.value.on('error', onError);
+      w.once('connect', onConnect);
+      w.once('disconnect', onDisconnect);
+      w.removeAllListeners('error');
+      w.on('error', onError);
     },
     { immediate: true },
   );

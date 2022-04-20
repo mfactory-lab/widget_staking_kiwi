@@ -115,11 +115,8 @@
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
-  import TotalStacked from '@/components/staking/TotalStacked.vue';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
 
   export default defineComponent({
-    components: { CopyToClipboard, TotalStacked },
     setup() {
       const {
         validatorId,
