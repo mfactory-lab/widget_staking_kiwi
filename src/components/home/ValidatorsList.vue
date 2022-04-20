@@ -14,7 +14,7 @@
           :class="{ 'v-scroll-desk': $q.screen.gt.sm }"
           :items="items"
           virtual-scroll-item-size="123"
-          virtual-scroll-slice-size="20"
+          virtual-scroll-slice-size="10"
           virtual-scroll-slice-ratio-after="0.7"
           virtual-scroll-slice-ratio-before="2"
         >
