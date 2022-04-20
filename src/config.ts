@@ -67,13 +67,13 @@ const TEST_STAKE_POOL_ADDRESS = 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy';
 // const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
 
 export const ENDPOINTS: Endpoint[] = [
-  {
-    id: 'genesys-mainnet',
-    name: 'Genesys RPC',
-    cluster: 'mainnet-beta',
-    url: 'https://jpoolone.genesysgo.net/',
-    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-  },
+  // {
+  //   id: 'genesys-mainnet',
+  //   name: 'Genesys RPC',
+  //   cluster: 'mainnet-beta',
+  //   url: 'https://jpoolone.genesysgo.net/',
+  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  // },
   {
     id: 'mainnet',
     name: 'Solana RPC',
