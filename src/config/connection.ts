@@ -41,14 +41,14 @@ const TEST_STAKE_LIMIT = 1500000;
 const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
 
 export const ENDPOINTS: Endpoint[] = [
-  {
-    id: 'genesys-mainnet',
-    name: 'Jpool RPC',
-    cluster: 'mainnet-beta',
-    url: 'https://jpoolone.genesysgo.net/',
-    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-    stakeLimit: MAIN_STAKE_LIMIT,
-  },
+  // {
+  //   id: 'genesys-mainnet',
+  //   name: 'Jpool RPC',
+  //   cluster: 'mainnet-beta',
+  //   url: 'https://jpoolone.genesysgo.net/',
+  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  //   stakeLimit: MAIN_STAKE_LIMIT,
+  // },
   {
     id: 'serum-mainnet',
     name: 'Serum RPC',
