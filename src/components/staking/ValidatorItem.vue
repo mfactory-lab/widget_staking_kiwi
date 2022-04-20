@@ -109,27 +109,27 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, toRef } from 'vue';
   import { evaGlobe, evaPerson } from '@quasar/extras/eva-icons';
-  import { storeToRefs } from 'pinia';
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
 
   export default defineComponent({
     setup() {
-      const {
-        validatorId,
-        voterKey,
-        validatorName,
-        validatorDetails,
-        validatorImage,
-        validatorUrl,
-        validatorSolanaBeach,
-        validatorWebsite,
-        savedValidator,
-      } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorsAllStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const validatorId = toRef(validatorJstakingStore, 'validatorId');
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
+      const validatorName = toRef(validatorJstakingStore, 'validatorName');
+      const validatorDetails = toRef(validatorJstakingStore, 'validatorDetails');
+      const validatorImage = toRef(validatorJstakingStore, 'validatorImage');
+      const validatorUrl = toRef(validatorJstakingStore, 'validatorUrl');
+      const validatorSolanaBeach = toRef(validatorJstakingStore, 'validatorSolanaBeach');
+      const validatorWebsite = toRef(validatorJstakingStore, 'validatorWebsite');
+      const savedValidator = toRef(validatorJstakingStore, 'savedValidator');
+
+      const validatorsAllStore = useValidatorsAllStore();
+      const loading = toRef(validatorsAllStore, 'loading');
 
       return {
         savedValidator,

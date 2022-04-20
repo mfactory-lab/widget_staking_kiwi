@@ -164,8 +164,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, nextTick, onMounted, reactive, ref, toRef, watch } from 'vue';
   import {
     useBalanceStore,
     useConnectionStore,
@@ -183,11 +182,15 @@
       clickOutside,
     },
     setup() {
-      const { voterKey, validatorDelinquent } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
+      const validatorDelinquent = toRef(validatorJstakingStore, 'validatorDelinquent');
       const connectionStore = useConnectionStore();
       const { connected } = useWallet();
-      const { solBalance } = storeToRefs(useBalanceStore());
-      const { connectionLost } = storeToRefs(useStakePoolStore());
+      const balanceStore = useBalanceStore();
+      const solBalance = toRef(balanceStore, 'solBalance');
+      const stakePoolStore = useStakePoolStore();
+      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const { depositFee, creating, createAccount } = useStakeAccounts();
       const maxStakeDialog = ref(false);
 

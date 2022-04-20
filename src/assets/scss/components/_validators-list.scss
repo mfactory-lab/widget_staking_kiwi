@@ -94,11 +94,11 @@
       text-transform: uppercase;
       color: $primary;
       @media (max-width: $breakpoint-xs) {
-        margin-bottom: 8px;
         width: 100%;
         text-align: center;
         font-weight: 500;
         font-size: 14px;
+        line-height: 17px;
       }
     }
   }
