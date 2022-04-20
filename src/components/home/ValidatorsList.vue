@@ -39,6 +39,13 @@
           </template>
         </q-virtual-scroll>
 
+        <div
+          v-if="items.length === 0"
+          class="validators-list__no-validators text-center text-grey-6"
+        >
+          There are currently no validators in the {{ cluster }} cluster.
+        </div>
+
         <!--          <div-->
         <!--            v-else-->
         <!--            class="validators-list__list"-->
