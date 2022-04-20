@@ -6,8 +6,10 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    AppHeader: typeof import('./components/AppHeader.vue')['default']
     Apy: typeof import('./components/Apy.vue')['default']
     ApyChart: typeof import('./components/staking/charts/ApyChart.vue')['default']
+    ApyChartNew: typeof import('./components/staking/charts/ApyChartNew.vue')['default']
     AverageSvg: typeof import('./components/Icons/AverageSvg.vue')['default']
     Chart: typeof import('./components/staking/charts/Chart.vue')['default']
     Charts: typeof import('./components/staking/charts/Charts.vue')['default']
@@ -24,6 +26,7 @@ declare module '@vue/runtime-core' {
     'FaqSection.old': typeof import('./components/staking/faq/FaqSection.old.vue')['default']
     FaqSectionItem: typeof import('./components/staking/faq/FaqSectionItem.vue')['default']
     JsolSvg: typeof import('./components/Icons/JsolSvg.vue')['default']
+    Lazy: typeof import('./components/Lazy.vue')['default']
     LinearProgress: typeof import('./components/Home/LinearProgress.vue')['default']
     MainSection: typeof import('./components/staking/MainSection.vue')['default']
     PriceStats: typeof import('./components/staking/PriceStats.vue')['default']
@@ -41,7 +44,6 @@ declare module '@vue/runtime-core' {
     StakeSlideWrapper: typeof import('./components/staking/stake/StakeSlideWrapper.vue')['default']
     StakesSection: typeof import('./components/staking/StakesSection.vue')['default']
     StakeStats: typeof import('./components/staking/my-stake/StakeStats.vue')['default']
-    StakingHeader: typeof import('./components/StakingHeader.vue')['default']
     TelegramSvg: typeof import('./components/Icons/TelegramSvg.vue')['default']
     ThemeModeSelector: typeof import('./components/ThemeModeSelector.vue')['default']
     TotalStacked: typeof import('./components/TotalStacked.vue')['default']

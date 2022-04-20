@@ -37,13 +37,7 @@
           <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
           <router-link v-else :to="`/app/${item.voter}`">
             <q-avatar class="shadow-1" size="60px">
-              <q-img
-                :src="item.image"
-                spinner-size="34px"
-                spinner-color="white"
-                loading="lazy"
-                no-transition
-              >
+              <q-img :src="item.image" spinner-size="34px" spinner-color="white" no-transition>
                 <template #default v-if="!item.image">
                   <q-icon :name="evaPerson" />
                 </template>
@@ -68,7 +62,7 @@
           <a
             v-if="!loading && item.svName && cluster"
             class="row q-mr-sm"
-            :href="`https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${cluster}&var-server=${item.svName}`"
+            :href="url"
             target="_blank"
           >
             <q-badge class="validator-row__status-badge" color="accent" text-color="text-white">
@@ -92,9 +86,9 @@
         <div class="validator-row__name column q-pt-xs justify-start">
           <q-skeleton width="100%" v-if="loading" />
           <div v-else class="q-mt-sm">
-            {{ item.name ?? item.id }}
+            {{ name }}
             <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
-              {{ item.name ?? item.id }}
+              {{ name }}
             </q-tooltip>
           </div>
           <q-skeleton width="100%" height="28px" class="q-mt-sm" v-if="loading" />
@@ -129,7 +123,7 @@
             :voter-key="item.voter"
             :show-y-axis="false"
             :show-title="false"
-            height="82px"
+            :height="82"
           />
         </div>
       </div>
@@ -184,7 +178,7 @@
             <div class="validator-row__stake__sol validator-row__stake__sol--my q-mt-sm q-pt-sm">
               <span class="validator-row__stake__label">MY STAKE:</span>
               <br />
-              <b v-if="!loading && connected">{{ item.myStakeSol }}&nbsp;SOL</b>
+              <b v-if="!loading && walletConnected">{{ item.myStakeSol }}&nbsp;SOL</b>
               <span v-else>Connect a wallet</span>
             </div>
           </div>
@@ -207,11 +201,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, watch } from 'vue';
+  import { PropType, computed, ref, watch } from 'vue';
   import { evaPerson } from '@quasar/extras/eva-icons';
-  import { useWallet } from 'solana-wallets-vue';
   import { isoTimeDifference } from '@/utils';
-  import { DELINQ_UPDATE_EVENT } from '@/store';
+  import { DELINQ_UPDATE_EVENT, ValidatorItem } from '@/store';
   import { useEmitter } from '@/hooks';
 
   const props = defineProps({
@@ -219,10 +212,18 @@
       type: Boolean,
       default: false,
     },
+    walletConnected: {
+      type: Boolean,
+      default: false,
+    },
     item: {
-      type: Object,
+      type: Object as PropType<ValidatorItem>,
       required: true,
     },
+    // chartData: {
+    //   type: Object as PropType<ChartData<'line'>>,
+    //   required: true,
+    // },
     cluster: {
       type: String,
     },
@@ -240,11 +241,18 @@
   });
 
   const emitter = useEmitter();
-  const { connected } = useWallet();
 
+  // TODO: refactory
   if (props.item.isDelinquent) {
     emitter.on(DELINQ_UPDATE_EVENT, () => {
       delinquentTime.value = isoTimeDifference(props.item.lastVote);
     });
   }
+
+  const name = computed(() => props.item.name ?? props.item.id);
+
+  const url = computed(
+    () =>
+      `https://solana.thevalidators.io/d/e-8yEOXMwerfwe/solana-monitoring?orgId=2&refresh=30s&from=now-3h&to=now&var-cluster=${props.cluster}&var-server=${props.item.svName}`,
+  );
 </script>

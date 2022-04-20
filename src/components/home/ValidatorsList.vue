@@ -7,18 +7,41 @@
       <q-card class="q-mb-md q-mt-md validators-list__main">
         <validators-list-table-head />
 
+        <!--        <div-->
+        <!--          v-for="(item, index) in items"-->
+        <!--          :key="item.id"-->
+        <!--          :data-id="index - 1"-->
+        <!--          class="stake-accounts-container col-12 q-px-none q-pt-md"-->
+        <!--          :class="{ 'q-mx-md': $q.screen.gt.sm }"-->
+        <!--          v-intersection="onIntersection"-->
+        <!--        >-->
+        <!--          <transition name="q-transition&#45;&#45;scale">-->
+        <!--            <validator-row-->
+        <!--              v-if="inView[index - 1]"-->
+        <!--              :item="item"-->
+        <!--              :chart-data="validatorsAllStore.getChartData(item.voter)"-->
+        <!--              :index="index + 1"-->
+        <!--              :loading="loading"-->
+        <!--              :wallet-connected="connected"-->
+        <!--              :cluster="cluster"-->
+        <!--            />-->
+        <!--          </transition>-->
+        <!--        </div>-->
+
         <q-virtual-scroll
           scroll-target="#html"
           :class="{ 'v-scroll-desk': $q.screen.gt.sm }"
           :items="items"
-          virtual-scroll-item-size="123"
-          virtual-scroll-slice-size="10"
+          virtual-scroll-item-size="50"
+          virtual-scroll-slice-size="20"
           virtual-scroll-slice-ratio-after="0.7"
           virtual-scroll-slice-ratio-before="2"
         >
           <template #default="{ item, index }">
-            <div
-              :key="index"
+            <lazy
+              render-on-idle
+              :min-height="82"
+              :key="item.id"
               class="stake-accounts-container col-12 q-px-none q-pt-md"
               :class="{ 'q-mx-md': $q.screen.gt.sm }"
             >
@@ -26,6 +49,7 @@
                 :item="item"
                 :index="index + 1"
                 :loading="loading"
+                :wallet-connected="connected"
                 :cluster="cluster"
               />
               <!--                <validator-row-mob-->
@@ -35,7 +59,7 @@
               <!--                  :loading="loading"-->
               <!--                  :cluster="cluster"-->
               <!--                />-->
-            </div>
+            </lazy>
           </template>
         </q-virtual-scroll>
 
@@ -95,12 +119,24 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue';
+  import { useWallet } from 'solana-wallets-vue';
   import { useConnectionStore, useValidatorsAllStore } from '@/store';
+  import Lazy from '@/components/Lazy.vue';
 
+  const { connected } = useWallet();
   const connectionStore = useConnectionStore();
   const validatorsAllStore = useValidatorsAllStore();
 
   const loading = computed(() => validatorsAllStore.loading);
-  const items = computed(() => validatorsAllStore.itemsComputed);
+  const items = computed(() => validatorsAllStore.items);
   const cluster = computed(() => connectionStore.cluster);
+
+  // const inView = ref(Array.apply(null, items.value).map(() => false));
+  //
+  // function onIntersection(entry) {
+  //   const index = parseInt(entry.target.dataset.id, 10);
+  //   setTimeout(() => {
+  //     inView.value.splice(index, 1, entry.isIntersecting);
+  //   }, 50);
+  // }
 </script>

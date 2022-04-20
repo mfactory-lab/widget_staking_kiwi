@@ -27,7 +27,7 @@
  */
 
 import { defineStore } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
 import {
   ApyStats,
@@ -40,12 +40,40 @@ import {
 } from '@/utils';
 import { useDebounce, useLocalStorage } from '@vueuse/core';
 import { useWallet } from 'solana-wallets-vue';
-import { useEmitter } from '@/hooks';
 
 export const DELINQ_UPDATE_EVENT = Symbol();
 
+export interface ValidatorItem {
+  id: string;
+  apyNum: number;
+  apyEstNum: number;
+  feeNum: number;
+  apy: number;
+  apyEst: number;
+  fee: number;
+  voter: string;
+  totalStake: number;
+  totalSolStacked: number;
+  name: string;
+  details: string;
+  website: string;
+  keybaseUsername: string;
+  image: string;
+  url: string;
+  inTop33: boolean;
+  inJpool: boolean;
+  isDelinquent: boolean;
+  svName: string;
+  apyComparedMax: number;
+  network: string;
+  lamports: 0;
+  myStake: number;
+  myStakeSol: number;
+  lastVote: string;
+}
+
 export const useValidatorsAllStore = defineStore('validators-all', () => {
-  const emitter = useEmitter();
+  // const emitter = useEmitter();
   const connectionStore = useConnectionStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
@@ -58,8 +86,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   // const perPage = useLocalStorage<number | string>('per-page', '10');
   // const perPageOptions = ref([5, 10, 15, 20, 30, 50, 70, 100, 150, 200, 'all']);
 
-  const validatorsStats = ref<Array<ValidatorStats>>([]);
-  const averageApy = ref<Array<ApyStats>>([]);
+  const validatorsStats = shallowRef<Array<ValidatorStats>>([]);
+  const averageApy = shallowRef<Array<ApyStats>>([]);
   const loading = ref(false);
 
   const nameFilter = ref('');
@@ -143,18 +171,69 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     return priceFormatter.format(val);
   }
 
-  setInterval(async () => {
-    console.log('Reload delinqs');
-    emitter.emit(DELINQ_UPDATE_EVENT);
-  }, 60000);
+  // const categories = computed(() => averageApy.value.map((item) => item.epoch));
+  //
+  // function getChartData(voterKey: string): ChartData<'line'> {
+  //   // const loading = ref(true);
+  //   //
+  //   // const lineOpts = {
+  //   //   backgroundColor: '#30e5b6',
+  //   //   borderWidth: 1,
+  //   // };
+  //   //
+  //   // const chartData = ref({
+  //   //   labels: categories.value.map((c) => `Epoch ${c}`),
+  //   //   datasets: [
+  //   //     {
+  //   //       ...lineOpts,
+  //   //       data: categories.value.map(() => 0),
+  //   //     },
+  //   //   ],
+  //   // });
+  //
+  //   // watch(
+  //   //   categories,
+  //   //   () => {
+  //   //     if (categories.value.length === 0) {
+  //   //       return;
+  //   //     }
+  //   //     if (cluster.value === 'mainnet-beta') {
+  //   //       loading.value = true;
+  //   //       console.log('loading');
+  //   //       getApyHistory(voterKey).then((apyData) => {
+  //   //         chartData.value = {
+  //   //           labels: apyData.map((d) => `Epoch ${d.epoch}`),
+  //   //           datasets: [
+  //   //             {
+  //   //               ...lineOpts,
+  //   //               data: apyData.map((d) => d.apy * 100),
+  //   //             },
+  //   //           ],
+  //   //         };
+  //   //         loading.value = false;
+  //   //       });
+  //   //     }
+  //   //   },
+  //   //   { immediate: true },
+  //   // );
+  //
+  //   return {} as ChartData<'line'>;
+  // }
 
-  const items = computed(() => {
+  // setInterval(async () => {
+  //   console.log('Reload delinqs');
+  //   emitter.emit(DELINQ_UPDATE_EVENT);
+  // }, 60000);
+
+  const items = computed<ValidatorItem[]>(() => {
     // skeleton preloader
     // console.log('[validators all] start');
     if (loading.value) {
       // console.log('[validators all] skeleton');
       return Array(10).fill({});
     }
+
+    console.log('aa');
 
     // console.log('[validators all] calc ', validatorsStats.value.length);
     return validatorsStats.value.map((voteAccount) => {
@@ -211,7 +290,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   // filters & sort
   const itemsComputed = computed(() => {
-    console.log('[validators all] filter');
+    // console.log('[validators all] filter');
 
     if (loading.value) {
       return items.value;
@@ -219,7 +298,9 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
     const search = nameFilterDebounce.value.toLowerCase();
 
-    return (
+    console.log('computed');
+
+    return Object.freeze(
       [...items.value]
         .filter((item) => {
           if (
@@ -273,7 +354,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
             return a[sortParam.value] - b[sortParam.value];
           }
           return b[sortParam.value] - a[sortParam.value];
-        })
+        }),
     );
   });
 
@@ -328,8 +409,8 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     filterNotJpool,
     filterHasStake,
 
-    items,
-    itemsComputed,
+    // items,
+    items: itemsComputed,
     // itemsShowed: computed(() =>
     //   itemsSorted.value.slice(
     //     perPageNum.value * (currentPage.value - 1),

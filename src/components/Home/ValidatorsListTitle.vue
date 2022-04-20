@@ -87,7 +87,7 @@
       const validatorsAllStore = useValidatorsAllStore();
 
       const connectionLost = toRef(stakePoolStore, 'connectionLost');
-      const items = toRef(validatorsAllStore, 'itemsComputed');
+      const items = toRef(validatorsAllStore, 'items');
       const loading = toRef(validatorsAllStore, 'loading');
       const showControls = toRef(validatorsAllStore, 'showControls');
       const showControlsMob = toRef(validatorsAllStore, 'showControlsMob');

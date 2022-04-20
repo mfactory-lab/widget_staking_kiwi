@@ -28,7 +28,7 @@
 
 <template>
   <q-layout view="lfh Lpr lff">
-    <staking-header />
+    <app-header />
     <q-page-container>
       <router-view />
     </q-page-container>

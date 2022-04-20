@@ -27,42 +27,23 @@
   -->
 
 <template>
-  <!--  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">-->
-  <!--  <div v-if="true">-->
   <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
-
-  <!--    <apexchart-->
-  <!--      width="100%"-->
-  <!--      :height="height"-->
-  <!--      :options="chartOptions"-->
-  <!--      :series="[data, averageData]"-->
-  <!--    />-->
-
-  <div class="item-chart">
-    <line-chart v-if="!loading" v-bind="lineChartProps" />
-    <q-inner-loading :showing="loading" />
-  </div>
-  <!--      <q-inner-loading :showing="loading" />-->
-  <!--  </div>-->
-  <!--  <div class="apy-chart" v-else>-->
-  <!--    <sol-svg class="q-icon" />-->
-  <!--  </div>-->
+  <line-chart v-bind="lineChartProps" />
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watch } from 'vue';
+  import { PropType, defineComponent } from 'vue';
   import { LineChart, useLineChart } from 'vue-chart-3';
-  import { useQuasar } from 'quasar';
-  import { useConnectionStore, useValidatorsAllStore } from '@/store';
-  import { getApyHistory } from '@/utils';
+  // @ts-ignore
+  import { ChartData } from 'chart.js';
 
   export default defineComponent({
     components: {
       LineChart,
     },
     props: {
-      voterKey: {
-        type: String,
+      chartData: {
+        type: Object as PropType<ChartData<'line'>>,
         required: true,
       },
       showYAxis: {
@@ -79,60 +60,9 @@
       },
     },
     setup(props) {
-      const { dark } = useQuasar();
-      const connectionStore = useConnectionStore();
-      const validatorsAllStore = useValidatorsAllStore();
-
-      const cluster = computed(() => connectionStore.cluster);
-      const averageApy = computed(() => validatorsAllStore.averageApy);
-      const categories = computed(() => averageApy.value.map((item) => item.epoch));
-
-      const loading = ref(true);
-
-      const lineOpts = {
-        backgroundColor: '#30e5b6',
-        borderWidth: 1,
-      };
-
-      const chartData = ref({
-        labels: categories.value.map((c) => `Epoch ${c}`),
-        datasets: [
-          {
-            ...lineOpts,
-            data: categories.value.map(() => 0),
-          },
-        ],
-      });
-
-      watch(
-        categories,
-        () => {
-          if (categories.value.length === 0) {
-            return;
-          }
-          if (cluster.value === 'mainnet-beta') {
-            loading.value = true;
-            console.log('loading');
-            getApyHistory(props.voterKey).then((apyData) => {
-              chartData.value = {
-                labels: apyData.map((d) => `Epoch ${d.epoch}`),
-                datasets: [
-                  {
-                    ...lineOpts,
-                    data: apyData.map((d) => d.apy * 100),
-                  },
-                ],
-              };
-              loading.value = false;
-            });
-          }
-        },
-        { immediate: true },
-      );
-
       const { lineChartProps, lineChartRef } = useLineChart({
-        chartData,
-        height: 220,
+        chartData: props.chartData,
+        height: Number(props.height),
         options: {
           interaction: {
             intersect: false,
@@ -179,19 +109,7 @@
       return {
         lineChartProps,
         lineChartRef,
-        loading,
-        dark,
       };
     },
   });
 </script>
-
-<style lang="scss" scoped>
-  .item-chart {
-    height: 100%;
-    position: relative;
-    .q-inner-loading {
-      background-color: transparent;
-    }
-  }
-</style>
