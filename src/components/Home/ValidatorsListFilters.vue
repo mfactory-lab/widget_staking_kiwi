@@ -171,7 +171,7 @@
       class="q-mb-xs q-mt-sm col-grow validators-list__search"
       :class="{ 'full-width': $q.screen.lt.sm }"
       label="Search"
-      placeholder="enter a validator name, identity or vote key"
+      placeholder="Enter a validator name, identity or vote key"
       stack-label
     />
 

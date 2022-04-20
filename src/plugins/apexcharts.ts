@@ -29,6 +29,9 @@
 import VueApexCharts from 'vue3-apexcharts';
 import { App } from 'vue';
 
+import { Chart, registerables } from 'chart.js';
+
 export const install = ({ app }: { app: App<Element> }) => {
   app.use(VueApexCharts);
+  Chart.register(...registerables);
 };

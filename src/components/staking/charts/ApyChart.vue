@@ -27,17 +27,20 @@
   -->
 
 <template>
-  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">
+  <!--  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">-->
+  <div v-if="true">
     <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
-    <div v-if="!loading">
-      <!--      <keep-alive>-->
-      <!--        <apexchart-->
-      <!--          width="100%"-->
-      <!--          :height="height"-->
-      <!--          :options="chartOptions"-->
-      <!--          :series="[data, averageData]"-->
-      <!--        />-->
-      <!--      </keep-alive>-->
+
+    <!--    <apexchart-->
+    <!--      width="100%"-->
+    <!--      :height="height"-->
+    <!--      :options="chartOptions"-->
+    <!--      :series="[data, averageData]"-->
+    <!--    />-->
+
+    <div :style="{ height: height + 'px' }" class="relative-position">
+      <line-chart v-if="!loading" v-bind="lineChartProps" />
+      <!--      <q-inner-loading :showing="loading" />-->
     </div>
   </div>
   <div class="apy-chart" v-else>
@@ -47,17 +50,15 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
+  import { LineChart, useLineChart } from 'vue-chart-3';
   import { useQuasar } from 'quasar';
-  import { getApyHistory } from '@/utils';
   import { useConnectionStore, useValidatorsAllStore } from '@/store';
-
-  interface ChartData {
-    data: number[];
-    type: String;
-    name: String;
-  }
+  import { getApyHistory } from '@/utils';
 
   export default defineComponent({
+    components: {
+      LineChart,
+    },
     props: {
       voterKey: {
         type: String,
@@ -72,190 +73,113 @@
         default: true,
       },
       height: {
-        type: String,
-        default: '84px',
+        type: Number,
+        default: 84,
       },
     },
     setup(props) {
-      const data = ref<ChartData>({
-        name: 'APY',
-        type: 'area',
-        data: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ],
-      });
-      // const categories = ref<Array<number | string>>([0, 1]);
       const { dark } = useQuasar();
       const connectionStore = useConnectionStore();
       const validatorsAllStore = useValidatorsAllStore();
 
-      const loading = ref(true);
-
       const cluster = computed(() => connectionStore.cluster);
       const averageApy = computed(() => validatorsAllStore.averageApy);
-      const averageData = computed(() => {
-        return {
-          name: 'Avr. APY',
-          type: 'line',
-          data: averageApy.value.map((item) => item.apy * 100),
-          // data: categories.value.map((item) => {
-          //   const average = averageApy.value.find((aa) => aa.epoch == item);
-          //   return average ? average.apy * 100 : 0;
-          // }),
-        };
-      });
-
       const categories = computed(() => averageApy.value.map((item) => item.epoch));
+
+      const loading = ref(true);
+
+      const lineOpts = {
+        backgroundColor: '#30e5b6',
+        borderWidth: 1,
+      };
+
+      const chartData = ref({
+        labels: categories.value.map((c) => `Epoch ${c}`),
+        datasets: [
+          {
+            ...lineOpts,
+            data: categories.value.map(() => 0),
+          },
+        ],
+      });
 
       watch(
         categories,
-        async () => {
-          if (cluster.value === 'mainnet-beta') {
-            const apyData = await getApyHistory(props.voterKey);
-
-            const arrayLength = averageApy.value.length - apyData.length;
-            const array: number[] = [];
-            for (let i = 0; i < arrayLength; i++) {
-              array.push(0);
-            }
-
-            data.value = {
-              name: 'APY',
-              type: 'area',
-              data: [...array, ...apyData.map((item) => item.apy * 100)],
-            };
+        () => {
+          if (categories.value.length === 0) {
+            return;
           }
-          loading.value = false;
+          if (cluster.value === 'mainnet-beta') {
+            loading.value = true;
+            console.log('loading');
+            getApyHistory(props.voterKey).then((apyData) => {
+              chartData.value = {
+                labels: apyData.map((d) => `Epoch ${d.epoch}`),
+                datasets: [
+                  {
+                    ...lineOpts,
+                    data: apyData.map((d) => d.apy * 100),
+                  },
+                ],
+              };
+              loading.value = false;
+            });
+          }
         },
         { immediate: true },
       );
 
-      return {
-        loading,
-        categories,
-        data,
-        cluster,
-        averageData,
-        chartOptions: computed(() => ({
-          colors: ['#1DE3B0', '#5A7683'],
-          legend: {
-            showForSingleSeries: false,
-            show: false,
+      const { lineChartProps, lineChartRef } = useLineChart({
+        chartData,
+        height: Number(props.height),
+        options: {
+          interaction: {
+            intersect: false,
+            mode: 'index',
           },
-          fill: {
-            opacity: 1,
-            gradient: {
-              shade: 'light',
-              type: 'vertical',
-              shadeIntensity: 0.1,
-              opacityFrom: 1,
-              opacityTo: 1,
+          responsive: true,
+          plugins: {
+            legend: false,
+            // tooltip: {
+            //   usePointStyle: true,
+            // },
+          },
+          elements: {
+            line: {
+              fill: true,
             },
-            pattern: {
-              style: 'verticalLines',
-              strokeWidth: 30,
+            point: {
+              radius: 0,
             },
           },
-          chart: {
-            type: 'area',
-            // offsetX: -7,
-            offsetY: 0,
-            parentHeightOffset: 0,
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
-            width: 1,
-            dashArray: [0, 2],
-          },
-          grid: {
-            show: true,
-            borderColor: '#cccccc70',
-            strokeDashArray: 2,
-            position: 'back',
-            xaxis: {
-              lines: {
-                show: false,
-              },
-            },
-            yaxis: {
-              lines: {
-                show: false,
-              },
-            },
-            row: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            column: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            padding: {
-              top: -12,
-              right: 10,
-              bottom: -5,
-              left: 0,
-            },
-          },
-          yaxis: {
-            axisBorder: {
-              show: false,
-            },
-            labels: {
-              show: props.showYAxis,
-              offsetX: -8,
-              style: {
-                colors: [dark.isActive ? '#ffffff90' : '#707585'],
-                fontSize: '10px',
-              },
-              formatter: (value) => {
-                return `${value?.toFixed(2) ?? 0}%`;
-              },
-            },
-            min: (_value) => {
-              return 0;
-            },
-            max: (value) => {
-              return value + 0.5;
-            },
-            tickAmount: 5,
-          },
-          xaxis: {
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false,
-            },
-            type: 'datetime',
-            labels: {
-              show: false,
-            },
-            categories: categories.value,
-            tooltip: {
-              enabled: false,
-            },
-          },
-          tooltip: {
+          scales: {
             x: {
-              show: true,
-              formatter: (value) => {
-                return `Epoch ${value}`;
+              ticks: {
+                display: false,
+              },
+              grid: {
+                display: false,
+                drawBorder: false,
+              },
+            },
+            y: {
+              ticks: {
+                display: false,
+              },
+              grid: {
+                display: false,
+                drawBorder: false,
               },
             },
           },
-        })),
+        },
+      });
+
+      return {
+        lineChartProps,
+        lineChartRef,
+        loading,
+        dark,
       };
     },
   });
