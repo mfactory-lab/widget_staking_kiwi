@@ -44,9 +44,8 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watch } from 'vue';
+  import { computed, defineComponent, ref, toRef, watch } from 'vue';
   import { useConnectionStore, useValidatorsAllStore } from '@/store';
-  import { storeToRefs } from 'pinia';
   import SolSvg from '@/components/icons/SolSvg.vue';
   import { useQuasar } from 'quasar';
   import { getApyHistory } from '@/utils';
@@ -90,7 +89,8 @@
       // const categories = ref<Array<number | string>>([0, 1]);
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
-      const { averageApy } = storeToRefs(useValidatorsAllStore());
+      const validatorsAllStore = useValidatorsAllStore();
+      const averageApy = toRef(validatorsAllStore, 'averageApy');
       const { dark } = useQuasar();
 
       const averageData = computed(() => {

@@ -27,8 +27,7 @@
  */
 
 import { useQuasar } from 'quasar';
-import { computed, ref } from 'vue';
-import { storeToRefs } from 'pinia';
+import { computed, ref, toRef } from 'vue';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
   sendTransaction,
@@ -42,7 +41,8 @@ import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature } = storeToRefs(useStakePoolStore());
+  const stakePoolStore = useStakePoolStore();
+  const lamportsPerSignature = toRef(stakePoolStore, 'lamportsPerSignature');
   const { publicKey } = useWallet();
   const anchorWallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
@@ -50,7 +50,8 @@ export function useStakeAccounts() {
   const loading = ref(false);
   const seed = ref('0');
   const stakeAccountStore = useStakeAccountStore();
-  const { voterKey } = storeToRefs(useValidatorJstakingStore());
+  const validatorJstakingStore = useValidatorJstakingStore();
+  const voterKey = toRef(validatorJstakingStore, 'voterKey');
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;

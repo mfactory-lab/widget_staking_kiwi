@@ -87,8 +87,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, onMounted, ref, watch } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
   import {
@@ -127,9 +126,12 @@
       const anchorWallet = useAnchorWallet();
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
-      const { voterKey, validatorInJpool } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
+      const validatorInJpool = toRef(validatorJstakingStore, 'validatorInJpool');
       const { delegateAccount } = useStakeAccounts();
-      const { connectionLost } = storeToRefs(useStakePoolStore());
+      const stakePoolStore = useStakePoolStore();
+      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const { depositStake } = useDeposit();
 
       const dialog = computed(() => stakeAccountStore.dialog);

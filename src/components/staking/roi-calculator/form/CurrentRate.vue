@@ -34,14 +34,14 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, toRef } from 'vue';
   import { useValidatorJstakingStore } from '@/store';
   import { formatPct } from '@jpool/common/utils';
 
   export default defineComponent({
     setup() {
-      const { apy } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const apy = toRef(validatorJstakingStore, 'apy');
       return {
         apy: computed(() => formatPct.format(apy.value)),
       };

@@ -27,8 +27,8 @@
  */
 
 import axios from 'axios';
-import { computed, ref, watch } from 'vue';
-import { defineStore, storeToRefs } from 'pinia';
+import { computed, ref, toRef, watch } from 'vue';
+import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
 import { APY_VALIDATOR_ID, DEFAULT_APY } from '@/config';
 
@@ -52,8 +52,10 @@ export interface ApyInfo {
 }
 
 export const useApyStore = defineStore('apy', () => {
-  const { voteIds } = storeToRefs(useValidatorStore());
-  const { epochInfo } = storeToRefs(useEpochStore());
+  const validatorStore = useValidatorStore();
+  const voteIds = toRef(validatorStore, 'voteIds');
+  const epochStore = useEpochStore();
+  const epochInfo = toRef(epochStore, 'epochInfo');
   const apyInfo = useLocalStorage<ApyInfo>('apy', {
     beginTimestamp: 0,
     collectionTimestamp: 0,

@@ -27,15 +27,16 @@
  */
 
 import { useQuasar } from 'quasar';
-import { ref } from 'vue';
-import { storeToRefs } from 'pinia';
+import { ref, toRef } from 'vue';
 import { useConnectionStore } from '../store';
 import { TELEGRAM_ANNOUNCEMENT_URL } from '@/config';
 
 const CONFIRM_TIMEOUT = 30000;
 
 export function useMonitorTransaction() {
-  const { connection, cluster } = storeToRefs(useConnectionStore());
+  const connectionStore = useConnectionStore();
+  const cluster = toRef(connectionStore, 'cluster');
+  const connection = toRef(connectionStore, 'connection');
   const { notify } = useQuasar();
   const sending = ref(false);
 
@@ -73,22 +74,20 @@ export function useMonitorTransaction() {
       label: 'Explore',
       color: 'white',
       target: '_blank',
-      type: 'a',
       href: explorerUrl,
+      onClick: () => false,
     };
 
     const telegramAction = {
       label: 'Telegram',
       color: 'white',
       target: '_blank',
-      type: 'a',
       href: TELEGRAM_ANNOUNCEMENT_URL,
     };
 
     const closeAction = {
       label: 'Close',
       color: 'white',
-      type: 'a',
     };
 
     try {

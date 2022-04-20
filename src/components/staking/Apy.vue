@@ -36,9 +36,8 @@
 
 <script lang="ts">
   import { useValidatorJstakingStore } from '@/store';
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent, toRef } from 'vue';
   import { formatPct } from '@jpool/common/utils';
-  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     props: {
@@ -48,7 +47,9 @@
       },
     },
     setup() {
-      const { apy, apyLoading } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const apyLoading = toRef(validatorJstakingStore, 'apyLoading');
+      const apy = toRef(validatorJstakingStore, 'apy');
       return {
         apyLoading,
         apy: computed(() => formatPct.format(apy.value)),

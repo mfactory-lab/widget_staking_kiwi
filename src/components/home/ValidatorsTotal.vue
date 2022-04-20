@@ -53,9 +53,8 @@
 
 <script lang="ts">
   import { useEpochStore, useValidatorsAllStore } from '@/store';
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent, toRef } from 'vue';
   import SolSvg from '@/components/icons/SolSvg.vue';
-  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {
@@ -68,7 +67,8 @@
       },
     },
     setup() {
-      const { epochNumber } = storeToRefs(useEpochStore());
+      const epochStore = useEpochStore();
+      const epochNumber = toRef(epochStore, 'epochNumber');
       const validatorStore = useValidatorsAllStore();
       return {
         validatorsCount: computed(() =>

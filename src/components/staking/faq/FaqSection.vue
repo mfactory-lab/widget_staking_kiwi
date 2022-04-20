@@ -79,15 +79,18 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, toRef } from 'vue';
   import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
-  import { storeToRefs } from 'pinia';
 
   export default defineComponent({
     components: {},
     setup() {
-      const { savedValidator, validatorName } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorsAllStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const savedValidator = toRef(validatorJstakingStore, 'savedValidator');
+      const validatorName = toRef(validatorJstakingStore, 'validatorName');
+
+      const validatorsAllStore = useValidatorsAllStore();
+      const loading = toRef(validatorsAllStore, 'loading');
 
       return {
         savedValidator,

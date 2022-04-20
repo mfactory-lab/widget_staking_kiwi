@@ -27,8 +27,7 @@
  */
 
 import { useQuasar } from 'quasar';
-import { computed, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+import { computed, ref, toRef, watch } from 'vue';
 import { useDebounce } from '@vueuse/core';
 import { PublicKey } from '@solana/web3.js';
 import { depositSol, depositStake, withdrawSol, withdrawStake } from '@solana/spl-stake-pool/src';
@@ -49,11 +48,16 @@ import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 
 export function useDeposit() {
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature, stakePool, minRentBalance } = storeToRefs(useStakePoolStore());
+  const stakePoolStore = useStakePoolStore();
+  const lamportsPerSignature = toRef(stakePoolStore, 'lamportsPerSignature');
+  const stakePool = toRef(stakePoolStore, 'stakePool');
+  const minRentBalance = toRef(stakePoolStore, 'minRentBalance');
   const { connected } = useWallet();
   const wallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
-  const { nativeBalance, hasTokenAccount } = storeToRefs(useBalanceStore());
+  const balanceStore = useBalanceStore();
+  const nativeBalance = toRef(balanceStore, 'nativeBalance');
+  const hasTokenAccount = toRef(balanceStore, 'hasTokenAccount');
   const { notify } = useQuasar();
   const loading = ref(false);
   const stakeSuccessDialog = ref(false);
@@ -161,10 +165,14 @@ export function useWithdraw() {
   const { monitorTransaction, sending } = useMonitorTransaction();
 
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature, stakePool, reserveStakeBalance } = storeToRefs(useStakePoolStore());
+  const stakePoolStore = useStakePoolStore();
+  const lamportsPerSignature = toRef(stakePoolStore, 'lamportsPerSignature');
+  const stakePool = toRef(stakePoolStore, 'stakePool');
+  const reserveStakeBalance = toRef(stakePoolStore, 'reserveStakeBalance');
   const { wallet, connected } = useWallet();
   const anchorWallet = useAnchorWallet();
-  const { epochInfo } = storeToRefs(useEpochStore());
+  const epochStore = useEpochStore();
+  const epochInfo = toRef(epochStore, 'epochInfo');
 
   const useReserve = ref(false);
   const useWithdrawSol = ref(true);

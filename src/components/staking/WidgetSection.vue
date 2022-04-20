@@ -121,15 +121,15 @@
 
 <script lang="ts">
   import { evaMoon, evaSun } from '@quasar/extras/eva-icons';
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, toRef } from 'vue';
   import { useValidatorJstakingStore } from '@/store';
-  import { storeToRefs } from 'pinia';
   import CopyToClipboardBig from '@/components/CopyToClipboardBig.vue';
 
   export default defineComponent({
     components: { CopyToClipboardBig },
     setup() {
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
       const widgetTheme = ref(true);
       const voteKey = ref(voterKey.value);
 

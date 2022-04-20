@@ -26,8 +26,8 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { computed, ref, watch } from 'vue';
-import { defineStore, storeToRefs } from 'pinia';
+import { computed, ref, toRef, watch } from 'vue';
+import { defineStore } from 'pinia';
 import { Connection, EpochInfo } from '@solana/web3.js';
 import { useEmitter } from '@jpool/common/hooks';
 import { useConnectionStore } from '@jpool/common/store';
@@ -57,7 +57,7 @@ export const useEpochStore = defineStore('epoch', () => {
   const loadHourlySlotTime = () =>
     calcHourlySlotTime(connectionStore.connection).then((v) => (hourlySlotTime.value = v));
 
-  const { stakePoolAddress } = storeToRefs(connectionStore);
+  const stakePoolAddress = toRef(connectionStore, 'stakePoolAddress');
 
   watch(
     stakePoolAddress,

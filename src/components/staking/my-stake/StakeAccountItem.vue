@@ -131,8 +131,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, ref, toRef } from 'vue';
   // @ts-ignore
   import { ProgramAccount, useCoinRateStore, useEpochStore } from '@/store';
   import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
@@ -163,7 +162,8 @@
 
       const stateLoading = ref(false);
       const coinRateStore = useCoinRateStore();
-      const { epochProgress } = storeToRefs(useEpochStore());
+      const epochStore = useEpochStore();
+      const epochProgress = toRef(epochStore, 'epochProgress');
 
       const solAmount = computed(() => lamportsToSol(props.stakeAccount?.account?.lamports ?? 0));
 

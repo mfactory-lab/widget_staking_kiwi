@@ -486,8 +486,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, toRef } from 'vue';
   import { useConnectionStore, useStakePoolStore, useValidatorsAllStore } from '@/store';
   import ValidatorRow from '@/components/home/ValidatorRow.vue';
   import ValidatorRowMob from '@/components/home/ValidatorRowMob.vue';
@@ -500,33 +499,31 @@
     setup() {
       const connectionStore = useConnectionStore();
       const stakePoolStore = useStakePoolStore();
+      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const { connected } = useWallet();
 
-      const { connectionLost } = storeToRefs(stakePoolStore);
       const validatorsAllStore = useValidatorsAllStore();
-      const {
-        sortType,
-        sortParam,
-        nameFilter,
-        currentPage,
-        perPage,
-        perPageNum,
-        perPageOptions,
-        pages,
-        itemsSorted,
-        itemsShowed,
-        filterPrivate,
-        filterTop33,
-        filterFee,
-        filterNoname,
-        filterDelinq,
-        filterNotSvm,
-        filterNotJpool,
-        filterHasStake,
-        loading,
-        showControls,
-        showControlsMob,
-      } = storeToRefs(validatorsAllStore);
+      const sortType = toRef(validatorsAllStore, 'sortType');
+      const sortParam = toRef(validatorsAllStore, 'sortParam');
+      const nameFilter = toRef(validatorsAllStore, 'nameFilter');
+      const currentPage = toRef(validatorsAllStore, 'currentPage');
+      const perPage = toRef(validatorsAllStore, 'perPage');
+      const perPageNum = toRef(validatorsAllStore, 'perPageNum');
+      const perPageOptions = toRef(validatorsAllStore, 'perPageOptions');
+      const pages = toRef(validatorsAllStore, 'pages');
+      const itemsSorted = toRef(validatorsAllStore, 'itemsSorted');
+      const itemsShowed = toRef(validatorsAllStore, 'itemsShowed');
+      const filterPrivate = toRef(validatorsAllStore, 'filterPrivate');
+      const filterTop33 = toRef(validatorsAllStore, 'filterTop33');
+      const filterFee = toRef(validatorsAllStore, 'filterFee');
+      const filterNoname = toRef(validatorsAllStore, 'filterNoname');
+      const filterDelinq = toRef(validatorsAllStore, 'filterDelinq');
+      const filterNotSvm = toRef(validatorsAllStore, 'filterNotSvm');
+      const filterNotJpool = toRef(validatorsAllStore, 'filterNotJpool');
+      const filterHasStake = toRef(validatorsAllStore, 'filterHasStake');
+      const loading = toRef(validatorsAllStore, 'loading');
+      const showControls = toRef(validatorsAllStore, 'showControls');
+      const showControlsMob = toRef(validatorsAllStore, 'showControlsMob');
 
       const refresh = async () => {
         await validatorsAllStore.loadAllValidators();

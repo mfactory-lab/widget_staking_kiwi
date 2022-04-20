@@ -62,8 +62,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, toRef } from 'vue';
   import { useBalanceStore, useCoinRateStore, useStakePoolStore } from '@/store';
   import { formatMoney } from '@jpool/common/utils/check-number';
   import JsolSvg from '@/components/icons/JsolSvg.vue';
@@ -77,7 +76,8 @@
       const coinRateStore = useCoinRateStore();
       const { connected } = useWallet();
 
-      const { solBalance, tokenBalance } = storeToRefs(balanceStore);
+      const solBalance = toRef(balanceStore, 'solBalance');
+      const tokenBalance = toRef(balanceStore, 'tokenBalance');
 
       const solUsd = computed(() => coinRateStore.solPrice * solBalance.value);
 
