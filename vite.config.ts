@@ -1,5 +1,5 @@
 /*
- * This file is part of the Web3 Library developed by mFactory GmbH.
+ * This file is part of Solana Reference Stake Pool code.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -28,100 +28,65 @@
 
 import { resolve } from 'path';
 import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
-import { injectHtml, minifyHtml } from 'vite-plugin-html';
+import { createHtmlPlugin } from 'vite-plugin-html';
 import Vue from '@vitejs/plugin-vue';
-// import ViteLegacy from '@vitejs/plugin-legacy';
 import ViteVisualizer from 'rollup-plugin-visualizer';
-import inject from '@rollup/plugin-inject';
-
 import Components from 'unplugin-vue-components/vite';
-import { QuasarResolver } from 'unplugin-vue-components/resolvers';
+import inject from '@rollup/plugin-inject';
+// noinspection ES6PreferShortImport
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
+  // const isDev = mode === 'development';
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
-    injectHtml({
-      data: {
-        title: 'staking.kiwi',
-        description: 'Solana staking.',
-        keywords: 'Solana, SOL',
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: SITE_TITLE,
+          description: SITE_DESCRIPTION,
+          keywords: SITE_KEYWORDS,
+        },
       },
-    }),
-    minifyHtml({
-      // collapseBooleanAttributes: true,
-      // collapseWhitespace: true,
-      // minifyCSS: true,
-      // minifyJS: true,
-      // minifyURLs: true,
-      // removeAttributeQuotes: true,
-      // removeComments: true,
-      // removeEmptyAttributes: true,
-      // html5: true,
-      // keepClosingSlash: true,
-      // removeRedundantAttributes: true,
-      // removeScriptTypeAttributes: true,
-      // removeStyleLinkTypeAttributes: true,
-      // useShortDoctype: true,
     }),
     Vue({
       include: [/\.vue$/, /\.md$/],
+      // reactivityTransform: true,
     }),
-    // ViteComponents({
-    //   customComponentResolvers: [resolveQuasar],
-    // }
-    // AutoImport({
-    //   resolvers: [QuasarResolver()],
-    // }),
+    // https://github.com/antfu/unplugin-vue-components
     Components({
-      resolvers: [QuasarResolver()],
+      // allow auto load components under `./src/components/`
+      extensions: ['vue', 'md'],
+      // allow auto import and register components used in markdown
+      // resolvers: [QuasarResolver()],
+      dts: 'src/components.d.ts',
     }),
   ];
 
   const build: BuildOptions = {
-    manifest: false,
-    cssCodeSplit: false, // true,
+    manifest: isProd,
     sourcemap: false,
-    polyfillDynamicImport: false,
     brotliSize: false,
-    chunkSizeWarningLimit: 2000, //550
+    cssCodeSplit: false,
+    polyfillDynamicImport: false,
+    chunkSizeWarningLimit: 2500, // 550 TODO: optimize
     assetsInlineLimit: 4096,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        // drop_console: true,
-        drop_debugger: true,
-      },
-    },
     rollupOptions: {
       plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/')) {
+            return 'vendors';
+          }
+        },
+      },
     },
   };
 
-  if (isProd) {
-    build.manifest = true;
-
-    // TODO: charset error
-    // plugins.push(
-    //   /**
-    //    * DESC:
-    //    * provides support for legacy browsers
-    //    * that do not support native ESM
-    //    */
-    //   ViteLegacy({
-    //     targets: ['defaults', 'not IE 11'],
-    //   }),
-    // );
-  }
-
   if (isReport) {
     plugins.push(
-      /**
-       * DESC:
-       * visualize bundle
-       */
       ViteVisualizer({
         filename: './dist/report.html',
         open: true,
@@ -130,7 +95,7 @@ export default defineConfig(({ mode }) => {
     );
   }
 
-  let optimizeDeps: DepOptimizationOptions = {
+  const optimizeDeps: DepOptimizationOptions = {
     include: [
       'vue',
       'vue-router',
@@ -138,36 +103,16 @@ export default defineConfig(({ mode }) => {
       '@vueuse/head',
       'pinia',
       'quasar',
+      '@quasar/extras/eva-icons',
       '@solana/spl-stake-pool',
       '@solana/web3.js',
       '@solana/spl-token',
-      '@project-serum/anchor',
-      // '@blocto/sdk',
-      // 'solana-wallets-vue',
-      // 'eventemitter3',
-      // 'vue3-apexcharts',
-      // 'buffer',
-      // 'bs58',
-      // 'base64url',
-      // 'eventemitter3',
-      // 'lodash-es',
     ],
     exclude: ['vue-demi'],
     esbuildOptions: {
       minify: true,
     },
   };
-
-  if (isDev) {
-    /**
-     * DESC:
-     * dependency pre-bundling
-     */
-    optimizeDeps = {
-      include: ['quasar', 'lodash', '@vue/runtime-core', '@vueuse/core', '@vueuse/head'],
-      exclude: ['vue-demi'],
-    };
-  }
 
   return {
     build,
@@ -178,8 +123,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           charset: false,
-          additionalData:
-            '@import "@/assets/scss/_fonts.scss";\n @import "@/assets/scss/_variables.scss";\n',
+          additionalData: '@import "@/assets/scss/global.scss";\n',
         },
       },
       postcss: {
@@ -208,8 +152,8 @@ export default defineConfig(({ mode }) => {
         'bs58',
         'lodash',
         'buffer',
-        'eventemitter3',
         'buffer-layout',
+        'eventemitter3',
         '@solana/web3.js',
         '@solana/buffer-layout',
       ],
@@ -222,22 +166,27 @@ export default defineConfig(({ mode }) => {
       ],
     },
 
-    server: {
-      fs: {
-        strict: true,
-      },
+    define: {
+      'process.env': process.env,
+      global: 'globalThis',
     },
 
     // https://github.com/antfu/vite-ssg
     // ssgOptions: {
     //   script: 'async',
     //   formatting: 'minify',
+    //   // onFinished() {
+    //   // generateSitemap();
+    //   // },
     // },
 
-    // support node libraries
-    define: {
-      'process.env': process.env,
-      global: 'window',
-    },
+    // https://github.com/vitest-dev/vitest
+    // test: {
+    //   include: ['test/**/*.test.ts'],
+    //   environment: 'jsdom',
+    //   deps: {
+    //     inline: ['@vue', '@vueuse', 'vue-demi'],
+    //   },
+    // },
   };
 });

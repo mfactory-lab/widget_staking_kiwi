@@ -34,21 +34,3 @@
     <widget-section />
   </q-page>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-  import StakesSection from '@/components/staking/StakesSection.vue';
-  import FaqSection from '@/components/staking/faq/FaqSection.vue';
-  import WidgetSection from '@/components/staking/WidgetSection.vue';
-
-  export default defineComponent({
-    components: {
-      MainSection,
-      StakesSection,
-      FaqSection,
-      WidgetSection,
-    },
-    setup() {},
-  });
-</script>

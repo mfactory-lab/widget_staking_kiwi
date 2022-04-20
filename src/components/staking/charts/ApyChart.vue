@@ -29,13 +29,15 @@
 <template>
   <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">
     <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
-    <div>
-      <apexchart
-        width="100%"
-        :height="height"
-        :options="chartOptions"
-        :series="[data, averageData]"
-      />
+    <div v-if="!loading">
+      <!--      <keep-alive>-->
+      <!--        <apexchart-->
+      <!--          width="100%"-->
+      <!--          :height="height"-->
+      <!--          :options="chartOptions"-->
+      <!--          :series="[data, averageData]"-->
+      <!--        />-->
+      <!--      </keep-alive>-->
     </div>
   </div>
   <div class="apy-chart" v-else>
@@ -44,11 +46,10 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, toRef, watch } from 'vue';
-  import { useConnectionStore, useValidatorsAllStore } from '@/store';
-  import SolSvg from '@/components/icons/SolSvg.vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
   import { useQuasar } from 'quasar';
   import { getApyHistory } from '@/utils';
+  import { useConnectionStore, useValidatorsAllStore } from '@/store';
 
   interface ChartData {
     data: number[];
@@ -57,9 +58,6 @@
   }
 
   export default defineComponent({
-    components: {
-      SolSvg,
-    },
     props: {
       voterKey: {
         type: String,
@@ -87,12 +85,14 @@
         ],
       });
       // const categories = ref<Array<number | string>>([0, 1]);
-      const connectionStore = useConnectionStore();
-      const cluster = computed(() => connectionStore.cluster);
-      const validatorsAllStore = useValidatorsAllStore();
-      const averageApy = toRef(validatorsAllStore, 'averageApy');
       const { dark } = useQuasar();
+      const connectionStore = useConnectionStore();
+      const validatorsAllStore = useValidatorsAllStore();
 
+      const loading = ref(true);
+
+      const cluster = computed(() => connectionStore.cluster);
+      const averageApy = computed(() => validatorsAllStore.averageApy);
       const averageData = computed(() => {
         return {
           name: 'Avr. APY',
@@ -108,7 +108,7 @@
       const categories = computed(() => averageApy.value.map((item) => item.epoch));
 
       watch(
-        [categories],
+        categories,
         async () => {
           if (cluster.value === 'mainnet-beta') {
             const apyData = await getApyHistory(props.voterKey);
@@ -125,11 +125,13 @@
               data: [...array, ...apyData.map((item) => item.apy * 100)],
             };
           }
+          loading.value = false;
         },
         { immediate: true },
       );
 
       return {
+        loading,
         categories,
         data,
         cluster,

@@ -35,17 +35,3 @@
     </div>
   </section>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import StakeAccounts from './my-stake/StakeAccounts.vue';
-
-  export default defineComponent({
-    components: {
-      StakeAccounts,
-    },
-    setup() {
-      return {};
-    },
-  });
-</script>

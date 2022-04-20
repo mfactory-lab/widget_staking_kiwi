@@ -27,41 +27,44 @@
  */
 
 import { useQuasar } from 'quasar';
-import { computed, ref, toRef } from 'vue';
+import { computed, ref } from 'vue';
+import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
-  sendTransaction,
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
   useValidatorJstakingStore,
 } from '@/store';
-import { useMonitorTransaction } from '@jpool/common/hooks/monitor';
-import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
+import { useMonitorTransaction } from '@/hooks';
+import { sendTransaction } from '@/utils';
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
+  const stakeAccountStore = useStakeAccountStore();
+  const validatorJstakingStore = useValidatorJstakingStore();
   const stakePoolStore = useStakePoolStore();
-  const lamportsPerSignature = toRef(stakePoolStore, 'lamportsPerSignature');
   const { publicKey } = useWallet();
   const anchorWallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
   const { notify } = useQuasar();
+
   const loading = ref(false);
   const seed = ref('0');
-  const stakeAccountStore = useStakeAccountStore();
-  const validatorJstakingStore = useValidatorJstakingStore();
-  const voterKey = toRef(validatorJstakingStore, 'voterKey');
+
+  const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
+  const voterKey = computed(() => validatorJstakingStore.voterKey);
+
+  // console.log(stakeAccountStore);
 
   const findFirstAvailableSeed = async () => {
     let seedIndex = 0;
     if (!publicKey.value) return;
-    const STAKE_PROGRAM_ID = new PublicKey('Stake11111111111111111111111111111111111111');
     while (1) {
       const newStakeAccountPubkey = await PublicKey.createWithSeed(
         publicKey.value,
         seedIndex.toString(),
-        STAKE_PROGRAM_ID,
+        StakeProgram.programId,
       );
       const matching = stakeAccountStore.data.find((meta) =>
         newStakeAccountPubkey.equals(meta.pubkey),

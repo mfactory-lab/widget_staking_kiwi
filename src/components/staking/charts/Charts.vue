@@ -41,8 +41,8 @@
   import Chart from './Chart.vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { CHARTS_PAIRS } from '@/config';
-  import { getPairIntervalPrice } from '@jpool/common/utils/coinmarket';
-  import { priceFormatter } from '@jpool/common/utils';
+  import { priceFormatter } from '@/utils';
+  import { getPairIntervalPrice } from '@/utils/coinmarket';
 
   export default defineComponent({
     components: {

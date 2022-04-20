@@ -27,4 +27,8 @@
  */
 
 export * from './api';
+export * from './connection';
+export * from './format';
+export * from './scroller';
 export * from './time';
+export * from './web3';

@@ -39,14 +39,16 @@
           v-if="showValidator"
           class="staking-header__faq-btn q-ml-sm"
           @click="scrollTo('faq-section')"
-          >How to use staking.kiwi</div
         >
+          How to use staking.kiwi
+        </div>
         <div
           v-if="showValidator"
           class="staking-header__faq-btn q-ml-md"
           @click="scrollTo('widget-section')"
-          >widget</div
         >
+          widget
+        </div>
       </div>
     </div>
     <div class="staking-header__main q-py-md">
@@ -64,7 +66,7 @@
               color="accent"
               text-color="text-white"
             >
-              v.1.2
+              v{{ version }}
             </q-badge>
           </router-link>
           <div v-if="!showValidator && $q.screen.lt.md" class="total-validators-nxs q-mr-auto">
@@ -112,36 +114,21 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import ClusterSelector from '@/components/staking/ClusterSelector.vue';
-  import ValidatorName from '@/components/staking/ValidatorName.vue';
-  import ConnectWallet from '@/components/staking/ConnectWallet.vue';
-  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
-  import handleScroll from '@jpool/common/utils/scroller';
   import router from '@/router';
-  import EpochCircle from '@/components/EpochCircle.vue';
-  import ValidatorsTotal from '@/components/home/ValidatorsTotal.vue';
+  import { handleScroll } from '@/utils';
 
   export default defineComponent({
-    components: {
-      ClusterSelector,
-      ValidatorName,
-      ConnectWallet,
-      ThemeModeSelector,
-      EpochCircle,
-      ValidatorsTotal,
-    },
     setup() {
       return {
+        // TODO: package.json
+        version: '1.2',
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
           console.log('validator === ', validator);
-          if (!!validator && typeof validator === 'string') {
-            return true;
-          }
-          return false;
+          return !!validator && typeof validator === 'string';
         }),
         scrollTo(id) {
-          const header = document.querySelector('.q-header');
+          const header = document.querySelector('.q-header') as HTMLElement;
           handleScroll(id, header?.offsetHeight - 10 ?? 0);
         },
       };

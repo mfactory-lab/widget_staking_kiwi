@@ -36,17 +36,3 @@
     <cookie-modal />
   </q-layout>
 </template>
-
-<script lang="ts">
-  import CookieModal from '@/components/CookieModal.vue';
-  import StakingHeader from '@/components/StakingHeader.vue';
-  import AppFooter from '@/components/AppFooter.vue';
-
-  export default {
-    components: {
-      StakingHeader,
-      AppFooter,
-      CookieModal,
-    },
-  };
-</script>

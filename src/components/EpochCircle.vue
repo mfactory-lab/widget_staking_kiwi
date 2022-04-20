@@ -49,26 +49,21 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import { useEpochStore } from '@/store';
-  import { computed, defineComponent } from 'vue';
+  import { computed } from 'vue';
 
-  export default defineComponent({
-    setup() {
-      const epochStore = useEpochStore();
-      return {
-        epochNumber: computed(() => epochStore.epochNumber),
-        epochProgress: computed(() => epochStore.epochProgress),
-        time: computed(() => {
-          const timeInMs = epochStore.epochTimeRemaining;
-          const _h = timeInMs / 1000 / 60 / 60;
-          const h = Math.floor(_h);
-          const m = Math.floor((_h - h) * 60);
-          const s = Math.ceil(((_h - h) * 60 - m) * 60);
-          return { h, m: m < 10 ? `0${m}` : m, s: s < 10 ? `0${s}` : s };
-        }),
-      };
-    },
+  const epochStore = useEpochStore();
+  const epochNumber = computed(() => epochStore.epochNumber);
+  const epochProgress = computed(() => +epochStore.epochProgress);
+
+  const time = computed(() => {
+    const timeInMs = epochStore.epochTimeRemaining;
+    const _h = +timeInMs / 1000 / 60 / 60;
+    const h = Math.floor(_h);
+    const m = Math.floor((_h - h) * 60);
+    const s = Math.ceil(((_h - h) * 60 - m) * 60);
+    return { h, m: m < 10 ? `0${m}` : m, s: s < 10 ? `0${s}` : s };
   });
 </script>
 

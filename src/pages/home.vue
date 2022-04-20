@@ -32,14 +32,3 @@
     <to-top-button />
   </q-page>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import ValidatorsList from '@/components/home/ValidatorsList.vue';
-  import ToTopButton from '@/components/ToTopButton.vue';
-
-  export default defineComponent({
-    components: { ToTopButton, ValidatorsList },
-    setup() {},
-  });
-</script>

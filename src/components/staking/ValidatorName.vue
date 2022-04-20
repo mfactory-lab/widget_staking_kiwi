@@ -111,30 +111,32 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, toRef, watch } from 'vue';
-  import { useConnectionStore, useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
-  import { isoTimeDifference } from '@/utils';
+  import { computed, defineComponent, ref, watch } from 'vue';
+  import { storeToRefs } from 'pinia';
   import { evaPerson } from '@quasar/extras/eva-icons';
-  import { DELINQ_UPDATE_EVENT } from '@/store';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { isoTimeDifference } from '@/utils';
+  import { useEmitter } from '@/hooks';
+  import {
+    DELINQ_UPDATE_EVENT,
+    useConnectionStore,
+    useValidatorJstakingStore,
+    useValidatorsAllStore,
+  } from '@/store';
 
   export default defineComponent({
-    components: {},
     setup() {
-      const validatorJstakingStore = useValidatorJstakingStore();
-      const savedValidator = toRef(validatorJstakingStore, 'savedValidator');
-      const validatorName = toRef(validatorJstakingStore, 'validatorName');
-      const validatorDetails = toRef(validatorJstakingStore, 'validatorDetails');
-      const validatorImage = toRef(validatorJstakingStore, 'validatorImage');
-      const validatorUrl = toRef(validatorJstakingStore, 'validatorUrl');
-      const validatorInJpool = toRef(validatorJstakingStore, 'validatorInJpool');
-      const validatorDelinquent = toRef(validatorJstakingStore, 'validatorDelinquent');
-      const validatorSVM = toRef(validatorJstakingStore, 'validatorSVM');
-      const validatorLastVote = toRef(validatorJstakingStore, 'validatorLastVote');
-
-      const validatorsAllStore = useValidatorsAllStore();
-      const loading = toRef(validatorsAllStore, 'loading');
-
+      const {
+        savedValidator,
+        validatorName,
+        validatorDetails,
+        validatorImage,
+        validatorUrl,
+        validatorInJpool,
+        validatorDelinquent,
+        validatorSVM,
+        validatorLastVote,
+      } = storeToRefs(useValidatorJstakingStore());
+      const { loading } = storeToRefs(useValidatorsAllStore());
       const connectionStore = useConnectionStore();
       const cluster = computed(() => connectionStore.cluster);
       const isDelinquent = computed(() =>

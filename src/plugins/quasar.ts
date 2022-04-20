@@ -30,40 +30,13 @@ import { Dark, LocalStorage, Notify, Quasar, QuasarPluginOptions } from 'quasar'
 import iconSet from 'quasar/icon-set/eva-icons';
 import { App } from 'vue';
 
-// import lang from 'quasar/lang/en-US'
-// import 'quasar/src/css/index.sass';
-// import '@quasar/extras/eva-icons/eva-icons.css';
-// import '@quasar/extras/roboto-font/roboto-font.css';
-
-export const quasarConfig = {
-  config: {
-    // brand: {
-    //   primary: '#1CE4B0',
-    //   secondary: '#FFDF75',
-    //   accent: '#609ECC',
-    //   dark: '#1D1D1D',
-    //   positive: '#1CE4B0',
-    //   negative: '#F56C6C',
-    //   info: '#609ECC',
-    //   warning: '#FFDF75',
-    // },
-    // notify: {
-    //   position: 'center',
-    // },
-    dark: true,
-    globalProperties: {},
-  },
-  iconSet: iconSet,
-  // lang,
-  plugins: {
-    Dark,
-    Notify,
-    LocalStorage,
-  },
-} as QuasarPluginOptions;
-
-export default {
-  install: (app: App<Element>) => {
-    app.use(Quasar, quasarConfig);
-  },
+export const install = ({ app }: { app: App<Element> }) => {
+  app.use(Quasar, {
+    plugins: {
+      Dark,
+      Notify,
+      LocalStorage,
+    },
+    iconSet: iconSet,
+  } as QuasarPluginOptions);
 };
