@@ -137,7 +137,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   watch([cluster, epoch], () => {
     loadAllValidators();
-    loadAllValidators();
   });
 
   function formatAmountPrice(val: number | bigint) {

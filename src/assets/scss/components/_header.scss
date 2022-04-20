@@ -31,6 +31,7 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
+    // background-color: #fff;
     @media (max-width: $breakpoint-sm) {
       margin-bottom: -10px;
     }
@@ -41,11 +42,12 @@
     font-weight: 500;
     font-size: 14px;
     text-transform: uppercase;
-    color: $text-black;
+    // color: $text-black;
+    color: $text-white;
   }
   &__main {
     background: $primary;
-    min-height: 90px;
+    min-height: 94px;
   }
   &__logo {
     margin-top: -55px;
@@ -101,9 +103,12 @@
 body.body--dark {
   .staking-header {
     background: $primary;
-    &__faq-btn {
-      color: $text-white;
-    }
+    // &__faq-btn {
+    //   color: $text-white;
+    // }
+    // &__top {
+    //   background-color: $primary;
+    // }
   }
   .q-menu--dark {
     background: $gray-dark-theme;

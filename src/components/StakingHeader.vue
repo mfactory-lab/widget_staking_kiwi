@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="staking-header__main q-py-md">
+    <div class="staking-header__main row items-end q-py-md">
       <div class="container relative-position">
         <div class="row items-end justify-between full-width">
           <router-link
@@ -92,7 +92,7 @@
               <validators-total />
             </div>
             <epoch-circle v-if="!showValidator" />
-            <div class="row q-ml-auto">
+            <div class="row q-ml-auto q-mt-auto">
               <div class="q-mr-md staking-header__btn">
                 <cluster-selector />
               </div>

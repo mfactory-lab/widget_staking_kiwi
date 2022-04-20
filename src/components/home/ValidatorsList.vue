@@ -4,8 +4,6 @@
       <validators-list-title />
       <validators-list-filters />
 
-      <div> Shown validators: {{ loading ? 'loading...' : items.length }} </div>
-
       <q-card class="q-mb-md q-mt-md validators-list__main">
         <validators-list-table-head />
 

@@ -27,12 +27,12 @@
   -->
 
 <template>
-  <div class="row">
+  <div class="price-stats-header row q-pr-xl q-mt-xs">
     <div class="column">
       <div class="price-stats-header__title">SOL PRICE</div>
-      <div class="price-stats-header__price">${{ price }}</div>
+      <div class="price-stats-header__price q-mt-xs">${{ price }}</div>
     </div>
-    <div class="column">
+    <div class="column q-ml-sm">
       <div
         class="price-stats-header__grow"
         :class="{ 'price-stats-header__main__grow--negative': growIsNegative }"
@@ -40,11 +40,9 @@
         <img src="@/assets/img/arrow-grow.svg" class="price-stats-header-arrow" alt="" />
         {{ grow }}
       </div>
-      <div class="row price-stats-header__additional">
-        <div class="price-stats-header__additional__price">
-          Last 24h {{ growIsNegative ? '-' : '+' }}${{ last24 }}
-        </div>
-        <div class="price-stats-header__additional__value">${{ value }}</div>
+      <div class="row price-stats-header__additional q-mt-xs">
+        <div> Last 24H: {{ growIsNegative ? '-' : '+' }}${{ last24 }} </div>
+        <div class="q-pl-sm">${{ value }}</div>
       </div>
     </div>
   </div>
@@ -53,8 +51,7 @@
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import { useCoinRateStore } from '@/store';
-  import { formatMoney } from '@jpool/common/utils/check-number';
-  import { formatAmount, formatAndTrimAmount, formatPct } from '@jpool/common/utils';
+  import { formatAmount, formatAndTrimAmount, formatMoney, formatPct } from '@/utils';
 
   export default defineComponent({
     setup() {
@@ -72,11 +69,8 @@
 
 <style scoped lang="scss">
   .price-stats-header {
-    padding: 8px 16px;
-    width: 100%;
+    margin-bottom: -18px;
     font-weight: 500;
-    margin-left: auto;
-    margin-right: auto;
     &-arrow {
       height: 12px;
       margin-right: 5px;
@@ -85,11 +79,10 @@
       font-size: 12px;
       text-transform: uppercase;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     &__price {
-      line-height: 22px;
+      font-size: 24px;
+      line-height: 28px;
     }
     &__grow {
       font-size: 12px;
@@ -100,6 +93,7 @@
       height: 22px;
       display: flex;
       align-items: center;
+      margin-right: auto;
 
       &--negative {
         background: $negative;
@@ -121,6 +115,7 @@
       justify-content: space-between;
       padding-left: 5px;
       font-size: 11px;
+      line-height: 28px;
     }
   }
 </style>
