@@ -29,17 +29,19 @@
 <template>
   <div class="charts__item">
     <div v-if="title" class="charts__title">{{ title }}</div>
-    <div>
-      <apexchart width="100%" height="100px" type="area" :options="chartOptions" :series="series" />
-    </div>
+    <line-chart :style="{ height: '100px' }" v-bind="lineChartProps" />
   </div>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
+  import { LineChart, useLineChart } from 'vue-chart-3';
   import { useQuasar } from 'quasar';
 
   export default defineComponent({
+    components: {
+      LineChart,
+    },
     props: {
       title: {
         type: String,
@@ -53,121 +55,113 @@
         type: Array,
         required: true,
       },
+      min: {
+        type: Number,
+        required: true,
+      },
+      max: {
+        type: Number,
+        required: true,
+      },
       colors: {
         type: Array,
-        default: () => ['#1DE3B0', '#455A64'],
+        default: () => ['#30e5b6', '#455A64'],
       },
     },
     setup(props) {
       const { dark } = useQuasar();
+      const chartData = computed(() => ({
+        labels: props.categories,
+        datasets: props.series.map((series, index) => ({
+          label: series.name,
+          fill: true,
+          backgroundColor: props.colors[index],
+          borderWidth: 1,
+          data: series.data,
+        })),
+      }));
+
+      const options = computed(() => ({
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: false,
+          tooltip: {
+            // usePointStyle: true,
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+
+                if (context.parsed.y !== null) {
+                  label += `: $${context.parsed.y?.toFixed(2) ?? 0}`;
+                }
+                return label;
+              },
+              title: function (context) {
+                return context[0].label.slice(0, 10);
+              },
+            },
+          },
+        },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              display: false,
+              tickLength: 15,
+            },
+            grid: {
+              display: false,
+              color: '#cccccc70',
+              drawBorder: false,
+              drawTicks: false,
+            },
+          },
+          y: {
+            min: props.min - 10,
+            max: props.max + 10,
+            ticks: {
+              display: true,
+              stepSize: 1,
+              color: dark.isActive ? '#ffffff90' : '#707585',
+              font: {
+                size: 10,
+                lineHeight: 1,
+              },
+              callback: function (val) {
+                return `$${val.toFixed(0)}`;
+              },
+            },
+            grid: {
+              display: true,
+              color: '#cccccc70',
+              drawBorder: false,
+              drawTicks: false,
+              borderDash: [2, 2],
+            },
+          },
+        },
+        layout: {
+          padding: 0,
+        },
+      }));
+
+      const { lineChartProps, lineChartRef } = useLineChart({
+        chartData,
+        options,
+      });
 
       return {
-        chartOptions: computed(() => ({
-          colors: props.colors,
-          legend: {
-            showForSingleSeries: false,
-          },
-          fill: {
-            opacity: 0.9,
-            gradient: {
-              shade: 'light',
-              type: 'vertical',
-              shadeIntensity: 0.1,
-              opacityFrom: 1,
-              opacityTo: 0.9,
-            },
-            pattern: {
-              style: 'verticalLines',
-              strokeWidth: 30,
-            },
-          },
-          chart: {
-            type: 'area',
-            offsetY: 0,
-            parentHeightOffset: 0,
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
-            width: 1,
-            dashArray: 0,
-          },
-          grid: {
-            show: true,
-            borderColor: '#cccccc70',
-            strokeDashArray: 2,
-            position: 'back',
-            xaxis: {
-              lines: {
-                show: true,
-              },
-            },
-            yaxis: {
-              lines: {
-                show: true,
-              },
-            },
-            row: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            column: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            padding: {
-              top: -12,
-              right: 10,
-              bottom: -5,
-              left: 0,
-            },
-          },
-          yaxis: {
-            axisBorder: {
-              show: false,
-            },
-            labels: {
-              show: true,
-              offsetX: -8,
-              style: {
-                colors: [dark.isActive ? '#ffffff90' : '#707585'],
-                fontSize: '10px',
-              },
-              formatter: (value) => {
-                return `$${value}`;
-              },
-            },
-          },
-          xaxis: {
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false,
-            },
-            type: 'datetime',
-            labels: {
-              show: false,
-            },
-            categories: props.categories,
-            tooltip: {
-              enabled: false,
-            },
-          },
-          tooltip: {
-            // enabled: false,
-          },
-        })),
+        lineChartProps,
+        lineChartRef,
       };
     },
   });

@@ -105,7 +105,6 @@
           }
           if (cluster.value === 'mainnet-beta') {
             loading.value = true;
-            console.log('loading');
             getApyHistory(props.voterKey).then((apyData) => {
               const arrayLength = averageApy.value.length - apyData.length;
               const array: number[] = [];
@@ -208,8 +207,6 @@
         chartData,
         options,
       });
-
-      console.log('lineChartProps === ', lineChartProps);
 
       return {
         lineChartProps,
