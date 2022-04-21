@@ -131,7 +131,6 @@
                   },
                 ],
               };
-              console.log('chartData === ', chartData.value);
               loading.value = false;
             });
           }
