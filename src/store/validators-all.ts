@@ -142,6 +142,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
 
   watch([cluster, epoch], () => {
     loadAllValidators();
+    loadAverageApy();
   });
 
   function formatAmountPrice(val: number | bigint) {

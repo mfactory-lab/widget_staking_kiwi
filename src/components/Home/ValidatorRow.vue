@@ -114,7 +114,7 @@
           <q-skeleton class="q-mt-sm" height="10px" v-if="loading" width="100%" />
           <linear-progress v-else :val="item.apyComparedMax" />
         </div>
-        <div class="validator-row__apy-chart column q-px-sm justify-start">
+        <div class="validator-row__apy-chart column q-pl-sm q-pr-md justify-start">
           <div class="q-px-sm q-mt-xs" v-if="loading">
             <q-skeleton width="100%" height="60px" class="" />
           </div>
@@ -123,7 +123,7 @@
             :voter-key="item.voter"
             :show-y-axis="false"
             :show-title="false"
-            :height="82"
+            :height="68"
           />
         </div>
       </div>

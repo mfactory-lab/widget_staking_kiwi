@@ -27,11 +27,16 @@
   -->
 
 <template>
-  <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
+  <div class="apy-chart" v-if="cluster === 'mainnet-beta'">
+    <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
 
-  <div class="item-chart">
-    <line-chart v-if="!loading" v-bind="lineChartProps" />
-    <q-inner-loading :showing="loading" />
+    <div class="item-chart">
+      <line-chart :style="{ height: height + 'px' }" v-if="!loading" v-bind="lineChartProps" />
+      <q-inner-loading :showing="loading" />
+    </div>
+  </div>
+  <div class="apy-chart" v-else>
+    <sol-svg class="q-icon" />
   </div>
 </template>
 
@@ -84,6 +89,8 @@
         labels: categories.value.map((c) => `Epoch ${c}`),
         datasets: [
           {
+            label: 'APY',
+            fill: true,
             ...lineOpts,
             data: categories.value.map(() => 0),
           },
@@ -100,15 +107,32 @@
             loading.value = true;
             console.log('loading');
             getApyHistory(props.voterKey).then((apyData) => {
+              const arrayLength = averageApy.value.length - apyData.length;
+              const array: number[] = [];
+              for (let i = 0; i < arrayLength; i++) {
+                array.push(0);
+              }
               chartData.value = {
-                labels: apyData.map((d) => `Epoch ${d.epoch}`),
+                labels: categories.value.map((d) => `Epoch ${d}`),
                 datasets: [
                   {
+                    label: 'Avg APY',
+                    fill: false,
+                    borderWidth: 2,
+                    borderDash: [3, 3],
+                    borderColor: '#5A7683',
+                    backgroundColor: '#5A7683',
+                    data: averageApy.value.map((d) => d.apy * 100),
+                  },
+                  {
+                    label: 'APY',
+                    fill: true,
                     ...lineOpts,
-                    data: apyData.map((d) => d.apy * 100),
+                    data: [...array, ...apyData.map((d) => d.apy * 100)],
                   },
                 ],
               };
+              console.log('chartData === ', chartData.value);
               loading.value = false;
             });
           }
@@ -118,23 +142,33 @@
 
       const { lineChartProps, lineChartRef } = useLineChart({
         chartData,
-        height: 220,
         options: {
           interaction: {
             intersect: false,
             mode: 'index',
           },
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: false,
-            // tooltip: {
-            //   usePointStyle: true,
-            // },
+            tooltip: {
+              // usePointStyle: true,
+              callbacks: {
+                label: function (context) {
+                  let label = context.dataset.label || '';
+
+                  if (context.parsed.y !== null) {
+                    label += `: ${context.parsed.y?.toFixed(2) ?? 0}%`;
+                  }
+                  return label;
+                },
+              },
+            },
           },
           elements: {
-            line: {
-              fill: true,
-            },
+            // line: {
+            //   fill: false,
+            // },
             point: {
               radius: 0,
             },
@@ -150,8 +184,14 @@
               },
             },
             y: {
+              min: 0,
+              suggestedMax: 8,
               ticks: {
-                display: false,
+                display: props.showYAxis,
+                stepSize: 1,
+                callback: function (val) {
+                  return `${val?.toFixed(2) ?? 0}%`;
+                },
               },
               grid: {
                 display: false,
@@ -159,13 +199,19 @@
               },
             },
           },
+          layout: {
+            padding: 0,
+          },
         },
       });
+
+      console.log('lineChartProps === ', lineChartProps);
 
       return {
         lineChartProps,
         lineChartRef,
         loading,
+        cluster,
         dark,
       };
     },
@@ -174,8 +220,8 @@
 
 <style lang="scss" scoped>
   .item-chart {
-    height: 100%;
     position: relative;
+    width: 100%;
     .q-inner-loading {
       background-color: transparent;
     }

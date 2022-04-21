@@ -11,7 +11,7 @@
     <template #default="{ item, index }">
       <lazy
         render-on-idle
-        :min-height="123"
+        :min-height="124"
         :key="item.id"
         class="stake-accounts-container col-12 q-px-none q-pt-md q-mx-md"
       >
