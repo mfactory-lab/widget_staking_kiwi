@@ -140,69 +140,73 @@
         { immediate: true },
       );
 
-      const { lineChartProps, lineChartRef } = useLineChart({
-        chartData,
-        options: {
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: false,
-            tooltip: {
-              // usePointStyle: true,
-              callbacks: {
-                label: function (context) {
-                  let label = context.dataset.label || '';
+      const options = computed(() => ({
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: false,
+          tooltip: {
+            // usePointStyle: true,
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
 
-                  if (context.parsed.y !== null) {
-                    label += `: ${context.parsed.y?.toFixed(2) ?? 0}%`;
-                  }
-                  return label;
-                },
+                if (context.parsed.y !== null) {
+                  label += `: ${context.parsed.y?.toFixed(2) ?? 0}%`;
+                }
+                return label;
               },
             },
-          },
-          elements: {
-            // line: {
-            //   fill: false,
-            // },
-            point: {
-              radius: 0,
-            },
-          },
-          scales: {
-            x: {
-              ticks: {
-                display: false,
-              },
-              grid: {
-                display: false,
-                drawBorder: false,
-              },
-            },
-            y: {
-              min: 0,
-              suggestedMax: 8,
-              ticks: {
-                display: props.showYAxis,
-                stepSize: 1,
-                callback: function (val) {
-                  return `${val?.toFixed(2) ?? 0}%`;
-                },
-              },
-              grid: {
-                display: false,
-                drawBorder: false,
-              },
-            },
-          },
-          layout: {
-            padding: 0,
           },
         },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              display: false,
+            },
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+          y: {
+            min: 0,
+            suggestedMax: 8,
+            ticks: {
+              display: props.showYAxis,
+              stepSize: 1,
+              color: dark.isActive ? '#ffffff90' : '#707585',
+              font: {
+                size: 10,
+                lineHeight: 1,
+              },
+              callback: function (val) {
+                return `${val?.toFixed(2) ?? 0}%`;
+              },
+            },
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+        },
+        layout: {
+          padding: 0,
+        },
+      }));
+
+      const { lineChartProps, lineChartRef } = useLineChart({
+        chartData,
+        options,
       });
 
       console.log('lineChartProps === ', lineChartProps);
@@ -212,7 +216,6 @@
         lineChartRef,
         loading,
         cluster,
-        dark,
       };
     },
   });
