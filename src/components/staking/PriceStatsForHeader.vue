@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="price-stats-header row q-pr-xl q-mt-xs">
+  <div class="price-stats-header row q-pr-xl">
     <div class="column">
       <div class="price-stats-header__title">SOL PRICE</div>
       <div class="price-stats-header__price q-mt-xs">${{ price }}</div>
@@ -35,7 +35,7 @@
     <div class="column q-ml-sm">
       <div
         class="price-stats-header__grow"
-        :class="{ 'price-stats-header__main__grow--negative': growIsNegative }"
+        :class="{ 'price-stats-header__grow--negative': growIsNegative }"
       >
         <img src="@/assets/img/arrow-grow.svg" class="price-stats-header-arrow" alt="" />
         {{ grow }}
@@ -69,7 +69,7 @@
 
 <style scoped lang="scss">
   .price-stats-header {
-    margin-bottom: -18px;
+    margin-bottom: -30px;
     font-weight: 500;
     &-arrow {
       height: 12px;
@@ -102,13 +102,6 @@
           transform: rotate(180deg);
         }
       }
-    }
-    &__main {
-      font-size: 22px;
-      margin-top: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
     }
     &__additional {
       display: flex;

@@ -30,7 +30,7 @@
   <q-header id="app-header" class="staking-header">
     <div
       v-if="showValidator || $q.screen.gt.sm"
-      class="staking-header__top q-pt-sm q-pb-xs text-right"
+      class="staking-header__top q-pt-md q-pb-xs text-right"
     >
       <div class="container row items-center justify-end q-mb-xs">
         <price-stats-for-header v-if="!showValidator" />

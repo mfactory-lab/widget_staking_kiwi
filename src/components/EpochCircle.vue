@@ -32,7 +32,7 @@
       show-value
       class="q-mt-xs epoch-circle__progress"
       :value="epochProgress"
-      size="106px"
+      size="110px"
       :thickness="0.2"
       color="natural-light-gray"
       track-color="warning"
@@ -70,8 +70,8 @@
 <style scoped lang="scss">
   .epoch-circle {
     position: absolute;
-    left: calc(50% - 53px);
-    bottom: 5px;
+    left: calc(50% - 55px);
+    bottom: 0;
     @media (max-width: $breakpoint-sm) {
       left: calc(60%);
       bottom: 50px;

@@ -67,7 +67,7 @@
       const validatorStore = useValidatorsAllStore();
       const epochNumber = computed(() => epochStore.epochNumber);
       const validatorsCount = computed(() =>
-        validatorStore.loading ? '...' : `${validatorStore.items.length}`,
+        validatorStore.loading ? '...' : `${validatorStore.itemsTotal}`,
       );
       return {
         validatorsCount,

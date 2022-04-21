@@ -288,6 +288,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     filterNotSvm,
     filterNotJpool,
     filterHasStake,
+    itemsTotal: computed(() => items.value.length),
     items: itemsComputed,
     averageApy,
     loading,

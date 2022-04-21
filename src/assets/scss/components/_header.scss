@@ -31,6 +31,7 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
+    min-height: 48px;
     background: $primary;
     // background-color: #fff;
     @media (max-width: $breakpoint-sm) {
