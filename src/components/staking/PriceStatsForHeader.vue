@@ -28,11 +28,11 @@
 
 <template>
   <div class="price-stats-header row q-pr-xl">
-    <div class="column">
+    <div class="column q-mr-dm">
       <div class="price-stats-header__title">SOL PRICE</div>
       <div class="price-stats-header__price q-mt-xs">${{ price }}</div>
     </div>
-    <div class="column q-ml-sm">
+    <div class="column q-ml-md">
       <div
         class="price-stats-header__grow"
         :class="{ 'price-stats-header__grow--negative': growIsNegative }"
@@ -106,7 +106,6 @@
     &__additional {
       display: flex;
       justify-content: space-between;
-      padding-left: 5px;
       font-size: 11px;
       line-height: 28px;
     }

@@ -102,8 +102,11 @@
             </div>
           </div>
         </div>
-        <div class="row items-center full-width total-validators-xs">
-          <div v-if="!showValidator && $q.screen.lt.sm" class="q-mt-sm">
+        <div
+          v-if="!showValidator && $q.screen.lt.sm"
+          class="row items-center full-width total-validators-xs"
+        >
+          <div class="q-mt-sm">
             <validators-total :alt="true" />
           </div>
         </div>
