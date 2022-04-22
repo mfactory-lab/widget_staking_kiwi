@@ -250,9 +250,11 @@
         depositJpool: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
-          await depositStake(stakeAccount);
+          const success = await depositStake(stakeAccount);
+          if (success) {
+            stakeAccountStore.removeAccount(stakeAccount.pubkey.toBase58());
+          }
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
           emit('afterDeposit');
         },
 
@@ -290,9 +292,11 @@
               }).instructions,
               [],
             ),
+            {
+              onSuccess: () => stakeAccountStore.removeAccount(address),
+            },
           );
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
           emit('afterWithdraw');
         },
       };

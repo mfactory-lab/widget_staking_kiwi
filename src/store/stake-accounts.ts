@@ -48,6 +48,10 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
   // filter by voter
   const voter = ref<string | null>();
 
+  function removeAccount(address: string) {
+    data.value = data.value.filter((acc) => acc.pubkey.toBase58() !== address);
+  }
+
   async function load() {
     if (loading.value || !publicKey.value) {
       console.log('[Stake accounts] Skip loading...');
@@ -146,5 +150,6 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
     stakeSolBalance: computed(() => calcStakeBalance(data.value)),
     voterAccounts,
     voterStake,
+    removeAccount,
   };
 });

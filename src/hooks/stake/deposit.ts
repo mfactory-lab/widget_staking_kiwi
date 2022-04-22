@@ -96,11 +96,16 @@ export function useDeposit() {
           );
         }
 
+        let success = false;
+
         await monitorTransaction(
           sendTransaction(connectionStore.connection, wallet.value!, instructions, signers),
+          {
+            onSuccess: () => (success = true),
+          },
         );
 
-        return true;
+        return success;
       } catch (e: any) {
         notify({ message: e.message, type: 'negative' });
         throw e;
