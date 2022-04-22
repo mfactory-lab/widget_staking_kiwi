@@ -29,16 +29,16 @@
 <template>
   <q-card class="stake-box shadow-sm q-pa-sm">
     <q-card-section class="stake-box__top-section">
-      <div class="row justify-center">
-        <div class="col-12">
+      <div class="row items-center">
+        <div class="col-12 col-sm-auto q-mr-auto">
           <div class="stake-box__title"> Balance: {{ availableSol }} SOL </div>
         </div>
-      </div>
-      <div
-        v-if="connected && Number(stake.from) > Number(availableSol)"
-        class="stake-box__warning lt-sm"
-      >
-        Insufficient funds to stake
+        <div
+          v-if="connected && Number(stake.from) > Number(availableSol)"
+          class="stake-box__warning col-auto"
+        >
+          Insufficient funds to stake
+        </div>
       </div>
     </q-card-section>
 
@@ -109,7 +109,9 @@
               size="14px"
               padding="9px xl"
               text-color="text-white"
-              :disabled="connectionLost || validatorDelinquent"
+              :disabled="
+                connectionLost || validatorDelinquent || Number(stake.from) > Number(availableSol)
+              "
               @click="stakeHandler"
             >
               STAKE NOW
@@ -209,14 +211,8 @@
         });
       });
 
-      watch([stake, connected, solBalance], ([amount, connected, solBalance]) => {
+      watch(stake, (amount) => {
         if (amount.from < 0) stake.from = 0;
-        if (!connected) return;
-        const sol = Number(amount.from);
-        const solFee = lamportsToSol(depositFee.value);
-        if (solBalance && sol + solFee > solBalance) {
-          stake.from = solBalance - solFee;
-        }
       });
 
       // Calculate amount to deposit

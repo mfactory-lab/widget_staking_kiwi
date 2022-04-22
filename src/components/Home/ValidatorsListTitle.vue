@@ -28,7 +28,7 @@
 
 <template>
   <div class="validators-list__title q-pt-md q-pb-sm row">
-    <div class="col-4 row justify-start">
+    <div class="col-3 row justify-start">
       <q-btn
         rounded
         class="home-page__std-btn q-pl-sm"
@@ -38,18 +38,23 @@
         padding="4px 17px"
         @click="refresh"
       >
-        REFRESH <br v-if="$q.screen.lt.sm" />
+        REFRESH <br v-if="$q.screen.lt.md" />
         LIST
       </q-btn>
     </div>
-    <div class="validators-list__title__text col-4 text-center">
-      {{ $q.screen.gt.sm ? 'Solana' : '' }} Validators {{ loading ? '' : items.length }}
+    <div class="validators-list__title__text col-6 text-center">
+      <span class="validators-list__title__text--light">
+        {{ $q.screen.gt.sm ? 'Solana' : '' }} Validators
+      </span>
+      <span class="validators-list__title__text--strong" v-if="!loading">
+        {{ items.length }} / {{ itemsTotal }}
+      </span>
     </div>
-    <div class="col-4 row q-pl-md items-center justify-end">
+    <div class="col-3 row items-center justify-end">
       <q-btn
         v-if="$q.screen.gt.sm"
         rounded
-        class="home-page__std-btn q-pl-sm"
+        class="home-page__std-btn"
         color="gray-dark-theme"
         text-color="text-white"
         :disable="connectionLost"
@@ -61,14 +66,14 @@
       <q-btn
         v-if="$q.screen.lt.md"
         rounded
-        class="home-page__std-btn q-pl-sm"
+        class="home-page__std-btn"
         color="gray-dark-theme"
         text-color="text-white"
         :disable="connectionLost"
         padding="4px 17px"
         @click="() => (showControlsMob = !showControlsMob)"
       >
-        {{ showControlsMob ? 'HIDE' : 'SHOW' }} <br v-if="$q.screen.lt.sm" />
+        {{ showControlsMob ? 'HIDE' : 'SHOW' }} <br v-if="$q.screen.lt.md" />
         FILTERS
       </q-btn>
     </div>
@@ -87,6 +92,7 @@
       const validatorsAllStore = useValidatorsAllStore();
 
       const connectionLost = toRef(stakePoolStore, 'connectionLost');
+      const itemsTotal = toRef(validatorsAllStore, 'itemsTotal');
       const items = toRef(validatorsAllStore, 'items');
       const loading = toRef(validatorsAllStore, 'loading');
       const showControls = toRef(validatorsAllStore, 'showControls');
@@ -102,6 +108,7 @@
         connectionLost,
         loading,
         items,
+        itemsTotal,
         showControls,
         showControlsMob,
         refresh,

@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="price-stats-header row q-pr-xl">
+  <div class="price-stats-header row">
     <div class="column q-mr-dm">
       <div class="price-stats-header__title">SOL PRICE</div>
       <div class="price-stats-header__price q-mt-xs">${{ price }}</div>
@@ -70,6 +70,7 @@
 <style scoped lang="scss">
   .price-stats-header {
     margin-bottom: -30px;
+    padding-right: 77px;
     font-weight: 500;
     &-arrow {
       height: 12px;

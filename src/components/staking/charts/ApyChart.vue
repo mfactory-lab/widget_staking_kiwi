@@ -117,7 +117,7 @@
                   {
                     label: 'Avg APY',
                     fill: false,
-                    borderWidth: 2,
+                    borderWidth: 1,
                     borderDash: [3, 3],
                     borderColor: '#5A7683',
                     backgroundColor: '#5A7683',

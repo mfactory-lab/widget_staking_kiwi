@@ -82,7 +82,9 @@
   }
   &__btn {
     button {
+      width: 173px;
       @media (max-width: $breakpoint-xs) {
+        width: 137px;
         padding: 4px 10px;
         font-size: 12px;
       }

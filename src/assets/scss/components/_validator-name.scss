@@ -47,7 +47,7 @@
     flex-grow: 1;
 
     @media (min-width: $breakpoint-sm) {
-      max-width: 370px;
+      max-width: 360px;
     }
 
     div:not(:first-child) {

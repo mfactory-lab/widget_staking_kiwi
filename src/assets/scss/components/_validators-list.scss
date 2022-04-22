@@ -33,7 +33,7 @@
     min-height: 30px;
     padding: 4px 14px;
     line-height: 24px;
-    @media (max-width: $breakpoint-xs) {
+    @media (max-width: $breakpoint-sm) {
       line-height: 14px;
       padding: 5px 17px 4px !important;
       height: 39px;
@@ -92,13 +92,16 @@
       font-size: 22px;
       line-height: 27px;
       text-transform: uppercase;
-      color: $primary;
+      color: $text-black;
       @media (max-width: $breakpoint-xs) {
         width: 100%;
         text-align: center;
         font-weight: 500;
         font-size: 14px;
         line-height: 17px;
+      }
+      &--light {
+        opacity: 0.8;
       }
     }
   }
@@ -206,44 +209,6 @@
 .stake-accounts-container {
   &:not(:last-child) {
     border-bottom: 1px solid $blue-grey-5;
-  }
-}
-
-.stake-stats {
-  &:not(:first-child) {
-    @media (min-width: $breakpoint-sm) {
-      border-left: 1px solid $primary;
-    }
-  }
-
-  &:not(:last-child) {
-    @media (max-width: $breakpoint-sm) {
-      margin-bottom: 16px;
-    }
-  }
-
-  &__title {
-    font-family: $font-secondary;
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 15px;
-    text-transform: uppercase;
-  }
-
-  &__values {
-    font-family: $font-secondary;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-    text-transform: uppercase;
-
-    &__sol {
-      color: #000;
-    }
-
-    &__usd {
-      color: $primary;
-    }
   }
 }
 

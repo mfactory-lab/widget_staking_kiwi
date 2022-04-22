@@ -68,6 +68,12 @@ a {
     left: 0.65em;
   }
   .q-toggle__track {
+    opacity: .65;
+  }
+  .q-toggle__inner--truthy .q-toggle__track {
+    opacity: .84;
+  }
+  .q-toggle__track {
     height: 0.60em;
     border-radius: 0.35em;
   }
