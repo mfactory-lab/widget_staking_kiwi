@@ -142,7 +142,7 @@
             {{ item.id }}
             <q-tooltip class="text-body2 break-words"> Identity: {{ item.id }} </q-tooltip>
           </span>
-          <copy-to-clipboard :text="item.voter" />
+          <copy-to-clipboard :text="item.id" />
         </div>
         <q-skeleton
           width="296px"

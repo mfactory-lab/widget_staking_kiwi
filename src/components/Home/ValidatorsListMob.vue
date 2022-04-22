@@ -11,7 +11,7 @@
       <lazy
         render-on-idle
         :min-height="79"
-        :key="item.id"
+        :key="item.voter"
         class="stake-accounts-container col-12 q-px-none q-pt-md"
       >
         <validator-row-mob :item="item" :index="index + 1" :loading="loading" :cluster="cluster" />
