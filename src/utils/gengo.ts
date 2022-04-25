@@ -41,7 +41,7 @@ const getCsrfToken = debounceAsync<() => Promise<string>, string>(
 export async function getGengoToken() {
   const token = await getCsrfToken();
   if (!token) {
-    return;
+    throw 'Invalid token';
   }
   const res = await axios(`${API_URL}/auth/genesysgo`, {
     withCredentials: true,
