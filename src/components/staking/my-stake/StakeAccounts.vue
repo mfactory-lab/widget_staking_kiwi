@@ -126,7 +126,6 @@
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositStake } = useDeposit();
 
-      const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
       const loadingPubkey = ref();
       const totalStats = ref([
@@ -228,7 +227,6 @@
 
       return {
         connected,
-        dialog,
         loading,
         loadingPubkey,
         accounts,
@@ -237,7 +235,6 @@
         connectionLost,
         validatorInJpool,
         refresh,
-        updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
 
         activate: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
@@ -273,7 +270,9 @@
             ),
           );
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
+          await stakeAccountStore.load({
+            delay: 1000,
+          });
           emit('afterDeactivate');
         },
 
