@@ -29,7 +29,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { Buffer } from 'buffer';
-import { debounce } from 'lodash-es';
+import debounce from 'lodash-es/debounce';
 import { useWallet } from 'solana-wallets-vue';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { useConnectionStore, useStakePoolStore } from '@/store';

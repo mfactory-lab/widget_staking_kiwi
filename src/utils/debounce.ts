@@ -1,4 +1,12 @@
-// like lodash.debounce, but also avoids async invocations to overlap
+/**
+ * Like lodash.debounce,
+ * but also avoids async invocations to overlap
+ *
+ * @param callback
+ * @param wait
+ * @param leading
+ * @param maxWait
+ */
 export function debounceAsync<CB extends (...args: any[]) => Promise<R>, R>(
   callback: CB,
   wait = 100,
@@ -9,13 +17,13 @@ export function debounceAsync<CB extends (...args: any[]) => Promise<R>, R>(
   let runningDebouncer: Promise<R | undefined>; // latest wrapper invocation
   let waitingSince = 0; // we are delaying invocation since
   let whoIsWaiting: undefined | any[]; // args' array object identifies the pending instance, and incidentally stores args
-  // eslint-disable-next-line prefer-spread
-  const interceptingWrapper = (...args: any[]) => (runningDebouncer = debouncer.apply(null, args));
+
+  const interceptingWrapper = (...args: any[]) => (runningDebouncer = debouncer(...args));
+
   return Object.assign(interceptingWrapper, {
     cancel: () => (whoIsWaiting = undefined),
     flush() {
-      // eslint-disable-next-line prefer-spread
-      return whoIsWaiting ? callback.apply(null, whoIsWaiting) : this.cancel();
+      return whoIsWaiting ? callback(...whoIsWaiting) : this.cancel();
     },
   });
 
@@ -36,8 +44,7 @@ export function debounceAsync<CB extends (...args: any[]) => Promise<R>, R>(
     whoIsWaiting = undefined;
     started = Date.now();
     try {
-      // eslint-disable-next-line prefer-spread
-      runningCallback = callback.apply(null, args);
+      runningCallback = callback(...args);
       return await runningCallback;
     } finally {
       runningCallback = undefined;
