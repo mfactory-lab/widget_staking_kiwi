@@ -31,6 +31,7 @@ import { computed, ref } from 'vue';
 import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
+  ProgramAccount,
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
@@ -38,6 +39,27 @@ import {
 } from '@/store';
 import { useMonitorTransaction } from '@/hooks';
 import { sendTransaction } from '@/utils';
+
+const findFirstAvailableSeed = async (
+  publicKey: PublicKey,
+  stakeAccounts: ProgramAccount[],
+): Promise<string> => {
+  let seedIndex = 0;
+  if (!publicKey) return '';
+  while (1) {
+    const newStakeAccountPubkey = await PublicKey.createWithSeed(
+      publicKey,
+      seedIndex.toString(),
+      StakeProgram.programId,
+    );
+    const matching = stakeAccounts.find((meta) => newStakeAccountPubkey.equals(meta.pubkey));
+    if (!matching) {
+      break;
+    }
+    seedIndex++;
+  }
+  return seedIndex.toString();
+};
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
@@ -54,28 +76,6 @@ export function useStakeAccounts() {
 
   const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
   const voterKey = computed(() => validatorJstakingStore.voterKey);
-
-  // console.log(stakeAccountStore);
-
-  const findFirstAvailableSeed = async () => {
-    let seedIndex = 0;
-    if (!publicKey.value) return;
-    while (1) {
-      const newStakeAccountPubkey = await PublicKey.createWithSeed(
-        publicKey.value,
-        seedIndex.toString(),
-        StakeProgram.programId,
-      );
-      const matching = stakeAccountStore.data.find((meta) =>
-        newStakeAccountPubkey.equals(meta.pubkey),
-      );
-      if (!matching) {
-        break;
-      }
-      seedIndex++;
-    }
-    seed.value = seedIndex.toString();
-  };
 
   const delegateAccount = async (stakePubkey) => {
     if (!publicKey.value) {
@@ -117,7 +117,7 @@ export function useStakeAccounts() {
       }
       try {
         loading.value = true;
-        await findFirstAvailableSeed();
+        seed.value = await findFirstAvailableSeed(publicKey.value, stakeAccountStore.data);
         const stakePubkey = await PublicKey.createWithSeed(
           publicKey.value,
           seed.value,
