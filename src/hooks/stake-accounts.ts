@@ -97,7 +97,9 @@ export function useStakeAccounts() {
         ),
         {
           onSuccess: async () => {
-            await stakeAccountStore.load();
+            await stakeAccountStore.load({
+              delay: 3000,
+            });
           },
           onError: () => {},
         },
@@ -148,7 +150,9 @@ export function useStakeAccounts() {
           ),
           {
             onSuccess: async () => {
-              await stakeAccountStore.load();
+              await stakeAccountStore.load({
+                delay: 3000,
+              });
             },
             onError: () => {},
           },

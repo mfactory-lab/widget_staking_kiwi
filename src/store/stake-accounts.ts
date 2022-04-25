@@ -30,7 +30,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { AccountInfo, ParsedAccountData, PublicKey, StakeProgram } from '@solana/web3.js';
 import { useConnectionStore } from '@/store';
-import { getFilteredProgramAccounts, lamportsToSol } from '@/utils';
+import { getFilteredProgramAccounts, lamportsToSol, sleep } from '@/utils';
 import { useWallet } from 'solana-wallets-vue';
 
 export interface ProgramAccount {
@@ -43,16 +43,12 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
   const { publicKey } = useWallet();
   const data = ref<ProgramAccount[]>([]);
   const loading = ref<boolean>(false);
-  const dialog = ref<boolean>(false);
-
-  // filter by voter
-  const voter = ref<string | null>();
 
   function removeAccount(address: string) {
     data.value = data.value.filter((acc) => acc.pubkey.toBase58() !== address);
   }
 
-  async function load() {
+  async function load({ delay }: { delay?: number } = {}) {
     if (loading.value || !publicKey.value) {
       console.log('[Stake accounts] Skip loading...');
       return;
@@ -83,6 +79,10 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
 
     loading.value = true;
 
+    if (delay) {
+      await sleep(delay);
+    }
+
     try {
       // @ts-ignore
       data.value = await getFilteredProgramAccounts(
@@ -108,13 +108,6 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
     { immediate: true },
   );
 
-  // TODO: refactory
-  watch(dialog, () => {
-    if (dialog.value == false) {
-      voter.value = null;
-    }
-  });
-
   const calcStakeBalance = (accounts: ProgramAccount[]) => {
     const lamports = accounts.reduce((total, acc) => {
       total += acc.account.lamports;
@@ -123,33 +116,11 @@ export const useStakeAccountStore = defineStore('stake-accounts', () => {
     return lamportsToSol(lamports);
   };
 
-  const voterAccounts = (voter: string) =>
-    computed(() => {
-      return data.value.filter(
-        (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voter,
-      );
-    });
-
-  const voterStake = (voter: string) =>
-    computed(() => calcStakeBalance(voterAccounts(voter).value));
-
   return {
     loading,
-    dialog,
-    voter,
-
-    data: computed(() =>
-      voter.value
-        ? data.value.filter(
-            (acc) => acc.account.data?.parsed?.info?.stake?.delegation?.voter == voter.value,
-          )
-        : data.value,
-    ),
-
+    data,
     load,
     stakeSolBalance: computed(() => calcStakeBalance(data.value)),
-    voterAccounts,
-    voterStake,
     removeAccount,
   };
 });

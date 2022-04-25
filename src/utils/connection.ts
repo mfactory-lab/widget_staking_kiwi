@@ -180,3 +180,7 @@ export const sendTransactions = async (
 
   return await Promise.all(pendingTransactions);
 };
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
