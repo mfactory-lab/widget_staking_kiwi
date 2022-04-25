@@ -26,60 +26,30 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { Commitment, StakeProgram, clusterApiUrl } from '@solana/web3.js';
 import { Endpoint } from '@/store';
-import ethIcon from '@/assets/img/eth.svg';
-import dotIcon from '@/assets/img/dot.svg';
-import atomIcon from '@/assets/img/atom.svg';
-import terraIcon from '@/assets/img/terra.svg';
-import avalancheIcon from '@/assets/img/avalanche.svg';
-import minaIcon from '@/assets/img/mina.svg';
+import { Commitment, clusterApiUrl } from '@solana/web3.js';
+import { getGengoToken } from '@/utils/gengo';
 
 const mode = import.meta.env.MODE;
-const isProd = mode == 'production';
 const isDev = mode == 'development';
 
-export const PASSWORD_PROTECT = '';
-export const DEFAULT_APY = 0.07;
-export const APY_VALIDATOR_ID = '8BYmtxKY1LuvjesaMi1nkXcj6ghuq48iiGKq2jNpnrNY';
-export const VALIDATORS_LIMIT = 60;
-export const EPOCH_RELOAD_DURATION = 60000;
-export const WITHDRAW_SOL_ACTIVE = true;
-export const SOL_USD_RELOAD_DURATION = 300000;
-export const DEFI_RELOAD_DURATION = 30000;
-export const POOL_CONNECTION_DELAY = 30000;
-
-export const GTAG_ID = isProd ? 'G-H60CS7J10W' : null;
-
-export const JSOL_LOGO =
-  'https://raw.githubusercontent.com/mfactory-lab/jpool-pub/main/assets/images/jsol.png';
-
-// Social links
-export const TELEGRAM_URL = 'https://t.me/jstaking';
-export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
-
-// Stake
-export const STAKE_PROGRAM_ID = StakeProgram.programId;
-
-// Connection
 const MAIN_STAKE_POOL_ADDRESS = 'CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1';
+const MAIN_STAKE_LIMIT = 1500000;
+
 const TEST_STAKE_POOL_ADDRESS = 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy';
-// const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
+const TEST_STAKE_LIMIT = 1500000;
+
+const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
 
 export const ENDPOINTS: Endpoint[] = [
-  // {
-  //   id: 'genesys-mainnet',
-  //   name: 'Genesys RPC',
-  //   cluster: 'mainnet-beta',
-  //   url: 'https://jpoolone.genesysgo.net/',
-  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-  // },
   {
-    id: 'mainnet',
-    name: 'Solana RPC',
+    id: 'jpool-mainnet',
+    name: 'Jpool RPC',
     cluster: 'mainnet-beta',
-    url: clusterApiUrl('mainnet-beta'),
+    url: 'https://jpoolone.genesysgo.net/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+    stakeLimit: MAIN_STAKE_LIMIT,
+    getToken: getGengoToken,
   },
   {
     id: 'serum-mainnet',
@@ -87,6 +57,7 @@ export const ENDPOINTS: Endpoint[] = [
     cluster: 'mainnet-beta',
     url: 'https://solana-api.projectserum.com/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+    stakeLimit: MAIN_STAKE_LIMIT,
   },
   {
     id: 'rpcpool-mainnet',
@@ -94,6 +65,15 @@ export const ENDPOINTS: Endpoint[] = [
     cluster: 'mainnet-beta',
     url: 'https://mainnet.rpcpool.com/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+    stakeLimit: MAIN_STAKE_LIMIT,
+  },
+  {
+    id: 'mainnet',
+    name: 'Solana RPC',
+    cluster: 'mainnet-beta',
+    url: clusterApiUrl('mainnet-beta'),
+    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+    stakeLimit: MAIN_STAKE_LIMIT,
   },
   {
     id: 'testnet',
@@ -101,39 +81,27 @@ export const ENDPOINTS: Endpoint[] = [
     cluster: 'testnet',
     url: 'https://testnet.rpcpool.com/',
     stakePoolAddress: TEST_STAKE_POOL_ADDRESS,
+    stakeLimit: TEST_STAKE_LIMIT,
   },
-  // {
-  //   id: 'devnet',
-  //   name: 'DevNet',
-  //   cluster: 'devnet',
-  //   url: 'https://devnet.rpcpool.com/',
-  //   stakePoolAddress: DEV_STAKE_POOL_ADDRESS,
-  // },
+  {
+    id: 'devnet',
+    name: 'DevNet',
+    cluster: 'devnet',
+    url: 'https://devnet.rpcpool.com/',
+    stakePoolAddress: DEV_STAKE_POOL_ADDRESS,
+    stakeLimit: 100000,
+  },
 ];
 
 if (isDev) {
   ENDPOINTS.push({
     id: 'localnet',
-    name: 'localnet',
+    name: 'LocalNet',
     cluster: 'localnet',
     url: 'http://127.0.0.1:8899',
     stakePoolAddress: 'HYgufSTxQ8Ma6qgzQ8n2vD5gPTB7YgP5JjurYCgQqFPR',
   });
 }
-
-export const API_URL = 'https://api.thevalidators.io/';
-
-export const DEFAULT_VALIDATOR = {
-  'mainnet-beta': {
-    idPubkey: '8yjHdsCgx3bp2zEwGiWSMgwpFaCSzfYAHT1vk7KJBqhN',
-    voterKey: 'DPmsofVJ1UMRZADgwYAHotJnazMwohHzRHSoomL6Qcao',
-  },
-  // is random validator for testnet
-  testnet: {
-    idPubkey: '75A6FVv8hAZn3n4KsTkURtQP7GDU4SDiZxcTzkTHZM3b',
-    voterKey: 'BcX6qjy6fxYSHPyRmy5uJV6Z9MzK8v5ZS8UUiREoEYWW',
-  },
-};
 
 export const DEFAULT_ENDPOINT = ENDPOINTS[0] as Endpoint;
 
@@ -147,52 +115,11 @@ export const DEFAULT_ENDPOINT = ENDPOINTS[0] as Endpoint;
  */
 export const DEFAULT_COMMITMENT: Commitment = 'confirmed';
 
-// DEFI
-export const DEFI = [];
+export const DEFAULT_MONITOR_COMMITMENT: Commitment = 'processed';
 
-export const LAUNCH_VALIDATORS = [
-  {
-    title: 'Etherium 2.0',
-    id: 'ethereum',
-    icon: ethIcon,
-  },
-  {
-    title: 'Polkadot',
-    id: 'polkadot',
-    icon: dotIcon,
-  },
-  {
-    title: 'Cosmos',
-    id: 'cosmos',
-    icon: atomIcon,
-  },
-  {
-    title: 'Terra',
-    id: 'terracoin',
-    icon: terraIcon,
-  },
-  {
-    title: 'Avalanche',
-    id: 'avalanche-2',
-    icon: avalancheIcon,
-  },
-  {
-    title: 'Mina',
-    id: 'mina-protocol',
-    icon: minaIcon,
-  },
-];
+export const DEFAULT_SEND_TIMEOUT = 15000;
 
-// charts
-export const CHARTS_PAIRS = [
-  {
-    title: 'SOL / USD & JSOL / USD',
-    pairs: [
-      {
-        id: 5426,
-        convertTo: 2781, // usd
-        chartName: 'SOL',
-      },
-    ],
-  },
-];
+/**
+ * Time to allow for the server to initially process a transaction (in milliseconds)
+ */
+export const DEFAULT_CONFIRM_TIMEOUT = 120000;

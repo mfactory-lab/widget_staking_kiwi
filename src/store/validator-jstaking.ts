@@ -31,7 +31,7 @@ import { computed, ref, watch } from 'vue';
 import { useConnectionStore, useEpochStore, useValidatorsAllStore } from '@/store';
 import { DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
-import { shortenAddress } from '@jpool/common/utils';
+import { shortenAddress } from '@/utils';
 import router from '@/router';
 
 interface ValidatorInfo {
@@ -51,6 +51,7 @@ interface ValidatorInfo {
   validatorInJpool: boolean;
   validatorDelinquent: boolean;
   validatorSVM: string | undefined;
+  validatorLastVote: string | undefined;
 }
 
 export const useValidatorJstakingStore = defineStore('validators-jstaking', () => {
@@ -68,6 +69,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   const validatorInJpool = ref(false);
   const validatorDelinquent = ref(false);
   const validatorSVM = ref(<string | undefined>'');
+  const validatorLastVote = ref(<string | undefined>'');
 
   const connectionStore = useConnectionStore();
   const cluster = computed(() => connectionStore.cluster);
@@ -114,6 +116,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
             validatorInJpool: voterData.inJpool,
             validatorDelinquent: voterData.isDelinquent,
             validatorSVM: voterData.svName,
+            validatorLastVote: voterData.lastVote,
           };
         }
       } else if (savedValidators.value.length > 0) {
@@ -147,6 +150,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
       validatorInJpool: validatorInJpool.value,
       validatorDelinquent: validatorDelinquent.value,
       validatorSVM: validatorSVM.value,
+      validatorLastVote: validatorLastVote.value,
     };
     if (savedValIndex > -1) {
       savedValidators.value = [
@@ -201,6 +205,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
         validatorInJpool.value = voterData.inJpool;
         validatorDelinquent.value = voterData.isDelinquent;
         validatorSVM.value = voterData.svName;
+        validatorLastVote.value = voterData.lastVote;
       }
     },
     { immediate: true },
@@ -222,6 +227,7 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
     validatorInJpool,
     validatorDelinquent,
     validatorSVM,
+    validatorLastVote,
     savedValidator,
   };
 });
