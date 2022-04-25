@@ -28,112 +28,22 @@
 
 <template>
   <q-header id="app-header" class="staking-header">
-    <div
-      v-if="showValidator || $q.screen.gt.sm"
-      class="staking-header__top q-pt-md q-pb-xs text-right"
-    >
-      <div class="container row items-center justify-end q-mb-xs">
-        <price-stats-for-header v-if="!showValidator" />
-        <theme-mode-selector />
-        <div
-          v-if="showValidator"
-          class="staking-header__faq-btn q-ml-sm"
-          @click="scrollTo('faq-section')"
-        >
-          How to use staking.kiwi
-        </div>
-        <div
-          v-if="showValidator"
-          class="staking-header__faq-btn q-ml-md"
-          @click="scrollTo('widget-section')"
-        >
-          widget
-        </div>
-      </div>
-    </div>
-    <div class="staking-header__main row items-end q-py-md">
-      <div class="container relative-position">
-        <div class="row items-end justify-between full-width">
-          <router-link
-            class="row items-center"
-            :class="{ 'q-mr-md': $q.screen.lt.sm, 'q-mr-lg': $q.screen.gt.xs }"
-            to="/"
-          >
-            <img src="@/assets/img/kiwi-logo-2.svg" alt="" class="staking-header__logo" />
-            <q-badge
-              v-if="$q.screen.gt.sm"
-              class="staking-header__beta"
-              color="accent"
-              text-color="text-white"
-            >
-              v{{ version }}
-            </q-badge>
-          </router-link>
-          <div v-if="!showValidator && $q.screen.lt.md" class="total-validators-nxs q-mr-auto">
-            <validators-total />
-          </div>
-          <div v-if="$q.screen.lt.md" class="column q-ml-auto">
-            <div class="staking-header__btn q-mb-sm">
-              <cluster-selector />
-            </div>
-            <div class="staking-header__btn">
-              <connect-wallet />
-            </div>
-          </div>
-          <div
-            v-if="showValidator"
-            class="col-12 col-md-auto q-mr-auto col-grow"
-            :class="{ 'q-mt-md': $q.screen.lt.md }"
-          >
-            <validator-name />
-          </div>
-          <div v-if="$q.screen.gt.sm" class="row items-center col-grow">
-            <div v-if="!showValidator" class="q-mr-auto">
-              <validators-total />
-            </div>
-            <epoch-circle v-if="!showValidator" />
-            <div class="row q-ml-auto q-mt-auto">
-              <div class="q-mr-md staking-header__btn">
-                <cluster-selector />
-              </div>
-              <div class="staking-header__btn">
-                <connect-wallet />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="!showValidator && $q.screen.lt.sm"
-          class="row items-center full-width total-validators-xs"
-        >
-          <div class="q-mt-sm">
-            <validators-total :alt="true" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <staking-header v-if="showValidator" />
+    <home-header v-else />
   </q-header>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
   import router from '@/router';
-  import { handleScroll } from '@/utils';
-
   export default defineComponent({
     setup() {
       return {
-        // TODO: package.json
-        version: '1.2',
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
           console.log('validator === ', validator);
           return !!validator && typeof validator === 'string';
         }),
-        scrollTo(id) {
-          const header = document.querySelector('.q-header') as HTMLElement;
-          handleScroll(id, header?.offsetHeight - 10 ?? 0);
-        },
       };
     },
   });
