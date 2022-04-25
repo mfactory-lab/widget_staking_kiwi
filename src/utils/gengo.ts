@@ -1,5 +1,5 @@
 /*
- * This file is part of the Web3 Library developed by mFactory GmbH.
+ * This file is part of Solana Reference Stake Pool code.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -26,10 +26,28 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-export * from './api';
-export * from './connection';
-export * from './debounce';
-export * from './format';
-export * from './scroller';
-export * from './time';
-export * from './web3';
+import { API_URL } from '@/config';
+import axios from 'axios';
+import { debounceAsync } from '@/utils/index';
+
+const getCsrfToken = debounceAsync<() => Promise<string>, string>(
+  async () =>
+    axios(`${API_URL}/auth/csrf`, {
+      withCredentials: true,
+    }).then(({ data }) => data.token),
+  250,
+);
+
+export async function getGengoToken() {
+  const token = await getCsrfToken();
+  if (!token) {
+    return;
+  }
+  const res = await axios(`${API_URL}/auth/genesysgo`, {
+    withCredentials: true,
+    headers: {
+      'X-XSRF-TOKEN': token,
+    },
+  });
+  return res.data.access_token;
+}

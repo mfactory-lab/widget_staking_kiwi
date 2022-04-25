@@ -35,6 +35,7 @@
         color="gray-dark-theme"
         text-color="text-white"
         :disable="connectionLost"
+        :ripple="false"
         padding="4px 17px"
         @click="refresh"
       >
@@ -58,6 +59,7 @@
         color="gray-dark-theme"
         text-color="text-white"
         :disable="connectionLost"
+        :ripple="false"
         padding="4px 17px"
         @click="() => (showControls = !showControls)"
       >

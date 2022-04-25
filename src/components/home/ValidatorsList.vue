@@ -6,9 +6,8 @@
 
       <q-card class="q-mb-md q-mt-md validators-list__main">
         <validators-list-table-head />
-
-        <validators-list-Desk v-if="$q.screen.gt.sm" />
-        <validators-list-Mob v-else />
+        <validators-list-desk v-if="$q.screen.gt.sm" />
+        <validators-list-mob v-else />
       </q-card>
     </div>
   </section>

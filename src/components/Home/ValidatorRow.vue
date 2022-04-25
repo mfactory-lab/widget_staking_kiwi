@@ -153,6 +153,7 @@
 
         <q-btn
           :to="`/app/${item.voter}`"
+          :ripple="false"
           label="Stake"
           color="warning"
           text-color="primary"

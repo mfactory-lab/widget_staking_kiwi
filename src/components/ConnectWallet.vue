@@ -31,6 +31,7 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
+      :ripple="false"
       color="warning"
       text-color="primary"
       rounded
@@ -45,6 +46,7 @@
     <q-btn
       class="app-header__wallet-btn"
       :class="$style.btn"
+      :ripple="false"
       color="warning"
       text-color="primary"
       rounded
@@ -100,6 +102,7 @@
           unelevated
           class="absolute-right"
           :icon="evaClose"
+          :ripple="false"
           size="md"
           @click="ok"
         />

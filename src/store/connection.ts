@@ -1,5 +1,5 @@
 /*
- * This file is part of the Web3 Library developed by mFactory GmbH.
+ * This file is part of Solana Reference Stake Pool code.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -27,8 +27,9 @@
  */
 
 import { defineStore } from 'pinia';
-import { Cluster, Commitment, Connection, PublicKey } from '@solana/web3.js';
 import { useStorage } from '@vueuse/core';
+import { Cluster, Commitment, Connection, PublicKey } from '@solana/web3.js';
+import { tokenAuthFetchMiddleware } from '@strata-foundation/web3-token-auth';
 import { DEFAULT_COMMITMENT, DEFAULT_CONFIRM_TIMEOUT, DEFAULT_ENDPOINT, ENDPOINTS } from '@/config';
 
 export type ExtendedCluster = Cluster | 'localnet';
@@ -40,7 +41,10 @@ export interface Endpoint {
   url: string;
   stakePoolAddress: string;
   stakeLimit?: number;
+  getToken?: () => Promise<string>;
 }
+
+// const DEFAULT_TOKEN_EXPIRY = 180000;
 
 export const useConnectionStore = defineStore({
   id: 'connection',
@@ -57,6 +61,12 @@ export const useConnectionStore = defineStore({
       return new Connection(this.endpoint.url, {
         confirmTransactionInitialTimeout: state.confirmTransactionInitialTimeout,
         commitment: state.commitment,
+        fetchMiddleware: this.endpoint.getToken
+          ? tokenAuthFetchMiddleware({
+              // tokenExpiry: DEFAULT_TOKEN_EXPIRY,
+              getToken: this.endpoint.getToken,
+            })
+          : undefined,
       });
     },
     stakePoolAddress(): PublicKey | null {

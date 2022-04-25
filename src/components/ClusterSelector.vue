@@ -31,9 +31,10 @@
     class="app-header__cluster-btn"
     :label="endpoint.name"
     :model-value="false"
-    auto-close
+    :ripple="false"
     color="text-white"
     text-color="primary"
+    auto-close
     rounded
   >
     <q-list>

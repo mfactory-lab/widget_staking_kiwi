@@ -29,10 +29,14 @@
 import { resolve } from 'path';
 import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import Vue from '@vitejs/plugin-vue';
-import ViteVisualizer from 'rollup-plugin-visualizer';
-import Components from 'unplugin-vue-components/vite';
+import vue from '@vitejs/plugin-vue';
+import visualizer from 'rollup-plugin-visualizer';
+import components from 'unplugin-vue-components/vite';
 import inject from '@rollup/plugin-inject';
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+// import sri from 'rollup-plugin-sri';
+
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 // noinspection ES6PreferShortImport
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
@@ -42,6 +46,18 @@ export default defineConfig(({ mode }) => {
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
+    // {
+    //   enforce: 'post',
+    //   ...sri({ publicPath: '/' }),
+    // },
+    vue({
+      include: [/\.vue$/, /\.md$/],
+      template: { transformAssetUrls },
+      reactivityTransform: true,
+    }),
+    quasar({
+      // sassVariables: 'src/quasar-variables.sass',
+    }),
     createHtmlPlugin({
       inject: {
         data: {
@@ -51,43 +67,40 @@ export default defineConfig(({ mode }) => {
         },
       },
     }),
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-      // reactivityTransform: true,
+    chunkSplitPlugin({
+      // strategy: 'unbundle',
     }),
     // https://github.com/antfu/unplugin-vue-components
-    Components({
-      // allow auto load components under `./src/components/`
+    components({
       extensions: ['vue', 'md'],
-      // allow auto import and register components used in markdown
-      // resolvers: [QuasarResolver()],
-      dts: 'src/components.d.ts',
+      dts: 'types/components.d.ts',
     }),
   ];
 
   const build: BuildOptions = {
     manifest: isProd,
-    sourcemap: false,
-    brotliSize: false,
-    cssCodeSplit: false,
-    polyfillDynamicImport: false,
-    chunkSizeWarningLimit: 2500, // 550 TODO: optimize
-    assetsInlineLimit: 4096,
+    // sourcemap: false,
+    // brotliSize: false,
+    // cssCodeSplit: false,
+    // polyfillDynamicImport: false,
+    // assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1024,
     rollupOptions: {
       plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
-      output: {
-        manualChunks(id) {
-          if (id.includes('/node_modules/')) {
-            return 'vendors';
-          }
-        },
-      },
+      // treeshake: true,
+      // output: {
+      //   manualChunks(id) {
+      //     if (id.includes('/node_modules/')) {
+      //       return 'vendors';
+      //     }
+      //   },
+      // },
     },
   };
 
   if (isReport) {
     plugins.push(
-      ViteVisualizer({
+      visualizer({
         filename: './dist/report.html',
         open: true,
         brotliSize: true,
@@ -98,15 +111,11 @@ export default defineConfig(({ mode }) => {
   const optimizeDeps: DepOptimizationOptions = {
     include: [
       'vue',
-      'vue-router',
-      '@vueuse/core',
-      '@vueuse/head',
-      'pinia',
-      'quasar',
+      // 'vue-chartjs',
+      'chart.js',
+      // 'chartjs-adapter-luxon',
       '@quasar/extras/eva-icons',
-      '@solana/spl-stake-pool',
-      '@solana/web3.js',
-      '@solana/spl-token',
+      'bn.js',
     ],
     exclude: ['vue-demi'],
     esbuildOptions: {
@@ -145,8 +154,8 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
-      browser: true,
-      preferBuiltins: false,
+      // browser: true,
+      // preferBuiltins: false,
       dedupe: [
         'bn.js',
         'bs58',
@@ -172,13 +181,13 @@ export default defineConfig(({ mode }) => {
     },
 
     // https://github.com/antfu/vite-ssg
-    // ssgOptions: {
-    //   script: 'async',
-    //   formatting: 'minify',
-    //   // onFinished() {
-    //   // generateSitemap();
-    //   // },
-    // },
+    ssgOptions: {
+      script: 'async',
+      formatting: 'minify',
+      // onFinished() {
+      // generateSitemap();
+      // },
+    },
 
     // https://github.com/vitest-dev/vitest
     // test: {

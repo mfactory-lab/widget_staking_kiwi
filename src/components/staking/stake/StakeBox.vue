@@ -70,6 +70,7 @@
             unelevated
             size="12px"
             padding="2px 8px 0"
+            :ripple="false"
             @click="stakeMax"
           >
             MAX
@@ -112,6 +113,7 @@
               :disabled="
                 connectionLost || validatorDelinquent || Number(stake.from) > Number(availableSol)
               "
+              :ripple="false"
               @click="stakeHandler"
             >
               STAKE NOW
@@ -145,6 +147,7 @@
           unelevated
           class="absolute-right"
           :icon="evaClose"
+          :ripple="false"
           size="md"
           @click="maxStakeDialog = false"
         />

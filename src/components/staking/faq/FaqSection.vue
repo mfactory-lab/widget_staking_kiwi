@@ -36,10 +36,10 @@
           <li class="faq-section__list__item">Connect your wallet.</li>
           <li class="faq-section__list__item">Enter the amount of SOL you want to stake.</li>
           <li class="faq-section__list__item">Click STAKE NOW</li>
-          <li class="faq-section__list__item"
-            >Done! You have staked your SOL to
-            <span v-if="loading && !savedValidator">Validator</span
-            ><span v-else>{{ loading ? savedValidator.validatorName : validatorName }}</span></li
+          <li class="faq-section__list__item">
+            Done! You have staked your SOL to
+            <span v-if="loading && !savedValidator">Validator</span>
+            <span v-else>{{ loading ? savedValidator.validatorName : validatorName }}</span></li
           >
         </ul>
       </q-card>

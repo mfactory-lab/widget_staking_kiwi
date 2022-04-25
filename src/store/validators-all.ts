@@ -27,10 +27,10 @@
  */
 
 import { defineStore } from 'pinia';
-import { computed, onMounted, ref, shallowRef, watch } from 'vue';
-import { useDebounce, useLocalStorage } from '@vueuse/core';
+import { computed, ref, shallowRef, watch } from 'vue';
+import { useDebounce, useDebounceFn, useLocalStorage } from '@vueuse/core';
 import { useWallet } from 'solana-wallets-vue';
-import { useConnectionStore, useEpochStore, useStakeAccountStore } from '@/store';
+import { useConnectionStore, useStakeAccountStore } from '@/store';
 import { useEmitter } from '@/hooks';
 import {
   ApyStats,
@@ -90,13 +90,14 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const connectionStore = useConnectionStore();
   const stakeAccountStore = useStakeAccountStore();
   const stakeAccounts = computed(() => stakeAccountStore.data);
-  const epochStore = useEpochStore();
+  // const epochStore = useEpochStore();
   const cluster = computed(() => connectionStore.cluster);
-  const epoch = computed(() => epochStore.epochNumber);
+  // const epoch = computed(() => epochStore.epochNumber);
   const { connected } = useWallet();
 
   const validatorsStats = shallowRef<Array<ValidatorStats>>([]);
   const averageApy = shallowRef<Array<ApyStats>>([]);
+  const averageApyLoading = ref(false);
   const loading = ref(false);
 
   const nameFilter = ref('');
@@ -120,43 +121,54 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const showControlsMob = useLocalStorage<boolean>('show-controls-mob', false);
 
   const loadAllValidators = async () => {
-    console.log('[validators all] loadAllValidators');
-    if (!loading.value) {
-      const network = connectionStore.cluster.replace('-beta', '');
-      loading.value = true;
-      try {
-        validatorsStats.value = await getValidatorsStats(network);
-      } catch {
-      } finally {
-        loading.value = false;
-      }
+    if (loading.value) {
+      return;
+    }
+    const network = connectionStore.cluster.replace('-beta', '');
+    loading.value = true;
+    try {
+      console.log('[useValidatorsAllStore] Loading validator stats...');
+      validatorsStats.value = await getValidatorsStats(network);
+    } catch (e) {
+      console.log('[useValidatorsAllStore] Error:', e);
+    } finally {
+      loading.value = false;
     }
   };
 
   const loadAverageApy = async () => {
+    if (averageApyLoading.value) {
+      return;
+    }
     if (cluster.value === 'mainnet-beta') {
+      averageApyLoading.value = true;
+      console.log('[useValidatorsAllStore] Loading average APY...');
       averageApy.value = await getAverageApy();
+      averageApyLoading.value = false;
     } else {
       averageApy.value = [];
     }
-    console.log('[validators all] getAverageApy === ', averageApy.value);
   };
 
-  onMounted(() => {
-    loadAverageApy();
-    if (validatorsStats.value.length < 1) {
-      loadAllValidators();
-    }
-  });
+  // onBeforeMount(() => {
+  //   loadAverageApy();
+  //   if (validatorsStats.value.length < 1) {
+  //     loadAllValidators();
+  //   }
+  // });
 
   watch(connected, (connected) => {
     if (!connected) filters.value.hasStake = false;
   });
 
-  watch([cluster, epoch], () => {
-    loadAllValidators();
-    loadAverageApy();
-  });
+  watch(
+    cluster,
+    useDebounceFn(() => {
+      loadAllValidators();
+      loadAverageApy();
+    }, 250),
+    { immediate: true },
+  );
 
   function formatAmountPrice(val: number | bigint) {
     return priceFormatter.format(val);
