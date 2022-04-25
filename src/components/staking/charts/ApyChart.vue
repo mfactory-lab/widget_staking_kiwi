@@ -27,16 +27,12 @@
   -->
 
 <template>
-  <div class="apy-chart" v-if="data.data.length > 0 && cluster === 'mainnet-beta'">
+  <div class="apy-chart" v-if="cluster === 'mainnet-beta'">
     <div v-if="showTitle" class="apy-chart__title">HISTORIC APY</div>
-    <div>
-      <apexchart
-        width="100%"
-        :height="height"
-        type="area"
-        :options="chartOptions"
-        :series="[data]"
-      />
+
+    <div class="item-chart">
+      <line-chart :style="{ height: height + 'px' }" v-if="!loading" v-bind="lineChartProps" />
+      <q-inner-loading :showing="loading" />
     </div>
   </div>
   <div class="apy-chart" v-else>
@@ -46,25 +42,14 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
-  import { useConnectionStore, useEpochStore } from '@/store';
-  import { storeToRefs } from 'pinia';
-  import { API_URL } from '@/config';
-  import SolSvg from '@/components/icons/SolSvg.vue';
+  import { LineChart, useLineChart } from 'vue-chart-3';
   import { useQuasar } from 'quasar';
-
-  interface ApyStats {
-    apy: number;
-    epoch: number;
-  }
-
-  interface ChartData {
-    data: number[];
-    name: String;
-  }
+  import { useConnectionStore, useValidatorsAllStore } from '@/store';
+  import { getApyHistory } from '@/utils';
 
   export default defineComponent({
     components: {
-      SolSvg,
+      LineChart,
     },
     props: {
       voterKey: {
@@ -80,181 +65,164 @@
         default: true,
       },
       height: {
-        type: String,
-        default: '84px',
+        type: Number,
+        default: 84,
       },
     },
     setup(props) {
-      const data = ref<ChartData>({
-        name: 'APY',
-        data: [0, 0],
-      });
-      const categories = ref<Array<number | string>>([0, 1]);
-      const connectionStore = useConnectionStore();
-      const cluster = computed(() => connectionStore.cluster);
-      const { epochNumber } = storeToRefs(useEpochStore());
       const { dark } = useQuasar();
+      const connectionStore = useConnectionStore();
+      const validatorsAllStore = useValidatorsAllStore();
 
-      async function getApyHistory() {
-        return new Promise<Array<ApyStats>>((resolve, _reject) => {
-          fetch(`${API_URL}apy/history?voter_id=${props.voterKey}`)
-            .then((res) => res.json())
-            .then(
-              (res) => {
-                if (res.data?.length > 0) {
-                  resolve(res.data);
-                } else {
-                  // resolve([]);
-                  // reject(Error('Promise rejected'));
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-            );
-        });
-      }
+      const cluster = computed(() => connectionStore.cluster);
+      const averageApy = computed(() => validatorsAllStore.averageApy);
+      const categories = computed(() => averageApy.value.map((item) => item.epoch));
+
+      const loading = ref(true);
+
+      const lineOpts = {
+        backgroundColor: '#30e5b6',
+        borderWidth: 1,
+      };
+
+      const chartData = ref({
+        labels: categories.value.map((c) => `Epoch ${c}`),
+        datasets: [
+          {
+            label: 'APY',
+            fill: true,
+            ...lineOpts,
+            data: categories.value.map(() => 0),
+          },
+        ],
+      });
 
       watch(
-        [epochNumber],
-        async () => {
+        categories,
+        () => {
+          if (categories.value.length === 0) {
+            return;
+          }
           if (cluster.value === 'mainnet-beta') {
-            const apyData = await getApyHistory();
-
-            data.value = {
-              name: 'APY',
-              data: apyData.map((item) => item.apy * 100),
-            };
-            categories.value = apyData.map((item) => item.epoch);
+            loading.value = true;
+            getApyHistory(props.voterKey).then((apyData) => {
+              const arrayLength = averageApy.value.length - apyData.length;
+              const array: number[] = [];
+              for (let i = 0; i < arrayLength; i++) {
+                array.push(0);
+              }
+              chartData.value = {
+                labels: categories.value.map((d) => `Epoch ${d}`),
+                datasets: [
+                  {
+                    label: 'Avg APY',
+                    fill: false,
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    borderColor: '#5A7683',
+                    backgroundColor: '#5A7683',
+                    data: averageApy.value.map((d) => d.apy * 100),
+                  },
+                  {
+                    label: 'APY',
+                    fill: true,
+                    ...lineOpts,
+                    data: [...array, ...apyData.map((d) => d.apy * 100)],
+                  },
+                ],
+              };
+              loading.value = false;
+            });
           }
         },
         { immediate: true },
       );
 
-      return {
-        categories,
-        data,
-        cluster,
-        chartOptions: computed(() => ({
-          colors: ['#1DE3B0'],
-          legend: {
-            showForSingleSeries: false,
-          },
-          fill: {
-            opacity: 1,
-            gradient: {
-              shade: 'light',
-              type: 'vertical',
-              shadeIntensity: 0.1,
-              opacityFrom: 1,
-              opacityTo: 1,
-            },
-            pattern: {
-              style: 'verticalLines',
-              strokeWidth: 30,
-            },
-          },
-          chart: {
-            type: 'area',
-            // offsetX: -7,
-            offsetY: 0,
-            parentHeightOffset: 0,
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
-            width: 1,
-            dashArray: 0,
-          },
-          grid: {
-            show: true,
-            borderColor: '#cccccc70',
-            strokeDashArray: 2,
-            position: 'back',
-            xaxis: {
-              lines: {
-                show: false,
-              },
-            },
-            yaxis: {
-              lines: {
-                show: false,
-              },
-            },
-            row: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            column: {
-              colors: undefined,
-              opacity: 0.5,
-            },
-            padding: {
-              top: -12,
-              right: 10,
-              bottom: -5,
-              left: 0,
-            },
-          },
-          yaxis: {
-            axisBorder: {
-              show: false,
-            },
-            labels: {
-              show: props.showYAxis,
-              offsetX: -8,
-              style: {
-                colors: [dark.isActive ? '#ffffff90' : '#707585'],
-                fontSize: '10px',
-              },
-              formatter: (value) => {
-                return `${value.toFixed(2)}%`;
-              },
-            },
-            min: (value) => {
-              return value - 0.5;
-            },
-            max: (value) => {
-              return value + 0.5;
-            },
-            tickAmount: 5,
-          },
-          xaxis: {
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false,
-            },
-            type: 'datetime',
-            labels: {
-              show: false,
-            },
-            categories: categories.value,
-            tooltip: {
-              enabled: false,
-            },
-          },
+      const options = computed(() => ({
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: false,
           tooltip: {
-            x: {
-              show: true,
-              formatter: (value) => {
-                return `Epoch ${value}`;
+            // usePointStyle: true,
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+
+                if (context.parsed.y !== null) {
+                  label += `: ${context.parsed.y?.toFixed(2) ?? 0}%`;
+                }
+                return label;
               },
             },
           },
-        })),
+        },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              display: false,
+            },
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+          y: {
+            min: 0,
+            suggestedMax: 8,
+            ticks: {
+              display: props.showYAxis,
+              stepSize: 1,
+              color: dark.isActive ? '#ffffff90' : '#707585',
+              font: {
+                size: 10,
+                lineHeight: 1,
+              },
+              callback: function (val) {
+                return `${val?.toFixed(2) ?? 0}%`;
+              },
+            },
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+        },
+        layout: {
+          padding: 0,
+        },
+      }));
+
+      const { lineChartProps, lineChartRef } = useLineChart({
+        chartData,
+        options,
+      });
+
+      return {
+        lineChartProps,
+        lineChartRef,
+        loading,
+        cluster,
       };
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .item-chart {
+    position: relative;
+    width: 100%;
+    .q-inner-loading {
+      background-color: transparent;
+    }
+  }
+</style>

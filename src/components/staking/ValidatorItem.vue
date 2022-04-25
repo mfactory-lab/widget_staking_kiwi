@@ -82,9 +82,12 @@
       <div class="validator-item__address column items-end justify-start">
         <q-skeleton width="350px" style="max-width: 100%" v-if="loading && !savedValidator" />
         <div class="text-right" v-else>
-          <span class="validator-item__address__text">{{
-            loading ? savedValidator.validatorId : validatorId
-          }}</span>
+          <span class="validator-item__address__text">
+            {{ loading ? savedValidator.validatorId : validatorId }}
+            <q-tooltip class="text-body2 break-words">
+              Identity: {{ loading ? savedValidator.validatorId : validatorId }}
+            </q-tooltip>
+          </span>
           <copy-to-clipboard :text="loading ? savedValidator.validatorId : validatorId" />
         </div>
         <q-skeleton
@@ -94,7 +97,10 @@
           v-if="loading && !savedValidator"
         />
         <div class="text-right" v-else>
-          <span class="validator-item__address__text">{{ voterKey }}</span>
+          <span class="validator-item__address__text">
+            {{ voterKey }}
+            <q-tooltip class="text-body2 break-words"> Vote Account: {{ voterKey }} </q-tooltip>
+          </span>
           <copy-to-clipboard :text="voterKey" />
         </div>
       </div>
@@ -103,30 +109,27 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, toRef } from 'vue';
   import { evaGlobe, evaPerson } from '@quasar/extras/eva-icons';
-  import { storeToRefs } from 'pinia';
   import validatorsAppsImg from '@/assets/img/validators-apps.png';
   import solanaBeachImg from '@/assets/img/solana-beach.png';
   import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
-  import TotalStacked from '@/components/staking/TotalStacked.vue';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
 
   export default defineComponent({
-    components: { CopyToClipboard, TotalStacked },
     setup() {
-      const {
-        validatorId,
-        voterKey,
-        validatorName,
-        validatorDetails,
-        validatorImage,
-        validatorUrl,
-        validatorSolanaBeach,
-        validatorWebsite,
-        savedValidator,
-      } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorsAllStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const validatorId = toRef(validatorJstakingStore, 'validatorId');
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
+      const validatorName = toRef(validatorJstakingStore, 'validatorName');
+      const validatorDetails = toRef(validatorJstakingStore, 'validatorDetails');
+      const validatorImage = toRef(validatorJstakingStore, 'validatorImage');
+      const validatorUrl = toRef(validatorJstakingStore, 'validatorUrl');
+      const validatorSolanaBeach = toRef(validatorJstakingStore, 'validatorSolanaBeach');
+      const validatorWebsite = toRef(validatorJstakingStore, 'validatorWebsite');
+      const savedValidator = toRef(validatorJstakingStore, 'savedValidator');
+
+      const validatorsAllStore = useValidatorsAllStore();
+      const loading = toRef(validatorsAllStore, 'loading');
 
       return {
         savedValidator,

@@ -28,97 +28,79 @@
 
 import { resolve } from 'path';
 import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
-import { injectHtml, minifyHtml } from 'vite-plugin-html';
-import Vue from '@vitejs/plugin-vue';
-// import ViteLegacy from '@vitejs/plugin-legacy';
-import ViteVisualizer from 'rollup-plugin-visualizer';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import vue from '@vitejs/plugin-vue';
+import visualizer from 'rollup-plugin-visualizer';
+import components from 'unplugin-vue-components/vite';
+import inject from '@rollup/plugin-inject';
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+// import sri from 'rollup-plugin-sri';
 
-import Components from 'unplugin-vue-components/vite';
-import { QuasarResolver } from 'unplugin-vue-components/resolvers';
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+// noinspection ES6PreferShortImport
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
+  // const isDev = mode === 'development';
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
-    injectHtml({
-      data: {
-        title: 'staking.kiwi',
-        description: 'Solana staking.',
-        keywords: 'Solana, SOL',
+    // {
+    //   enforce: 'post',
+    //   ...sri({ publicPath: '/' }),
+    // },
+    vue({
+      include: [/\.vue$/, /\.md$/],
+      template: { transformAssetUrls },
+      reactivityTransform: true,
+    }),
+    quasar({
+      // sassVariables: 'src/quasar-variables.sass',
+    }),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: SITE_TITLE,
+          description: SITE_DESCRIPTION,
+          keywords: SITE_KEYWORDS,
+        },
       },
     }),
-    minifyHtml({
-      // collapseBooleanAttributes: true,
-      // collapseWhitespace: true,
-      // minifyCSS: true,
-      // minifyJS: true,
-      // minifyURLs: true,
-      // removeAttributeQuotes: true,
-      // removeComments: true,
-      // removeEmptyAttributes: true,
-      // html5: true,
-      // keepClosingSlash: true,
-      // removeRedundantAttributes: true,
-      // removeScriptTypeAttributes: true,
-      // removeStyleLinkTypeAttributes: true,
-      // useShortDoctype: true,
+    chunkSplitPlugin({
+      // strategy: 'unbundle',
     }),
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-    }),
-    // ViteComponents({
-    //   customComponentResolvers: [resolveQuasar],
-    // }
-    // AutoImport({
-    //   resolvers: [QuasarResolver()],
-    // }),
-    Components({
-      resolvers: [QuasarResolver()],
+    // https://github.com/antfu/unplugin-vue-components
+    components({
+      extensions: ['vue', 'md'],
+      dts: 'types/components.d.ts',
     }),
   ];
 
   const build: BuildOptions = {
-    manifest: false,
-    cssCodeSplit: false, // true,
-    sourcemap: false,
-    polyfillDynamicImport: false,
-    brotliSize: false,
-    chunkSizeWarningLimit: 2000, //550
-    assetsInlineLimit: 4096,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        // drop_console: true,
-        drop_debugger: true,
-      },
+    manifest: isProd,
+    // sourcemap: false,
+    // brotliSize: false,
+    // cssCodeSplit: false,
+    // polyfillDynamicImport: false,
+    // assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1024,
+    rollupOptions: {
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+      // treeshake: true,
+      // output: {
+      //   manualChunks(id) {
+      //     if (id.includes('/node_modules/')) {
+      //       return 'vendors';
+      //     }
+      //   },
+      // },
     },
   };
 
-  if (isProd) {
-    build.manifest = true;
-
-    // TODO: charset error
-    // plugins.push(
-    //   /**
-    //    * DESC:
-    //    * provides support for legacy browsers
-    //    * that do not support native ESM
-    //    */
-    //   ViteLegacy({
-    //     targets: ['defaults', 'not IE 11'],
-    //   }),
-    // );
-  }
-
   if (isReport) {
     plugins.push(
-      /**
-       * DESC:
-       * visualize bundle
-       */
-      ViteVisualizer({
+      visualizer({
         filename: './dist/report.html',
         open: true,
         brotliSize: true,
@@ -126,18 +108,21 @@ export default defineConfig(({ mode }) => {
     );
   }
 
-  let optimizeDeps: DepOptimizationOptions = {};
-
-  if (isDev) {
-    /**
-     * DESC:
-     * dependency pre-bundling
-     */
-    optimizeDeps = {
-      include: ['quasar', 'lodash', '@vue/runtime-core', '@vueuse/core', '@vueuse/head'],
-      exclude: ['vue-demi'],
-    };
-  }
+  const optimizeDeps: DepOptimizationOptions = {
+    include: [
+      'vue',
+      // 'vue-chartjs',
+      'vue-chart-3', // TODO: remove
+      'chart.js',
+      // 'chartjs-adapter-luxon',
+      '@quasar/extras/eva-icons',
+      'bn.js',
+    ],
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      minify: true,
+    },
+  };
 
   return {
     build,
@@ -148,14 +133,40 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           charset: false,
-          additionalData: '@import "@/assets/scss/_variables.scss";\n',
+          additionalData: '@import "@/assets/scss/global.scss";\n',
         },
+      },
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove();
+                }
+              },
+            },
+          },
+        ],
       },
       // TODO https://github.com/vitejs/vite/issues/5833
       charset: false,
     },
 
     resolve: {
+      // browser: true,
+      // preferBuiltins: false,
+      dedupe: [
+        'bn.js',
+        'bs58',
+        'lodash',
+        'buffer',
+        'buffer-layout',
+        'eventemitter3',
+        '@solana/web3.js',
+        '@solana/buffer-layout',
+      ],
       alias: [
         {
           find: /~(.+)/,
@@ -165,22 +176,27 @@ export default defineConfig(({ mode }) => {
       ],
     },
 
-    server: {
-      fs: {
-        strict: true,
-      },
+    define: {
+      'process.env': process.env,
+      // global: 'globalThis',
     },
 
     // https://github.com/antfu/vite-ssg
-    // ssgOptions: {
-    //   script: 'async',
-    //   formatting: 'minify',
-    // },
-
-    // support node libraries
-    define: {
-      'process.env': process.env,
-      global: 'window',
+    ssgOptions: {
+      script: 'async',
+      formatting: 'minify',
+      // onFinished() {
+      // generateSitemap();
+      // },
     },
+
+    // https://github.com/vitest-dev/vitest
+    // test: {
+    //   include: ['test/**/*.test.ts'],
+    //   environment: 'jsdom',
+    //   deps: {
+    //     inline: ['@vue', '@vueuse', 'vue-demi'],
+    //   },
+    // },
   };
 });

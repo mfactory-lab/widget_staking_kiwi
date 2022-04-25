@@ -96,6 +96,11 @@
       }
     }
   }
+  &__warning {
+    color: #f56c6c;
+    text-transform: none;
+    font-size: 12px;
+  }
 }
 
 // Dark mode

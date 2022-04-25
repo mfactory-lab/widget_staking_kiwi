@@ -26,11 +26,12 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
+@import 'fonts';
 @import 'variables';
 @import 'mixins';
+@import 'colors';
 @import 'vendors';
 @import 'components';
-@import 'color-utils';
 
 a {
   text-decoration: none;
@@ -52,4 +53,28 @@ a {
 
 .break-words {
   word-break: break-all;
+}
+
+.styled-toggle {
+  .q-toggle__inner {
+    padding: 0 0.2em 0 0;
+    height: 0.58em;
+  }
+  .q-toggle__thumb {
+    left: 0.05em;
+    top: 0.05em;
+  }
+  .q-toggle__inner--truthy .q-toggle__thumb {
+    left: 0.65em;
+  }
+  .q-toggle__track {
+    opacity: .65;
+  }
+  .q-toggle__inner--truthy .q-toggle__track {
+    opacity: .84;
+  }
+  .q-toggle__track {
+    height: 0.60em;
+    border-radius: 0.35em;
+  }
 }

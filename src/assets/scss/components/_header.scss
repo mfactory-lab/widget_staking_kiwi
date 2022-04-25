@@ -31,8 +31,11 @@
   font-family: $font-secondary;
   &__top {
     position: relative;
-    @media (max-width: $breakpoint-xs) {
-      margin-bottom: 40px;
+    min-height: 48px;
+    background: $primary;
+    // background-color: #fff;
+    @media (max-width: $breakpoint-sm) {
+      margin-bottom: -10px;
     }
   }
   &__faq-btn {
@@ -41,32 +44,60 @@
     font-weight: 500;
     font-size: 14px;
     text-transform: uppercase;
-    color: $text-black;
+    // color: $text-black;
+    color: $text-white;
   }
   &__main {
     background: $primary;
-    min-height: 90px;
+    min-height: 94px;
   }
   &__logo {
     margin-top: -55px;
-  }
-  &__btn {
     @media (max-width: $breakpoint-sm) {
-      margin-top: 16px;
+      margin-top: -3px;
+      height: 95px;
+    }
+    @media (max-width: $breakpoint-xs) {
+      margin-top: 0;
+      height: 70px;
     }
   }
   &__beta {
     font-weight: 7;
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 10px;
+    line-height: 13px;
+    padding: 1px 10px;
     text-transform: uppercase;
     margin-top: -115px;
     margin-left: -15px;
     margin-right: -125px;
     font-weight: 500;
     font-family: $font-secondary;
-    @media (max-width: 340px) {
-      font-size: 15px;
+    @media (max-width: $breakpoint-sm) {
+      margin-top: -75px;
+      margin-left: -18px;
+      font-size: 8px;
+      padding: 1px 8px;
+    }
+  }
+  &__btn {
+    button {
+      width: 173px;
+      @media (max-width: $breakpoint-xs) {
+        width: 137px;
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+    }
+  }
+  .total-validators-nxs {
+    @media (max-width: 409px) {
+      display: none;
+    }
+  }
+  .total-validators-xs {
+    @media (min-width: 410px) {
+      display: none;
     }
   }
 }
@@ -76,9 +107,12 @@
 body.body--dark {
   .staking-header {
     background: $primary;
-    &__faq-btn {
-      color: $text-white;
-    }
+    // &__faq-btn {
+    //   color: $text-white;
+    // }
+    // &__top {
+    //   background-color: $primary;
+    // }
   }
   .q-menu--dark {
     background: $gray-dark-theme;

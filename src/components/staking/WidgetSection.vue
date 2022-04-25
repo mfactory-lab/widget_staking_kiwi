@@ -38,7 +38,7 @@
                 >Enter your validator's vote key in the field below</div
               >
               <div class="faq-section__text__item q-mt-xs">
-                <q-input outlined v-model="voteKey" label="Vote key" stack-label :dense="dense" />
+                <q-input outlined v-model="voteKey" label="Vote key" stack-label />
               </div>
             </div>
             <div class="faq-section__text">
@@ -120,16 +120,15 @@
 </template>
 
 <script lang="ts">
-  import { evaMoon, evaSun } from '@quasar/extras/eva-icons';
   import { computed, defineComponent, ref } from 'vue';
+  import { evaMoon, evaSun } from '@quasar/extras/eva-icons';
   import { useValidatorJstakingStore } from '@/store';
-  import { storeToRefs } from 'pinia';
-  import CopyToClipboardBig from '@/components/CopyToClipboardBig.vue';
 
   export default defineComponent({
-    components: { CopyToClipboardBig },
     setup() {
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = computed(() => validatorJstakingStore.voterKey);
+
       const widgetTheme = ref(true);
       const voteKey = ref(voterKey.value);
 

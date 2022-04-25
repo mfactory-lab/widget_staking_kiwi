@@ -1,0 +1,162 @@
+/*!
+ * This file is part of the Web3 Library developed by mFactory GmbH.
+ *
+ * Copyright © 2021, mFactory GmbH
+ *
+ * Solana Reference Stake Pool is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Solana Reference Stake Pool is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ *
+ * You can be released from the requirements of the Affero GNU General Public License
+ * by purchasing a commercial license. The purchase of such a license is
+ * mandatory as soon as you develop commercial activities using the
+ * Solana Reference Stake Pool code without disclosing the source code of
+ * your own applications.
+ *
+ * The developer of this program can be contacted at <info@mfactory.ch>.
+ */
+
+.validator-row-mob {
+  flex-wrap: nowrap;
+  height: 62px;
+  color: $almost-black;
+
+  .q-avatar__content {
+    text-align: center;
+
+    svg {
+      fill: $grey-4;
+    }
+  }
+  
+  &__index {
+    width: 45px;
+    font-size: 11px;
+    border-right: 1px solid $light-gray;
+    padding-right: 8px;
+  }
+
+  &__logo {
+    width: 34px;
+    margin-top: 4px;
+  }
+
+  &__name {
+    font-weight: 500;
+    font-size: 12px;
+    flex-grow: 1;
+    max-width: calc(100% - 320px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-right: 1px solid $light-gray;
+    padding-right: 8px;
+
+    @media (max-width: $breakpoint-xs) {
+      max-width: calc(100% - 291px);
+    }
+    @media (max-width: 399px) {
+      max-width: calc(100% - 257px);
+    }
+    &.column div {
+      text-overflow: ellipsis;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    &__details {
+      font-size: 10px;
+      margin-top: 2px;
+      white-space: break-spaces;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+    }
+  }
+
+  &__apy {
+    width: 104px;
+    font-weight: 500;
+    align-items: flex-end;
+    border-right: 1px solid $light-gray;
+    padding-right: 8px;
+    font-size: 14px;
+    @media (max-width: $breakpoint-xs) {
+      width: 75px;
+    }
+  }
+
+  &__fee {
+    font-size: 12px;
+    line-height: 16px;
+    padding-left: 75px;
+    @media (max-width: 399px) {
+      padding-left: 40px;
+    }
+  }
+
+  &__stake {
+    font-size: 12px;
+    width: 112px;
+    @media (max-width: 399px) {
+      width: 76px;
+    }
+
+    &__sol {
+      color: $almost-black;
+      .sol-xs {
+        @media (max-width: 399px) {
+          display: none;
+        }
+      }
+      .sol-xxs {
+        @media (min-width: 400px) {
+          display: none;
+        }
+      }
+    }
+  }
+  &__badges {
+    top: 30px;
+    left: 95px;
+  }
+  &__status-badge {
+    font-size: 8px;
+    padding-right: 4px;
+    height: 16px;
+    padding: 0 8px;
+  }
+}
+
+// Dark mode
+body.body--dark {
+  .validator-row-mob {
+    color: $text-white;
+    &__apy {
+      &__val {
+        color: $text-white;
+      }
+      &__fee {
+        color: $text-white;
+      }
+    }
+    &__stake__sol {
+      color: $text-white;
+    }
+    &__address {
+      &__text {
+        color: $text-white;
+      }
+    }
+  }
+}

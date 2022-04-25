@@ -30,24 +30,25 @@
   <router-view />
 </template>
 
-<script lang="ts">
-  import '@/assets/scss/app.scss';
-
-  import { defineComponent, watch } from 'vue';
+<script lang="ts" setup>
+  import { onBeforeMount, watch } from 'vue';
+  import { initWallet } from '@/hooks';
   import router from '@/router';
 
-  export default defineComponent({
-    setup() {
-      watch(
-        [router.currentRoute],
-        async ([route]) => {
-          const validator = route.query?.validator;
-          if (validator) {
-            router.push({ path: `/app/${validator}` });
-          }
-        },
-        { immediate: true },
-      );
-    },
+  import '@/assets/scss/app.scss';
+
+  onBeforeMount(() => {
+    initWallet();
   });
+
+  watch(
+    [router.currentRoute],
+    async ([route]) => {
+      const validator = route.query?.validator;
+      if (validator) {
+        await router.push({ path: `/app/${validator}` });
+      }
+    },
+    { immediate: true },
+  );
 </script>

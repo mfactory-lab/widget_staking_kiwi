@@ -27,13 +27,18 @@
   -->
 
 <template>
-  <div class="charts" v-if="pairsData.length > 0">
+  <div class="charts" v-if="!loading">
     <chart
       v-for="(series, index) in pairsData"
       :key="index"
       :series="series.series"
       :categories="categories"
+      :min="min"
+      :max="max"
     />
+  </div>
+  <div class="charts" v-if="loading">
+    <q-inner-loading :showing="loading" />
   </div>
 </template>
 
@@ -41,8 +46,8 @@
   import Chart from './Chart.vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { CHARTS_PAIRS } from '@/config';
-  import { getPairIntervalPrice } from '@jpool/common/utils/coinmarket';
-  import { priceFormatter } from '@jpool/common/utils';
+  import { priceFormatter } from '@/utils';
+  import { getPairIntervalPrice } from '@/utils/coinmarket';
 
   export default defineComponent({
     components: {
@@ -51,8 +56,13 @@
     setup() {
       const pairsData = ref<Object[]>([]);
       const categories = ref<Array<number | string>>([]);
+      const min = ref(0);
+      const max = ref(10);
+      const loading = ref(false);
 
       onMounted(async () => {
+        let firstVal = true;
+        loading.value = true;
         pairsData.value = await Promise.all(
           CHARTS_PAIRS.map(async (item) => {
             return {
@@ -63,22 +73,37 @@
                   if (categories.value.length < 1) {
                     categories.value = pairData.map((pairValues) => pairValues.timeClose);
                   }
+                  const data = pairData.map((pairValues) => {
+                    const price = pairValues.quote.close;
+                    if (price < min.value || firstVal) {
+                      min.value = price;
+                    }
+                    if (price > max.value || firstVal) {
+                      max.value = price;
+                    }
+                    if (firstVal) {
+                      firstVal = false;
+                    }
+                    return priceFormatter.format(price);
+                  });
                   return {
                     name: pair.chartName,
-                    data: pairData.map((pairValues) =>
-                      priceFormatter.format(pairValues.quote.close),
-                    ),
+                    data,
                   };
                 }),
               ),
             };
           }),
         );
+        loading.value = false;
       });
 
       return {
         categories,
         pairsData,
+        loading,
+        min,
+        max,
       };
     },
   });
@@ -88,5 +113,9 @@
   .charts {
     width: 100%;
     padding: 0 8px;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12px;
   }
 </style>

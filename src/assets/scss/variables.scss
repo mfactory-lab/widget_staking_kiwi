@@ -1,0 +1,76 @@
+/*!
+ * This file is part of the Web3 Library developed by mFactory GmbH.
+ *
+ * Copyright © 2021, mFactory GmbH
+ *
+ * Solana Reference Stake Pool is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Solana Reference Stake Pool is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ *
+ * You can be released from the requirements of the Affero GNU General Public License
+ * by purchasing a commercial license. The purchase of such a license is
+ * mandatory as soon as you develop commercial activities using the
+ * Solana Reference Stake Pool code without disclosing the source code of
+ * your own applications.
+ *
+ * The developer of this program can be contacted at <info@mfactory.ch>.
+ */
+
+@import '~quasar/src/css/variables.sass';
+
+$animate-duration: .1s !default;
+$animate-delay: .1s !default;
+$animate-repeat: 1 !default;
+
+$primary: #455A64;
+$secondary: #1DE3B0;
+$accent: #00A5B9;
+$dark: #404246;
+$warning: #FFCD29;
+
+$almost-black: #1d1d1d;
+$text-white: #FFFFFF;
+$text-black: #000000;
+$light-gray-natural: #E9E9E9;
+$gray-inactive: #CFCFCF;
+$red: #FF6B48;
+$red-dark: #E33B3B;
+$gray: #647E82;
+$solana-dark: #313131;
+$gray-secondary: #5A7683;
+$gray-dark-theme: #374850;
+$light-gray: #9EB3BD;
+$dark-gray: #383838;
+
+$generic-border-radius: 12px;
+$row-width: 990px;
+
+$dark-page: #455A64;
+
+// Assumes the browser default, typically `16px`
+$body-font-size: 1rem;
+
+$button-padding: 9px 17px;
+
+$font-secondary: 'Montserrat';
+$font-monoscape: 'Courier';
+
+$tooltip-background: rgba(#111, 0.9);
+
+$primary-gradient: linear-gradient(
+    180deg,
+    transparentize($primary, 0.05) 0%,
+    transparentize($primary, 0.05) 50%,
+    $primary 50%,
+    $primary 100%
+);

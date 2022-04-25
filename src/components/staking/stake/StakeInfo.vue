@@ -41,13 +41,9 @@
 </template>
 
 <script lang="ts">
-  import StakeInfoRow from '@/components/staking/stake/StakeInfoRow.vue';
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    components: {
-      StakeInfoRow,
-    },
     props: {
       isStake: {
         type: Boolean,

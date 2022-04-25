@@ -87,32 +87,26 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watch } from 'vue';
+  import { computed, defineComponent, onMounted, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
   // @ts-ignore
   import { PublicKey, StakeProgram } from '@solana/web3.js';
   import {
     ProgramAccount,
-    sendTransaction,
     useConnectionStore,
     useStakeAccountStore,
     useStakePoolStore,
-    useWalletStore,
   } from '@/store';
-  import { useDeposit, useMonitorTransaction } from '@jpool/common/hooks';
-  import StakeAccountItem from './StakeAccountItem.vue';
-  import StakeStats from './StakeStats.vue';
+  import { useDeposit, useMonitorTransaction, useStakeAccounts } from '@/hooks';
   import { useValidatorJstakingStore } from '@/store';
-  import { useStakeAccounts } from '@/hooks/stake-accounts';
-  import { lamportsToSol } from '@jpool/common/utils';
-  import SolSvg from '@/components/icons/TelegramSvg.vue';
+  import { lamportsToSol, sendTransaction } from '@/utils';
 
   interface StakeAccount {
     stakeAccount: ProgramAccount;
     state: String;
   }
   export default defineComponent({
-    components: { StakeAccountItem, StakeStats, SolSvg },
     emits: [
       'beforeDeposit',
       'afterDeposit',
@@ -123,7 +117,8 @@
     ],
     setup(_props, { emit }) {
       const connectionStore = useConnectionStore();
-      const { wallet, connected } = storeToRefs(useWalletStore());
+      const { wallet, connected } = useWallet();
+      const anchorWallet = useAnchorWallet();
       const stakeAccountStore = useStakeAccountStore();
       const { monitorTransaction } = useMonitorTransaction();
       const { voterKey, validatorInJpool } = storeToRefs(useValidatorJstakingStore());
@@ -131,7 +126,6 @@
       const { connectionLost } = storeToRefs(useStakePoolStore());
       const { depositStake } = useDeposit();
 
-      const dialog = computed(() => stakeAccountStore.dialog);
       const loading = computed(() => stakeAccountStore.loading);
       const loadingPubkey = ref();
       const totalStats = ref([
@@ -157,6 +151,16 @@
         },
       ]);
 
+      const refresh = () => {
+        stakeAccountStore.load();
+      };
+
+      onMounted(() => {
+        if (stakeAccountStore.data.length < 1) {
+          refresh();
+        }
+      });
+
       const accounts = computed(() => {
         if (voterKey.value) {
           return stakeAccountStore.data.filter(
@@ -181,42 +185,48 @@
         return statusWeights[status];
       };
 
-      watch(accounts, async () => {
-        const newStats = [0, 0, 0, 0];
-        const accountsSorts = await Promise.all(
-          accounts.value.map(async (acc) => {
-            const stakeActivation = await connectionStore.connection!.getStakeActivation(
-              acc.pubkey,
-            );
-            if (acc.account.data?.parsed?.type == 'delegated') {
-              if (stakeActivation.state === 'active' || stakeActivation.state === 'deactivating') {
-                newStats[2] += lamportsToSol(acc.account.lamports);
+      watch(
+        accounts,
+        async () => {
+          const newStats = [0, 0, 0, 0];
+          const accountsSorts = await Promise.all(
+            accounts.value.map(async (acc) => {
+              const stakeActivation = await connectionStore.connection!.getStakeActivation(
+                acc.pubkey,
+              );
+              if (acc.account.data?.parsed?.type == 'delegated') {
+                if (
+                  stakeActivation.state === 'active' ||
+                  stakeActivation.state === 'deactivating'
+                ) {
+                  newStats[2] += lamportsToSol(acc.account.lamports);
+                } else {
+                  newStats[1] += lamportsToSol(acc.account.lamports);
+                }
               } else {
-                newStats[1] += lamportsToSol(acc.account.lamports);
+                newStats[0] += lamportsToSol(acc.account.lamports);
               }
-            } else {
-              newStats[0] += lamportsToSol(acc.account.lamports);
-            }
-            newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
-            totalStats.value.forEach((item, index) => {
-              item.value = newStats[index] ?? 0;
-            });
-            return {
-              stakeAccount: acc,
-              state: stakeActivation.state,
-            };
-          }),
-        );
-        accountsSorted.value = accountsSorts.sort((a, b) => {
-          return (
-            getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
+              newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
+              totalStats.value.forEach((item, index) => {
+                item.value = newStats[index] ?? 0;
+              });
+              return {
+                stakeAccount: acc,
+                state: stakeActivation.state,
+              };
+            }),
           );
-        });
-      });
+          accountsSorted.value = accountsSorts.sort((a, b) => {
+            return (
+              getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
+            );
+          });
+        },
+        { immediate: true },
+      );
 
       return {
         connected,
-        dialog,
         loading,
         loadingPubkey,
         accounts,
@@ -224,12 +234,7 @@
         totalStats,
         connectionLost,
         validatorInJpool,
-
-        updateDialog: (v: boolean) => (stakeAccountStore.dialog = v),
-
-        refresh: () => {
-          stakeAccountStore.load();
-        },
+        refresh,
 
         activate: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
@@ -242,9 +247,11 @@
         depositJpool: async (stakeAccount: ProgramAccount) => {
           emit('beforeDeposit');
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
-          await depositStake(stakeAccount);
+          const success = await depositStake(stakeAccount);
+          if (success) {
+            stakeAccountStore.removeAccount(stakeAccount.pubkey.toBase58());
+          }
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
           emit('afterDeposit');
         },
 
@@ -254,7 +261,7 @@
           await monitorTransaction(
             sendTransaction(
               connectionStore.connection,
-              wallet.value!,
+              anchorWallet.value!,
               StakeProgram.deactivate({
                 stakePubkey: new PublicKey(address),
                 authorizedPubkey: wallet.value!.publicKey!,
@@ -263,7 +270,9 @@
             ),
           );
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
+          await stakeAccountStore.load({
+            delay: 1000,
+          });
           emit('afterDeactivate');
         },
 
@@ -273,7 +282,7 @@
           await monitorTransaction(
             sendTransaction(
               connectionStore.connection,
-              wallet.value!,
+              anchorWallet.value!,
               StakeProgram.withdraw({
                 stakePubkey: new PublicKey(address),
                 authorizedPubkey: wallet.value!.publicKey!,
@@ -282,9 +291,11 @@
               }).instructions,
               [],
             ),
+            {
+              onSuccess: () => stakeAccountStore.removeAccount(address),
+            },
           );
           loadingPubkey.value = null;
-          await stakeAccountStore.load();
           emit('afterWithdraw');
         },
       };

@@ -27,15 +27,13 @@
  */
 
 import VueGtag from 'vue-gtag';
-import { App } from 'vue';
 import { GTAG_ID } from '@/config';
+import { App } from 'vue';
 
-export default {
-  install: (app: App<Element>) => {
-    if (GTAG_ID) {
-      app.use(VueGtag, {
-        config: { id: GTAG_ID },
-      });
-    }
-  },
+export const install = ({ app }: { app: App<Element> }) => {
+  if (GTAG_ID) {
+    app.use(VueGtag, {
+      config: { id: GTAG_ID },
+    });
+  }
 };

@@ -73,6 +73,7 @@
 
     &__text {
       font-size: 12px;
+      font-family: $font-monoscape;
       color: $dark;
       @media (max-width: $breakpoint-xs) {
         word-break: break-all;

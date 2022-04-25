@@ -1,5 +1,5 @@
 /*!
- * This file is part of Solana Reference Stake Pool code.
+ * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -33,6 +33,13 @@
     min-height: 30px;
     padding: 4px 14px;
     line-height: 24px;
+    @media (max-width: $breakpoint-sm) {
+      line-height: 14px;
+      padding: 5px 17px 4px !important;
+      height: 39px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
   }
   .wallet-balance {
     margin-bottom: 0;
@@ -61,7 +68,7 @@
   &__no-validators {
     position: sticky;
     left: 0px;
-    width: 990px;
+    width: $row-width;
     height: 100px;
     display: flex;
     justify-content: center;
@@ -81,21 +88,43 @@
 
     &__text {
       font-family: $font-secondary;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 22px;
       line-height: 27px;
       text-transform: uppercase;
-      color: $primary;
+      color: $text-black;
       @media (max-width: $breakpoint-xs) {
-        margin-bottom: 8px;
         width: 100%;
         text-align: center;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+      }
+      &--light {
+        opacity: 0.8;
       }
     }
   }
 
   &__main {
     overflow-x: auto;
+    @media (max-width: $breakpoint-xs) {
+      margin-right: -15px !important;
+      margin-left: -15px !important;
+    }
+  }
+  
+  &__filters {
+    background: $text-white;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+    border-radius: 12px;
+    padding: 16px 16px 8px 0;
+
+    >div {
+      @media (max-width: $breakpoint-xs) {
+        min-width: 92px;
+      }
+    }
   }
 
   &__dropdown-label {
@@ -104,34 +133,32 @@
   }
 
   &__search {
-    width: 320px;
+    width: 320px !important;
     max-width: 100%;
   }
 
   &__list {
-    width: 990px !important;
     overflow-y: hidden;
-    border-top: 1px solid $text-white;
-    
+
     &__head {
       background: $primary;
       font-size: 14px;
       line-height: 20px;
       font-weight: 500;
       padding-top: 16px;
-      color: #fff;
+      color: $text-white;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      width: 990px !important;
       height: auto !important;
+      border-bottom: 1px solid #FFFFFF;
 
       & > div {
         height: 24px;
       }
 
       .validator-row__name {
-        width: 356px;
+        width: 305px;
         overflow: visible;
       }
 
@@ -144,204 +171,44 @@
         font-size: 8px;
       }
     }
+    &-desk {
+      width: $row-width !important;
+      &__head {
+        width: $row-width !important;
+      }
+    }
+    &-mob {
+      &__head {
+        color: $text-white !important;
+        padding-left: 0;
+        padding-right: 8px;
+        .validator-row-mob__name {
+          max-width: calc(100% - 269px);
+          overflow: visible;
+          @media (max-width: $breakpoint-xs) {
+            max-width: calc(100% - 230px);
+          }
+          @media (max-width: 399px) {
+            max-width: calc(100% - 195px);
+          }
+        }
+      }
+    }
   }
 
-  .q-toggle__inner {
-    padding: 0.21em 0.2em 0.21em 0;
+  .main-section__block {
+    width: 228px;
+    max-width: 228px;
   }
-  .q-toggle__thumb {
-    left: 0.05em;
-  }
-  .q-toggle__inner--truthy .q-toggle__thumb {
-    left: 0.65em;
-  }
-  .q-toggle__track {
-    height: 0.60em;
-    border-radius: 0.35em;
+
+  .v-scroll-desk .q-virtual-scroll__content {
+    width: $row-width;
   }
 }
 
 .stake-accounts-container {
   &:not(:last-child) {
     border-bottom: 1px solid $blue-grey-5;
-  }
-}
-
-.stake-stats {
-  &:not(:first-child) {
-    @media (min-width: $breakpoint-sm) {
-      border-left: 1px solid $primary;
-    }
-  }
-
-  &:not(:last-child) {
-    @media (max-width: $breakpoint-sm) {
-      margin-bottom: 16px;
-    }
-  }
-
-  &__title {
-    font-family: $font-secondary;
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 15px;
-    text-transform: uppercase;
-  }
-
-  &__values {
-    font-family: $font-secondary;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-    text-transform: uppercase;
-
-    &__sol {
-      color: #000;
-    }
-
-    &__usd {
-      color: $primary;
-    }
-  }
-}
-
-.validator-row {
-  flex-wrap: nowrap;
-  width: 958px;
-  height: 94px;
-
-  .q-avatar__content {
-    text-align: center;
-
-    svg {
-      fill: $grey-4;
-    }
-  }
-
-  &__index {
-    width: 45px;
-    border-right: 1px solid $light-gray;
-    padding-right: 16px;
-  }
-
-  &__logo {
-    width: 60px;
-  }
-
-  &__name {
-    font-weight: 500;
-    width: 219px;
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    border-right: 1px solid $light-gray;
-    padding-right: 16px;
-
-    &.column div {
-      text-overflow: ellipsis;
-      max-width: 100%;
-      overflow: hidden;
-    }
-
-    &__details {
-      font-size: 10px;
-      margin-top: 2px;
-      white-space: break-spaces;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      display: -webkit-box;
-    }
-  }
-
-  &__apy {
-    width: 159px;
-    font-weight: 500;
-    align-items: flex-end;
-    border-right: 1px solid $light-gray;
-    padding-right: 16px;
-
-    &__fee {
-      font-size: 14px;
-      line-height: 16px;
-      color: $primary;
-
-      span {
-        font-size: 11px;
-      }
-    }
-
-    &__val {
-      font-size: 20px;
-      color: $text-black;
-    }
-  }
-
-  &__apy-chart {
-    width: 170px;
-  }
-
-  &__stake {
-    width: 135px;
-    padding-right: 16px;
-
-    &__sol {
-      font-size: 14px;
-      line-height: 17px;
-      color: $almost-black;
-    }
-
-    &__usd {
-      font-family: $secondary;
-      font-size: 14px;
-      color: $primary;
-    }
-  }
-
-  &__address {
-    &__text {
-      font-size: 11px;
-      width: 230px;
-      display: inline-block;
-      font-family: 'Courier';
-      color: $dark;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      height: 18px;
-      line-height: 28px;
-    }
-  }
-
-  &__btns {
-    border-left: 1px solid $light-gray;
-    margin-left: auto;
-    padding-left: 16px;
-    width: 278px;
-
-    &__stake {
-      font-size: 12px;
-    }
-  }
-
-  &__status-badge {
-    position: absolute;
-    left: 33px;
-    top: -10px;
-    height: 22px;
-
-    &--jpool {
-      left: -37px;
-    }
-  }
-
-  .apy-chart {
-    padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    .q-icon {
-      height: 50px;
-      padding: 16px 0 8px;
-    }
   }
 }
 
@@ -364,23 +231,8 @@ body.body--dark {
     .q-field--float .q-field__label {
       color: $text-white;
     }
-  }
-  .validator-row {
-    &__apy {
-      &__val {
-        color: $text-white;
-      }
-      &__fee {
-        color: $text-white;
-      }
-    }
-    &__stake__sol {
-      color: $text-white;
-    }
-    &__address {
-      &__text {
-        color: $text-white;
-      }
+    &__filters {
+      background: $gray-dark-theme;
     }
   }
   .stake-accounts-container {

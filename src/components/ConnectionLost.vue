@@ -32,23 +32,15 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import { useStakePoolStore } from '@/store';
-  import { storeToRefs } from 'pinia';
-  import { defineComponent, ref } from 'vue';
+  import { ref, toRef } from 'vue';
 
-  export default defineComponent({
-    setup() {
-      const { connectionLost } = storeToRefs(useStakePoolStore());
-      const forceHidden = ref(true);
+  const stakePoolStore = useStakePoolStore();
+  const connectionLost = toRef(stakePoolStore, 'connectionLost');
+  const forceHidden = ref(true);
 
-      setTimeout(() => (forceHidden.value = false), 3000);
-      return {
-        connectionLost,
-        forceHidden,
-      };
-    },
-  });
+  setTimeout(() => (forceHidden.value = false), 3000);
 </script>
 
 <style scoped lang="scss">

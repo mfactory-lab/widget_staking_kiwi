@@ -33,6 +33,7 @@ export interface ValidatorStats {
   validatorId: string;
   fee: number;
   apy: number;
+  apyEst: number;
   totalStake: number;
   network: string;
   name: string | undefined;
@@ -42,14 +43,20 @@ export interface ValidatorStats {
   inTop33: boolean;
   inJpool: boolean;
   isDelinquent: boolean;
+  lastVote: string;
   svName: string;
   apyComparedMax: Number;
 }
 
+export interface ApyStats {
+  apy: number;
+  epoch: number;
+}
+
 export async function getValidatorsStats(network) {
-  return new Promise<Array<ValidatorStats>>((resolve, _reject) => {
+  return new Promise<Array<ValidatorStats>>((resolve, reject) => {
     // fetch(`http://localhost:3000/validators/list?network=${network}`)
-    fetch(`${API_URL}validators/list?network=${network}`)
+    fetch(`${API_URL}/validators/list?network=${network}`)
       .then((res) => res.json())
       .then(
         (res) => {
@@ -57,6 +64,47 @@ export async function getValidatorsStats(network) {
             resolve(res.data);
           } else {
             resolve([]);
+          }
+        },
+        (error) => {
+          reject(error);
+          console.error(error);
+        },
+      );
+  });
+}
+
+export async function getApyHistory(voterKey) {
+  return new Promise<Array<ApyStats>>((resolve, _reject) => {
+    fetch(`${API_URL}/apy/history?voter_id=${voterKey}`)
+      .then((res) => res.json())
+      .then(
+        (res) => {
+          if (res.data?.length > 0) {
+            resolve(res.data);
+          } else {
+            // resolve([]);
+            // reject(Error('Promise rejected'));
+          }
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+  });
+}
+
+export async function getAverageApy() {
+  return new Promise<Array<ApyStats>>((resolve, _reject) => {
+    fetch(`${API_URL}/apy-average/history`)
+      .then((res) => res.json())
+      .then(
+        (res) => {
+          if (res.data?.length > 0) {
+            resolve(res.data);
+          } else {
+            // resolve([]);
+            // reject(Error('Promise rejected'));
           }
         },
         (error) => {

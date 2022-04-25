@@ -29,16 +29,16 @@
 <template>
   <q-card class="stake-box shadow-sm q-pa-sm">
     <q-card-section class="stake-box__top-section">
-      <div class="row justify-center">
-        <div class="col-12">
+      <div class="row items-center">
+        <div class="col-12 col-sm-auto q-mr-auto">
           <div class="stake-box__title"> Balance: {{ availableSol }} SOL </div>
         </div>
-      </div>
-      <div
-        v-if="connected && Number(stake.from) > Number(availableSol)"
-        class="stake-box__warning lt-sm"
-      >
-        Insufficient funds to stake
+        <div
+          v-if="connected && Number(stake.from) > Number(availableSol)"
+          class="stake-box__warning col-auto"
+        >
+          Insufficient funds to stake
+        </div>
       </div>
     </q-card-section>
 
@@ -70,6 +70,7 @@
             unelevated
             size="12px"
             padding="2px 8px 0"
+            :ripple="false"
             @click="stakeMax"
           >
             MAX
@@ -109,6 +110,10 @@
               size="14px"
               padding="9px xl"
               text-color="text-white"
+              :disabled="
+                connectionLost || validatorDelinquent || Number(stake.from) > Number(availableSol)
+              "
+              :ripple="false"
               @click="stakeHandler"
             >
               STAKE NOW
@@ -142,6 +147,7 @@
           unelevated
           class="absolute-right"
           :icon="evaClose"
+          :ripple="false"
           size="md"
           @click="maxStakeDialog = false"
         />
@@ -163,42 +169,33 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent, nextTick, onMounted, reactive, ref, toRef, watch } from 'vue';
   import {
     useBalanceStore,
     useConnectionStore,
     useStakePoolStore,
     useValidatorJstakingStore,
-    useWalletStore,
   } from '@/store';
-  import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
-  import { useStakeAccounts } from '@/hooks/stake-accounts';
-  import Apy from '@/components/staking/Apy.vue';
-  import StakeSlideWrapper from '@/components/staking/stake/StakeSlideWrapper.vue';
-  import ConnectWallet from '@/components/staking/ConnectWallet.vue';
-  import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
-  import { clickOutside } from '@jpool/common/directives';
+  import { formatAmount, formatPct, lamportsToSol } from '@/utils';
+  import { useStakeAccounts } from '@/hooks';
+  import { clickOutside } from '@/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
-  import ApyChart from '@/components/staking/charts/ApyChart.vue';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
-    components: {
-      Apy,
-      ConnectWallet,
-      StakeSlideWrapper,
-      RoiCalculatorBtn,
-      ApyChart,
-    },
     directives: {
       clickOutside,
     },
     setup() {
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = toRef(validatorJstakingStore, 'voterKey');
+      const validatorDelinquent = toRef(validatorJstakingStore, 'validatorDelinquent');
       const connectionStore = useConnectionStore();
-      const { connected } = storeToRefs(useWalletStore());
-      const { solBalance } = storeToRefs(useBalanceStore());
-      const { connectionLost } = storeToRefs(useStakePoolStore());
+      const { connected } = useWallet();
+      const balanceStore = useBalanceStore();
+      const solBalance = toRef(balanceStore, 'solBalance');
+      const stakePoolStore = useStakePoolStore();
+      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const { depositFee, creating, createAccount } = useStakeAccounts();
       const maxStakeDialog = ref(false);
 
@@ -217,14 +214,8 @@
         });
       });
 
-      watch([stake, connected, solBalance], ([amount, connected, solBalance]) => {
+      watch(stake, (amount) => {
         if (amount.from < 0) stake.from = 0;
-        if (!connected) return;
-        const sol = Number(amount.from);
-        const solFee = lamportsToSol(depositFee.value);
-        if (solBalance && sol + solFee > solBalance) {
-          stake.from = solBalance - solFee;
-        }
       });
 
       // Calculate amount to deposit
@@ -267,6 +258,7 @@
 
       return {
         voterKey,
+        validatorDelinquent,
         stake,
         cluster: computed(() => connectionStore.cluster),
         evaClose,

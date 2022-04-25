@@ -133,17 +133,13 @@
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
   import { storeToRefs } from 'pinia';
-  // @ts-ignore
-  import { ProgramAccount, useCoinRateStore, useEpochStore } from '@/store';
-  import { formatAmount, lamportsToSol, shortenAddress } from '@jpool/common/utils';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
-  import { formatMoney } from '@jpool/common/utils/check-number';
   import BN from 'bn.js';
+  import { ProgramAccount, useCoinRateStore, useEpochStore } from '@/store';
+  import { formatAmount, formatMoney, lamportsToSol, shortenAddress } from '@/utils';
 
   const MAX_EPOCH = new BN(2).pow(new BN(64)).sub(new BN(1));
 
   export default defineComponent({
-    components: { CopyToClipboard },
     props: {
       index: Number,
       loading: Boolean,

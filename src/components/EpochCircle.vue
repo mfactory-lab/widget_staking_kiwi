@@ -32,7 +32,7 @@
       show-value
       class="q-mt-xs epoch-circle__progress"
       :value="epochProgress"
-      size="106px"
+      size="110px"
       :thickness="0.2"
       color="natural-light-gray"
       track-color="warning"
@@ -49,40 +49,38 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import { useEpochStore } from '@/store';
-  import { computed, defineComponent } from 'vue';
+  import { computed } from 'vue';
 
-  export default defineComponent({
-    setup() {
-      const epochStore = useEpochStore();
-      return {
-        epochNumber: computed(() => epochStore.epochNumber),
-        epochProgress: computed(() => epochStore.epochProgress),
-        time: computed(() => {
-          const timeInMs = epochStore.epochTimeRemaining;
-          const _h = timeInMs / 1000 / 60 / 60;
-          const h = Math.floor(_h);
-          const m = Math.floor((_h - h) * 60);
-          const s = Math.ceil(((_h - h) * 60 - m) * 60);
-          return { h, m: m < 10 ? `0${m}` : m, s: s < 10 ? `0${s}` : s };
-        }),
-      };
-    },
+  const epochStore = useEpochStore();
+  const epochNumber = computed(() => epochStore.epochNumber);
+  const epochProgress = computed(() => +epochStore.epochProgress);
+
+  const time = computed(() => {
+    const timeInMs = epochStore.epochTimeRemaining;
+    const _h = +timeInMs / 1000 / 60 / 60;
+    const h = Math.floor(_h);
+    const m = Math.floor((_h - h) * 60);
+    const s = Math.ceil(((_h - h) * 60 - m) * 60);
+    return { h, m: m < 10 ? `0${m}` : m, s: s < 10 ? `0${s}` : s };
   });
 </script>
 
 <style scoped lang="scss">
   .epoch-circle {
     position: absolute;
-    left: calc(50% - 53px);
-    bottom: 5px;
+    left: calc(50% - 55px);
+    bottom: 0;
     @media (max-width: $breakpoint-sm) {
       left: calc(60%);
       bottom: 50px;
     }
     @media (max-width: $breakpoint-xs) {
-      left: calc(100% - 106px);
+      left: 235px;
+    }
+    @media (max-width: 350px) {
+      left: 215px;
     }
     &__progress {
       @media (max-width: $breakpoint-sm) {

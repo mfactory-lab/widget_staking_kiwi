@@ -26,17 +26,12 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import type { App } from 'vue';
-import { createPinia } from 'pinia';
-import { useCoinRateStore } from '@jpool/common/store/modules';
-
-const store = createPinia();
-
-export function setupStore(app: App<Element>) {
-  app.use(store);
-  useCoinRateStore().init();
-}
-
-export { store };
-export * from './modules';
-export * from '@jpool/common/store/modules';
+export * from './apy';
+export * from './balance';
+export * from './epoch';
+export * from './connection';
+export * from './coin-rate';
+export * from './stake-accounts';
+export * from './stake-pool';
+export * from './validator-jstaking';
+export * from './validators-all';
