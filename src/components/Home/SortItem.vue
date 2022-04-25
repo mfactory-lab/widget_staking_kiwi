@@ -36,6 +36,7 @@
         :color="currentParam === param && currentType === 'desc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('desc')"
         :icon="'img:' + sortUp"
+        :ripple="false"
       />
       <q-btn
         v-if="!onlyDesc"
@@ -44,6 +45,7 @@
         :color="currentParam === param && currentType === 'asc' ? 'gray-dark-theme' : 'primary'"
         @click="() => sort('asc')"
         :icon="'img:' + sortDown"
+        :ripple="false"
       />
     </div>
   </div>

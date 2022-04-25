@@ -34,6 +34,7 @@ import visualizer from 'rollup-plugin-visualizer';
 import components from 'unplugin-vue-components/vite';
 import inject from '@rollup/plugin-inject';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+import checker from 'vite-plugin-checker';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 // noinspection ES6PreferShortImport
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
@@ -47,11 +48,9 @@ export default defineConfig(({ mode }) => {
     vue({
       include: [/\.vue$/, /\.md$/],
       template: { transformAssetUrls },
-      reactivityTransform: true,
+      // reactivityTransform: true,
     }),
-    quasar({
-      // sassVariables: 'src/quasar-variables.sass',
-    }),
+    quasar(),
     createHtmlPlugin({
       inject: {
         data: {
@@ -61,13 +60,17 @@ export default defineConfig(({ mode }) => {
         },
       },
     }),
-    chunkSplitPlugin({
-      // strategy: 'single-vendor',
-    }),
+    chunkSplitPlugin(),
     // https://github.com/antfu/unplugin-vue-components
     components({
       extensions: ['vue', 'md'],
       dts: 'types/components.d.ts',
+    }),
+    // https://github.com/fi3ework/vite-plugin-checker
+    checker({
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      },
     }),
   ];
 
@@ -110,7 +113,6 @@ export default defineConfig(({ mode }) => {
       'vue-chart-3', // TODO: remove
       'chart.js',
       'lodash',
-      'lodash-es',
       '@quasar/extras/eva-icons',
       'bn.js',
     ],

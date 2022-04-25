@@ -28,7 +28,7 @@
 
 import { computed, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
-import { useEpochStore, useValidatorStore } from '@/store';
+import { useEpochStore } from '@/store';
 import axios from 'axios';
 import { useLocalStorage } from '@vueuse/core';
 import { APY_VALIDATOR_ID, DEFAULT_APY } from '@/config';
@@ -64,10 +64,12 @@ export const useApyStore = defineStore('apy', () => {
   const selectedApy = ref();
   const apyLoading = ref(!apyInfo.value?.lastEpoch);
 
+  // TODO: check
   const validatorStore = {
     voteIds: [],
   }; // useValidatorStore();
-  const voteIds = computed(() => validatorStore.voteIds);
+
+  const voteIds = computed<Array<string>>(() => validatorStore.voteIds);
   const epochInfo = computed(() => epochStore.epochInfo);
 
   watch([epochInfo, voteIds], async ([epochInfo, ids]) => {
