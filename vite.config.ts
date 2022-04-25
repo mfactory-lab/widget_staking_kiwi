@@ -29,13 +29,13 @@
 import { resolve } from 'path';
 import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import vue from '@vitejs/plugin-vue';
-import visualizer from 'rollup-plugin-visualizer';
-import components from 'unplugin-vue-components/vite';
-import inject from '@rollup/plugin-inject';
-import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+// import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import checker from 'vite-plugin-checker';
+import vue from '@vitejs/plugin-vue';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+import components from 'unplugin-vue-components/vite';
+import visualizer from 'rollup-plugin-visualizer';
+import inject from '@rollup/plugin-inject';
 // noinspection ES6PreferShortImport
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     }),
-    chunkSplitPlugin(),
+    // chunkSplitPlugin(),
     // https://github.com/antfu/unplugin-vue-components
     components({
       extensions: ['vue', 'md'],
