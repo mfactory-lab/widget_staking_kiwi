@@ -34,8 +34,6 @@ import visualizer from 'rollup-plugin-visualizer';
 import components from 'unplugin-vue-components/vite';
 import inject from '@rollup/plugin-inject';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
-// import sri from 'rollup-plugin-sri';
-
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 // noinspection ES6PreferShortImport
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
@@ -46,10 +44,6 @@ export default defineConfig(({ mode }) => {
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
-    // {
-    //   enforce: 'post',
-    //   ...sri({ publicPath: '/' }),
-    // },
     vue({
       include: [/\.vue$/, /\.md$/],
       template: { transformAssetUrls },
@@ -68,7 +62,7 @@ export default defineConfig(({ mode }) => {
       },
     }),
     chunkSplitPlugin({
-      // strategy: 'unbundle',
+      // strategy: 'single-vendor',
     }),
     // https://github.com/antfu/unplugin-vue-components
     components({
@@ -112,9 +106,11 @@ export default defineConfig(({ mode }) => {
     include: [
       'vue',
       // 'vue-chartjs',
+      // 'chartjs-adapter-luxon',
       'vue-chart-3', // TODO: remove
       'chart.js',
-      // 'chartjs-adapter-luxon',
+      'lodash',
+      'lodash-es',
       '@quasar/extras/eva-icons',
       'bn.js',
     ],
@@ -155,8 +151,8 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
-      // browser: true,
-      // preferBuiltins: false,
+      browser: true,
+      preferBuiltins: false,
       dedupe: [
         'bn.js',
         'bs58',
@@ -182,13 +178,13 @@ export default defineConfig(({ mode }) => {
     },
 
     // https://github.com/antfu/vite-ssg
-    ssgOptions: {
-      script: 'async',
-      formatting: 'minify',
-      // onFinished() {
-      // generateSitemap();
-      // },
-    },
+    // ssgOptions: {
+    //   script: 'async',
+    //   formatting: 'minify',
+    //   // onFinished() {
+    //   // generateSitemap();
+    //   // },
+    // },
 
     // https://github.com/vitest-dev/vitest
     // test: {
