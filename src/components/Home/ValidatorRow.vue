@@ -31,11 +31,13 @@
     <div class="validator-row__index column q-mr-md justify-center items-center">
       {{ index }}
     </div>
-    <div class="validator-row__main-block column no-wrap justify-center relative-position">
+    <div
+      v-if="!loading"
+      class="validator-row__main-block column no-wrap justify-center relative-position"
+    >
       <div class="row justify-between relative-position">
         <div class="validator-row__logo column q-mr-md justify-center relative-position">
-          <q-skeleton v-if="loading" type="QAvatar" class="shadow-5" size="60px" />
-          <router-link v-else :to="`/app/${item.voter}`">
+          <router-link :to="`/app/${item.voter}`">
             <q-avatar class="shadow-1" size="60px">
               <q-img :src="item.image" spinner-size="34px" spinner-color="white" no-transition>
                 <template #default v-if="!item.image">
@@ -49,28 +51,18 @@
           </router-link>
         </div>
         <div class="validator-row__badges row no-wrap absolute">
-          <a
-            v-if="!loading && item.inJpool"
-            href="https://jpool.one"
-            class="row q-mr-sm"
-            target="_blank"
-          >
+          <a v-if="item.inJpool" href="https://jpool.one" class="row q-mr-sm" target="_blank">
             <q-badge class="validator-row__status-badge" color="warning" text-color="primary">
               JPOOL
             </q-badge>
           </a>
-          <a
-            v-if="!loading && item.svName && cluster"
-            class="row q-mr-sm"
-            :href="url"
-            target="_blank"
-          >
+          <a v-if="item.svName && cluster" class="row q-mr-sm" :href="url" target="_blank">
             <q-badge class="validator-row__status-badge" color="accent" text-color="text-white">
               SVT MEMBER
             </q-badge>
           </a>
           <q-badge
-            v-if="!loading && item.isDelinquent"
+            v-if="item.isDelinquent"
             class="validator-row__status-badge"
             color="negative"
             text-color="text-white"
@@ -84,15 +76,13 @@
           </q-badge>
         </div>
         <div class="validator-row__name column q-pt-xs justify-start">
-          <q-skeleton width="100%" v-if="loading" />
-          <div v-else class="q-mt-sm">
+          <div class="q-mt-sm">
             {{ name }}
             <q-tooltip class="text-body2" :class="{ 'break-words': !item.name }">
               {{ name }}
             </q-tooltip>
           </div>
-          <q-skeleton width="100%" height="28px" class="q-mt-sm" v-if="loading" />
-          <div v-else class="validator-row__name__details">
+          <div class="validator-row__name__details">
             {{ item.details }}
             <q-tooltip v-if="item.details" class="text-body2">
               {{ item.details }}
@@ -100,26 +90,19 @@
           </div>
         </div>
         <div class="validator-row__apy column q-pl-md justify-start">
-          <q-skeleton width="100%" height="16px" class="q-mt-xs" v-if="loading" />
-          <div class="validator-row__apy__fee q-mt-xs" v-else>
+          <div class="validator-row__apy__fee q-mt-xs">
             <!-- <span>Commission:</span> <b>{{ item.fee }}</b> -->
             <span>Current APY:</span> <b>{{ item.apyEst }}</b>
           </div>
-          <q-skeleton class="q-mt-sm" height="18px" v-if="loading" width="100%" />
-          <div class="validator-row__apy__val q-mb-xs" v-else>
+          <div class="validator-row__apy__val q-mb-xs">
             <average-svg :fill="$q.dark.isActive ? '#fff' : '#252B42'" />
             APY: <b>{{ item.apy }}</b>
             <q-tooltip class="text-body2"> Average APY for the previous 3 epochs </q-tooltip>
           </div>
-          <q-skeleton class="q-mt-sm" height="10px" v-if="loading" width="100%" />
-          <linear-progress v-else :val="item.apyComparedMax" />
+          <linear-progress :val="item.apyComparedMax" />
         </div>
         <div class="validator-row__apy-chart column q-pl-sm q-pr-md justify-start">
-          <div class="q-px-sm q-mt-xs" v-if="loading">
-            <q-skeleton width="100%" height="60px" class="" />
-          </div>
           <apy-chart
-            v-else
             :voter-key="item.voter"
             :show-y-axis="false"
             :show-title="false"
@@ -130,28 +113,14 @@
       <div
         class="validator-row__addresses q-pt-sm row justify-between q-pb-xs q-pr-md relative-position"
       >
-        <q-skeleton
-          width="288px"
-          height="16px"
-          style="max-width: 48%"
-          class="q-mt-xs"
-          v-if="loading"
-        />
-        <div class="text-right" v-else>
+        <div class="text-right">
           <span class="validator-row__address__text">
             {{ item.id }}
             <q-tooltip class="text-body2 break-words"> Identity: {{ item.id }} </q-tooltip>
           </span>
           <copy-to-clipboard :text="item.id" />
         </div>
-        <q-skeleton
-          width="296px"
-          height="16px"
-          style="max-width: 48%"
-          class="q-mt-xs"
-          v-if="loading"
-        />
-        <div class="text-right" v-else>
+        <div class="text-right">
           <span class="validator-row__address__text">
             {{ item.voter }}
             <q-tooltip class="text-body2 break-words"> Vote Account: {{ item.voter }} </q-tooltip>
@@ -161,11 +130,10 @@
       </div>
     </div>
 
-    <div class="validator-row__btns no-wrap column q-pl-md justify-start">
+    <div v-if="!loading" class="validator-row__btns no-wrap column q-pl-md justify-start">
       <div class="row q-mb-xs justify-between">
         <div class="validator-row__stake column justify-start">
-          <q-skeleton v-if="loading" width="100%" height="35px" class="q-mt-xs" />
-          <div class="column validator-row__stake__values" v-else>
+          <div class="column validator-row__stake__values">
             <div class="validator-row__stake__sol">
               <span class="validator-row__stake__label">TOTAL STAKE:</span>
               <br />
@@ -173,8 +141,7 @@
             </div>
           </div>
 
-          <q-skeleton v-if="loading" width="100%" height="35px" class="q-mt-md" />
-          <div class="column validator-row__stake__values" v-else>
+          <div class="column validator-row__stake__values">
             <div class="validator-row__stake__sol validator-row__stake__sol--my q-mt-sm q-pt-sm">
               <span class="validator-row__stake__label">MY STAKE:</span>
               <br />
@@ -184,9 +151,7 @@
           </div>
         </div>
 
-        <q-skeleton class="q-mt-xs" v-if="loading" width="106px" height="86px" />
         <q-btn
-          v-else
           :to="`/app/${item.voter}`"
           label="Stake"
           color="warning"
@@ -197,6 +162,8 @@
         />
       </div>
     </div>
+
+    <validator-row-skeleton v-else />
   </div>
 </template>
 

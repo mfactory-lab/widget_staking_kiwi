@@ -74,6 +74,17 @@ export interface ValidatorItem {
   lastVote: string;
 }
 
+export interface Filters {
+  top33: boolean;
+  private: boolean;
+  withFee: boolean;
+  noname: boolean;
+  delinquent: boolean;
+  onlyJpool: boolean;
+  onlySvm: boolean;
+  hasStake: boolean;
+}
+
 export const useValidatorsAllStore = defineStore('validators-all', () => {
   const emitter = useEmitter();
   const connectionStore = useConnectionStore();
@@ -94,14 +105,16 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const sortType = useLocalStorage<string>('sort-type', 'desc');
   const sortParam = useLocalStorage<string>('sort-param', 'apyNum');
 
-  const filterTop33 = useLocalStorage<boolean>('filter-top-staked', true);
-  const filterPrivate = useLocalStorage<boolean>('filter-private', true);
-  const filterFee = useLocalStorage<boolean>('filter-fee', false);
-  const filterNoname = useLocalStorage<boolean>('filter-noname', false);
-  const filterDelinq = useLocalStorage<boolean>('filter-delinq', false);
-  const filterNotJpool = useLocalStorage<boolean>('filter-not-jpool', false);
-  const filterNotSvm = useLocalStorage<boolean>('filter-not-svm', false);
-  const filterHasStake = ref(false);
+  const filters = useLocalStorage<Filters>('filters', {
+    top33: true,
+    private: true,
+    withFee: false,
+    noname: false,
+    delinquent: false,
+    onlyJpool: false,
+    onlySvm: false,
+    hasStake: false,
+  });
 
   const showControls = useLocalStorage<boolean>('show-controls', true);
   const showControlsMob = useLocalStorage<boolean>('show-controls-mob', false);
@@ -137,7 +150,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   });
 
   watch(connected, (connected) => {
-    if (!connected) filterHasStake.value = false;
+    if (!connected) filters.value.hasStake = false;
   });
 
   watch([cluster, epoch], () => {
@@ -229,28 +242,28 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
           ) {
             return false;
           }
-          if (filterFee.value && item.feeNum > 0) {
+          if (filters.value.withFee && item.feeNum > 0) {
             return false;
           }
-          if (filterNoname.value && !item.name) {
+          if (filters.value.noname && !item.name) {
             return false;
           }
-          if (filterDelinq.value && item.isDelinquent) {
+          if (filters.value.delinquent && item.isDelinquent) {
             return false;
           }
-          if (filterNotSvm.value && !item.svName) {
+          if (filters.value.onlySvm && !item.svName) {
             return false;
           }
-          if (filterPrivate.value && item.feeNum === 100) {
+          if (filters.value.private && item.feeNum === 100) {
             return false;
           }
-          if (filterTop33.value && item.inTop33) {
+          if (filters.value.top33 && item.inTop33) {
             return false;
           }
-          if (filterNotJpool.value && !item.inJpool) {
+          if (filters.value.onlyJpool && !item.inJpool) {
             return false;
           }
-          if (filterHasStake.value && !item.myStake) {
+          if (filters.value.hasStake && !item.myStake) {
             return false;
           }
 
@@ -281,14 +294,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     sortType,
     sortParam,
     nameFilter,
-    filterPrivate,
-    filterTop33,
-    filterFee,
-    filterNoname,
-    filterDelinq,
-    filterNotSvm,
-    filterNotJpool,
-    filterHasStake,
+    filters,
     itemsTotal: computed(() => items.value.length),
     items: itemsComputed,
     averageApy,

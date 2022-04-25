@@ -36,7 +36,7 @@
       <div class="column q-ml-md q-my-xs">
         <div class="validators-list__dropdown-label q-mb-xs">Hide Private</div>
         <q-toggle
-          v-model="filterPrivate"
+          v-model="filters.private"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           size="40px"
@@ -50,7 +50,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Hide Top Staked</div>
         <q-toggle
-          v-model="filterTop33"
+          v-model="filters.top33"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -63,7 +63,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Hide with Commission</div>
         <q-toggle
-          v-model="filterFee"
+          v-model="filters.withFee"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -76,7 +76,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Hide Anonymous</div>
         <q-toggle
-          v-model="filterNoname"
+          v-model="filters.noname"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -89,7 +89,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Hide Delinquent</div>
         <q-toggle
-          v-model="filterDelinq"
+          v-model="filters.delinquent"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -104,7 +104,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">JPool members</div>
         <q-toggle
-          v-model="filterNotJpool"
+          v-model="filters.onlyJpool"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -117,7 +117,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">SVT members</div>
         <q-toggle
-          v-model="filterNotSvm"
+          v-model="filters.onlySvm"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -130,7 +130,7 @@
       <div v-if="$q.screen.lt.md" class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Show my Stake</div>
         <q-toggle
-          v-model="filterHasStake"
+          v-model="filters.hasStake"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -147,7 +147,7 @@
       <div class="column q-my-xs q-ml-md">
         <div class="validators-list__dropdown-label q-mb-xs">Show my Stake</div>
         <q-toggle
-          v-model="filterHasStake"
+          v-model="filters.hasStake"
           class="styled-toggle"
           checked-icon="eva-checkmark-outline"
           toggle-order="tf"
@@ -238,17 +238,10 @@
       const { connected } = useWallet();
 
       const validatorsAllStore = useValidatorsAllStore();
+      const filters = toRef(validatorsAllStore, 'filters');
       const sortType = toRef(validatorsAllStore, 'sortType');
       const sortParam = toRef(validatorsAllStore, 'sortParam');
       const nameFilter = toRef(validatorsAllStore, 'nameFilter');
-      const filterPrivate = toRef(validatorsAllStore, 'filterPrivate');
-      const filterTop33 = toRef(validatorsAllStore, 'filterTop33');
-      const filterFee = toRef(validatorsAllStore, 'filterFee');
-      const filterNoname = toRef(validatorsAllStore, 'filterNoname');
-      const filterDelinq = toRef(validatorsAllStore, 'filterDelinq');
-      const filterNotSvm = toRef(validatorsAllStore, 'filterNotSvm');
-      const filterNotJpool = toRef(validatorsAllStore, 'filterNotJpool');
-      const filterHasStake = toRef(validatorsAllStore, 'filterHasStake');
       const showControls = toRef(validatorsAllStore, 'showControls');
       const showControlsMob = toRef(validatorsAllStore, 'showControlsMob');
 
@@ -259,14 +252,7 @@
         sortType,
         sortParam,
         nameFilter,
-        filterPrivate,
-        filterTop33,
-        filterFee,
-        filterNoname,
-        filterDelinq,
-        filterNotSvm,
-        filterNotJpool,
-        filterHasStake,
+        filters,
         cluster,
         showControls,
         showControlsMob,

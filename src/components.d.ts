@@ -53,6 +53,8 @@ declare module '@vue/runtime-core' {
     ValidatorName: typeof import('./components/staking/ValidatorName.vue')['default']
     ValidatorRow: typeof import('./components/home/ValidatorRow.vue')['default']
     ValidatorRowMob: typeof import('./components/home/ValidatorRowMob.vue')['default']
+    ValidatorRowMobSkeleton: typeof import('./components/home/ValidatorRowMobSkeleton.vue')['default']
+    ValidatorRowSkeleton: typeof import('./components/home/ValidatorRowSkeleton.vue')['default']
     ValidatorsList: typeof import('./components/home/ValidatorsList.vue')['default']
     ValidatorsListDesk: typeof import('./components/home/ValidatorsListDesk.vue')['default']
     ValidatorsListFilters: typeof import('./components/home/ValidatorsListFilters.vue')['default']
