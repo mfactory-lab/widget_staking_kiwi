@@ -1,6 +1,7 @@
 /public
 /docs
 /bin
+/types
 node_modules
 dist
 .vscode

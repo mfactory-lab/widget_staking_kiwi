@@ -26,8 +26,31 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { Chart, registerables } from 'chart.js';
+import {
+  CategoryScale,
+  Chart,
+  Filler,
+  Legend,
+  LineController,
+  LineElement,
+  LinearScale,
+  PointElement,
+  TimeScale,
+  Title,
+  Tooltip,
+} from 'chart.js';
 
 export const install = () => {
-  Chart.register(...registerables);
+  Chart.register(
+    LineController,
+    PointElement,
+    Title,
+    Filler,
+    Legend,
+    Tooltip,
+    LinearScale,
+    LineElement,
+    TimeScale,
+    CategoryScale,
+  );
 };

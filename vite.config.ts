@@ -112,6 +112,7 @@ export default defineConfig(({ mode }) => {
     include: [
       'vue',
       // 'vue-chartjs',
+      'vue-chart-3', // TODO: remove
       'chart.js',
       // 'chartjs-adapter-luxon',
       '@quasar/extras/eva-icons',
@@ -177,7 +178,7 @@ export default defineConfig(({ mode }) => {
 
     define: {
       'process.env': process.env,
-      global: 'globalThis',
+      // global: 'globalThis',
     },
 
     // https://github.com/antfu/vite-ssg
