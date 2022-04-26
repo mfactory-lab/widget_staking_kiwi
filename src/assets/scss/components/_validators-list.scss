@@ -67,7 +67,7 @@
   }
   &__no-validators {
     position: sticky;
-    left: 0px;
+    left: 0;
     width: $row-width;
     height: 100px;
     display: flex;
@@ -113,7 +113,7 @@
       margin-left: -15px !important;
     }
   }
-  
+
   &__filters {
     background: $text-white;
     box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
@@ -135,6 +135,9 @@
   &__search {
     width: 320px !important;
     max-width: 100%;
+    .q-field__append {
+      margin-top: 8px;
+    }
   }
 
   &__list {

@@ -1,5 +1,5 @@
 <!--
-  - This file is part of the Web3 Library developed by mFactory GmbH.
+  - This file is part of Solana Reference Stake Pool code.
   -
   - Copyright © 2021, mFactory GmbH
   -
@@ -52,14 +52,7 @@
       rounded
       @click="connect"
     >
-      <div class="row items-center no-wrap">
-        <!-- <img
-              alt=""
-              class="q-icon"
-              src="@/assets/img/wallet.svg"
-            /> -->
-        <span>CONNECT WALLET</span>
-      </div>
+      <span>CONNECT WALLET</span>
     </q-btn>
   </template>
 
@@ -73,7 +66,7 @@
           text-color="primary-gray"
           unelevated
           class="absolute-right"
-          :icon="evaClose"
+          :icon="icons.close"
           size="md"
           @click="ok"
         />
@@ -101,8 +94,7 @@
           text-color="primary-gray"
           unelevated
           class="absolute-right"
-          :icon="evaClose"
-          :ripple="false"
+          :icon="icons.close"
           size="md"
           @click="ok"
         />
@@ -115,7 +107,10 @@
               <q-item-section>{{ wallet.name }}</q-item-section>
               <q-item-section avatar>
                 <q-avatar square>
-                  <img :src="wallet.icon" alt="" />
+                  <img
+                    :src="dark.isActive ? wallet.icon : wallet['darkIcon'] ?? wallet.icon"
+                    alt=""
+                  />
                 </q-avatar>
               </q-item-section>
             </q-item>
@@ -132,6 +127,9 @@
   import { evaClose } from '@quasar/extras/eva-icons';
   import { WalletReadyState } from '@solana/wallet-adapter-base';
   import { shortenAddress } from '@/utils';
+  import ledgerDarkSvg from '@/assets/img/wallets/ledger.svg';
+  import mathWalletDarkSvg from '@/assets/img/wallets/mathwallet.svg';
+  import { useQuasar } from 'quasar';
 
   const walletPriority = {
     solflare: 10,
@@ -142,34 +140,56 @@
 
   export default defineComponent({
     setup() {
-      const { wallets, select: selectWallet, publicKey, connected, disconnect } = useWallet();
+      const {
+        wallets,
+        select: selectWallet,
+        publicKey,
+        connected,
+        disconnect,
+        connect,
+      } = useWallet();
       const walletAddress = computed(() => publicKey.value?.toBase58() ?? '');
-      const walletShortAddress = computed(() => shortenAddress(walletAddress.value, 6));
+      const walletShortAddress = computed(() => shortenAddress(walletAddress.value));
 
       const dialog = ref(false);
+
+      const { dark } = useQuasar();
+      const darkIcons = {
+        ledger: ledgerDarkSvg,
+        mathwallet: mathWalletDarkSvg,
+      };
 
       function isActiveWallet(wallet: Wallet) {
         return [WalletReadyState.Installed, WalletReadyState.Loadable].includes(wallet.readyState);
       }
 
       return {
-        evaClose,
         walletAddress,
         walletShortAddress,
         dialog,
         connected,
+        dark,
         wallets: computed(() =>
-          [...wallets.value].sort((a, b) => {
-            const aPriority = walletPriority[a.name.toLowerCase()] ?? 1;
-            const bPriority = walletPriority[b.name.toLowerCase()] ?? 1;
-            return (
-              bPriority - aPriority + ((isActiveWallet(b) ? 1 : 0) - (isActiveWallet(a) ? 1 : 0))
-            );
-          }),
+          [...wallets.value]
+            .map((w) => {
+              w['darkIcon'] = darkIcons[w.name.toLowerCase()];
+              return w;
+            })
+            .sort((a, b) => {
+              const aPriority = walletPriority[a.name.toLowerCase()] ?? 1;
+              const bPriority = walletPriority[b.name.toLowerCase()] ?? 1;
+              return (
+                bPriority - aPriority + ((isActiveWallet(b) ? 1 : 0) - (isActiveWallet(a) ? 1 : 0))
+              );
+            }),
         ),
+        icons: {
+          close: evaClose,
+        },
         isActiveWallet,
-        select(wallet: Wallet) {
-          selectWallet(wallet.name);
+        async select(wallet: Wallet) {
+          await selectWallet(wallet.name);
+          await connect();
           dialog.value = false;
         },
         connect() {

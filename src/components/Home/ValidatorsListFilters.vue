@@ -170,9 +170,10 @@
       v-model="nameFilter"
       class="q-mb-xs q-mt-sm col-grow validators-list__search"
       :class="{ 'full-width': $q.screen.lt.sm }"
+      clearable
       label="Search"
-      placeholder="Enter a validator name, identity or vote key"
       stack-label
+      placeholder="Enter a validator name, identity or vote key"
     />
 
     <div

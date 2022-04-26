@@ -1,5 +1,5 @@
 /*
- * This file is part of the Web3 Library developed by mFactory GmbH.
+ * This file is part of Solana Reference Stake Pool code.
  *
  * Copyright © 2021, mFactory GmbH
  *
@@ -26,12 +26,11 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { watch } from 'vue';
 import { useQuasar } from 'quasar';
-import { PublicKey } from '@solana/web3.js';
-import { useWallet } from 'solana-wallets-vue';
 import { useEmitter } from '@/hooks/emitter';
 import { useConnectionStore } from '@/store';
+import { useWallet } from 'solana-wallets-vue';
+import { watch } from 'vue';
 import { shortenAddress } from '@/utils';
 
 export const WALLET_CONNECT_EVENT = Symbol();
@@ -44,30 +43,26 @@ export function initWallet() {
   const { connection } = useConnectionStore();
   const { emit } = useEmitter();
   const { notify } = useQuasar();
-  const { wallet } = useWallet();
+  const { wallet, publicKey } = useWallet();
 
   watch(
-    wallet,
-    (w) => {
-      if (!w) return;
+    publicKey,
+    (pk) => {
+      if (!pk) return;
 
       const onConnect = () => {
-        const publicKey = w.publicKey as PublicKey;
-
-        connection.onAccountChange(publicKey, (acc) => {
+        connection.onAccountChange(pk, (acc) => {
           emit(ACCOUNT_CHANGE_EVENT, acc);
         });
-
-        connection.onLogs(publicKey, (logs) => {
+        connection.onLogs(pk, (logs) => {
           console.log(logs);
         });
-
         notify({
           message: 'Wallet update',
-          caption: `Connected to wallet ${shortenAddress(publicKey.toBase58(), 7)}`,
+          caption: `Connected to wallet ${shortenAddress(pk.toBase58(), 7)}`,
           timeout: noticeTimeout,
         });
-        emit(WALLET_CONNECT_EVENT, w);
+        emit(WALLET_CONNECT_EVENT, wallet.value);
       };
 
       const onDisconnect = () => {
@@ -76,7 +71,7 @@ export function initWallet() {
           caption: 'Disconnected from wallet',
           timeout: noticeTimeout,
         });
-        emit(WALLET_DISCONNECT_EVENT, w);
+        emit(WALLET_DISCONNECT_EVENT, wallet.value);
       };
 
       const onError = (e) => {
@@ -91,10 +86,10 @@ export function initWallet() {
         });
       };
 
-      w.once('connect', onConnect);
-      w.once('disconnect', onDisconnect);
-      w.removeAllListeners('error');
-      w.on('error', onError);
+      wallet.value?.once('connect', onConnect);
+      wallet.value?.once('disconnect', onDisconnect);
+      wallet.value?.removeAllListeners('error');
+      wallet.value?.on('error', onError);
     },
     { immediate: true },
   );

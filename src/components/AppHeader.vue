@@ -42,7 +42,7 @@
       return {
         showValidator: computed(() => {
           const validator = router.currentRoute.value.params.validator;
-          console.log('validator === ', validator);
+          // console.log('validator === ', validator);
           return !!validator && typeof validator === 'string';
         }),
       };

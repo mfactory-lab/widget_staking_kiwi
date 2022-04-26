@@ -241,7 +241,7 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
       return items.value;
     }
 
-    const search = nameFilterDebounce.value.toLowerCase();
+    const search = nameFilterDebounce.value?.toLowerCase();
 
     return Object.freeze(
       [...items.value]
