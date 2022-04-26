@@ -278,9 +278,6 @@
           );
           updateAccounts(stakePubkey);
           loadingPubkey.value = null;
-          // await stakeAccountStore.load({
-          //   delay: 1000,
-          // });
           emit('afterDeactivate');
         },
 
