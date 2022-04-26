@@ -1,6 +1,6 @@
 /node_modules
 /dist
-/pbulic
+/public
 .husky
 **/*.svg
 .DS_Store
