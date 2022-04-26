@@ -108,6 +108,7 @@ export default defineConfig(({ mode }) => {
   const optimizeDeps: DepOptimizationOptions = {
     include: [
       'vue',
+      '@vueuse/core',
       // 'vue-chartjs',
       // 'chartjs-adapter-luxon',
       'vue-chart-3', // TODO: remove

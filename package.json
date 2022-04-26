@@ -14,6 +14,7 @@
   "scripts": {
     "dev": "vite --port 3333",
     "build": "vite build --mode production",
+    "build:staging": "vite build --mode staging",
     "build:report": "vite build --mode report",
     "build:ssg": "cross-env NODE_ENV=production vite-ssg build",
     "serve": "vite preview",
