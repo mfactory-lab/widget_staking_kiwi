@@ -34,7 +34,7 @@ jobs:
         run: |
           cd build
           yarn
-          yarn build
+          yarn build:staging
           cp dist/index.html dist/404.html
           echo ${{ env.URL }} > dist/CNAME
           yarn run deploy:gh-pages
