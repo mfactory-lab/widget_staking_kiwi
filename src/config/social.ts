@@ -34,4 +34,4 @@ export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
 export const TWITTER_URL = 'https://twitter.com/JPoolSolana';
 export const DISCORD_URL = 'https://discord.gg/qR4BA9QXVR';
 
-export const GTAG_ID = isProd ? 'G-H60CS7J10W' : null;
+export const GTAG_ID = isProd ? 'UA-223939982-1' : null;
