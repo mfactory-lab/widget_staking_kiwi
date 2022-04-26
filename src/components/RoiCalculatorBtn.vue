@@ -27,16 +27,9 @@
   -->
 
 <template>
-  <q-btn
-    class="q-mx-lg roi-calc-btn"
-    flat
-    padding="none"
-    color="white"
-    size="md"
-    @click="roiDialog = true"
-  >
+  <div class="q-mx-lg roi-calc-btn" @click="roiDialog = true">
     <img src="@/assets/img/calculator.svg" alt="" class="q-ml-xs" />
-  </q-btn>
+  </div>
   <roi-calculator v-model="roiDialog" />
 </template>
 
@@ -66,6 +59,7 @@
   .roi-calc-btn {
     height: 46px !important;
     width: 46px !important;
+    cursor: pointer;
     img {
       max-width: 100%;
       max-height: 100%;
