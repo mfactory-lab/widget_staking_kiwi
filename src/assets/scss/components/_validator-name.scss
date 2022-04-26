@@ -74,8 +74,13 @@
   }
 }
 
-.q-avatar .q-img__content .q-icon {
-  top: 25%;
+.q-avatar {
+  .q-img {
+    height: 100%;
+    .q-icon {
+      top: 25%;
+    }
+  }
 }
 
 .q-tooltip {
