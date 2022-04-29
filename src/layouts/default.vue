@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <q-layout view="lfh Lpr lff">
+  <q-layout view="lfh Lpr lFf">
     <app-header />
     <q-page-container>
       <router-view />
