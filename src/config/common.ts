@@ -26,11 +26,6 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-// meta
-export const SITE_TITLE = 'staking.kiwi';
-export const SITE_DESCRIPTION = 'Solana staking.';
-export const SITE_KEYWORDS = 'Solana, SOL, Staking';
-
 // intervals
 export const EPOCH_RELOAD_INTERVAL = 60000;
 export const RATES_RELOAD_INTERVAL = 300000;
