@@ -28,7 +28,7 @@
 
 <template>
   <div class="validators-list__title q-pt-md q-pb-sm row">
-    <div class="col-3 row justify-start">
+    <div class="col-auto row nowrap justify-start q-mr-auto">
       <q-btn
         rounded
         class="home-page__std-btn q-pl-sm"
@@ -51,7 +51,7 @@
         {{ items.length }} / {{ itemsTotal }}
       </span>
     </div>
-    <div class="col-3 row items-center justify-end">
+    <div class="col-auto row items-center justify-end q-ml-auto">
       <q-btn
         v-if="$q.screen.gt.sm"
         rounded
