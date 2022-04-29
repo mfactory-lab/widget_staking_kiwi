@@ -26,12 +26,7 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-const mode = import.meta.env.MODE;
-const isProd = mode == 'production';
-
 export const TELEGRAM_URL = 'https://t.me/jstaking';
 export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
-export const TWITTER_URL = 'https://twitter.com/JPoolSolana';
-export const DISCORD_URL = 'https://discord.gg/qR4BA9QXVR';
 
-export const GTAG_ID = isProd ? 'UA-223939982-1' : null;
+export const GTAG_ID = import.meta.env.VITE_GTAG_ID;
