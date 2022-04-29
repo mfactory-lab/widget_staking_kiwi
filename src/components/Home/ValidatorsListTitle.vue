@@ -34,7 +34,6 @@
         class="home-page__std-btn q-pl-sm"
         color="gray-dark-theme"
         text-color="text-white"
-        :disable="connectionLost"
         :ripple="false"
         padding="4px 17px"
         @click="refresh"
@@ -58,7 +57,6 @@
         class="home-page__std-btn"
         color="gray-dark-theme"
         text-color="text-white"
-        :disable="connectionLost"
         :ripple="false"
         padding="4px 17px"
         @click="() => (showControls = !showControls)"
@@ -71,7 +69,6 @@
         class="home-page__std-btn"
         color="gray-dark-theme"
         text-color="text-white"
-        :disable="connectionLost"
         padding="4px 17px"
         @click="() => (showControlsMob = !showControlsMob)"
       >
@@ -85,15 +82,13 @@
 <script lang="ts">
   import { defineComponent, toRef } from 'vue';
   import { useWallet } from 'solana-wallets-vue';
-  import { useStakePoolStore, useValidatorsAllStore } from '@/store';
+  import { useValidatorsAllStore } from '@/store';
 
   export default defineComponent({
     setup() {
       const { connected } = useWallet();
-      const stakePoolStore = useStakePoolStore();
       const validatorsAllStore = useValidatorsAllStore();
 
-      const connectionLost = toRef(stakePoolStore, 'connectionLost');
       const itemsTotal = toRef(validatorsAllStore, 'itemsTotal');
       const items = toRef(validatorsAllStore, 'items');
       const loading = toRef(validatorsAllStore, 'loading');
@@ -107,7 +102,6 @@
 
       return {
         connected,
-        connectionLost,
         loading,
         items,
         itemsTotal,
