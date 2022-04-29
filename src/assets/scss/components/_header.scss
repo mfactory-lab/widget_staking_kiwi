@@ -90,6 +90,28 @@
       }
     }
   }
+  &__donate {
+    &__btn {
+      font-family: $font-primary;
+      width: 210px;
+      padding: 9px 10px;
+      line-height: 12px;
+      text-transform: none;
+      margin-top: auto;
+      color: $text-black;
+    }
+    &__arrow {
+      position: absolute;
+      top: -30px;
+      right: 10px;
+    }
+  }
+  &__validators-desktop {
+    margin-right: auto;
+    padding-left: 210px;
+    margin-bottom: -19px;
+    margin-top: -4px;
+  }
   .total-validators-nxs {
     @media (max-width: 409px) {
       display: none;

@@ -35,7 +35,6 @@
       color="warning"
       text-color="primary"
       rounded
-      unelevated
       @click="dialog = true"
     >
       {{ walletShortAddress }}

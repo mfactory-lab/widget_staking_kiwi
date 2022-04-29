@@ -29,6 +29,9 @@
 <template>
   <div v-if="$q.screen.gt.sm" class="staking-header__top q-pt-md q-pb-xs text-right">
     <div class="container row items-center justify-end q-mb-xs">
+      <div class="staking-header__validators-desktop">
+        <validators-total />
+      </div>
       <price-stats-for-header />
       <theme-mode-selector />
     </div>
@@ -63,9 +66,19 @@
           </div>
         </div>
         <div v-if="$q.screen.gt.sm" class="row items-center col-grow">
-          <div class="q-mr-auto">
-            <validators-total />
-          </div>
+          <q-btn
+            to="/app/5afRnmkFn1pRU9oussqwk1RRBVyoDgUkL16Jz4qNf574"
+            :ripple="false"
+            label="Stake to our validator to support the Staking.Kiwi project"
+            color="warning"
+            text-color="primary"
+            align="left"
+            rounded
+            size="11px"
+            class="staking-header__donate__btn q-mr-auto q-ml-lg"
+          >
+            <img src="@/assets/img/red-arrow.svg" alt="" class="staking-header__donate__arrow" />
+          </q-btn>
           <epoch-circle />
           <div class="row q-ml-auto q-mt-auto">
             <div class="q-mr-md staking-header__btn">
