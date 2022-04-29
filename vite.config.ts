@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
+import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig, loadEnv } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 // import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import checker from 'vite-plugin-checker';
@@ -8,11 +8,10 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import components from 'unplugin-vue-components/vite';
 import visualizer from 'rollup-plugin-visualizer';
 import inject from '@rollup/plugin-inject';
-// noinspection ES6PreferShortImport
-import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from './src/config/common';
 
 export default defineConfig(({ mode }) => {
-  // const isDev = mode === 'development';
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
@@ -26,9 +25,9 @@ export default defineConfig(({ mode }) => {
     createHtmlPlugin({
       inject: {
         data: {
-          title: SITE_TITLE,
-          description: SITE_DESCRIPTION,
-          keywords: SITE_KEYWORDS,
+          title: process.env.VITE_APP_TITLE,
+          description: process.env.VITE_APP_DESCRIPTION,
+          keywords: process.env.VITE_APP_KEYWORDS,
         },
       },
     }),
