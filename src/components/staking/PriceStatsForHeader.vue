@@ -70,7 +70,7 @@
 <style scoped lang="scss">
   .price-stats-header {
     margin-bottom: -30px;
-    padding-right: 77px;
+    padding-right: 70px;
     font-weight: 500;
     &-arrow {
       height: 12px;

@@ -171,7 +171,7 @@
         }
         return stakeAccountStore.data;
       });
-      const accountsSorted = ref<StakeAccount[]>([]);
+      const accountsFull = ref<StakeAccount[]>([]);
 
       const statusWeights = {
         active: 0,
@@ -185,45 +185,47 @@
         return statusWeights[status];
       };
 
-      watch(
-        accounts,
-        async () => {
-          const newStats = [0, 0, 0, 0];
-          const accountsSorts = await Promise.all(
-            accounts.value.map(async (acc) => {
-              const stakeActivation = await connectionStore.connection!.getStakeActivation(
-                acc.pubkey,
-              );
-              if (acc.account.data?.parsed?.type == 'delegated') {
-                if (
-                  stakeActivation.state === 'active' ||
-                  stakeActivation.state === 'deactivating'
-                ) {
-                  newStats[2] += lamportsToSol(acc.account.lamports);
-                } else {
-                  newStats[1] += lamportsToSol(acc.account.lamports);
-                }
-              } else {
-                newStats[0] += lamportsToSol(acc.account.lamports);
-              }
-              newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
-              totalStats.value.forEach((item, index) => {
-                item.value = newStats[index] ?? 0;
-              });
-              return {
-                stakeAccount: acc,
-                state: stakeActivation.state,
-              };
-            }),
+      const accountsSorted = computed(() =>
+        [...accountsFull.value].sort((a, b) => {
+          return (
+            getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
           );
-          accountsSorted.value = accountsSorts.sort((a, b) => {
-            return (
-              getStatusWeight(b.stakeAccount, b.state) - getStatusWeight(a.stakeAccount, a.state)
-            );
-          });
-        },
-        { immediate: true },
+        }),
       );
+
+      const updateAccounts = async (pubkey?: PublicKey) => {
+        const newStats = [0, 0, 0, 0];
+        const source = pubkey ? accountsFull.value : accounts.value;
+        accountsFull.value = await Promise.all(
+          source.map(async (item) => {
+            const acc = pubkey ? item.stakeAccount : item;
+            const needUpdate = !pubkey || pubkey.equals(acc.pubkey);
+            const stakeActivation = needUpdate
+              ? await connectionStore.connection!.getStakeActivation(acc.pubkey)
+              : item;
+            const state = stakeActivation.state;
+            if (acc.account.data?.parsed?.type == 'delegated') {
+              if (state === 'active' || state === 'deactivating') {
+                newStats[2] += lamportsToSol(acc.account.lamports);
+              } else {
+                newStats[1] += lamportsToSol(acc.account.lamports);
+              }
+            } else {
+              newStats[0] += lamportsToSol(acc.account.lamports);
+            }
+            return {
+              stakeAccount: acc,
+              state,
+            };
+          }),
+        );
+        newStats[3] = (newStats[0] ?? 0) + (newStats[1] ?? 0) + (newStats[2] ?? 0);
+        totalStats.value.forEach((item, index) => {
+          item.value = newStats[index] ?? 0;
+        });
+      };
+
+      watch(accounts, () => updateAccounts(), { immediate: true });
 
       return {
         connected,
@@ -240,6 +242,7 @@
           emit('beforeDeposit');
           loadingPubkey.value = stakeAccount.pubkey.toBase58();
           await delegateAccount(stakeAccount.pubkey);
+          updateAccounts(stakeAccount.pubkey);
           loadingPubkey.value = null;
           emit('afterDeposit');
         },
@@ -258,21 +261,23 @@
         deactivate: async (address: string) => {
           emit('beforeDeactivate');
           loadingPubkey.value = address;
+          const stakePubkey = new PublicKey(address);
           await monitorTransaction(
             sendTransaction(
               connectionStore.connection,
               anchorWallet.value!,
               StakeProgram.deactivate({
-                stakePubkey: new PublicKey(address),
+                stakePubkey,
                 authorizedPubkey: wallet.value!.publicKey!,
               }).instructions,
               [],
             ),
+            {
+              commitment: 'finalized',
+            },
           );
+          updateAccounts(stakePubkey);
           loadingPubkey.value = null;
-          await stakeAccountStore.load({
-            delay: 1000,
-          });
           emit('afterDeactivate');
         },
 
