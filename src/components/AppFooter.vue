@@ -29,19 +29,25 @@
 <template>
   <q-footer :class="$style.footer">
     <div class="container">
-      <div class="row justify-between q-mb-md">
-        <div class="justify-center q-mr-auto d-flex column">
+      <div class="row justify-between items-center q-mb-xs">
+        <!-- <div class="justify-center q-mr-auto d-flex column">
           <a href="https://jpool.one" target="_blank" class="app-footer__jpool-link">
             stake on
             <img src="@/assets/img/jpool-logo.svg" alt="" />
           </a>
+        </div> -->
+        <div class="justify-start q-mr-auto d-flex column">
+          <div class="text-left">© Copyright {{ date }} jstaking.one.</div>
+          <div class="text-left"
+            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
+          >
         </div>
         <div class="justify-between d-flex column">
-          <div v-if="$q.screen.lt.md" class="row items-center justify-end q-mb-xs">
-            <theme-mode-selector />
-          </div>
           <div class="row" :class="{ 'q-mx-auto': $q.screen.lt.sm }">
-            <div :class="$style.buttons" class="">
+            <div v-if="$q.screen.lt.md" class="row items-center justify-end q-mb-xs">
+              <theme-mode-selector />
+            </div>
+            <div :class="$style.buttons">
               <q-btn :href="TELEGRAM_URL" color="white" round target="_blank" type="a" unelevated>
                 <telegram-svg class="q-icon" />
               </q-btn>
@@ -58,21 +64,6 @@
               </q-btn>
             </div>
           </div>
-          <!-- <div :class="$style.nav" class="row footer-links q-pt-md">
-            <a href="https://docs.jpool.one/" target="_blank">Docs</a>
-            <span class="q-px-sm">|</span>
-            <router-link to="/terms">Terms of Use</router-link>
-            <span class="q-px-sm">|</span>
-            <router-link to="/impressum">Legal</router-link>
-          </div> -->
-        </div>
-      </div>
-      <div class="row justify-start">
-        <div class="col-12 justify-start q-mr-auto d-flex column">
-          <div class="text-left">© Copyright 2021 jstaking.one. All rights reserved.</div>
-          <div class="text-left"
-            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
-          >
         </div>
       </div>
     </div>
@@ -87,6 +78,7 @@
     setup() {
       return {
         TELEGRAM_URL,
+        date: new Date().getFullYear(),
       };
     },
   });
@@ -96,7 +88,7 @@
   .footer {
     background-color: $blue-grey-8 !important;
     color: #fff !important;
-    padding: 32px 0;
+    padding: 6px 0 4px;
     font-size: 12px;
 
     @media (max-width: $breakpoint-sm) {
@@ -128,17 +120,11 @@
     text-align: right;
     display: flex;
     justify-content: space-between;
-    margin: 8px 0;
+    margin: 4px 0 4px 8px;
 
     a {
       color: $blue-grey-8 !important;
-      font-size: 28px;
-      @media (max-width: $breakpoint-sm) {
-        font-size: 21px;
-      }
-      @media (max-width: $breakpoint-xs) {
-        font-size: 18px;
-      }
+      font-size: 14px;
     }
 
     @media (max-width: $breakpoint-sm) {

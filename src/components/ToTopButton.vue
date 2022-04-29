@@ -40,10 +40,15 @@
   .up {
     position: fixed;
     z-index: 10000;
-    bottom: 55px;
+    bottom: 42px;
     right: 55px;
     cursor: pointer;
     display: none;
+
+    @media (max-width: $breakpoint-xs) {
+      bottom: 106px;
+      right: 45px;
+    }
 
     svg {
       width: 50px;
