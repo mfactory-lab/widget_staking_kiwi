@@ -26,11 +26,6 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-// meta
-export const SITE_TITLE = 'staking.kiwi';
-export const SITE_DESCRIPTION = 'Solana staking.';
-export const SITE_KEYWORDS = 'Solana, SOL, Staking';
-
 // intervals
 export const EPOCH_RELOAD_INTERVAL = 60000;
 export const RATES_RELOAD_INTERVAL = 300000;
@@ -40,9 +35,11 @@ export const POOL_RELOAD_INTERVAL = 30000;
 export const DEFAULT_APY = 0.07;
 export const APY_VALIDATOR_ID = null;
 
-// misc
-export const API_URL = 'https://api.thevalidators.io';
+// api
+export const API_URL = import.meta.env.VITE_API_URL;
+export const API_COLLECTOR_URL = 'https://api.thevalidators.io';
 
+// misc
 export const JSOL_LOGO =
   'https://raw.githubusercontent.com/mfactory-lab/jpool-pub/main/assets/images/jsol.png';
 

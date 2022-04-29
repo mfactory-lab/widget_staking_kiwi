@@ -157,9 +157,13 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   //   }
   // });
 
-  watch(connected, (connected) => {
-    if (!connected) filters.value.hasStake = false;
-  });
+  watch(
+    connected,
+    (connected) => {
+      if (!connected) filters.value.hasStake = false;
+    },
+    { immediate: true },
+  );
 
   watch(
     cluster,
