@@ -33,7 +33,7 @@
       <sol-svg class="total-validators__logo q-icon" fill="#1CE4B0" />
     </div>
     <div class="column total-validators__text">
-      <div>VALIDATORS</div>
+      <div class="text-left">VALIDATORS</div>
       <div class="column total-validators__text__total">TOTAL: {{ validatorsCount }}</div>
     </div>
   </div>
@@ -79,13 +79,9 @@
 
 <style scoped lang="scss">
   .total-validators {
-    @media (max-width: $breakpoint-xs) {
-      font-size: 12px;
-      line-height: 15px;
-    }
     &__logo {
-      width: 47px;
-      height: 37px;
+      width: 40px;
+      height: 32px;
       margin-top: 4px;
       margin-right: 12px;
       @media (max-width: $breakpoint-xs) {
@@ -95,14 +91,18 @@
       }
     }
     &__text {
-      font-size: 19px;
-      line-height: 23px;
+      font-size: 13px;
+      line-height: 16px;
+      color: #cfcfcf;
       @media (max-width: $breakpoint-xs) {
         font-size: 12px;
         line-height: 15px;
       }
       &__total {
         font-weight: 500;
+        color: $text-white;
+        font-size: 19px;
+        line-height: 25px;
         @media (max-width: $breakpoint-xs) {
           font-size: 14px;
           line-height: 16px;

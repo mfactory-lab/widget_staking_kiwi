@@ -39,7 +39,7 @@
         <div class="justify-start q-mr-auto d-flex column">
           <div class="text-left">© Copyright {{ date }} jstaking.one.</div>
           <div class="text-left"
-            >Powered by <a href="https://mfactory.tech/" target="_blank">mFactory GmbH</a></div
+            >Powered by <a href="https://jfactory.ch/" target="_blank">jfactory.ch</a></div
           >
         </div>
         <div class="justify-between d-flex column">

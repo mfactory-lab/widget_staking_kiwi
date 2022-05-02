@@ -30,7 +30,7 @@
   <div class="price-stats-header row">
     <div class="column q-mr-dm">
       <div class="price-stats-header__title">SOL PRICE</div>
-      <div class="price-stats-header__price q-mt-xs">${{ price }}</div>
+      <div class="price-stats-header__price">${{ price }}</div>
     </div>
     <div class="column q-ml-md">
       <div
@@ -40,8 +40,8 @@
         <img src="@/assets/img/arrow-grow.svg" class="price-stats-header-arrow" alt="" />
         {{ grow }}
       </div>
-      <div class="row price-stats-header__additional q-mt-xs">
-        <div> Last 24H: {{ growIsNegative ? '-' : '+' }}${{ last24 }} </div>
+      <div class="row price-stats-header__additional">
+        <div> LAST 24H: {{ growIsNegative ? '-' : '+' }}${{ last24 }} </div>
         <div class="q-pl-sm">${{ value }}</div>
       </div>
     </div>
@@ -69,7 +69,7 @@
 
 <style scoped lang="scss">
   .price-stats-header {
-    margin-bottom: -30px;
+    margin-bottom: -25px;
     padding-right: 70px;
     font-weight: 500;
     &-arrow {
@@ -78,17 +78,20 @@
     }
     &__title {
       font-size: 12px;
+      line-height: 13px;
       text-transform: uppercase;
       display: flex;
     }
     &__price {
       font-size: 24px;
-      line-height: 28px;
+      line-height: 26px;
     }
     &__grow {
       font-size: 12px;
       color: $text-white;
       background: $secondary;
+      margin-bottom: 4px;
+      margin-top: -4px;
       padding: 3px 6px;
       border-radius: 6px;
       height: 22px;
@@ -108,7 +111,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 11px;
-      line-height: 28px;
+      line-height: 17px;
     }
   }
 </style>

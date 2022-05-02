@@ -27,8 +27,8 @@
   -->
 
 <template>
-  <div v-if="$q.screen.gt.sm" class="staking-header__top q-pt-md q-pb-xs text-right">
-    <div class="container row items-center justify-end q-mb-xs">
+  <div v-if="$q.screen.gt.sm" class="staking-header__top text-right">
+    <div class="container row items-center justify-end q-mt-xs">
       <div class="staking-header__validators-desktop">
         <validators-total />
       </div>

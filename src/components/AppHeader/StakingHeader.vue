@@ -27,8 +27,8 @@
   -->
 
 <template>
-  <div class="staking-header__top q-pt-md q-pb-xs text-right">
-    <div class="container row items-center justify-end q-mb-xs">
+  <div class="staking-header__top text-right">
+    <div class="container row items-center justify-end q-mt-xs">
       <theme-mode-selector />
       <div class="staking-header__faq-btn q-ml-sm" @click="scrollTo('faq-section')">
         How to use staking.kiwi

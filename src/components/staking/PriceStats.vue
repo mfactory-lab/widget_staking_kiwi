@@ -54,7 +54,7 @@
     </div>
     <div class="price-stats__additional">
       <div class="price-stats__additional__price">
-        Last 24h {{ growIsNegative ? '-' : '+' }}${{ last24 }}
+        LAST 24h {{ growIsNegative ? '-' : '+' }}${{ last24 }}
       </div>
       <div class="price-stats__additional__value">${{ value }}</div>
     </div>

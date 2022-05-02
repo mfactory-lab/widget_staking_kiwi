@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="validator-name row items-center">
+  <div class="validator-name row no-wrap items-center">
     <div class="validator-name__logo column q-mr-md justify-center relative-position">
       <q-skeleton v-if="loading && !savedValidator" type="QAvatar" class="shadow-5" size="56px" />
       <a v-else :href="loading ? savedValidator.validatorUrl : validatorUrl" target="_blank">
