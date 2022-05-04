@@ -192,7 +192,6 @@
         wallets: computed(() =>
           [...wallets.value]
             .map((w) => {
-              console.log(w);
               w['darkIcon'] = darkIcons[w.name.toLowerCase()];
               return w;
             })
