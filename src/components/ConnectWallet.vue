@@ -27,35 +27,39 @@
   -->
 
 <template>
-  <template v-if="connected">
-    <q-btn
-      class="app-header__wallet-btn"
-      :class="$style.btn"
-      :ripple="false"
-      color="warning"
-      text-color="primary"
-      rounded
-      @click="dialog = true"
-    >
-      {{ walletShortAddress }}
-    </q-btn>
-  </template>
+  <q-btn
+    v-if="connected"
+    v-bind="$attrs"
+    :class="$style.btn"
+    :ripple="false"
+    color="warning"
+    text-color="primary"
+    rounded
+    unelevated
+    @click="dialog = true"
+  >
+    {{ walletShortAddress }}
+  </q-btn>
 
-  <template v-else>
-    <q-btn
-      class="app-header__wallet-btn"
-      :class="$style.btn"
-      :ripple="false"
-      color="warning"
-      text-color="primary"
-      rounded
-      @click="connect"
-    >
-      <span>CONNECT WALLET</span>
-    </q-btn>
-  </template>
+  <q-btn
+    v-else
+    v-bind="$attrs"
+    color="warning"
+    text-color="primary"
+    rounded
+    unelevated
+    :ripple="false"
+    @click="dialog = true"
+  >
+    CONNECT WALLET
+  </q-btn>
 
-  <q-dialog v-model="dialog">
+  <q-dialog
+    v-model="dialog"
+    transition-duration="150"
+    transition-show="fade"
+    transition-hide="fade"
+  >
     <q-card v-if="connected">
       <q-card-section class="relative-position">
         <div class="text-h6 text-center">Your wallet</div>
@@ -99,22 +103,39 @@
         />
       </q-card-section>
       <q-separator />
-      <q-card-section class="scroll" style="max-height: 70vh">
-        <div class="row q-col-gutter-sm">
-          <div class="col-12 col-md-6" v-for="wallet in wallets" :key="wallet.name">
-            <q-item clickable @click="select(wallet)" :disable="!isActiveWallet(wallet)">
-              <q-item-section>{{ wallet.name }}</q-item-section>
-              <q-item-section avatar>
-                <q-avatar square>
-                  <img
-                    :src="dark.isActive ? wallet.icon : wallet['darkIcon'] ?? wallet.icon"
-                    alt=""
-                  />
-                </q-avatar>
-              </q-item-section>
-            </q-item>
-          </div>
-        </div>
+      <q-card-section>
+        <q-table
+          grid
+          :rows="wallets"
+          row-key="name"
+          hide-pagination
+          hide-header
+          :rows-per-page-options="[20]"
+        >
+          <template #item="{ row: wallet }">
+            <div class="col-12 col-md-6">
+              <q-item clickable @click="select(wallet)" :disable="!isActiveWallet(wallet)">
+                <q-item-section>
+                  <b>{{ wallet.name }}</b>
+                  <div
+                    class="text-grey text-caption full-width"
+                    style="text-overflow: ellipsis; overflow: hidden"
+                  >
+                    {{ wallet.url }}
+                  </div>
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-avatar square>
+                    <img
+                      :src="dark.isActive ? wallet.icon : wallet['darkIcon'] ?? wallet.icon"
+                      alt=""
+                    />
+                  </q-avatar>
+                </q-item-section>
+              </q-item>
+            </div>
+          </template>
+        </q-table>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -171,6 +192,7 @@
         wallets: computed(() =>
           [...wallets.value]
             .map((w) => {
+              console.log(w);
               w['darkIcon'] = darkIcons[w.name.toLowerCase()];
               return w;
             })
@@ -209,7 +231,14 @@
 <style scoped lang="scss">
   .wallet-connect-card {
     .q-item {
-      border: 1px solid #e8e8e8;
+      border: 1px solid #f5f5f5;
+      margin: 3px;
+      b {
+        font-weight: 500;
+      }
+      &:hover {
+        border-color: #e8e8e8;
+      }
     }
   }
 </style>
