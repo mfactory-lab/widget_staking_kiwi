@@ -62,7 +62,7 @@
             <cluster-selector />
           </div>
           <div class="staking-header__btn">
-            <connect-wallet />
+            <connect-wallet class="app-header__wallet-btn" />
           </div>
         </div>
         <div v-if="$q.screen.gt.sm" class="row items-center col-grow">
@@ -85,7 +85,7 @@
               <cluster-selector />
             </div>
             <div class="staking-header__btn">
-              <connect-wallet />
+              <connect-wallet class="app-header__wallet-btn" />
             </div>
           </div>
         </div>

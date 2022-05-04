@@ -38,7 +38,7 @@ const getCsrfToken = debounceAsync<() => Promise<string>, string>(
   250,
 );
 
-export async function getGengoToken() {
+export const getGengoToken = debounceAsync(async () => {
   const token = await getCsrfToken();
   if (!token) {
     throw 'Invalid token';
@@ -50,4 +50,18 @@ export async function getGengoToken() {
     },
   });
   return res.data.access_token;
-}
+}, 250) as () => Promise<string>;
+
+// export async function getGengoToken() {
+//   const token = await getCsrfToken();
+//   if (!token) {
+//     throw 'Invalid token';
+//   }
+//   const res = await axios(`${API_URL}/auth/genesysgo`, {
+//     withCredentials: true,
+//     headers: {
+//       'X-XSRF-TOKEN': token,
+//     },
+//   });
+//   return res.data.access_token;
+// }

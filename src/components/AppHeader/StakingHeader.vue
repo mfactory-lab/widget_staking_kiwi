@@ -61,7 +61,7 @@
             <cluster-selector />
           </div>
           <div class="staking-header__btn">
-            <connect-wallet />
+            <connect-wallet class="app-header__wallet-btn" />
           </div>
         </div>
         <div class="col-12 col-md-auto q-mr-auto col-grow" :class="{ 'q-mt-md': $q.screen.lt.md }">

@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-  import RoiCalculator from '@/packages/roi-calculator/components/RoiCalculator.vue';
+  import { RoiCalculator } from '@/features/roi-calculator';
   import { defineComponent, ref } from 'vue';
   import { useEmitter } from '@/hooks';
 

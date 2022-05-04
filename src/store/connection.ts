@@ -29,8 +29,8 @@
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { Cluster, Commitment, Connection, PublicKey } from '@solana/web3.js';
-import { tokenAuthFetchMiddleware } from '@strata-foundation/web3-token-auth';
 import { DEFAULT_COMMITMENT, DEFAULT_CONFIRM_TIMEOUT, DEFAULT_ENDPOINT, ENDPOINTS } from '@/config';
+import { tokenAuthFetchMiddleware } from '@/utils';
 
 export type ExtendedCluster = Cluster | 'localnet';
 
@@ -43,8 +43,6 @@ export interface Endpoint {
   stakeLimit?: number;
   getToken?: () => Promise<string>;
 }
-
-// const DEFAULT_TOKEN_EXPIRY = 180000;
 
 export const useConnectionStore = defineStore({
   id: 'connection',
@@ -63,7 +61,7 @@ export const useConnectionStore = defineStore({
         commitment: state.commitment,
         fetchMiddleware: this.endpoint.getToken
           ? tokenAuthFetchMiddleware({
-              // tokenExpiry: DEFAULT_TOKEN_EXPIRY,
+              tokenExpiry: 5 * 60 * 1000, // 5 min
               getToken: this.endpoint.getToken,
             })
           : undefined,
