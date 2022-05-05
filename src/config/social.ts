@@ -26,7 +26,7 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-export const TELEGRAM_URL = 'https://t.me/jstaking';
 export const TELEGRAM_ANNOUNCEMENT_URL = 'https://t.me/jstaking';
 
-export const GTAG_ID = import.meta.env.VITE_GTAG_ID;
+// export const GTAG_ID = import.meta.env.VITE_GTAG_ID;
+export const GTAG_ID = null;

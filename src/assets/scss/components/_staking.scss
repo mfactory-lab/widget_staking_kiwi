@@ -29,6 +29,8 @@
 .stake-box {
   padding-bottom: 8px;
   width: 100%;
+  margin-left: 1px;
+  margin-top: 1px;
   .q-field__control {
     padding: 0 18px !important;
     border-radius: 8px;
@@ -42,8 +44,12 @@
     font-size: 27px;
     color: $text-white;
   }
-  &__top-section {
-    padding-bottom: 0;
+  &__title {
+    font-size: 13px;
+    @media (max-width: 443px) {
+      order: 2;
+      width: 100%;
+    }
   }
   &__sol-icon {
     width: 36px;
@@ -65,41 +71,18 @@
     line-height: 13px;
     color: $primary;
 
-    @media (max-width: $breakpoint-xs) {
+    @media (max-width: 443px) {
       width: 100%;
-      margin-bottom: 8px;
-      text-align: right;
     }
   }
   .q-btn {
     width: 100%;
   }
-  &__slider {
-    margin-top: 5px;
-    padding: 0 28px 0 12px;
-    position: relative;
-    color: $primary;
-
-    &__steps {
-      font-size: 12px;
-      margin-left: -5px;
-      width: calc(100% + 20px);
-      display: flex;
-      justify-content: space-between;
-
-      > span {
-        margin-left: 9px;
-        &:first-child,
-        &:last-child {
-          margin-left: 0;
-        }
-      }
+  &__row {
+    justify-content: space-between;
+    @media (max-width: 443px) {
+      justify-content: center;
     }
-  }
-  &__warning {
-    color: #f56c6c;
-    text-transform: none;
-    font-size: 12px;
   }
 }
 
@@ -125,9 +108,6 @@ body.body--dark {
     }
     &__bottom-section {
       border-top: 1px solid $light-gray-natural;
-    }
-    &__slider {
-      color: $text-white;
     }
   }
 }

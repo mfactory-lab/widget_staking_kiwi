@@ -77,17 +77,7 @@ export default defineConfig(({ mode }) => {
   }
 
   const optimizeDeps: DepOptimizationOptions = {
-    include: [
-      'vue',
-      '@vueuse/core',
-      // 'vue-chartjs',
-      // 'chartjs-adapter-luxon',
-      'vue-chart-3', // TODO: remove
-      'chart.js',
-      'lodash',
-      '@quasar/extras/eva-icons',
-      'bn.js',
-    ],
+    include: ['vue', '@vueuse/core', 'lodash', '@quasar/extras/eva-icons', 'bn.js'],
     exclude: ['vue-demi'],
     esbuildOptions: {
       minify: true,

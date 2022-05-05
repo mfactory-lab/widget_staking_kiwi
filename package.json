@@ -1,16 +1,16 @@
 {
-  "name": "staking-kiwi",
+  "name": "staking-kiwi-widget",
   "version": "1.2.0",
   "license": "ISC",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mfactory-lab/staking_kiwi.git"
+    "url": "git+https://github.com/mfactory-lab/widget_staking_kiwi.git"
   },
   "bugs": {
-    "url": "https://github.com/mfactory-lab/staking_kiwi/issues"
+    "url": "https://github.com/mfactory-lab/widget_staking_kiwi/issues"
   },
-  "homepage": "https://github.com/mfactory-lab/staking_kiwi#readme",
+  "homepage": "https://github.com/mfactory-lab/widget_staking_kiwi#readme",
   "scripts": {
     "dev": "vite --port 3333",
     "build": "vite build --mode production",
@@ -33,7 +33,6 @@
     "@vueuse/head": "^0.7.6",
     "axios": "^0.26.0",
     "bn.js": "^5.2.0",
-    "chart.js": "^3.7.1",
     "localstorage-memory": "^1.0.3",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.0",
@@ -41,7 +40,6 @@
     "quasar": "^2.6.6",
     "solana-wallets-vue": "^0.3.2",
     "vue": "^3.2.33",
-    "vue-chart-3": "^3.1.8",
     "vue-gtag": "^2.0.1",
     "vue-router": "^4.0.14"
   },

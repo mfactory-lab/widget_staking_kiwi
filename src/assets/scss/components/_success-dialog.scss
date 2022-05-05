@@ -1,4 +1,4 @@
-/*
+/*!
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,15 +26,51 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-// intervals
-export const EPOCH_RELOAD_INTERVAL = 60000;
-export const RATES_RELOAD_INTERVAL = 300000;
-export const POOL_RELOAD_INTERVAL = 30000;
+.stake-success {
+  text-align: center;
+  &__body {
+    padding: 20px 0 0;
+    position: relative;
+  }
+  &__header {
+    background: $primary;
+  }
+  &__info {
+    padding: 20px;
 
-// apy
-export const DEFAULT_APY = 0.07;
-export const APY_VALIDATOR_ID = null;
+    &__title {
+      font-family: $font-secondary;
+      font-weight: 900;
+      font-size: 33px;
+      line-height: 40px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #009C74;
+    }
 
-// api
-export const API_URL = import.meta.env.VITE_API_URL;
-export const API_COLLECTOR_URL = 'https://api.thevalidators.io';
+    &__text {
+      color: $primary;
+      font-size: 13px;
+      line-height: 15px;
+    }
+  }
+}
+// Dark mode
+
+body.body--dark {
+  .stake-success {
+    &__header {
+      background: $gray-dark-theme;
+    }
+    &__info {
+      background: $primary;
+      &__title {
+        color: $text-white;
+      }
+  
+      &__text {
+        color: $text-white;
+      }
+    }
+  }
+}

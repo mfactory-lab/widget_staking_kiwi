@@ -27,41 +27,33 @@
   -->
 
 <template>
-  <div v-if="connectionLost && !forceHidden" class="connection-lost">
-    Solana network overloaded. Data currently unavailable.
+  <div class="apy" :class="{ 'apy--selected': selected }">
+    AVERAGE APY
+    <div class="apy__value">≈{{ apy }}</div>
+    <q-inner-loading :showing="apyLoading" />
   </div>
 </template>
 
 <script lang="ts">
-  import { useStakePoolStore } from '@/store';
-  import { computed, defineComponent, ref } from 'vue';
+  import { useValidatorJstakingStore } from '@/store';
+  import { computed, defineComponent } from 'vue';
+  import { formatPct } from '@/utils';
 
   export default defineComponent({
+    props: {
+      selected: {
+        type: Boolean,
+        default: false,
+      },
+    },
     setup() {
-      const stakePoolStore = useStakePoolStore();
-      const connectionLost = computed(() => stakePoolStore.connectionLost);
-      const forceHidden = ref(true);
-
-      setTimeout(() => (forceHidden.value = false), 3000);
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const apy = computed(() => validatorJstakingStore.apy);
+      const apyLoading = computed(() => validatorJstakingStore.apyLoading);
       return {
-        connectionLost,
-        forceHidden,
+        apyLoading,
+        apy: computed(() => formatPct.format(apy.value)),
       };
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .connection-lost {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    padding: 20px;
-    background: $info;
-    color: #fff;
-    font-weight: 500;
-    font-size: 22px;
-    z-index: 10000;
-    text-align: center;
-  }
-</style>

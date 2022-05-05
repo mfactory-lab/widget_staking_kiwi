@@ -28,7 +28,6 @@
 
 <template>
   <q-page class="home-page">
-    <validators-list />
-    <to-top-button />
+    <main-section />
   </q-page>
 </template>

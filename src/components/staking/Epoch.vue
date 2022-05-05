@@ -27,41 +27,36 @@
   -->
 
 <template>
-  <div v-if="connectionLost && !forceHidden" class="connection-lost">
-    Solana network overloaded. Data currently unavailable.
+  <div class="epoch column items-center justify-between">
+    <div class="epoch__title">Epoch {{ epochNumber }}</div>
+    <q-circular-progress
+      show-value
+      class="epoch__progress"
+      :value="epochProgress"
+      size="51px"
+      :thickness="0.2"
+      color="warning"
+      track-color="accent"
+      center-color="white"
+    >
+      <div class="epoch__number"> {{ epochProgress }}% </div>
+    </q-circular-progress>
   </div>
 </template>
 
 <script lang="ts">
-  import { useStakePoolStore } from '@/store';
-  import { computed, defineComponent, ref } from 'vue';
+  import { useEpochStore } from '@/store';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     setup() {
-      const stakePoolStore = useStakePoolStore();
-      const connectionLost = computed(() => stakePoolStore.connectionLost);
-      const forceHidden = ref(true);
-
-      setTimeout(() => (forceHidden.value = false), 3000);
+      const epochStore = useEpochStore();
+      const epochProgress = computed(() => epochStore.epochProgress);
+      const epochNumber = computed(() => epochStore.epochNumber);
       return {
-        connectionLost,
-        forceHidden,
+        epochNumber,
+        epochProgress: computed(() => Number(epochProgress.value)),
       };
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .connection-lost {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    padding: 20px;
-    background: $info;
-    color: #fff;
-    font-weight: 500;
-    font-size: 22px;
-    z-index: 10000;
-    text-align: center;
-  }
-</style>

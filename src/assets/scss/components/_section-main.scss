@@ -27,80 +27,39 @@
  */
 
 .main-section {
-  padding: 24px 0;
+  width: 470px;
+  max-width: calc(100% - 2px);
 
-  &__rect-btn,
   &__block {
     display: flex;
     justify-content: center;
     align-items: center;
     background: #fff;
     border-radius: 12px;
-    height: 105px !important;
-    background: linear-gradient(107.48deg, #fcfcfc 2%, #ffffff 97.35%);
-    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
-      0 3px 1px -2px rgb(0 0 0 / 12%);
-  }
+    background: #F2F2F2;
+    padding: 10px 14px;
+    flex-grow: 1;
+    border: 1px solid #F2F2F2;
 
-  &__rect-btn {
-    width: 100px;
-
-    &--logo {
-      // background: none;
-      // box-shadow: none;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: $primary;
-
-      img {
-        width: 66px;
-      }
-
-      @media (max-width: $breakpoint-xs) {
-        display: none;
+    &--epoch {
+      margin-left: 8px;
+      @media (min-width: 444px) {
+        margin-right: 8px;
       }
     }
   }
-
-  &__faq-title {
-    font-family: $font-secondary;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 18px;
-    text-align: center;
-    text-transform: uppercase;
-    color: #000000;
-    margin-bottom: 8px;
-  }
-}
-
-.stakes-section {
-  padding: 24px 0 16px;
 }
 
 // Dark mode
 
 body.body--dark {
   .main-section {
-    background: $gray-secondary;
     .q-card--dark {
       background: $gray-dark-theme;
     }
     &__block {
       background: $gray-dark-theme;
+      border: 1px solid $text-white;
     }
-    &__rect-btn {
-      &--logo {
-        color: $text-white;
-      }
-    }
-  }
-  .stakes-section {
-    background: $primary;
   }
 }

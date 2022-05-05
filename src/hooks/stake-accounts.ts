@@ -73,6 +73,7 @@ export function useStakeAccounts() {
 
   const loading = ref(false);
   const seed = ref('0');
+  const stakeSuccessDialog = ref(false);
 
   const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
   const voterKey = computed(() => validatorJstakingStore.voterKey);
@@ -112,6 +113,7 @@ export function useStakeAccounts() {
   };
 
   return {
+    stakeSuccessDialog,
     depositFee: computed(() => lamportsPerSignature.value),
     creating: computed(() => loading.value || sending.value),
     createAccount: async (amount) => {
@@ -152,6 +154,7 @@ export function useStakeAccounts() {
           {
             commitment: 'finalized',
             onSuccess: async () => {
+              stakeSuccessDialog.value = true;
               await stakeAccountStore.load({
                 // delay: 3000,
               });

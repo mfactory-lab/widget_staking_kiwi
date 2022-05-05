@@ -28,11 +28,8 @@
 
 <template>
   <q-layout view="lfh Lpr lFf">
-    <app-header />
     <q-page-container>
       <router-view />
     </q-page-container>
-    <app-footer />
-    <cookie-modal />
   </q-layout>
 </template>

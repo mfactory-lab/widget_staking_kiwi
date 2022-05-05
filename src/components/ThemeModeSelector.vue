@@ -29,7 +29,6 @@
 <template>
   <q-toggle
     v-model="isDark"
-    class="styled-toggle"
     :checked-icon="evaMoon"
     toggle-order="tf"
     color="gray-secondary"
@@ -39,19 +38,27 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
   import { evaMoon, evaSun } from '@quasar/extras/eva-icons';
-  import { ref, watch } from 'vue';
+  import { defineComponent, ref, watch } from 'vue';
   import { useDarkTheme } from '@/hooks';
 
-  const { toggle, isActive } = useDarkTheme();
-  const isDark = ref(isActive);
+  export default defineComponent({
+    setup() {
+      const { toggle, isActive } = useDarkTheme();
+      const isDark = ref(isActive);
+      watch([isDark], () => {
+        toggle();
+      });
+      watch([isActive], () => {
+        isDark.value = isActive.value;
+      });
 
-  watch([isDark], () => {
-    toggle();
-  });
-
-  watch([isActive], () => {
-    isDark.value = isActive.value;
+      return {
+        isDark,
+        evaMoon,
+        evaSun,
+      };
+    },
   });
 </script>

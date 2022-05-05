@@ -32,7 +32,6 @@ import { useConnectionStore, useEpochStore, useValidatorsAllStore } from '@/stor
 import { DEFAULT_VALIDATOR } from '@/config';
 import { useLocalStorage } from '@vueuse/core';
 import { shortenAddress } from '@/utils';
-import router from '@/router';
 
 interface ValidatorInfo {
   voterKey: string;
@@ -164,12 +163,12 @@ export const useValidatorJstakingStore = defineStore('validators-jstaking', () =
   });
 
   watch(
-    [cluster, router.currentRoute],
-    async ([cluster, route], [clusterOld, _routeOld]) => {
-      const isValidatorPage = route.matched.find((item) => item.path === '/app/:validator');
-      if (!isValidatorPage) return;
-      const validator = route.params.validator;
-      if (!!validator && typeof validator === 'string') {
+    [cluster],
+    async ([cluster], [clusterOld]) => {
+      const queryString = location.search;
+      const params = new URLSearchParams(queryString);
+      const validator = params.get('validator');
+      if (!!validator) {
         voterKey.value = validator;
       } else {
         voterKey.value = DEFAULT_VALIDATOR[cluster].voterKey;

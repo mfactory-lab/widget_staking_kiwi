@@ -1,4 +1,4 @@
-/*
+/*!
  * This file is part of the Web3 Library developed by mFactory GmbH.
  *
  * Copyright © 2021, mFactory GmbH
@@ -26,15 +26,13 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-// intervals
-export const EPOCH_RELOAD_INTERVAL = 60000;
-export const RATES_RELOAD_INTERVAL = 300000;
-export const POOL_RELOAD_INTERVAL = 30000;
-
-// apy
-export const DEFAULT_APY = 0.07;
-export const APY_VALIDATOR_ID = null;
-
-// api
-export const API_URL = import.meta.env.VITE_API_URL;
-export const API_COLLECTOR_URL = 'https://api.thevalidators.io';
+@import './components/layout';
+@import './components/staking';
+@import './components/section-main';
+@import './components/epoch';
+@import './components/total-staked';
+@import './components/apy';
+@import './components/cluster-selector';
+@import './components/kiwi-link';
+@import './components/success-dialog';
+@import './components/roi-calculator';

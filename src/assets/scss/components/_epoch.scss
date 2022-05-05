@@ -27,43 +27,19 @@
  */
 
 .epoch {
-  &__label {
-    color: $primary;
-    font-size: 12px;
-    line-height: 16px;
-  }
-
+  width: 61px;
   &__title {
     font-weight: 500;
-    font-size: 30px;
-    line-height: 35px;
+    font-size: 10px;
+    line-height: 12px;
     text-transform: uppercase;
     color: $accent;
-  }
-
-  &__value {
-    color: $primary;
-    font-size: 22px;
-    line-height: 26px;
+    margin-bottom: 6px;
   }
 
   &__number {
     color: #000;
-    font-size: 18px;
+    font-size: 14px;
     letter-spacing: -1px;
-  }
-}
-
-// Dark mode
-
-body.body--dark {
-  .epoch {
-    &__value {
-      color: $text-white;
-    }
-  
-    &__label {
-      color: $text-white;
-    }
   }
 }

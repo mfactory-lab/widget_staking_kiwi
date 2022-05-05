@@ -27,17 +27,17 @@
   -->
 
 <template>
-  <q-card class="stake-box shadow-sm q-pa-sm">
+  <q-card class="stake-box shadow-sm q-px-none q-py-sm">
     <q-card-section class="stake-box__top-section">
-      <div class="row items-center">
-        <div class="col-12 col-sm-auto q-mr-auto">
-          <div class="stake-box__title"> Balance: {{ availableSol }} SOL </div>
-        </div>
-        <div
-          v-if="connected && Number(stake.from) > Number(availableSol)"
-          class="stake-box__warning col-auto"
-        >
-          Insufficient funds to stake
+      <div class="row justify-between items-center q-mb-xs">
+        <div class="stake-box__title q-mt-sm"> Balance: {{ availableSol }} SOL </div>
+        <div class="q-ml-auto row justify-end q-mb-xs">
+          <div>
+            <cluster-selector />
+          </div>
+          <div class="q-ml-sm">
+            <connect-wallet />
+          </div>
         </div>
       </div>
     </q-card-section>
@@ -70,7 +70,6 @@
             unelevated
             size="12px"
             padding="2px 8px 0"
-            :ripple="false"
             @click="stakeMax"
           >
             MAX
@@ -82,56 +81,47 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="row items-between">
-        <div class="col-sm-7 col-xs-12 q-pr-sm">
-          <stake-slide-wrapper :value="stakePercent">
-            <q-slider
-              v-model="stakePercent"
-              :disable="!connected"
-              track-size="2px"
-              thumb-size="33px"
-              :thumb-color="$q.dark.isActive ? 'text-white' : 'primary'"
-              :min="0"
-              :max="100"
-              :step="25"
-              :label="false"
-              :color="$q.dark.isActive ? 'text-white' : 'primary'"
-            />
-          </stake-slide-wrapper>
+      <div class="row items-center q-mt-sm stake-box__row">
+        <div class="row justify-center q-mb-sm">
+          <total-stacked />
         </div>
 
-        <div class="col-sm-5 col-xs-12 q-mt-sm" :class="{ 'q-mb-md': $q.screen.lt.sm }">
-          <div v-if="connected" class="text-right q-ml-md">
+        <div class="col-auto q-mb-sm">
+          <div v-if="connected" class="text-right">
             <q-btn
               :loading="creating"
               class="stake-box__btn"
               color="accent"
               rounded
               size="14px"
-              padding="9px xl"
+              padding="9px 24px"
               text-color="text-white"
-              :disabled="
-                connectionLost || validatorDelinquent || Number(stake.from) > Number(availableSol)
-              "
-              :ripple="false"
               @click="stakeHandler"
             >
               STAKE NOW
             </q-btn>
           </div>
-          <div v-else class="text-right q-ml-auto">
-            <connect-wallet />
-          </div>
+          <div v-else class="text-center text-bold">Please connect a wallet</div>
         </div>
       </div>
-      <div class="row justify-end items-end q-mt-sm">
-        <div class="q-mr-auto stake-box__fee-info">Network Fee: {{ depositFeeVal }} SOL</div>
-        <roi-calculator-btn />
-        <apy />
-      </div>
-      <div class="stake-box__bottom-section row justify-end items-between q-mt-sm">
-        <div class="col-xs-12">
-          <apy-chart :voter-key="voterKey" />
+      <div
+        class="row items-center"
+        :class="{ 'justify-center': $q.screen.lt.sm, 'justify-between': !$q.screen.lt.sm }"
+      >
+        <div class="main-section__block q-my-sm">
+          <kiwi-link />
+        </div>
+        <div class="main-section__block main-section__block--epoch">
+          <epoch />
+        </div>
+        <div class="main-section__block column q-my-sm">
+          <div class="row justify-end items-end">
+            <roi-calculator-btn />
+            <apy />
+          </div>
+          <div class="q-mt-sm stake-box__fee-info text-center"
+            >Network Fee: {{ depositFeeVal }} SOL</div
+          >
         </div>
       </div>
     </q-card-section>
@@ -147,7 +137,6 @@
           unelevated
           class="absolute-right"
           :icon="evaClose"
-          :ripple="false"
           size="md"
           @click="maxStakeDialog = false"
         />
@@ -166,37 +155,49 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+  <stake-success-dialog v-model="stakeSuccessDialog" />
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, nextTick, onMounted, reactive, ref, toRef, watch } from 'vue';
-  import {
-    useBalanceStore,
-    useConnectionStore,
-    useStakePoolStore,
-    useValidatorJstakingStore,
-  } from '@/store';
-  import { formatAmount, formatPct, lamportsToSol } from '@/utils';
-  import { useStakeAccounts } from '@/hooks';
+  import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
+  import { useBalanceStore, useConnectionStore, useStakePoolStore } from '@/store';
+  import { formatPct, lamportsToSol } from '@/utils';
+  import { useStakeAccounts } from '@/hooks/stake-accounts';
+  import Apy from '@/components/staking/Apy.vue';
+  import ConnectWallet from '@/components/staking/ConnectWallet.vue';
+  import RoiCalculatorBtn from '@/components/staking/RoiCalculatorBtn.vue';
   import { clickOutside } from '@/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
+  import TotalStacked from '@/components/staking/TotalStacked.vue';
+  import Epoch from '@/components/staking/Epoch.vue';
+  import KiwiLink from '@/components/staking/KiwiLink.vue';
+  import ClusterSelector from '@/components/staking/ClusterSelector.vue';
+  import StakeSuccessDialog from '@/components/staking/stake/StakeSuccessDialog.vue';
+  import { useEmitter } from '@/hooks';
   import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
+    components: {
+      Apy,
+      ConnectWallet,
+      ClusterSelector,
+      RoiCalculatorBtn,
+      TotalStacked,
+      Epoch,
+      KiwiLink,
+      StakeSuccessDialog,
+    },
     directives: {
       clickOutside,
     },
     setup() {
-      const validatorJstakingStore = useValidatorJstakingStore();
-      const voterKey = toRef(validatorJstakingStore, 'voterKey');
-      const validatorDelinquent = toRef(validatorJstakingStore, 'validatorDelinquent');
       const connectionStore = useConnectionStore();
       const { connected } = useWallet();
       const balanceStore = useBalanceStore();
-      const solBalance = toRef(balanceStore, 'solBalance');
+      const solBalance = computed(() => balanceStore.solBalance);
       const stakePoolStore = useStakePoolStore();
-      const connectionLost = toRef(stakePoolStore, 'connectionLost');
-      const { depositFee, creating, createAccount } = useStakeAccounts();
+      const connectionLost = computed(() => stakePoolStore.connectionLost);
+      const { depositFee, creating, createAccount, stakeSuccessDialog } = useStakeAccounts();
       const maxStakeDialog = ref(false);
 
       const stake = reactive<{ from: any; to: any }>({
@@ -214,8 +215,14 @@
         });
       });
 
-      watch(stake, (amount) => {
+      watch([stake, connected, solBalance], ([amount, connected, solBalance]) => {
         if (amount.from < 0) stake.from = 0;
+        if (!connected) return;
+        const sol = Number(amount.from);
+        const solFee = lamportsToSol(depositFee.value);
+        if (solBalance && sol + solFee > solBalance) {
+          stake.from = solBalance - solFee;
+        }
       });
 
       // Calculate amount to deposit
@@ -236,16 +243,6 @@
         stake.to = amount > 0 ? amount.toFixed(9) : 0;
       });
 
-      const stakePercent = ref(0);
-      watch(stakePercent, () => {
-        if (stakePercent.value === 100) {
-          stake.from = solBalance.value;
-        } else {
-          const value = solBalance.value * stakePercent.value;
-          stake.from = value ? formatAmount(value / 100) : value;
-        }
-      });
-
       const highlightFix = ref(true);
 
       const doStake = async () => {
@@ -253,21 +250,23 @@
         await createAccount(stake.from);
         stake.from = 0;
         stake.to = 0;
-        stakePercent.value = 0;
       };
 
+      const emitter = useEmitter();
+      emitter.on('closeStakeSuccessDialog', () => {
+        stakeSuccessDialog.value = false;
+      });
+
       return {
-        voterKey,
-        validatorDelinquent,
         stake,
         cluster: computed(() => connectionStore.cluster),
         evaClose,
         connected,
         creating,
         stakeFromInput,
-        stakePercent,
         connectionLost,
         maxStakeDialog,
+        stakeSuccessDialog,
         depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
 

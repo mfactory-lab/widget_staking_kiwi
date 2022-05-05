@@ -27,41 +27,40 @@
   -->
 
 <template>
-  <div v-if="connectionLost && !forceHidden" class="connection-lost">
-    Solana network overloaded. Data currently unavailable.
-  </div>
+  <q-dialog>
+    <q-card class="stake-success">
+      <q-card-section class="stake-success__header">
+        <q-btn
+          padding="sm"
+          color="transparent"
+          unelevated
+          class="absolute-top-right"
+          :icon="evaClose"
+          size="sm"
+          @click="close"
+        />
+      </q-card-section>
+      <q-card-section class="stake-success__info">
+        <div class="stake-success__info__text">YOU HAVE STAKED YOUR SOL</div>
+        <div class="stake-success__info__title">SUCCESS!</div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
-  import { useStakePoolStore } from '@/store';
-  import { computed, defineComponent, ref } from 'vue';
+  import { evaClose } from '@quasar/extras/eva-icons';
+  import { useEmitter } from '@/hooks';
+  import { defineComponent } from 'vue';
 
   export default defineComponent({
+    components: {},
     setup() {
-      const stakePoolStore = useStakePoolStore();
-      const connectionLost = computed(() => stakePoolStore.connectionLost);
-      const forceHidden = ref(true);
-
-      setTimeout(() => (forceHidden.value = false), 3000);
+      const emitter = useEmitter();
       return {
-        connectionLost,
-        forceHidden,
+        evaClose,
+        close: () => emitter.emit('closeStakeSuccessDialog'),
       };
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .connection-lost {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    padding: 20px;
-    background: $info;
-    color: #fff;
-    font-weight: 500;
-    font-size: 22px;
-    z-index: 10000;
-    text-align: center;
-  }
-</style>

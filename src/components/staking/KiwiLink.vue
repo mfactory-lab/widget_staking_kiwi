@@ -27,41 +27,35 @@
   -->
 
 <template>
-  <div v-if="connectionLost && !forceHidden" class="connection-lost">
-    Solana network overloaded. Data currently unavailable.
+  <div class="kiwi-link column items-center justify-between">
+    <div class="kiwi-link__title">STAKE ACCOUNTS</div>
+    <div class="kiwi-link__text">& more details</div>
+    <q-btn
+      type="a"
+      :href="`https://staking.kiwi/app/${voterKey}`"
+      target="_blank"
+      rounded
+      label="STAKING.KIWI"
+      color="primary"
+      text-color="text-white"
+      size="10px"
+      padding="5px 12px"
+      class="q-mt-sm"
+    />
   </div>
 </template>
 
 <script lang="ts">
-  import { useStakePoolStore } from '@/store';
-  import { computed, defineComponent, ref } from 'vue';
+  import { useValidatorJstakingStore } from '@/store';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     setup() {
-      const stakePoolStore = useStakePoolStore();
-      const connectionLost = computed(() => stakePoolStore.connectionLost);
-      const forceHidden = ref(true);
-
-      setTimeout(() => (forceHidden.value = false), 3000);
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = computed(() => validatorJstakingStore.voterKey);
       return {
-        connectionLost,
-        forceHidden,
+        voterKey,
       };
     },
   });
 </script>
-
-<style scoped lang="scss">
-  .connection-lost {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    padding: 20px;
-    background: $info;
-    color: #fff;
-    font-weight: 500;
-    font-size: 22px;
-    z-index: 10000;
-    text-align: center;
-  }
-</style>

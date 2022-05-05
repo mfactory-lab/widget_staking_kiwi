@@ -28,48 +28,26 @@
 
 <template>
   <section class="main-section">
-    <div class="container">
-      <div class="row">
-        <validator-item />
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-6 row">
-          <stake-box />
-        </div>
-        <div
-          class="col-12 col-md-6 column"
-          :class="{ 'q-pl-lg': $q.screen.gt.sm, 'q-mt-md': $q.screen.lt.md }"
-        >
-          <div class="row full-width">
-            <div
-              class="col main-section__block q-mb-md"
-              :class="{ 'col-12': $q.screen.lt.xs, 'q-mr-md': $q.screen.gt.xs }"
-              ><epoch
-            /></div>
-            <a
-              href="https://jpool.one"
-              target="_blank"
-              class="main-section__block main-section__rect-btn main-section__rect-btn--logo"
-            >
-              stake on
-              <img src="@/assets/img/jpool-logo.svg" alt="" />
-            </a>
-          </div>
-          <div class="row full-width">
-            <div
-              class="col q-mb-md main-section__block q-mr-md"
-              :class="{ 'col-12': $q.screen.lt.sm }"
-              ><charts
-            /></div>
-            <div class="col q-mb-md main-section__block" :class="{ 'col-12': $q.screen.lt.sm }"
-              ><price-stats
-            /></div>
-          </div>
-          <div class="row">
-            <wallet-balance />
-          </div>
-        </div>
-      </div>
-    </div>
+    <connection-lost />
+    <theme-mode-selector v-show="false" />
+    <stake-box />
   </section>
 </template>
+
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import StakeBox from './stake/StakeBox.vue';
+  import ConnectionLost from '@/components/ConnectionLost.vue';
+  import ThemeModeSelector from '@/components/ThemeModeSelector.vue';
+
+  export default defineComponent({
+    components: {
+      StakeBox,
+      ConnectionLost,
+      ThemeModeSelector,
+    },
+    setup() {
+      return {};
+    },
+  });
+</script>

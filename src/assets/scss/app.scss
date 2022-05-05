@@ -26,55 +26,46 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-@import 'fonts';
 @import 'variables';
 @import 'mixins';
-@import 'colors';
 @import 'vendors';
 @import 'components';
+@import 'color-utils';
 
 a {
   text-decoration: none;
 }
 
 .section-title {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 56px;
   font-family: $font-secondary;
   text-transform: uppercase;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 29px;
-  text-align: center;
-
-  @media (max-width: $breakpoint-xs) {
+  @media (max-width: 443px) {
     font-size: 24px;
-    line-height: 29px;
+    line-height: 30px;
   }
 }
 
-.break-words {
-  word-break: break-all;
+.section-subtitle {
+  font-size: 27px;
+  line-height: 32px;
+  text-transform: uppercase;
+  color: #252B42;
+  font-weight: 700;
+  font-family: $font-secondary;
+  @media (max-width: 443px) {
+    font-size: 16px;
+    line-height: 20px;
+  }
 }
 
-.styled-toggle {
-  .q-toggle__inner {
-    padding: 0 0.2em 0 0;
-    height: 0.58em;
-  }
-  .q-toggle__thumb {
-    left: 0.05em;
-    top: 0.05em;
-  }
-  .q-toggle__inner--truthy .q-toggle__thumb {
-    left: 0.65em;
-  }
-  .q-toggle__track {
-    opacity: .65;
-  }
-  .q-toggle__inner--truthy .q-toggle__track {
-    opacity: .84;
-  }
-  .q-toggle__track {
-    height: 0.60em;
-    border-radius: 0.35em;
+.section-text {
+  font-size: 20px;
+  line-height: 24px;
+  @media (max-width: 443px) {
+    font-size: 14px;
+    line-height: 18px;
   }
 }
