@@ -56,20 +56,22 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useValidatorJstakingStore, useValidatorStore } from '@/store';
-  import { formatAmount, formatPct, lamportsToSol } from '@jpool/common/utils';
-  import { formatMoney } from '@jpool/common/utils/check-number';
-  import { storeToRefs } from 'pinia';
+  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
+  import { formatAmount, formatMoney, formatPct, lamportsToSol } from '@/utils';
 
   export default defineComponent({
     components: {},
     setup(_props) {
-      const { savedValidator, totalStake, commission } = storeToRefs(useValidatorJstakingStore());
-      const { loading } = storeToRefs(useValidatorStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const savedValidator = computed(() => validatorJstakingStore.savedValidator);
+      const totalStake = computed(() => validatorJstakingStore.totalStake);
+      const commission = computed(() => validatorJstakingStore.commission);
+      const validatorsAllStore = useValidatorsAllStore();
+      const loading = computed(() => validatorsAllStore.loading);
 
       const solStaked = computed(() =>
         lamportsToSol(
-          loading && savedValidator.value
+          loading.value && savedValidator.value
             ? savedValidator.value.validatorStake
             : totalStake.value ?? 0,
         ),
@@ -83,7 +85,7 @@
         solStakedFormat: computed(() => formatAmount(solStaked.value, 3)),
         commission: computed(() =>
           formatPct.format(
-            (loading && savedValidator.value
+            (loading.value && savedValidator.value
               ? savedValidator.value.validatorFee
               : commission.value) / 100,
           ),

@@ -34,12 +34,12 @@
 
 <script lang="ts">
   import { useStakePoolStore } from '@/store';
-  import { storeToRefs } from 'pinia';
-  import { defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
 
   export default defineComponent({
     setup() {
-      const { connectionLost } = storeToRefs(useStakePoolStore());
+      const stakePoolStore = useStakePoolStore();
+      const connectionLost = computed(() => stakePoolStore.connectionLost);
       const forceHidden = ref(true);
 
       setTimeout(() => (forceHidden.value = false), 3000);

@@ -30,12 +30,13 @@
   <router-view />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+  import { onBeforeMount } from 'vue';
+  import { initWallet } from '@/hooks';
+
   import '@/assets/scss/app.scss';
 
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
-    setup() {},
+  onBeforeMount(() => {
+    initWallet();
   });
 </script>

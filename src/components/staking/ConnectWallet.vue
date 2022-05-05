@@ -1,5 +1,5 @@
 <!--
-  - This file is part of the Web3 Library developed by mFactory GmbH.
+  - This file is part of Solana Reference Stake Pool code.
   -
   - Copyright © 2021, mFactory GmbH
   -
@@ -27,39 +27,39 @@
   -->
 
 <template>
-  <template v-if="connected">
-    <q-btn
-      class="app-header__wallet-btn"
-      :class="$style.btn"
-      color="warning"
-      text-color="primary"
-      rounded
-      padding="5px 16px 3px"
-      size="11px"
-      @click="dialog = true"
-    >
-      {{ walletShortAddress }}
-    </q-btn>
-  </template>
-  <template v-else>
-    <q-btn
-      class="app-header__wallet-btn"
-      :class="$style.btn"
-      color="warning"
-      text-color="primary"
-      rounded
-      padding="5px 16px 3px"
-      size="11px"
-      :disable="connectionLost"
-      @click="connect"
-    >
-      <div class="row items-center no-wrap">
-        <span>CONNECT WALLET</span>
-      </div>
-    </q-btn>
-  </template>
+  <q-btn
+    v-if="connected"
+    v-bind="$attrs"
+    :class="$style.btn"
+    :ripple="false"
+    color="warning"
+    text-color="primary"
+    rounded
+    unelevated
+    @click="dialog = true"
+  >
+    {{ walletShortAddress }}
+  </q-btn>
 
-  <q-dialog v-model="dialog">
+  <q-btn
+    v-else
+    v-bind="$attrs"
+    color="warning"
+    text-color="primary"
+    rounded
+    unelevated
+    :ripple="false"
+    @click="dialog = true"
+  >
+    CONNECT WALLET
+  </q-btn>
+
+  <q-dialog
+    v-model="dialog"
+    transition-duration="150"
+    transition-show="fade"
+    transition-hide="fade"
+  >
     <q-card v-if="connected">
       <q-card-section class="relative-position">
         <div class="text-h6 text-center">Your wallet</div>
@@ -69,7 +69,7 @@
           text-color="primary-gray"
           unelevated
           class="absolute-right"
-          :icon="evaClose"
+          :icon="icons.close"
           size="md"
           @click="ok"
         />
@@ -82,14 +82,14 @@
       <q-separator />
       <q-card-section>
         <div class="q-gutter-md row justify-between">
-          <q-btn outline rounded @click="disconnect"> Disconnect </q-btn>
-          <q-btn outline rounded @click="ok"> Ok </q-btn>
+          <q-btn outline rounded @click="disconnect"> Disconnect</q-btn>
+          <q-btn outline rounded @click="ok"> Ok</q-btn>
         </div>
       </q-card-section>
     </q-card>
 
-    <q-card v-else style="width: 300px">
-      <q-card-section class="relative-position">
+    <q-card v-else class="wallet-connect-card">
+      <q-card-section>
         <div class="text-h6">Connect to a wallet</div>
         <q-btn
           padding="md"
@@ -97,23 +97,45 @@
           text-color="primary-gray"
           unelevated
           class="absolute-right"
-          :icon="evaClose"
+          :icon="icons.close"
           size="md"
           @click="ok"
         />
       </q-card-section>
       <q-separator />
-      <q-card-section class="scroll" style="max-height: 55vh">
-        <q-list bordered separator>
-          <q-item v-for="p in providers" :key="p.name" v-ripple clickable @click="select(p)">
-            <q-item-section>{{ p.name }}</q-item-section>
-            <q-item-section avatar>
-              <q-avatar>
-                <img :src="p.icon" alt="" />
-              </q-avatar>
-            </q-item-section>
-          </q-item>
-        </q-list>
+      <q-card-section>
+        <q-table
+          grid
+          :rows="wallets"
+          row-key="name"
+          hide-pagination
+          hide-header
+          :rows-per-page-options="[20]"
+        >
+          <template #item="{ row: wallet }">
+            <div class="col-12 col-md-6">
+              <q-item clickable @click="select(wallet)" :disable="!isActiveWallet(wallet)">
+                <q-item-section>
+                  <b>{{ wallet.name }}</b>
+                  <div
+                    class="text-grey text-caption full-width"
+                    style="text-overflow: ellipsis; overflow: hidden"
+                  >
+                    {{ wallet.url }}
+                  </div>
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-avatar square>
+                    <img
+                      :src="dark.isActive ? wallet.icon : wallet['darkIcon'] ?? wallet.icon"
+                      alt=""
+                    />
+                  </q-avatar>
+                </q-item-section>
+              </q-item>
+            </div>
+          </template>
+        </q-table>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -121,42 +143,80 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
-  import { storeToRefs } from 'pinia';
-  import { WALLET_PROVIDERS, shortenAddress } from '@jpool/common/utils';
-  import { useStakePoolStore, useWalletStore } from '@/store';
-  import CopyToClipboard from '@/components/CopyToClipboard.vue';
+  import { Wallet, useWallet } from 'solana-wallets-vue';
   import { evaClose } from '@quasar/extras/eva-icons';
+  import { WalletReadyState } from '@solana/wallet-adapter-base';
+  import { shortenAddress } from '@/utils';
+  import ledgerDarkSvg from '@/assets/img/wallets/ledger.svg';
+  import mathWalletDarkSvg from '@/assets/img/wallets/mathwallet.svg';
+  import { useQuasar } from 'quasar';
+
+  const walletPriority = {
+    solflare: 10,
+    phantom: 20,
+    sollet: 5,
+    blocto: 4,
+  };
 
   export default defineComponent({
-    components: { CopyToClipboard },
     setup() {
-      const walletStore = useWalletStore();
-      const { connected } = storeToRefs(walletStore);
-      const { connectionLost } = storeToRefs(useStakePoolStore());
-      const walletAddress = computed(() => walletStore.wallet?.publicKey?.toBase58() ?? '');
+      const {
+        wallets,
+        select: selectWallet,
+        publicKey,
+        connected,
+        disconnect,
+        connect,
+      } = useWallet();
+      const walletAddress = computed(() => publicKey.value?.toBase58() ?? '');
       const walletShortAddress = computed(() => shortenAddress(walletAddress.value));
 
       const dialog = ref(false);
 
+      const { dark } = useQuasar();
+      const darkIcons = {
+        ledger: ledgerDarkSvg,
+        mathwallet: mathWalletDarkSvg,
+      };
+
+      function isActiveWallet(wallet: Wallet) {
+        return [WalletReadyState.Installed, WalletReadyState.Loadable].includes(wallet.readyState);
+      }
+
       return {
-        evaClose,
-        connectionLost,
         walletAddress,
         walletShortAddress,
         dialog,
         connected,
-        providers: WALLET_PROVIDERS.filter(
-          (item) => item.name === 'Solflare' || item.name === 'Sollet Web',
+        dark,
+        wallets: computed(() =>
+          [...wallets.value]
+            .map((w) => {
+              w['darkIcon'] = darkIcons[w.name.toLowerCase()];
+              return w;
+            })
+            .sort((a, b) => {
+              const aPriority = walletPriority[a.name.toLowerCase()] ?? 1;
+              const bPriority = walletPriority[b.name.toLowerCase()] ?? 1;
+              return (
+                bPriority - aPriority + ((isActiveWallet(b) ? 1 : 0) - (isActiveWallet(a) ? 1 : 0))
+              );
+            }),
         ),
-        select(provider) {
-          walletStore.select(provider);
+        icons: {
+          close: evaClose,
+        },
+        isActiveWallet,
+        async select(wallet: Wallet) {
+          await selectWallet(wallet.name);
+          await connect();
           dialog.value = false;
         },
         connect() {
           dialog.value = true;
         },
         disconnect() {
-          walletStore.disconnect();
+          disconnect();
           dialog.value = false;
         },
         ok() {
@@ -166,6 +226,21 @@
     },
   });
 </script>
+
+<style scoped lang="scss">
+  .wallet-connect-card {
+    .q-item {
+      border: 1px solid #f5f5f5;
+      margin: 3px;
+      b {
+        font-weight: 500;
+      }
+      &:hover {
+        border-color: #e8e8e8;
+      }
+    }
+  }
+</style>
 
 <style lang="scss" module>
   .btn {

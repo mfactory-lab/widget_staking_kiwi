@@ -27,15 +27,9 @@
   -->
 
 <template>
-  <q-layout view="lfh Lpr lff">
+  <q-layout view="lfh Lpr lFf">
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
-
-<script lang="ts">
-  export default {
-    components: {},
-  };
-</script>

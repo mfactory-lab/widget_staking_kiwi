@@ -28,21 +28,20 @@
 
 <template>
   <q-btn-dropdown
-    class="cluster-selector"
-    :label="filter(cluster)"
+    class="app-header__cluster-btn"
+    :label="endpoint.name"
     :model-value="false"
+    :ripple="false"
+    color="text-white"
+    text-color="primary"
     auto-close
-    color="primary"
-    text-color="text-white"
-    padding="5px 16px 3px"
-    size="11px"
     rounded
   >
     <q-list class="cluster-selector__list">
       <q-item v-for="item in items" :key="item.name" clickable @click="select(item)">
         <q-item-section>
           <q-item-label>
-            <b>{{ filter(item.name) }}</b>
+            <b>{{ item.name }}</b>
           </q-item-label>
           {{ item.url }}
         </q-item-section>
@@ -52,25 +51,27 @@
 </template>
 
 <script lang="ts">
-  import { computed } from 'vue';
+  import { computed, defineComponent } from 'vue';
+  import { useWallet } from 'solana-wallets-vue';
   import { ENDPOINTS } from '@/config';
-  import { Endpoint, useConnectionStore, useWalletStore } from '@/store';
-  import { defineComponent } from 'vue';
+  import { Endpoint, useConnectionStore } from '@/store';
 
   export default defineComponent({
     setup() {
       const connectionStore = useConnectionStore();
-      const walletStore = useWalletStore();
+      const { connected, connect, disconnect, autoConnect } = useWallet();
       return {
         items: ENDPOINTS,
-        cluster: computed(() => connectionStore.cluster),
+        endpoint: computed(() => connectionStore.endpoint),
         select: (e: Endpoint) => {
-          if (!!walletStore.wallet?.publicKey && connectionStore.cluster !== e.name) {
-            walletStore.disconnect();
+          if (connected && connectionStore.cluster !== e.cluster) {
+            disconnect();
+            if (autoConnect.value) {
+              connect();
+            }
           }
-          connectionStore.setCluster(e.name);
+          connectionStore.setRpc(e.id);
         },
-        filter: (name: string) => name.replace('-beta', ''),
       };
     },
   });

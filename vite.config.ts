@@ -1,124 +1,74 @@
-/*
- * This file is part of the Web3 Library developed by mFactory GmbH.
- *
- * Copyright © 2021, mFactory GmbH
- *
- * Solana Reference Stake Pool is free software: you can redistribute it
- * and/or modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Solana Reference Stake Pool is distributed in the hope that it
- * will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.
- * If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
- *
- * You can be released from the requirements of the Affero GNU General Public License
- * by purchasing a commercial license. The purchase of such a license is
- * mandatory as soon as you develop commercial activities using the
- * Solana Reference Stake Pool code without disclosing the source code of
- * your own applications.
- *
- * The developer of this program can be contacted at <info@mfactory.ch>.
- */
-
 import { resolve } from 'path';
-import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig } from 'vite';
-import { injectHtml, minifyHtml } from 'vite-plugin-html';
-import Vue from '@vitejs/plugin-vue';
-// import ViteLegacy from '@vitejs/plugin-legacy';
-import ViteVisualizer from 'rollup-plugin-visualizer';
-
-import Components from 'unplugin-vue-components/vite';
-import { QuasarResolver } from 'unplugin-vue-components/resolvers';
+import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig, loadEnv } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html';
+// import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+import checker from 'vite-plugin-checker';
+import vue from '@vitejs/plugin-vue';
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+import components from 'unplugin-vue-components/vite';
+import visualizer from 'rollup-plugin-visualizer';
+import inject from '@rollup/plugin-inject';
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
   const isProd = mode === 'production';
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
-    injectHtml({
-      data: {
-        title: 'JStaking',
-        description: 'Solana staking.',
-        keywords: 'Solana, SOL',
+    vue({
+      include: [/\.vue$/, /\.md$/],
+      template: { transformAssetUrls },
+      // reactivityTransform: true,
+    }),
+    quasar(),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: process.env.VITE_APP_TITLE,
+          description: process.env.VITE_APP_DESCRIPTION,
+          keywords: process.env.VITE_APP_KEYWORDS,
+        },
       },
     }),
-    minifyHtml({
-      // collapseBooleanAttributes: true,
-      // collapseWhitespace: true,
-      // minifyCSS: true,
-      // minifyJS: true,
-      // minifyURLs: true,
-      // removeAttributeQuotes: true,
-      // removeComments: true,
-      // removeEmptyAttributes: true,
-      // html5: true,
-      // keepClosingSlash: true,
-      // removeRedundantAttributes: true,
-      // removeScriptTypeAttributes: true,
-      // removeStyleLinkTypeAttributes: true,
-      // useShortDoctype: true,
+    // chunkSplitPlugin(),
+    // https://github.com/antfu/unplugin-vue-components
+    components({
+      extensions: ['vue', 'md'],
+      dts: 'types/components.d.ts',
     }),
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-    }),
-    // ViteComponents({
-    //   customComponentResolvers: [resolveQuasar],
-    // }
-    // AutoImport({
-    //   resolvers: [QuasarResolver()],
-    // }),
-    Components({
-      resolvers: [QuasarResolver()],
+    // https://github.com/fi3ework/vite-plugin-checker
+    checker({
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      },
     }),
   ];
 
   const build: BuildOptions = {
-    manifest: false,
-    cssCodeSplit: false, // true,
-    sourcemap: false,
-    polyfillDynamicImport: false,
-    brotliSize: false,
-    chunkSizeWarningLimit: 2000, //550
-    assetsInlineLimit: 4096,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        // drop_console: true,
-        drop_debugger: true,
-      },
+    manifest: isProd,
+    // sourcemap: false,
+    // brotliSize: false,
+    // cssCodeSplit: false,
+    // polyfillDynamicImport: false,
+    // assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1024,
+    rollupOptions: {
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+      // treeshake: true,
+      // output: {
+      //   manualChunks(id) {
+      //     if (id.includes('/node_modules/')) {
+      //       return 'vendors';
+      //     }
+      //   },
+      // },
     },
   };
 
-  if (isProd) {
-    build.manifest = true;
-
-    // TODO: charset error
-    // plugins.push(
-    //   /**
-    //    * DESC:
-    //    * provides support for legacy browsers
-    //    * that do not support native ESM
-    //    */
-    //   ViteLegacy({
-    //     targets: ['defaults', 'not IE 11'],
-    //   }),
-    // );
-  }
-
   if (isReport) {
     plugins.push(
-      /**
-       * DESC:
-       * visualize bundle
-       */
-      ViteVisualizer({
+      visualizer({
         filename: './dist/report.html',
         open: true,
         brotliSize: true,
@@ -126,18 +76,13 @@ export default defineConfig(({ mode }) => {
     );
   }
 
-  let optimizeDeps: DepOptimizationOptions = {};
-
-  if (isDev) {
-    /**
-     * DESC:
-     * dependency pre-bundling
-     */
-    optimizeDeps = {
-      include: ['quasar', 'lodash', '@vue/runtime-core', '@vueuse/core', '@vueuse/head'],
-      exclude: ['vue-demi'],
-    };
-  }
+  const optimizeDeps: DepOptimizationOptions = {
+    include: ['vue', '@vueuse/core', 'lodash', '@quasar/extras/eva-icons', 'bn.js'],
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      minify: true,
+    },
+  };
 
   return {
     build,
@@ -148,14 +93,40 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           charset: false,
-          additionalData: '@import "@/assets/scss/_variables.scss";\n',
+          additionalData: '@import "@/assets/scss/global.scss";\n',
         },
+      },
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove();
+                }
+              },
+            },
+          },
+        ],
       },
       // TODO https://github.com/vitejs/vite/issues/5833
       charset: false,
     },
 
     resolve: {
+      browser: true,
+      preferBuiltins: false,
+      dedupe: [
+        'bn.js',
+        'bs58',
+        'lodash',
+        'buffer',
+        'buffer-layout',
+        'eventemitter3',
+        '@solana/web3.js',
+        '@solana/buffer-layout',
+      ],
       alias: [
         {
           find: /~(.+)/,
@@ -165,22 +136,27 @@ export default defineConfig(({ mode }) => {
       ],
     },
 
-    server: {
-      fs: {
-        strict: true,
-      },
+    define: {
+      'process.env': process.env,
+      // global: 'globalThis',
     },
 
     // https://github.com/antfu/vite-ssg
     // ssgOptions: {
     //   script: 'async',
     //   formatting: 'minify',
+    //   // onFinished() {
+    //   // generateSitemap();
+    //   // },
     // },
 
-    // support node libraries
-    define: {
-      'process.env': process.env,
-      global: 'window',
-    },
+    // https://github.com/vitest-dev/vitest
+    // test: {
+    //   include: ['test/**/*.test.ts'],
+    //   environment: 'jsdom',
+    //   deps: {
+    //     inline: ['@vue', '@vueuse', 'vue-demi'],
+    //   },
+    // },
   };
 });

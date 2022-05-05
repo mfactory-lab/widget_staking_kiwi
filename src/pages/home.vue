@@ -27,17 +27,7 @@
   -->
 
 <template>
-  <main-section />
+  <q-page class="home-page">
+    <main-section />
+  </q-page>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import MainSection from '@/components/staking/MainSection.vue';
-
-  export default defineComponent({
-    components: {
-      MainSection,
-    },
-    setup() {},
-  });
-</script>

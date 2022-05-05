@@ -50,7 +50,7 @@
 
 <script lang="ts">
   import { evaClose } from '@quasar/extras/eva-icons';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { useEmitter } from '@/hooks';
   import { defineComponent } from 'vue';
 
   export default defineComponent({

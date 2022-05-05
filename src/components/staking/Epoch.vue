@@ -46,12 +46,13 @@
 
 <script lang="ts">
   import { useEpochStore } from '@/store';
-  import { storeToRefs } from 'pinia';
   import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     setup() {
-      const { epochProgress, epochNumber } = storeToRefs(useEpochStore());
+      const epochStore = useEpochStore();
+      const epochProgress = computed(() => epochStore.epochProgress);
+      const epochNumber = computed(() => epochStore.epochNumber);
       return {
         epochNumber,
         epochProgress: computed(() => Number(epochProgress.value)),

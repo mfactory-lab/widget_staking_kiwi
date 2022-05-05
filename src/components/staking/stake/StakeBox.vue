@@ -160,21 +160,21 @@
 
 <script lang="ts">
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
-  import { storeToRefs } from 'pinia';
-  import { useBalanceStore, useConnectionStore, useStakePoolStore, useWalletStore } from '@/store';
-  import { formatPct, lamportsToSol } from '@jpool/common/utils';
+  import { useBalanceStore, useConnectionStore, useStakePoolStore } from '@/store';
+  import { formatPct, lamportsToSol } from '@/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import Apy from '@/components/staking/Apy.vue';
   import ConnectWallet from '@/components/staking/ConnectWallet.vue';
-  import RoiCalculatorBtn from '../roi-calculator/RoiCalculatorBtn.vue';
-  import { clickOutside } from '@jpool/common/directives';
+  import RoiCalculatorBtn from '@/components/staking/RoiCalculatorBtn.vue';
+  import { clickOutside } from '@/directives';
   import { evaClose } from '@quasar/extras/eva-icons';
   import TotalStacked from '@/components/staking/TotalStacked.vue';
   import Epoch from '@/components/staking/Epoch.vue';
   import KiwiLink from '@/components/staking/KiwiLink.vue';
   import ClusterSelector from '@/components/staking/ClusterSelector.vue';
   import StakeSuccessDialog from '@/components/staking/stake/StakeSuccessDialog.vue';
-  import { useEmitter } from '@jpool/common/hooks';
+  import { useEmitter } from '@/hooks';
+  import { useWallet } from 'solana-wallets-vue';
 
   export default defineComponent({
     components: {
@@ -192,9 +192,11 @@
     },
     setup() {
       const connectionStore = useConnectionStore();
-      const { connected } = storeToRefs(useWalletStore());
-      const { solBalance } = storeToRefs(useBalanceStore());
-      const { connectionLost } = storeToRefs(useStakePoolStore());
+      const { connected } = useWallet();
+      const balanceStore = useBalanceStore();
+      const solBalance = computed(() => balanceStore.solBalance);
+      const stakePoolStore = useStakePoolStore();
+      const connectionLost = computed(() => stakePoolStore.connectionLost);
       const { depositFee, creating, createAccount, stakeSuccessDialog } = useStakeAccounts();
       const maxStakeDialog = ref(false);
 

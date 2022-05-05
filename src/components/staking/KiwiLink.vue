@@ -32,7 +32,7 @@
     <div class="kiwi-link__text">& more details</div>
     <q-btn
       type="a"
-      :href="`https://staking.kiwi/?validator=${voterKey}`"
+      :href="`https://staking.kiwi/app/${voterKey}`"
       target="_blank"
       rounded
       label="STAKING.KIWI"
@@ -47,12 +47,12 @@
 
 <script lang="ts">
   import { useValidatorJstakingStore } from '@/store';
-  import { defineComponent } from 'vue';
-  import { storeToRefs } from 'pinia';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     setup() {
-      const { voterKey } = storeToRefs(useValidatorJstakingStore());
+      const validatorJstakingStore = useValidatorJstakingStore();
+      const voterKey = computed(() => validatorJstakingStore.voterKey);
       return {
         voterKey,
       };

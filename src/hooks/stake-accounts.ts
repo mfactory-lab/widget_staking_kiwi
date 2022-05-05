@@ -28,68 +28,80 @@
 
 import { useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
-import { storeToRefs } from 'pinia';
+import { useAnchorWallet, useWallet } from 'solana-wallets-vue';
 import { Authorized, LAMPORTS_PER_SOL, PublicKey, StakeProgram } from '@solana/web3.js';
 import {
-  sendTransaction,
+  ProgramAccount,
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
   useValidatorJstakingStore,
-  useWalletStore,
 } from '@/store';
-import { useMonitorTransaction } from '@jpool/common/hooks/monitor';
+import { useMonitorTransaction } from '@/hooks';
+import { sendTransaction } from '@/utils';
+
+const findFirstAvailableSeed = async (
+  publicKey: PublicKey,
+  stakeAccounts: ProgramAccount[],
+): Promise<string> => {
+  let seedIndex = 0;
+  if (!publicKey) return '';
+  while (1) {
+    const newStakeAccountPubkey = await PublicKey.createWithSeed(
+      publicKey,
+      seedIndex.toString(),
+      StakeProgram.programId,
+    );
+    const matching = stakeAccounts.find((meta) => newStakeAccountPubkey.equals(meta.pubkey));
+    if (!matching) {
+      break;
+    }
+    seedIndex++;
+  }
+  return seedIndex.toString();
+};
 
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
-  const { lamportsPerSignature } = storeToRefs(useStakePoolStore());
-  const walletStore = useWalletStore();
-  const { wallet, walletPubKey } = storeToRefs(walletStore);
+  const stakeAccountStore = useStakeAccountStore();
+  const validatorJstakingStore = useValidatorJstakingStore();
+  const stakePoolStore = useStakePoolStore();
+  const { publicKey } = useWallet();
+  const anchorWallet = useAnchorWallet();
   const { monitorTransaction, sending } = useMonitorTransaction();
   const { notify } = useQuasar();
+
   const loading = ref(false);
   const seed = ref('0');
-  const stakeAccountStore = useStakeAccountStore();
-  const { voterKey } = storeToRefs(useValidatorJstakingStore());
   const stakeSuccessDialog = ref(false);
 
-  const findFirstAvailableSeed = async () => {
-    let seedIndex = 0;
-    if (!walletPubKey.value) return;
-    const STAKE_PROGRAM_ID = new PublicKey('Stake11111111111111111111111111111111111111');
-    while (1) {
-      const newStakeAccountPubkey = await PublicKey.createWithSeed(
-        walletPubKey.value,
-        seedIndex.toString(),
-        STAKE_PROGRAM_ID,
-      );
-      const matching = stakeAccountStore.data.find((meta) =>
-        newStakeAccountPubkey.equals(meta.pubkey),
-      );
-      if (!matching) {
-        break;
-      }
-      seedIndex++;
-    }
-    seed.value = seedIndex.toString();
-  };
+  const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
+  const voterKey = computed(() => validatorJstakingStore.voterKey);
 
   const delegateAccount = async (stakePubkey) => {
-    if (!walletPubKey.value) {
+    if (!publicKey.value) {
       return;
     }
     try {
       const transaction = StakeProgram.delegate({
         stakePubkey,
-        authorizedPubkey: walletPubKey.value,
+        authorizedPubkey: publicKey.value,
         votePubkey: new PublicKey(voterKey.value),
       });
 
       await monitorTransaction(
-        sendTransaction(connectionStore.connection, wallet.value!, transaction.instructions, []),
+        sendTransaction(
+          connectionStore.connection,
+          anchorWallet.value!,
+          transaction.instructions,
+          [],
+        ),
         {
+          commitment: 'finalized',
           onSuccess: async () => {
-            await stakeAccountStore.load();
+            await stakeAccountStore.load({
+              // delay: 3000,
+            });
           },
           onError: () => {},
         },
@@ -105,43 +117,47 @@ export function useStakeAccounts() {
     depositFee: computed(() => lamportsPerSignature.value),
     creating: computed(() => loading.value || sending.value),
     createAccount: async (amount) => {
-      if (!walletPubKey.value) {
+      if (!publicKey.value) {
         return;
       }
       try {
         loading.value = true;
-        await findFirstAvailableSeed();
+        seed.value = await findFirstAvailableSeed(publicKey.value, stakeAccountStore.data);
         const stakePubkey = await PublicKey.createWithSeed(
-          walletPubKey.value,
+          publicKey.value,
           seed.value,
           StakeProgram.programId,
         );
 
         const transaction = StakeProgram.createAccountWithSeed({
-          fromPubkey: walletPubKey.value,
+          fromPubkey: publicKey.value,
           stakePubkey,
-          basePubkey: walletPubKey.value,
+          basePubkey: publicKey.value,
           seed: seed.value,
-          authorized: new Authorized(walletPubKey.value, walletPubKey.value),
+          authorized: new Authorized(publicKey.value, publicKey.value),
           lamports: LAMPORTS_PER_SOL * amount,
         });
 
         const transactionDelegate = StakeProgram.delegate({
           stakePubkey,
-          authorizedPubkey: walletPubKey.value,
+          authorizedPubkey: publicKey.value,
           votePubkey: new PublicKey(voterKey.value),
         });
 
         await monitorTransaction(
           sendTransaction(
             connectionStore.connection,
-            wallet.value!,
+            anchorWallet.value!,
             [...transaction.instructions, ...transactionDelegate.instructions],
             [],
           ),
           {
+            commitment: 'finalized',
             onSuccess: async () => {
               stakeSuccessDialog.value = true;
+              await stakeAccountStore.load({
+                // delay: 3000,
+              });
             },
             onError: async () => {},
           },
