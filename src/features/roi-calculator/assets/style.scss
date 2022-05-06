@@ -59,7 +59,7 @@
    &__body {
      background: #ffffff;
      border-radius: 0 0 8px 8px;
-     padding: 16px 24px;
+     padding: 16px 12px;
      color: $color-main;
      display: flex;
      justify-content: space-between;
@@ -211,7 +211,7 @@
  
        &__text {
          width: 25%;
-         padding: 6px;
+         padding: 4px;
          font-size: 13px;
          line-height: 14px;
          text-align: center;
@@ -220,14 +220,14 @@
          &:first-child {
            text-align: left;
            width: 40%;
-           padding-left: 20px;
+           padding-left: 4px;
          }
  
          &:last-child {
            text-align: right;
            border-right: 0;
            width: 35%;
-           padding-right: 20px;
+           padding-right: 4px;
          }
        }
      }
