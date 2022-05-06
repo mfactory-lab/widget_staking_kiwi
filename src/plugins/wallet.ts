@@ -29,22 +29,22 @@
 import { App } from 'vue';
 import SolanaWallets from 'solana-wallets-vue';
 
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
-import { SlopeWalletAdapter } from '@solana/wallet-adapter-slope';
+// import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
+// import { SlopeWalletAdapter } from '@solana/wallet-adapter-slope';
 import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
-import { SolletExtensionWalletAdapter } from '@solana/wallet-adapter-sollet';
-import { BitKeepWalletAdapter } from '@solana/wallet-adapter-bitkeep';
-import { BitpieWalletAdapter } from '@solana/wallet-adapter-bitpie';
-import { CloverWalletAdapter } from '@solana/wallet-adapter-clover';
-import { Coin98WalletAdapter } from '@solana/wallet-adapter-coin98';
-import { CoinhubWalletAdapter } from '@solana/wallet-adapter-coinhub';
-import { MathWalletAdapter } from '@solana/wallet-adapter-mathwallet';
-import { SafePalWalletAdapter } from '@solana/wallet-adapter-safepal';
-import { SolongWalletAdapter } from '@solana/wallet-adapter-solong';
+// import { SolletExtensionWalletAdapter } from '@solana/wallet-adapter-sollet';
+// import { BitKeepWalletAdapter } from '@solana/wallet-adapter-bitkeep';
+// import { BitpieWalletAdapter } from '@solana/wallet-adapter-bitpie';
+// import { CloverWalletAdapter } from '@solana/wallet-adapter-clover';
+// import { Coin98WalletAdapter } from '@solana/wallet-adapter-coin98';
+// import { CoinhubWalletAdapter } from '@solana/wallet-adapter-coinhub';
+// import { MathWalletAdapter } from '@solana/wallet-adapter-mathwallet';
+// import { SafePalWalletAdapter } from '@solana/wallet-adapter-safepal';
+// import { SolongWalletAdapter } from '@solana/wallet-adapter-solong';
 import { SolletWalletAdapter } from '@solana/wallet-adapter-sollet';
-import { TokenPocketWalletAdapter } from '@solana/wallet-adapter-tokenpocket';
-import { LedgerWalletAdapter } from '@solana/wallet-adapter-ledger';
-import { GlowWalletAdapter } from '@solana/wallet-adapter-glow';
+// import { TokenPocketWalletAdapter } from '@solana/wallet-adapter-tokenpocket';
+// import { LedgerWalletAdapter } from '@solana/wallet-adapter-ledger';
+// import { GlowWalletAdapter } from '@solana/wallet-adapter-glow';
 
 // import { TorusWalletAdapter } from '@solana/wallet-adapter-torus';
 // import { BloctoWalletAdapter } from '@solana/wallet-adapter-blocto';
@@ -56,22 +56,22 @@ export const install = ({ app }: { app: App<Element> }) => {
   const walletOptions = {
     // wallets: getWalletAdapters(),
     wallets: [
-      new PhantomWalletAdapter(),
+      // new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
       new SolletWalletAdapter(),
-      new SolletExtensionWalletAdapter(),
-      new SlopeWalletAdapter(),
-      new SolongWalletAdapter(),
-      new CloverWalletAdapter(),
-      new BitKeepWalletAdapter(),
-      new BitpieWalletAdapter(),
-      new Coin98WalletAdapter(),
-      new CoinhubWalletAdapter(),
-      new SafePalWalletAdapter(),
-      new TokenPocketWalletAdapter(),
-      new GlowWalletAdapter(),
-      new MathWalletAdapter(),
-      new LedgerWalletAdapter(),
+      // new SolletExtensionWalletAdapter(),
+      // new SlopeWalletAdapter(),
+      // new SolongWalletAdapter(),
+      // new CloverWalletAdapter(),
+      // new BitKeepWalletAdapter(),
+      // new BitpieWalletAdapter(),
+      // new Coin98WalletAdapter(),
+      // new CoinhubWalletAdapter(),
+      // new SafePalWalletAdapter(),
+      // new TokenPocketWalletAdapter(),
+      // new GlowWalletAdapter(),
+      // new MathWalletAdapter(),
+      // new LedgerWalletAdapter(),
       // new BloctoWalletAdapter(),
     ],
     autoConnect: true,
