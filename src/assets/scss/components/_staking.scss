@@ -47,6 +47,7 @@
   &__title {
     font-size: 13px;
     @media (max-width: 443px) {
+      height: 23px;
       order: 2;
       width: 100%;
     }

@@ -30,8 +30,8 @@
   <q-card class="stake-box shadow-sm q-px-none q-py-sm">
     <q-card-section class="stake-box__top-section">
       <div class="row justify-between items-center q-mb-xs">
-        <div class="column">
-          <div class="stake-box__title q-mt-sm"> Balance: {{ availableSol }} SOL </div>
+        <div class="stake-box__title q-mt-sm column">
+          <div> Balance: {{ availableSol }} SOL </div>
           <div
             v-if="connected && Number(stake.from) > Number(availableSol)"
             class="stake-box__warning col-auto"
