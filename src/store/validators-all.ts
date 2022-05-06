@@ -33,10 +33,8 @@ import { useWallet } from 'solana-wallets-vue';
 import { useConnectionStore, useStakeAccountStore } from '@/store';
 import { useEmitter } from '@/hooks';
 import {
-  ApyStats,
   ValidatorStats,
   formatPct,
-  getAverageApy,
   getValidatorsStats,
   lamportsToSol,
   priceFormatter,
@@ -96,8 +94,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
   const { connected } = useWallet();
 
   const validatorsStats = shallowRef<Array<ValidatorStats>>([]);
-  const averageApy = shallowRef<Array<ApyStats>>([]);
-  const averageApyLoading = ref(false);
   const loading = ref(false);
 
   const nameFilter = ref('');
@@ -136,27 +132,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     }
   };
 
-  const loadAverageApy = async () => {
-    if (averageApyLoading.value) {
-      return;
-    }
-    if (cluster.value === 'mainnet-beta') {
-      averageApyLoading.value = true;
-      console.log('[useValidatorsAllStore] Loading average APY...');
-      averageApy.value = await getAverageApy();
-      averageApyLoading.value = false;
-    } else {
-      averageApy.value = [];
-    }
-  };
-
-  // onBeforeMount(() => {
-  //   loadAverageApy();
-  //   if (validatorsStats.value.length < 1) {
-  //     loadAllValidators();
-  //   }
-  // });
-
   watch(
     connected,
     (connected) => {
@@ -169,7 +144,6 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     cluster,
     useDebounceFn(() => {
       loadAllValidators();
-      loadAverageApy();
     }, 250),
     { immediate: true },
   );
@@ -313,12 +287,10 @@ export const useValidatorsAllStore = defineStore('validators-all', () => {
     filters,
     itemsTotal: computed(() => items.value.length),
     items: itemsComputed,
-    averageApy,
     loading,
     showControls,
     showControlsMob,
 
     loadAllValidators,
-    loadAverageApy,
   };
 });

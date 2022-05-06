@@ -48,11 +48,6 @@ export interface ValidatorStats {
   apyComparedMax: Number;
 }
 
-export interface ApyStats {
-  apy: number;
-  epoch: number;
-}
-
 export async function getValidatorsStats(network) {
   return new Promise<Array<ValidatorStats>>((resolve, reject) => {
     // fetch(`http://localhost:3000/validators/list?network=${network}`)
@@ -68,46 +63,6 @@ export async function getValidatorsStats(network) {
         },
         (error) => {
           reject(error);
-          console.error(error);
-        },
-      );
-  });
-}
-
-export async function getApyHistory(voterKey) {
-  return new Promise<Array<ApyStats>>((resolve, _reject) => {
-    fetch(`${API_COLLECTOR_URL}/apy/history?voter_id=${voterKey}`)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.data?.length > 0) {
-            resolve(res.data);
-          } else {
-            // resolve([]);
-            // reject(Error('Promise rejected'));
-          }
-        },
-        (error) => {
-          console.error(error);
-        },
-      );
-  });
-}
-
-export async function getAverageApy() {
-  return new Promise<Array<ApyStats>>((resolve, _reject) => {
-    fetch(`${API_COLLECTOR_URL}/apy-average/history`)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.data?.length > 0) {
-            resolve(res.data);
-          } else {
-            // resolve([]);
-            // reject(Error('Promise rejected'));
-          }
-        },
-        (error) => {
           console.error(error);
         },
       );
