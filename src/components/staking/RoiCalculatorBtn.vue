@@ -27,7 +27,7 @@
   -->
 
 <template>
-  <div class="q-mx-lg roi-calc-btn" @click="roiDialog = true">
+  <div class="q-mr-md roi-calc-btn" @click="roiDialog = true">
     <img src="@/assets/img/calculator.svg" alt="" class="q-ml-xs" />
   </div>
   <roi-calculator v-model="roiDialog" />

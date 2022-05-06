@@ -32,9 +32,11 @@
     :label="endpoint.name"
     :model-value="false"
     :ripple="false"
-    color="text-white"
-    text-color="primary"
     auto-close
+    color="primary"
+    text-color="text-white"
+    padding="5px 16px 3px"
+    size="11px"
     rounded
   >
     <q-list class="cluster-selector__list">
