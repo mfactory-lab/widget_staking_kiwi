@@ -30,7 +30,15 @@
   <q-card class="stake-box shadow-sm q-px-none q-py-sm">
     <q-card-section class="stake-box__top-section">
       <div class="row justify-between items-center q-mb-xs">
-        <div class="stake-box__title q-mt-sm"> Balance: {{ availableSol }} SOL </div>
+        <div class="column">
+          <div class="stake-box__title q-mt-sm"> Balance: {{ availableSol }} SOL </div>
+          <div
+            v-if="connected && Number(stake.from) > Number(availableSol)"
+            class="stake-box__warning col-auto"
+          >
+            Insufficient funds to stake
+          </div>
+        </div>
         <div class="q-ml-auto row justify-end q-mb-xs">
           <div>
             <cluster-selector />
@@ -215,14 +223,8 @@
         });
       });
 
-      watch([stake, connected, solBalance], ([amount, connected, solBalance]) => {
+      watch(stake, (amount) => {
         if (amount.from < 0) stake.from = 0;
-        if (!connected) return;
-        const sol = Number(amount.from);
-        const solFee = lamportsToSol(depositFee.value);
-        if (solBalance && sol + solFee > solBalance) {
-          stake.from = solBalance - solFee;
-        }
       });
 
       // Calculate amount to deposit

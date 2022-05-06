@@ -26,213 +26,250 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-
-$color-main: #5c5c5c;
-$color-dark: #000000;
-$color-border: #b3b3b3;
-$mobile-size: 601px;
-
-.sol-calculator {
-  display: flex;
-  justify-content: center;
-  font-family: $font-primary;
-
-  &__main {
-    width: 602px;
-    max-width: 100% !important;
-  }
-
-  &__header {
-    background: #455a64;
-    opacity: 0.95;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    justify-content: space-between;
-
-    &__title {
-      font-weight: bold;
-      font-size: 12px;
-      line-height: 14px;
-      padding: 12px 24px;
-      color: #ffffff;
-      margin: 0;
-    }
-  }
-
-  &__body {
-    background: #ffffff;
-    border-radius: 0 0 8px 8px;
-    padding: 16px 24px;
-    color: $color-main;
-    display: flex;
-    justify-content: space-between;
-
-    @media (max-width: $mobile-size) {
-      flex-direction: column;
-    }
-  }
-
-  &__form {
-    width: 130px;
-    margin-right: 33px;
-
-    @media (max-width: $mobile-size) {
-      width: 100%;
-      margin-right: 0;
-      margin-bottom: 20px;
-    }
-
-    &__text {
-      font-weight: bold;
-      font-size: 11px;
-      line-height: 13px;
-      color: $color-main;
-      text-align: center;
-    }
-
-    &__bigtext {
-      font-weight: 500;
-      font-size: 20px;
-      text-align: center;
-      color: $color-dark;
-    }
-
-    &__group {
-      margin-bottom: 13px;
-
-      & > :last-child {
-        width: 100%;
-      }
-    }
-
-    &__input-block {
-      display: flex;
-
-      & > :first-child {
-        flex-basis: 0;
-        flex-grow: 1;
-        margin-right: 6px;
-        width: 38px;
-      }
-
-      & > :last-child {
-        flex-basis: 76px;
-        flex-grow: 0;
-        width: 76px;
-      }
-    }
-
-    &__label {
-      font-size: 11px;
-      line-height: 13px;
-      color: $color-main;
-    }
-
-    &__input {
-      font-size: 15px;
-      line-height: 18px;
-      color: $color-dark;
-      height: 29px;
-      text-align: right;
-      max-width: 100%;
-      box-sizing: border-box;
-      outline: none;
-
-      &--invalid {
-        border: 1px solid red;
-      }
-    }
-
-    &__btn.q-btn {
-      background: #ffd140;
-      border-radius: 40px;
-      font-size: 15px;
-      line-height: 35px;
-      text-align: center;
-      color: $color-dark;
-      border: 0;
-      width: 100%;
-      text-transform: uppercase;
-      cursor: pointer;
-
-      &:disabled {
-        background: #ffd14079;
-        cursor: default;
-      }
-    }
-  }
-
-  &__results {
-    border-left: 1px solid $color-border;
-    padding-left: 25px;
-    flex-grow: 1;
-    flex-basis: 0;
-
-    @media (max-width: $mobile-size) {
-      border-left: 0;
-      padding-left: 0;
-    }
-
-    &__notice-title {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    &__notice-text {
-      font-weight: 300;
-      font-size: 10px;
-      line-height: 15px;
-      color: $color-dark;
-
-      &--bold {
-        font-size: 11px;
-        font-weight: normal;
-      }
-
-      &--light {
-        color: $color-main;
-        font-weight: normal;
-      }
-    }
-
-    &__table {
-      margin-bottom: 2px;
-
-      &__row {
-        display: flex;
-        border-bottom: 1px solid $color-border;
-
-        &:last-child {
-          border-bottom: 0;
-        }
-
-        &--bold {
-          font-weight: 500;
-        }
-      }
-
-      &__text {
-        width: 25%;
-        padding: 6px;
-        font-size: 13px;
-        line-height: 14px;
-        text-align: center;
-        border-right: 1px solid $color-border;
-
-        &:first-child {
-          text-align: left;
-          width: 40%;
-          padding-left: 20px;
-        }
-
-        &:last-child {
-          text-align: right;
-          border-right: 0;
-          width: 35%;
-          padding-right: 20px;
-        }
-      }
-    }
-  }
-}
+ $color-main: #5c5c5c;
+ $color-border: #b3b3b3;
+ $mobile-size: 601px;
+ 
+ .sol-calculator {
+   display: flex;
+   justify-content: center;
+ 
+   &__main {
+     width: 602px;
+     max-width: 100% !important;
+   }
+ 
+   &__header {
+     background: $primary;
+     opacity: 0.95;
+     border-radius: 8px 8px 0px 0px;
+     display: flex;
+     justify-content: space-between;
+ 
+     &__title {
+       font-weight: bold;
+       font-size: 12px;
+       line-height: 14px;
+       padding: 12px 24px;
+       color: #ffffff;
+       margin: 0;
+     }
+   }
+ 
+   &__body {
+     background: #ffffff;
+     border-radius: 0 0 8px 8px;
+     padding: 16px 24px;
+     color: $color-main;
+     display: flex;
+     justify-content: space-between;
+ 
+     @media (max-width: $mobile-size) {
+       flex-direction: column;
+     }
+   }
+ 
+   &__form {
+     width: 130px;
+     margin-right: 33px;
+ 
+     @media (max-width: $mobile-size) {
+       width: 100%;
+       margin-right: 0;
+       margin-bottom: 20px;
+     }
+ 
+     &__text {
+       font-weight: bold;
+       font-size: 11px;
+       line-height: 13px;
+       color: $color-main;
+       text-align: center;
+     }
+ 
+     &__bigtext {
+       font-weight: 500;
+       font-size: 20px;
+       text-align: center;
+       color: $text-black;
+     }
+ 
+     &__group {
+       margin-bottom: 13px;
+ 
+       &> :last-child {
+         width: 100%;
+       }
+     }
+ 
+     &__input-block {
+       display: flex;
+ 
+       &> :first-child {
+         flex-basis: 0;
+         flex-grow: 1;
+         margin-right: 6px;
+         width: 38px;
+       }
+ 
+       &> :last-child {
+         flex-basis: 76px;
+         flex-grow: 0;
+         width: 76px;
+       }
+     }
+ 
+     &__label {
+       font-size: 11px;
+       line-height: 13px;
+       color: $color-main;
+     }
+ 
+     &__input {
+       font-size: 15px;
+       line-height: 18px;
+       color: $text-black;
+       height: 29px;
+       text-align: right;
+       max-width: 100%;
+       box-sizing: border-box;
+       outline: none;
+ 
+       &--invalid {
+         border: 1px solid red;
+       }
+     }
+ 
+     &__btn.q-btn {
+       background: #ffd140;
+       border-radius: 40px;
+       font-size: 15px;
+       line-height: 35px;
+       text-align: center;
+       color: $text-black;
+       border: 0;
+       width: 100%;
+       text-transform: uppercase;
+       cursor: pointer;
+ 
+       &:disabled {
+         background: #ffd14079;
+         cursor: default;
+       }
+     }
+   }
+ 
+   &__results {
+     border-left: 1px solid $color-border;
+     padding-left: 25px;
+     flex-grow: 1;
+     flex-basis: 0;
+ 
+     @media (max-width: $mobile-size) {
+       border-left: 0;
+       padding-left: 0;
+     }
+ 
+     &__notice-title {
+       display: flex;
+       justify-content: space-between;
+       width: 100%;
+     }
+ 
+     &__notice-text {
+       font-weight: 300;
+       font-size: 10px;
+       line-height: 15px;
+       color: $text-black;
+ 
+       &--bold {
+         font-size: 11px;
+         font-weight: normal;
+       }
+ 
+       &--light {
+         color: $color-main;
+         font-weight: normal;
+       }
+     }
+ 
+     &__table {
+       margin-bottom: 2px;
+ 
+       &__row {
+         display: flex;
+         border-bottom: 1px solid $color-border;
+ 
+         &:last-child {
+           border-bottom: 0;
+         }
+ 
+         &--bold {
+           font-weight: 500;
+         }
+       }
+ 
+       &__text {
+         width: 25%;
+         padding: 6px;
+         font-size: 13px;
+         line-height: 14px;
+         text-align: center;
+         border-right: 1px solid $color-border;
+ 
+         &:first-child {
+           text-align: left;
+           width: 40%;
+           padding-left: 20px;
+         }
+ 
+         &:last-child {
+           text-align: right;
+           border-right: 0;
+           width: 35%;
+           padding-right: 20px;
+         }
+       }
+     }
+   }
+ }
+ 
+ // Dark mode
+ 
+ body.body--dark {
+   .sol-calculator {
+     &__header {
+       background: $gray-dark-theme;
+     }
+     &__body {
+       background: $primary;
+       color: $text-white;
+     }
+     &__form {
+       &__text {
+         color: $text-white;
+       }
+   
+       &__bigtext {
+         color: $text-white;
+       }
+   
+       &__label {
+         color: $text-white;
+       }
+     }
+   
+     &__results {
+       &__notice-text {
+         font-weight: 300;
+         font-size: 10px;
+         line-height: 15px;
+         color: transparentize($text-white, 0.3);
+   
+         &--light {
+           color: transparentize($text-white, 0.3);
+         }
+       }
+     }
+   }
+ }
