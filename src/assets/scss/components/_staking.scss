@@ -31,6 +31,7 @@
   width: 100%;
   margin-left: 1px;
   margin-top: 1px;
+  min-height: 299px;
   .q-field__control {
     padding: 0 18px !important;
     border-radius: 8px;
@@ -60,6 +61,9 @@
   &__symbol {
     font-size: 18px;
     color: $text-white;
+  }
+  &__row {
+    min-height: 53px;
   }
   ::placeholder {
     color: $text-white !important;

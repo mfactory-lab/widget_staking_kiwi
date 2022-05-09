@@ -104,6 +104,7 @@
               size="14px"
               padding="9px 24px"
               text-color="text-white"
+              :disabled="wrongVote"
               @click="stakeHandler"
             >
               STAKE NOW
@@ -168,7 +169,12 @@
 
 <script lang="ts">
   import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
-  import { useBalanceStore, useConnectionStore, useStakePoolStore } from '@/store';
+  import {
+    useBalanceStore,
+    useConnectionStore,
+    useStakePoolStore,
+    useValidatorStore,
+  } from '@/store';
   import { formatPct, lamportsToSol } from '@/utils';
   import { useStakeAccounts } from '@/hooks/stake-accounts';
   import Apy from '@/components/staking/Apy.vue';
@@ -206,6 +212,8 @@
       const stakePoolStore = useStakePoolStore();
       const connectionLost = computed(() => stakePoolStore.connectionLost);
       const { depositFee, creating, createAccount, stakeSuccessDialog } = useStakeAccounts();
+      const validatorStore = useValidatorStore();
+      const wrongVote = computed(() => validatorStore.wrongVote);
       const maxStakeDialog = ref(false);
 
       const stake = reactive<{ from: any; to: any }>({
@@ -271,6 +279,7 @@
         stakeSuccessDialog,
         depositFeeVal: computed(() => lamportsToSol(depositFee.value)),
         availableSol: computed(() => (solBalance.value ? solBalance.value : '0')),
+        wrongVote,
 
         stakeMax() {
           if (!connected.value) {

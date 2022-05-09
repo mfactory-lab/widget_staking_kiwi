@@ -8,6 +8,7 @@ declare module '@vue/runtime-core' {
     Apy: typeof import('./../src/components/staking/Apy.vue')['default']
     ClusterSelector: typeof import('./../src/components/staking/ClusterSelector.vue')['default']
     ConnectionLost: typeof import('./../src/components/ConnectionLost.vue')['default']
+    'ConnectionLost copy': typeof import('./../src/components/ConnectionLost copy.vue')['default']
     ConnectWallet: typeof import('./../src/components/staking/ConnectWallet.vue')['default']
     CookieModal: typeof import('./../src/components/CookieModal.vue')['default']
     CopyToClipboard: typeof import('./../src/components/CopyToClipboard.vue')['default']
@@ -23,6 +24,7 @@ declare module '@vue/runtime-core' {
     StakeSuccessDialog: typeof import('./../src/components/staking/stake/StakeSuccessDialog.vue')['default']
     ThemeModeSelector: typeof import('./../src/components/ThemeModeSelector.vue')['default']
     TotalStacked: typeof import('./../src/components/staking/TotalStacked.vue')['default']
+    WrongVoter: typeof import('./../src/components/WrongVoter.vue')['default']
   }
 }
 

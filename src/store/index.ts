@@ -33,5 +33,4 @@ export * from './connection';
 export * from './coin-rate';
 export * from './stake-accounts';
 export * from './stake-pool';
-export * from './validator-jstaking';
-export * from './validators-all';
+export * from './validator';

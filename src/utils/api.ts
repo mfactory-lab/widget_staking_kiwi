@@ -48,10 +48,10 @@ export interface ValidatorStats {
   apyComparedMax: Number;
 }
 
-export async function getValidatorsStats(network) {
+export async function getValidatorsStats(network, voteId) {
   return new Promise<Array<ValidatorStats>>((resolve, reject) => {
     // fetch(`http://localhost:3000/validators/list?network=${network}`)
-    fetch(`${API_COLLECTOR_URL}/validators/list?network=${network}`)
+    fetch(`${API_COLLECTOR_URL}/validators/list?network=${network}&vote_id=${voteId}`)
       .then((res) => res.json())
       .then(
         (res) => {

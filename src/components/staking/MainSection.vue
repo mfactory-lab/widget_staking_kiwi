@@ -29,6 +29,7 @@
 <template>
   <section class="main-section">
     <connection-lost />
+    <wrong-voter />
     <theme-mode-selector v-show="false" />
     <stake-box />
   </section>

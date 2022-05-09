@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-  import { useValidatorJstakingStore } from '@/store';
+  import { useValidatorStore } from '@/store';
   import { computed, defineComponent } from 'vue';
   import { formatPct } from '@/utils';
 
@@ -47,9 +47,9 @@
       },
     },
     setup() {
-      const validatorJstakingStore = useValidatorJstakingStore();
-      const apy = computed(() => validatorJstakingStore.apy);
-      const apyLoading = computed(() => validatorJstakingStore.apyLoading);
+      const validatorStore = useValidatorStore();
+      const apy = computed(() => validatorStore.apy);
+      const apyLoading = computed(() => validatorStore.loading);
       return {
         apyLoading,
         apy: computed(() => formatPct.format(apy.value)),

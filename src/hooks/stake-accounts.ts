@@ -35,7 +35,7 @@ import {
   useConnectionStore,
   useStakeAccountStore,
   useStakePoolStore,
-  useValidatorJstakingStore,
+  useValidatorStore,
 } from '@/store';
 import { useMonitorTransaction } from '@/hooks';
 import { sendTransaction } from '@/utils';
@@ -64,7 +64,7 @@ const findFirstAvailableSeed = async (
 export function useStakeAccounts() {
   const connectionStore = useConnectionStore();
   const stakeAccountStore = useStakeAccountStore();
-  const validatorJstakingStore = useValidatorJstakingStore();
+  const validatorStore = useValidatorStore();
   const stakePoolStore = useStakePoolStore();
   const { publicKey } = useWallet();
   const anchorWallet = useAnchorWallet();
@@ -76,7 +76,7 @@ export function useStakeAccounts() {
   const stakeSuccessDialog = ref(false);
 
   const lamportsPerSignature = computed(() => stakePoolStore.lamportsPerSignature);
-  const voterKey = computed(() => validatorJstakingStore.voterKey);
+  const voterKey = computed(() => validatorStore.voterKey);
 
   const delegateAccount = async (stakePubkey) => {
     if (!publicKey.value) {

@@ -28,26 +28,20 @@
 
 <template>
   <div class="total-staked">
-    <div class="q-mr-md total-staked__value" v-if="loading && !savedValidator">
-      <q-skeleton width="70px" height="18px" class="q-mx-sm" />
-      <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
-    </div>
-    <div class="q-mr-md total-staked__value" v-else>
+    <div class="q-mr-md total-staked__value">
       <div class="total-staked__label">Total Staked</div>
-      <div class="row justify-between">
+      <q-skeleton width="70px" height="16px" class="q-mt-sm" v-if="loading" />
+      <div class="row justify-between" v-else>
         <div class="total-staked__sol">≈ {{ solStakedFormat }}</div>
         <q-tooltip class="bg-gray text-body2" :offset="[10, 10]">
           {{ formatMoney(solStaked) }} SOL</q-tooltip
         >
       </div>
     </div>
-    <div class="total-staked__value" v-if="loading && !savedValidator">
-      <q-skeleton width="70px" height="18px" class="q-mx-sm" />
-      <q-skeleton width="70px" height="18px" class="q-mx-sm q-mt-sm" />
-    </div>
-    <div class="total-staked__value" v-else>
+    <div class="total-staked__value">
       <div class="total-staked__label">Validator Fee</div>
-      <div class="row justify-between">
+      <q-skeleton width="70px" height="16px" class="q-mt-sm" v-if="loading" />
+      <div class="row justify-between" v-else>
         <div class="total-staked__sol">{{ commission }}</div>
       </div>
     </div>
@@ -56,40 +50,25 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useValidatorJstakingStore, useValidatorsAllStore } from '@/store';
+  import { useValidatorStore } from '@/store';
   import { formatAmount, formatMoney, formatPct, lamportsToSol } from '@/utils';
 
   export default defineComponent({
     components: {},
     setup(_props) {
-      const validatorJstakingStore = useValidatorJstakingStore();
-      const savedValidator = computed(() => validatorJstakingStore.savedValidator);
-      const totalStake = computed(() => validatorJstakingStore.totalStake);
-      const commission = computed(() => validatorJstakingStore.commission);
-      const validatorsAllStore = useValidatorsAllStore();
-      const loading = computed(() => validatorsAllStore.loading);
+      const validatorStore = useValidatorStore();
+      const totalStake = computed(() => validatorStore.totalStake);
+      const commission = computed(() => validatorStore.commission);
+      const loading = computed(() => validatorStore.loading);
 
-      const solStaked = computed(() =>
-        lamportsToSol(
-          loading.value && savedValidator.value
-            ? savedValidator.value.validatorStake
-            : totalStake.value ?? 0,
-        ),
-      );
+      const solStaked = computed(() => lamportsToSol(totalStake.value ?? 0));
 
       return {
         loading,
-        savedValidator,
         solStaked,
         formatMoney,
         solStakedFormat: computed(() => formatAmount(solStaked.value, 3)),
-        commission: computed(() =>
-          formatPct.format(
-            (loading.value && savedValidator.value
-              ? savedValidator.value.validatorFee
-              : commission.value) / 100,
-          ),
-        ),
+        commission: computed(() => formatPct.format(commission.value / 100)),
       };
     },
   });
