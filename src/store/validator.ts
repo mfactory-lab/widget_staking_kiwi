@@ -31,6 +31,7 @@ import { computed, ref, watch } from 'vue';
 import { useConnectionStore } from '@/store';
 import { useDebounceFn } from '@vueuse/core';
 import { getValidatorsStats } from '@/utils';
+import { VALIDATOR_RELOAD_INTERVAL } from '@/config';
 
 export const useValidatorStore = defineStore('validator', () => {
   const validatorId = ref<string>('');
@@ -85,6 +86,11 @@ export const useValidatorStore = defineStore('validator', () => {
       loading.value = false;
     }
   };
+
+  setInterval(async () => {
+    console.log('[useValidatorStore] Loading validator setInterval...');
+    loadValidator();
+  }, VALIDATOR_RELOAD_INTERVAL);
 
   watch(
     cluster,

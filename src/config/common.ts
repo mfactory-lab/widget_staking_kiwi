@@ -30,6 +30,7 @@
 export const EPOCH_RELOAD_INTERVAL = 60000;
 export const RATES_RELOAD_INTERVAL = 300000;
 export const POOL_RELOAD_INTERVAL = 30000;
+export const VALIDATOR_RELOAD_INTERVAL = 600000;
 
 // apy
 export const DEFAULT_APY = 0.07;
