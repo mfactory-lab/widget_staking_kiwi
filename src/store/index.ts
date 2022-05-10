@@ -26,7 +26,6 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-export * from './apy';
 export * from './balance';
 export * from './epoch';
 export * from './connection';

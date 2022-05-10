@@ -27,7 +27,7 @@
  */
 
 import { ref, toRef } from 'vue';
-import { useApyStore } from '@/store';
+import { useValidatorStore } from '@/store';
 
 const epochHours = ref(60); // hours
 const investmentAmount = ref<string>('100');
@@ -39,8 +39,8 @@ const solMonth = ref(0);
 const solYear = ref(0);
 
 export function useRoiCalculator() {
-  const apyStore = useApyStore();
-  const apy = toRef(apyStore, 'apy');
+  const validatorStore = useValidatorStore();
+  const apy = toRef(validatorStore, 'apy');
 
   function calc() {
     const amount = Number(investmentAmount.value);

@@ -35,9 +35,9 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { useApyStore } from '@/store';
+  import { useValidatorStore } from '@/store';
   import { formatPct } from '@/utils';
 
-  const apyStore = useApyStore();
-  const apy = computed(() => formatPct.format(apyStore.apy));
+  const validatorStore = useValidatorStore();
+  const apy = computed(() => formatPct.format(validatorStore.apy));
 </script>
