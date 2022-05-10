@@ -57,8 +57,6 @@ export const useValidatorStore = defineStore('validator', () => {
   }
 
   const loadValidator = async () => {
-    console.log('[useValidatorStore] Loading ===', loading.value);
-    console.log('[useValidatorStore] validator ===', validator);
     if (loading.value || !validator) {
       return;
     }

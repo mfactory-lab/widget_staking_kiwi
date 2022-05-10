@@ -32,7 +32,7 @@
     <div class="kiwi-link__text">& more details</div>
     <q-btn
       type="a"
-      :href="`https://staking.kiwi/app/${voterKey}`"
+      :href="`https://staking.kiwi/app/${voterKey}?cluster=${cluster}`"
       target="_blank"
       rounded
       label="STAKING.KIWI"
@@ -46,15 +46,18 @@
 </template>
 
 <script lang="ts">
-  import { useValidatorStore } from '@/store';
+  import { useConnectionStore, useValidatorStore } from '@/store';
   import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     setup() {
       const validatorStore = useValidatorStore();
       const voterKey = computed(() => validatorStore.voterKey);
+      const connectionStore = useConnectionStore();
+      const cluster = computed(() => connectionStore.cluster);
       return {
         voterKey,
+        cluster,
       };
     },
   });

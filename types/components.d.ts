@@ -8,7 +8,6 @@ declare module '@vue/runtime-core' {
     Apy: typeof import('./../src/components/staking/Apy.vue')['default']
     ClusterSelector: typeof import('./../src/components/staking/ClusterSelector.vue')['default']
     ConnectionLost: typeof import('./../src/components/ConnectionLost.vue')['default']
-    'ConnectionLost copy': typeof import('./../src/components/ConnectionLost copy.vue')['default']
     ConnectWallet: typeof import('./../src/components/staking/ConnectWallet.vue')['default']
     CookieModal: typeof import('./../src/components/CookieModal.vue')['default']
     CopyToClipboard: typeof import('./../src/components/CopyToClipboard.vue')['default']
