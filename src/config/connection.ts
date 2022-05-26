@@ -28,7 +28,7 @@
 
 import { Endpoint } from '@/store';
 import { Commitment, clusterApiUrl } from '@solana/web3.js';
-import { getGengoToken } from '@/utils/gengo';
+// import { getGengoToken } from '@/utils/gengo';
 
 const mode = import.meta.env.MODE;
 const isDev = mode == 'development';
@@ -49,7 +49,7 @@ export const ENDPOINTS: Endpoint[] = [
     url: 'https://jpoolone.genesysgo.net/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
-    getToken: getGengoToken,
+    // getToken: getGengoToken,
   },
   {
     id: 'serum-mainnet',
