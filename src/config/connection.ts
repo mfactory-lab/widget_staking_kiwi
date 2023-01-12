@@ -46,7 +46,7 @@ export const ENDPOINTS: Endpoint[] = [
     id: 'jpool-mainnet',
     name: 'Jpool RPC',
     cluster: 'mainnet-beta',
-    url: 'https://jpoolone.genesysgo.net/',
+    url: 'https://rpc.jfactory.ch/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
     // getToken: getGengoToken,

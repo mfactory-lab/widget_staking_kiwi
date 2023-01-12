@@ -55,8 +55,8 @@
   .connection-lost {
     position: fixed;
     width: 100%;
-    top: 0;
-    padding: 20px;
+    top: 60px;
+    padding: 23px;
     background: $info;
     color: #fff;
     font-weight: 500;
