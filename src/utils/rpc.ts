@@ -26,42 +26,10 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { API_URL } from '@/config';
 import axios from 'axios';
 import { debounceAsync } from '@/utils/index';
 
-const getCsrfToken = debounceAsync<() => Promise<string>, string>(
-  async () =>
-    axios(`${API_URL}/auth/csrf`, {
-      withCredentials: true,
-    }).then(({ data }) => data.token),
-  250,
-);
-
-export const getGengoToken = debounceAsync(async () => {
-  const token = await getCsrfToken();
-  if (!token) {
-    throw 'Invalid token';
-  }
-  const res = await axios(`${API_URL}/auth/genesysgo`, {
-    withCredentials: true,
-    headers: {
-      'X-XSRF-TOKEN': token,
-    },
-  });
+export const getJFRpcToken = debounceAsync(async () => {
+  const res = await axios('https://jwt.jfactory.workers.dev', {});
   return res.data.access_token;
 }, 250) as () => Promise<string>;
-
-// export async function getGengoToken() {
-//   const token = await getCsrfToken();
-//   if (!token) {
-//     throw 'Invalid token';
-//   }
-//   const res = await axios(`${API_URL}/auth/genesysgo`, {
-//     withCredentials: true,
-//     headers: {
-//       'X-XSRF-TOKEN': token,
-//     },
-//   });
-//   return res.data.access_token;
-// }

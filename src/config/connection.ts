@@ -28,7 +28,7 @@
 
 import { Endpoint } from '@/store';
 import { Commitment, clusterApiUrl } from '@solana/web3.js';
-// import { getGengoToken } from '@/utils/gengo';
+import { getJFRpcToken } from '@/utils/rpc';
 
 const mode = import.meta.env.MODE;
 const isDev = mode == 'development';
@@ -46,10 +46,15 @@ export const ENDPOINTS: Endpoint[] = [
     id: 'jpool-mainnet',
     name: 'Jpool RPC',
     cluster: 'mainnet-beta',
-    url: 'https://rpc.jfactory.ch/',
+    url: import.meta.env.DEV
+      ? 'https://restless-blue-valley.solana-mainnet.quiknode.pro/388d47063172de995210b42f44a3483d4269dcf9/'
+      : 'https://rpc.jfactory.ch/',
+    wsEndpoint: import.meta.env.DEV
+      ? undefined
+      : 'wss://sleek-solemn-rain.solana-mainnet.quiknode.pro/1bac3b4146d57810e23b4263129fda9dbff83fe9/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
-    // getToken: getGengoToken,
+    getToken: getJFRpcToken,
   },
   {
     id: 'serum-mainnet',

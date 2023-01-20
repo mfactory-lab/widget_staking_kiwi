@@ -18,7 +18,7 @@ declare module '@vue/runtime-core' {
     RoiCalculatorBtn: typeof import('./../src/components/staking/RoiCalculatorBtn.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SolSvg: typeof import('./../src/components/icons/SolSvg.vue')['default']
+    SolSvg: typeof import('./../src/components/Icons/SolSvg.vue')['default']
     StakeBox: typeof import('./../src/components/staking/stake/StakeBox.vue')['default']
     StakeSuccessDialog: typeof import('./../src/components/staking/stake/StakeSuccessDialog.vue')['default']
     ThemeModeSelector: typeof import('./../src/components/ThemeModeSelector.vue')['default']

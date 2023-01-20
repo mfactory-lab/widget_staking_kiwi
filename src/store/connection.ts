@@ -41,6 +41,7 @@ export interface Endpoint {
   url: string;
   stakePoolAddress: string;
   stakeLimit?: number;
+  wsEndpoint?: string;
   getToken?: () => Promise<string>;
 }
 
@@ -58,6 +59,7 @@ export const useConnectionStore = defineStore({
     connection(state): Connection {
       return new Connection(this.endpoint.url, {
         confirmTransactionInitialTimeout: state.confirmTransactionInitialTimeout,
+        wsEndpoint: this.endpoint.wsEndpoint,
         commitment: state.commitment,
         fetchMiddleware: this.endpoint.getToken
           ? tokenAuthFetchMiddleware({

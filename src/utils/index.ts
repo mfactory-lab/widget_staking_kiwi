@@ -31,3 +31,4 @@ export * from './connection';
 export * from './debounce';
 export * from './format';
 export * from './web3';
+export * from './rpc';
