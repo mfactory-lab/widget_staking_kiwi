@@ -27,7 +27,7 @@
  */
 
 import { Endpoint } from '@/store';
-import { Commitment/*, clusterApiUrl*/ } from '@solana/web3.js';
+import { Commitment } from '@solana/web3.js';
 
 const mode = import.meta.env.MODE;
 const isDev = mode == 'development';
