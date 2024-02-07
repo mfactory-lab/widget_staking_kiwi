@@ -27,8 +27,7 @@
  */
 
 import { Endpoint } from '@/store';
-import { Commitment, clusterApiUrl } from '@solana/web3.js';
-import { getJFRpcToken } from '@/utils/rpc';
+import { Commitment/*, clusterApiUrl*/ } from '@solana/web3.js';
 
 const mode = import.meta.env.MODE;
 const isDev = mode == 'development';
@@ -39,47 +38,41 @@ const MAIN_STAKE_LIMIT = 1500000;
 const TEST_STAKE_POOL_ADDRESS = 'AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy';
 const TEST_STAKE_LIMIT = 1500000;
 
-const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
+// const DEV_STAKE_POOL_ADDRESS = 'vU5rGXWuLTqFbxtz89TXEbJ59wYHJiLHNmtbXdSB7UF';
 
 export const ENDPOINTS: Endpoint[] = [
   {
     id: 'jpool-mainnet',
     name: 'Jpool RPC',
     cluster: 'mainnet-beta',
-    url: import.meta.env.DEV
-      ? 'https://restless-blue-valley.solana-mainnet.quiknode.pro/388d47063172de995210b42f44a3483d4269dcf9/'
-      : 'https://rpc.jfactory.ch/',
-    wsEndpoint: import.meta.env.DEV
-      ? undefined
-      : 'wss://sleek-solemn-rain.solana-mainnet.quiknode.pro/1bac3b4146d57810e23b4263129fda9dbff83fe9/',
-    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-    stakeLimit: MAIN_STAKE_LIMIT,
-    getToken: getJFRpcToken,
-  },
-  {
-    id: 'serum-mainnet',
-    name: 'Serum RPC',
-    cluster: 'mainnet-beta',
-    url: 'https://solana-api.projectserum.com/',
+    url: 'https://marketa-1sh8m6-fast-mainnet.helius-rpc.com/',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
   },
-  {
-    id: 'rpcpool-mainnet',
-    name: 'RPCPool RPC',
-    cluster: 'mainnet-beta',
-    url: 'https://mainnet.rpcpool.com/',
-    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-    stakeLimit: MAIN_STAKE_LIMIT,
-  },
-  {
-    id: 'mainnet',
-    name: 'Solana RPC',
-    cluster: 'mainnet-beta',
-    url: clusterApiUrl('mainnet-beta'),
-    stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
-    stakeLimit: MAIN_STAKE_LIMIT,
-  },
+  // {
+  //   id: 'serum-mainnet',
+  //   name: 'Serum RPC',
+  //   cluster: 'mainnet-beta',
+  //   url: 'https://solana-api.projectserum.com/',
+  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  //   stakeLimit: MAIN_STAKE_LIMIT,
+  // },
+  // {
+  //   id: 'rpcpool-mainnet',
+  //   name: 'RPCPool RPC',
+  //   cluster: 'mainnet-beta',
+  //   url: 'https://mainnet.rpcpool.com/',
+  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  //   stakeLimit: MAIN_STAKE_LIMIT,
+  // },
+  // {
+  //   id: 'mainnet',
+  //   name: 'Solana RPC',
+  //   cluster: 'mainnet-beta',
+  //   url: clusterApiUrl('mainnet-beta'),
+  //   stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+  //   stakeLimit: MAIN_STAKE_LIMIT,
+  // },
   {
     id: 'testnet',
     name: 'TestNet',
@@ -88,14 +81,14 @@ export const ENDPOINTS: Endpoint[] = [
     stakePoolAddress: TEST_STAKE_POOL_ADDRESS,
     stakeLimit: TEST_STAKE_LIMIT,
   },
-  {
-    id: 'devnet',
-    name: 'DevNet',
-    cluster: 'devnet',
-    url: 'https://devnet.rpcpool.com/',
-    stakePoolAddress: DEV_STAKE_POOL_ADDRESS,
-    stakeLimit: 100000,
-  },
+  // {
+  //   id: 'devnet',
+  //   name: 'DevNet',
+  //   cluster: 'devnet',
+  //   url: 'https://devnet.rpcpool.com/',
+  //   stakePoolAddress: DEV_STAKE_POOL_ADDRESS,
+  //   stakeLimit: 100000,
+  // },
 ];
 
 if (isDev) {
