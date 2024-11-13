@@ -1,0 +1,53 @@
+.sol-calculator{display:flex;justify-content:center}.sol-calculator__main{width:602px;max-width:100%!important}.sol-calculator__header{background:#455A64;opacity:.95;border-radius:8px 8px 0 0;display:flex;justify-content:space-between}.sol-calculator__header__title{font-weight:700;font-size:12px;line-height:14px;padding:12px 24px;color:#fff;margin:0}.sol-calculator__body{background:#ffffff;border-radius:0 0 8px 8px;padding:16px 12px;color:#5c5c5c;display:flex;justify-content:space-between}@media (max-width: 601px){.sol-calculator__body{flex-direction:column}}.sol-calculator__form{width:130px;margin-right:33px}@media (max-width: 601px){.sol-calculator__form{width:100%;margin-right:0;margin-bottom:20px}}.sol-calculator__form__text{font-weight:700;font-size:11px;line-height:13px;color:#5c5c5c;text-align:center}.sol-calculator__form__bigtext{font-weight:500;font-size:20px;text-align:center;color:#000}.sol-calculator__form__group{margin-bottom:13px}.sol-calculator__form__group>:last-child{width:100%}.sol-calculator__form__input-block{display:flex}.sol-calculator__form__input-block>:first-child{flex-basis:0;flex-grow:1;margin-right:6px;width:38px}.sol-calculator__form__input-block>:last-child{flex-basis:76px;flex-grow:0;width:76px}.sol-calculator__form__label{font-size:11px;line-height:13px;color:#5c5c5c}.sol-calculator__form__input{font-size:15px;line-height:18px;color:#000;height:29px;text-align:right;max-width:100%;box-sizing:border-box;outline:none}.sol-calculator__form__input--invalid{border:1px solid red}.sol-calculator__form__btn.q-btn{background:#ffd140;border-radius:40px;font-size:15px;line-height:35px;text-align:center;color:#000;border:0;width:100%;text-transform:uppercase;cursor:pointer}.sol-calculator__form__btn.q-btn:disabled{background:#ffd14079;cursor:default}.sol-calculator__results{border-left:1px solid #b3b3b3;padding-left:25px;flex-grow:1;flex-basis:0}@media (max-width: 601px){.sol-calculator__results{border-left:0;padding-left:0}}.sol-calculator__results__notice-title{display:flex;justify-content:space-between;width:100%}.sol-calculator__results__notice-text{font-weight:300;font-size:10px;line-height:15px;color:#000}.sol-calculator__results__notice-text--bold{font-size:11px;font-weight:400}.sol-calculator__results__notice-text--light{color:#5c5c5c;font-weight:400}.sol-calculator__results__table{margin-bottom:2px}.sol-calculator__results__table__row{display:flex;border-bottom:1px solid #b3b3b3}.sol-calculator__results__table__row:last-child{border-bottom:0}.sol-calculator__results__table__row--bold{font-weight:500}.sol-calculator__results__table__text{width:25%;padding:4px;font-size:13px;line-height:14px;text-align:center;border-right:1px solid #b3b3b3}.sol-calculator__results__table__text:first-child{text-align:left;width:40%;padding-left:4px}.sol-calculator__results__table__text:last-child{text-align:right;border-right:0;width:35%;padding-right:4px}body.body--dark .sol-calculator__header{background:#374850}body.body--dark .sol-calculator__body{background:#455A64;color:#fff}body.body--dark .sol-calculator__form__text,body.body--dark .sol-calculator__form__bigtext,body.body--dark .sol-calculator__form__label{color:#fff}body.body--dark .sol-calculator__results__notice-text{font-weight:300;font-size:10px;line-height:15px;color:#ffffffb3}body.body--dark .sol-calculator__results__notice-text--light{color:#ffffffb3}.roi-calc-btn{height:46px!important;width:46px!important;cursor:pointer}.roi-calc-btn img{max-width:100%;max-height:100%}.wallet-connect-card .q-item[data-v-0b813393]{border:1px solid #f5f5f5;margin:3px}.wallet-connect-card .q-item b[data-v-0b813393]{font-weight:500}.wallet-connect-card .q-item[data-v-0b813393]:hover{border-color:#e8e8e8}._btn_1jn5t_56{white-space:nowrap;flex-wrap:nowrap}._btn_1jn5t_56 img{height:.6em;margin-right:.2em}.wrong-vote[data-v-75c91578]{position:fixed;width:100%;top:122px;padding:16px;background:#FFCD29;color:#000;font-weight:500;font-size:22px;z-index:2000;text-align:center}@media (max-width: 443px){.wrong-vote[data-v-75c91578]{top:153px}}/*!
+* This file is part of the Web3 Library developed by mFactory GmbH.
+*
+* Copyright © 2021, mFactory GmbH
+*
+* Solana Reference Stake Pool is free software: you can redistribute it
+* and/or modify it under the terms of the GNU Affero General Public License
+* as published by the Free Software Foundation, either version 3
+* of the License, or (at your option) any later version.
+*
+* Solana Reference Stake Pool is distributed in the hope that it
+* will be useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program.
+* If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+*
+* You can be released from the requirements of the Affero GNU General Public License
+* by purchasing a commercial license. The purchase of such a license is
+* mandatory as soon as you develop commercial activities using the
+* Solana Reference Stake Pool code without disclosing the source code of
+* your own applications.
+*
+* The developer of this program can be contacted at <info@mfactory.ch>.
+*//*!
+ * This file is part of the Web3 Library developed by mFactory GmbH.
+ *
+ * Copyright © 2021, mFactory GmbH
+ *
+ * Solana Reference Stake Pool is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Solana Reference Stake Pool is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ *
+ * You can be released from the requirements of the Affero GNU General Public License
+ * by purchasing a commercial license. The purchase of such a license is
+ * mandatory as soon as you develop commercial activities using the
+ * Solana Reference Stake Pool code without disclosing the source code of
+ * your own applications.
+ *
+ * The developer of this program can be contacted at <info@mfactory.ch>.
+ */.connection-lost[data-v-051b3494]{position:fixed;width:100%;top:60px;padding:23px;background:#31CCEC;color:#fff;font-weight:500;font-size:22px;z-index:10000;text-align:center}

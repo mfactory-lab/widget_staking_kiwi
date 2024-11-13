@@ -1,0 +1,1 @@
+import{_ as e}from"./ErrorContainer.49ce03da.js";import{_ as r}from"./plugin-vue_export-helper.21dcd24c.js";import{o as n,c as _}from"./index.fdcf90e6.js";const c={};function t(a,s){const o=e;return n(),_(o,{code:404,message:"Page not found"})}var i=r(c,[["render",t]]);export{i as default};
