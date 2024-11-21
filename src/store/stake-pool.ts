@@ -129,7 +129,7 @@ export const useStakePoolStore = defineStore('stake-pool', (): StakePoolStore =>
   );
 
   // watch(reserveStakeBalance, async (con) => {
-  //   const { blockhash } = await con.getRecentBlockhash('max');
+  //   const { blockhash } = await con.getLatestBlockhash('max');
   //   fees.txFee = (await con.getFeeCalculatorForBlockhash(blockhash)).value?.lamportsPerSignature ?? 0;
   //   // minRentBalance.value = (await con.getMinimumBalanceForRentExemption(STAKE_STATE_LEN)) + 1;
   // }, { immediate: true });
