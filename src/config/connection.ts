@@ -42,10 +42,10 @@ const TEST_STAKE_LIMIT = 1500000;
 
 export const ENDPOINTS: Endpoint[] = [
   {
-    id: 'jpool-mainnet',
-    name: 'Jpool RPC',
+    id: 'solana-mainnet',
+    name: 'Mainnet',
     cluster: 'mainnet-beta',
-    url: 'https://marketa-1sh8m6-fast-mainnet.helius-rpc.com/',
+    url: 'https://api.mainnet-beta.solana.com',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
   },
@@ -75,7 +75,7 @@ export const ENDPOINTS: Endpoint[] = [
   // },
   {
     id: 'testnet',
-    name: 'TestNet',
+    name: 'Testnet',
     cluster: 'testnet',
     url: 'https://testnet.rpcpool.com/',
     stakePoolAddress: TEST_STAKE_POOL_ADDRESS,
