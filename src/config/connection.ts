@@ -101,6 +101,27 @@ if (isDev) {
   });
 }
 
+const rpcParam = new URLSearchParams(location.search).get('rpc');
+if (rpcParam) {
+  try {
+    const url = new URL(rpcParam);
+    if (url.protocol !== 'https:') {
+      throw new Error('Only HTTPS RPC allowed');
+    }
+
+    ENDPOINTS.unshift({
+      id: 'custom-rpc',
+      name: 'Custom RPC',
+      cluster: 'mainnet-beta',
+      url: url.toString(),
+      stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
+      stakeLimit: MAIN_STAKE_LIMIT,
+    });
+  } catch {
+    // ignore invalid URL
+  }
+}
+
 export const DEFAULT_ENDPOINT = ENDPOINTS[0] as Endpoint;
 
 /**
