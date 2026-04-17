@@ -36,6 +36,22 @@
 
   import '@/assets/scss/app.scss';
 
+  import { useHead } from '@vueuse/head';
+
+  useHead({
+    title: import.meta.env.VITE_APP_TITLE,
+    meta: [
+      {
+        name: 'description',
+        content: import.meta.env.VITE_APP_DESCRIPTION,
+      },
+      {
+        name: 'keywords',
+        content: import.meta.env.VITE_APP_KEYWORDS,
+      },
+    ],
+  });
+
   onBeforeMount(() => {
     initWallet();
   });

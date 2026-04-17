@@ -1,6 +1,5 @@
 import { resolve } from 'path';
 import { BuildOptions, DepOptimizationOptions, PluginOption, defineConfig, loadEnv } from 'vite';
-import { createHtmlPlugin } from 'vite-plugin-html';
 // import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import checker from 'vite-plugin-checker';
 import vue from '@vitejs/plugin-vue';
@@ -30,15 +29,6 @@ export default defineConfig(({ mode }) => {
       // reactivityTransform: true,
     }),
     quasar(),
-    createHtmlPlugin({
-      inject: {
-        data: {
-          title: process.env.VITE_APP_TITLE,
-          description: process.env.VITE_APP_DESCRIPTION,
-          keywords: process.env.VITE_APP_KEYWORDS,
-        },
-      },
-    }),
     // chunkSplitPlugin(),
     // https://github.com/antfu/unplugin-vue-components
     components({
