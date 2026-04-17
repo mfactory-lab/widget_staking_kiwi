@@ -11,40 +11,62 @@ on:
 env:
   URL: widget.solanastaking.kiwi
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    environment:
-      name: production
-      url: https://${{ env.URL }}
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-        with:
-          path: 'build'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: 'pnpm'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 10
 
-      - name: Set GitHub Actions as Commit Author
-        run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
 
       - name: Build
+        run: pnpm build:staging
+
+      - name: Prepare dist
         run: |
-          cd build
-          pnpm install
-          pnpm build:staging
           cp dist/index.html dist/404.html
           echo ${{ env.URL }} > dist/CNAME
-          pnpm run deploy:gh-pages
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
