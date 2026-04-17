@@ -16,12 +16,12 @@ export default defineConfig(({ mode }) => {
 
   const plugins: (PluginOption | PluginOption[])[] = [
     nodePolyfills({
+      include: ['buffer'],
       globals: {
         Buffer: true,
-        global: true,
-        process: true,
+        global: false,
+        process: false,
       },
-      protocolImports: true,
     }),
     vue({
       include: [/\.vue$/, /\.md$/],
