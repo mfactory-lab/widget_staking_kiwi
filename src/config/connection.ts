@@ -45,7 +45,7 @@ export const ENDPOINTS: Endpoint[] = [
     id: 'solana-mainnet',
     name: 'Mainnet',
     cluster: 'mainnet-beta',
-    url: 'https://api.mainnet-beta.solana.com',
+    url: 'https://rpc.jpool.one',
     stakePoolAddress: MAIN_STAKE_POOL_ADDRESS,
     stakeLimit: MAIN_STAKE_LIMIT,
   },
