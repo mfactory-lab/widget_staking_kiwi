@@ -32,7 +32,7 @@
     <div class="kiwi-link__text">& more details</div>
     <q-btn
       type="a"
-      :href="`https://staking.kiwi/app/${voterKey}?cluster=${cluster}`"
+      :href="`https://solanastaking.kiwi/app/${voterKey}?cluster=${cluster}`"
       target="_blank"
       rounded
       label="STAKING.KIWI"
