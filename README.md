@@ -17,7 +17,7 @@ The Widget brings the power of Staking.Kiwi’s sleek design, ultrafast interfac
 * `[THEME]` is the Widget's theme: replace with `light` for a light theme, replace with `dark` for a dark one.
 
 ```html
-<iframe id="staking-kiwi-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="" style="position: static; visibility: visible; width: 472px; height: 302px" title="Staking Kiwi widget" src="https://widget.staking.kiwi/?validator=[YOUR VALIDATOR'S VOTE KEY]&theme=[THEME]" ></iframe>
+<iframe id="staking-kiwi-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="" style="position: static; visibility: visible; width: 472px; height: 302px" title="Staking Kiwi widget" src="https://widget.solanastaking.kiwi/?validator=[YOUR VALIDATOR'S VOTE KEY]&theme=[THEME]" ></iframe>
 ```
 
 2. Done! Delegators can now stake to your validator directly on your website.

@@ -9,7 +9,7 @@ on:
       - '**.md'
 
 env:
-  URL: widget.staking.kiwi
+  URL: widget.solanastaking.kiwi
 
 jobs:
   build:
