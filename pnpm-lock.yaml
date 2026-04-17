@@ -12,7 +12,7 @@ importers:
         specifier: ^1.13.5
         version: 1.18.0
       '@solana/spl-stake-pool':
-        specifier: github:mfactory-lab/jfactory-stake-pool
+        specifier: mfactory-lab/jfactory-stake-pool
         version: git+https://git@github.com:mfactory-lab/jfactory-stake-pool.git#6efc75609f1c868311f0c906abef83935814f961(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@4.9.5)(utf-8-validate@6.0.6)
       '@solana/wallet-adapter-wallets':
         specifier: ^0.16.0
