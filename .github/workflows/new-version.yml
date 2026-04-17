@@ -33,8 +33,8 @@ jobs:
       - name: Build
         run: |
           cd build
-          yarn
-          yarn build:staging
+          pnpm install
+          pnpm build:staging
           cp dist/index.html dist/404.html
           echo ${{ env.URL }} > dist/CNAME
-          yarn run deploy:gh-pages
+          pnpm run deploy:gh-pages
