@@ -7,7 +7,7 @@ import vue from '@vitejs/plugin-vue';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import components from 'unplugin-vue-components/vite';
 import visualizer from 'rollup-plugin-visualizer';
-import inject from '@rollup/plugin-inject';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -16,6 +16,14 @@ export default defineConfig(({ mode }) => {
   const isReport = mode === 'report';
 
   const plugins: (PluginOption | PluginOption[])[] = [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+      protocolImports: true,
+    }),
     vue({
       include: [/\.vue$/, /\.md$/],
       template: { transformAssetUrls },
@@ -53,17 +61,16 @@ export default defineConfig(({ mode }) => {
     // polyfillDynamicImport: false,
     // assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1024,
-    rollupOptions: {
-      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
-      // treeshake: true,
-      // output: {
-      //   manualChunks(id) {
-      //     if (id.includes('/node_modules/')) {
-      //       return 'vendors';
-      //     }
-      //   },
-      // },
-    },
+    // rollupOptions: {
+    // treeshake: true,
+    // output: {
+    //   manualChunks(id) {
+    //     if (id.includes('/node_modules/')) {
+    //       return 'vendors';
+    //     }
+    //   },
+    // },
+    // },
   };
 
   if (isReport) {
@@ -77,7 +84,7 @@ export default defineConfig(({ mode }) => {
   }
 
   const optimizeDeps: DepOptimizationOptions = {
-    include: ['vue', '@vueuse/core', 'lodash', '@quasar/extras/eva-icons', 'bn.js'],
+    include: ['vue', '@vueuse/core', 'lodash', '@quasar/extras/eva-icons', 'bn.js', 'buffer'],
     exclude: ['vue-demi'],
     esbuildOptions: {
       minify: true,

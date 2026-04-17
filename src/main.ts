@@ -26,14 +26,22 @@
  * The developer of this program can be contacted at <info@mfactory.ch>.
  */
 
-import { createApp } from 'vue';
+import { App as VueApp, createApp } from 'vue';
 import { setupRouter } from '@/router';
 
 import App from './App.vue';
 
+type PluginModule = {
+  install?: ({ app }: { app: VueApp<Element> }) => void;
+};
+
 async function bootstrap() {
   const app = createApp(App);
-  Object.values(import.meta.globEager('./plugins/*.ts')).forEach((i) => i.install?.({ app }));
+  Object.values(import.meta.glob<PluginModule>('./plugins/*.ts', { eager: true })).forEach(
+    (plugin) => {
+      plugin.install?.({ app });
+    },
+  );
   setupRouter(app);
   app.mount('#app');
 }
