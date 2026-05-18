@@ -38,4 +38,4 @@ export const APY_VALIDATOR_ID = null;
 
 // api
 export const API_URL = import.meta.env.VITE_API_URL;
-export const API_COLLECTOR_URL = 'https://api.thevalidators.io';
+export const API_COLLECTOR_URL = 'https://api.validators.svt.one';
